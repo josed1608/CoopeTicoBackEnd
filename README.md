@@ -4,7 +4,7 @@ Backend source code for coopetico taxi application
 # Dependencies
 * Java 8
 * Maven 3
-* IntelliJ IDE
+* IntelliJ Ultimate IDE
 * MySQL Server
 
 # How to run
