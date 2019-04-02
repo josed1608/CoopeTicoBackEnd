@@ -1,10 +1,14 @@
 package com.coopetico.coopeticobackend.entidades;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
 @Table(name = "permisos_grupo", schema = "coopetico-dev")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "permisosGrupoEntidadPK")
 public class PermisosGrupoEntidad {
     private PermisosGrupoEntidadPK permisosGrupoEntidadPK;
     private PermisoEntidad permisoByPkIdPermisos;

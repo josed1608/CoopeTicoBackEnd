@@ -1,11 +1,15 @@
 package com.coopetico.coopeticobackend.entidades;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Objects;
 
 @Entity
 @Table(name = "viaje", schema = "coopetico-dev")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "viajeEntidadPK")
 public class ViajeEntidad {
     private ViajeEntidadPK viajeEntidadPK;
     private Timestamp fechaFin;

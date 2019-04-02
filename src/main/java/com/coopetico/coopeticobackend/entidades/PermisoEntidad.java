@@ -1,11 +1,15 @@
 package com.coopetico.coopeticobackend.entidades;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Objects;
 
 @Entity
 @Table(name = "permiso", schema = "coopetico-dev")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "pkId")
 public class PermisoEntidad {
     private int pkId;
     private String descripcion;
