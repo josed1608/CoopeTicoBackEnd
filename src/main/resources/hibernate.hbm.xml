@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+    "-//Hibernate/Hibernate Configuration DTD//EN"
+    "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+  <session-factory>
+    <property name="connection.url">jdbc:mysql://localhost:3306/coopetico-dev</property>
+    <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+      <mapping class="com.coopetico.coopeticobackend.entidades.AutenticaEntidad"/>
+      <mapping class="com.coopetico.coopeticobackend.entidades.ClienteEntidad"/>
+      <mapping class="com.coopetico.coopeticobackend.entidades.CoopeticoEntidad"/>
+      <mapping class="com.coopetico.coopeticobackend.entidades.GrupoEntidad"/>
+      <mapping class="com.coopetico.coopeticobackend.entidades.PermisoEntidad"/>
+      <mapping class="com.coopetico.coopeticobackend.entidades.PermisosGrupoEntidad"/>
+      <mapping class="com.coopetico.coopeticobackend.entidades.TaxiEntidad"/>
+      <mapping class="com.coopetico.coopeticobackend.entidades.TaxistaEntidad"/>
+      <mapping class="com.coopetico.coopeticobackend.entidades.UsuarioEntidad"/>
+      <mapping class="com.coopetico.coopeticobackend.entidades.ViajeEntidad"/>
+      <!-- <property name="connection.username"/> -->
+    <!-- <property name="connection.password"/> -->
+
+    <!-- DB schema will be updated if needed -->
+    <!-- <property name="hbm2ddl.auto">update</property> -->
+  </session-factory>
+</hibernate-configuration>
