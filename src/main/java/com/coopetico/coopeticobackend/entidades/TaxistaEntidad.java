@@ -5,15 +5,13 @@ import java.util.Collection;
 import java.util.Objects;
 
 @Entity
-@Table(name = "taxista", schema = "coopetico-dev", catalog = "")
+@Table(name = "taxista", schema = "coopetico-dev")
 public class TaxistaEntidad {
     private String pkCorreoUsuario;
-    private Object faltas;
+    private String faltas;
     private boolean estado;
     private boolean hojaDelincuencia;
     private int estrellas;
-    private String placaTaxiManeja;
-    private String placaTaxiDueno;
     private UsuarioEntidad usuarioByPkCorreoUsuario;
     private TaxiEntidad taxiByPlacaTaxiManeja;
     private TaxiEntidad taxiByPlacaTaxiDueno;
@@ -30,12 +28,12 @@ public class TaxistaEntidad {
     }
 
     @Basic
-    @Column(name = "faltas", nullable = false)
-    public Object getFaltas() {
+    @Column(name = "faltas", nullable = false, columnDefinition = "ENUM('1','2','3','0')")
+    public String getFaltas() {
         return faltas;
     }
 
-    public void setFaltas(Object faltas) {
+    public void setFaltas(String faltas) {
         this.faltas = faltas;
     }
 
@@ -69,26 +67,6 @@ public class TaxistaEntidad {
         this.estrellas = estrellas;
     }
 
-    @Basic
-    @Column(name = "placa_taxi_maneja", nullable = false, length = 8)
-    public String getPlacaTaxiManeja() {
-        return placaTaxiManeja;
-    }
-
-    public void setPlacaTaxiManeja(String placaTaxiManeja) {
-        this.placaTaxiManeja = placaTaxiManeja;
-    }
-
-    @Basic
-    @Column(name = "placa_taxi_dueno", nullable = true, length = 8)
-    public String getPlacaTaxiDueno() {
-        return placaTaxiDueno;
-    }
-
-    public void setPlacaTaxiDueno(String placaTaxiDueno) {
-        this.placaTaxiDueno = placaTaxiDueno;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -98,14 +76,12 @@ public class TaxistaEntidad {
                 hojaDelincuencia == that.hojaDelincuencia &&
                 estrellas == that.estrellas &&
                 Objects.equals(pkCorreoUsuario, that.pkCorreoUsuario) &&
-                Objects.equals(faltas, that.faltas) &&
-                Objects.equals(placaTaxiManeja, that.placaTaxiManeja) &&
-                Objects.equals(placaTaxiDueno, that.placaTaxiDueno);
+                Objects.equals(faltas, that.faltas);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(pkCorreoUsuario, faltas, estado, hojaDelincuencia, estrellas, placaTaxiManeja, placaTaxiDueno);
+        return Objects.hash(pkCorreoUsuario, faltas, estado, hojaDelincuencia, estrellas);
     }
 
     @OneToOne

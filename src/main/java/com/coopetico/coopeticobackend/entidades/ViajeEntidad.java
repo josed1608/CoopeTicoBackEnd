@@ -5,49 +5,24 @@ import java.sql.Timestamp;
 import java.util.Objects;
 
 @Entity
-@Table(name = "viaje", schema = "coopetico-dev", catalog = "")
-@IdClass(ViajeEntidadPK.class)
+@Table(name = "viaje", schema = "coopetico-dev")
 public class ViajeEntidad {
-    private String pkPlacaTaxi;
-    private String pkCorreoCliente;
-    private Timestamp pkFechaInicio;
+    private ViajeEntidadPK viajeEntidadPK;
     private Timestamp fechaFin;
     private String costo;
     private Integer estrellas;
     private String origenDestino;
-    private String correoTaxi;
     private TaxiEntidad taxiByPkPlacaTaxi;
     private ClienteEntidad clienteByPkCorreoCliente;
     private TaxistaEntidad taxistaByCorreoTaxi;
 
-    @Id
-    @Column(name = "pk_placa_taxi", nullable = false, length = 8)
-    public String getPkPlacaTaxi() {
-        return pkPlacaTaxi;
+    @EmbeddedId
+    public ViajeEntidadPK getViajeEntidadPK() {
+        return viajeEntidadPK;
     }
 
-    public void setPkPlacaTaxi(String pkPlacaTaxi) {
-        this.pkPlacaTaxi = pkPlacaTaxi;
-    }
-
-    @Id
-    @Column(name = "pk_correo_cliente", nullable = false, length = 64)
-    public String getPkCorreoCliente() {
-        return pkCorreoCliente;
-    }
-
-    public void setPkCorreoCliente(String pkCorreoCliente) {
-        this.pkCorreoCliente = pkCorreoCliente;
-    }
-
-    @Id
-    @Column(name = "pk_fecha_inicio", nullable = false)
-    public Timestamp getPkFechaInicio() {
-        return pkFechaInicio;
-    }
-
-    public void setPkFechaInicio(Timestamp pkFechaInicio) {
-        this.pkFechaInicio = pkFechaInicio;
+    public void setViajeEntidadPK(ViajeEntidadPK viajeEntidadPK) {
+        this.viajeEntidadPK = viajeEntidadPK;
     }
 
     @Basic
@@ -71,7 +46,7 @@ public class ViajeEntidad {
     }
 
     @Basic
-    @Column(name = "estrellas", nullable = true)
+    @Column(name = "estrellas")
     public Integer getEstrellas() {
         return estrellas;
     }
@@ -90,37 +65,25 @@ public class ViajeEntidad {
         this.origenDestino = origenDestino;
     }
 
-    @Basic
-    @Column(name = "correo_taxi", nullable = false, length = 8)
-    public String getCorreoTaxi() {
-        return correoTaxi;
-    }
-
-    public void setCorreoTaxi(String correoTaxi) {
-        this.correoTaxi = correoTaxi;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ViajeEntidad that = (ViajeEntidad) o;
-        return Objects.equals(pkPlacaTaxi, that.pkPlacaTaxi) &&
-                Objects.equals(pkCorreoCliente, that.pkCorreoCliente) &&
-                Objects.equals(pkFechaInicio, that.pkFechaInicio) &&
+        return Objects.equals(viajeEntidadPK, that.viajeEntidadPK) &&
                 Objects.equals(fechaFin, that.fechaFin) &&
                 Objects.equals(costo, that.costo) &&
                 Objects.equals(estrellas, that.estrellas) &&
-                Objects.equals(origenDestino, that.origenDestino) &&
-                Objects.equals(correoTaxi, that.correoTaxi);
+                Objects.equals(origenDestino, that.origenDestino);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(pkPlacaTaxi, pkCorreoCliente, pkFechaInicio, fechaFin, costo, estrellas, origenDestino, correoTaxi);
+        return Objects.hash(viajeEntidadPK, fechaFin, costo, estrellas, origenDestino);
     }
 
     @ManyToOne
+    @MapsId("pkPlacaTaxi")
     @JoinColumn(name = "pk_placa_taxi", referencedColumnName = "pk_placa", nullable = false)
     public TaxiEntidad getTaxiByPkPlacaTaxi() {
         return taxiByPkPlacaTaxi;
@@ -131,6 +94,7 @@ public class ViajeEntidad {
     }
 
     @ManyToOne
+    @MapsId("pkCorreoCliente")
     @JoinColumn(name = "pk_correo_cliente", referencedColumnName = "pk_correo_usuario", nullable = false)
     public ClienteEntidad getClienteByPkCorreoCliente() {
         return clienteByPkCorreoCliente;

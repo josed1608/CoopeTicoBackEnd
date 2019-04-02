@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.Objects;
 
 @Entity
-@Table(name = "grupo", schema = "coopetico-dev", catalog = "")
+@Table(name = "grupo", schema = "coopetico-dev")
 public class GrupoEntidad {
     private String pkId;
     private Collection<PermisosGrupoEntidad> permisosGruposByPkId;

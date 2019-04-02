@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "usuario", schema = "coopetico-dev", catalog = "")
+@Table(name = "usuario", schema = "coopetico-dev")
 public class UsuarioEntidad {
     private String pkCorreo;
     private String nombre;
@@ -12,7 +12,6 @@ public class UsuarioEntidad {
     private String telefono;
     private String contrasena;
     private String foto;
-    private String idGrupo;
     private String salt;
     private ClienteEntidad clienteByPkCorreo;
     private CoopeticoEntidad coopeticoByPkCorreo;
@@ -70,23 +69,13 @@ public class UsuarioEntidad {
     }
 
     @Basic
-    @Column(name = "foto", nullable = true, length = 512)
+    @Column(name = "foto", length = 512)
     public String getFoto() {
         return foto;
     }
 
     public void setFoto(String foto) {
         this.foto = foto;
-    }
-
-    @Basic
-    @Column(name = "id_grupo", nullable = false, length = 32)
-    public String getIdGrupo() {
-        return idGrupo;
-    }
-
-    public void setIdGrupo(String idGrupo) {
-        this.idGrupo = idGrupo;
     }
 
     @Basic
@@ -110,13 +99,12 @@ public class UsuarioEntidad {
                 Objects.equals(telefono, that.telefono) &&
                 Objects.equals(contrasena, that.contrasena) &&
                 Objects.equals(foto, that.foto) &&
-                Objects.equals(idGrupo, that.idGrupo) &&
                 Objects.equals(salt, that.salt);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(pkCorreo, nombre, apellidos, telefono, contrasena, foto, idGrupo, salt);
+        return Objects.hash(pkCorreo, nombre, apellidos, telefono, contrasena, foto, salt);
     }
 
     @OneToOne(mappedBy = "usuarioByPkCorreoUsuario")

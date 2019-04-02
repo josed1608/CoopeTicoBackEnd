@@ -6,13 +6,13 @@ import java.util.Collection;
 import java.util.Objects;
 
 @Entity
-@Table(name = "taxi", schema = "coopetico-dev", catalog = "")
+@Table(name = "taxi", schema = "coopetico-dev")
 public class TaxiEntidad {
     private String pkPlaca;
     private Boolean datafono;
     private String telefono;
-    private Object clase;
-    private Object tipo;
+    private String clase;
+    private String tipo;
     private Timestamp fechaVenTaxista;
     private Timestamp fechaVenMarchamo;
     private Timestamp fechaVenSeguro;
@@ -31,7 +31,7 @@ public class TaxiEntidad {
     }
 
     @Basic
-    @Column(name = "datafono", nullable = true)
+    @Column(name = "datafono")
     public Boolean getDatafono() {
         return datafono;
     }
@@ -51,22 +51,22 @@ public class TaxiEntidad {
     }
 
     @Basic
-    @Column(name = "clase", nullable = false)
-    public Object getClase() {
+    @Column(name = "clase", nullable = false, columnDefinition = "ENUM('A','B','NA')")
+    public String getClase() {
         return clase;
     }
 
-    public void setClase(Object clase) {
+    public void setClase(String clase) {
         this.clase = clase;
     }
 
     @Basic
-    @Column(name = "tipo", nullable = false)
-    public Object getTipo() {
+    @Column(name = "tipo", nullable = false, columnDefinition = "ENUM('microbus','wagon','normal')")
+    public String getTipo() {
         return tipo;
     }
 
-    public void setTipo(Object tipo) {
+    public void setTipo(String tipo) {
         this.tipo = tipo;
     }
 
