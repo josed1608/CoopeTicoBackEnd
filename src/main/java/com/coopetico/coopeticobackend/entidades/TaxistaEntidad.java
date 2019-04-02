@@ -12,8 +12,12 @@ public class TaxistaEntidad {
     private boolean estado;
     private boolean hojaDelincuencia;
     private int estrellas;
-    private Collection<AutenticaEntidad> autenticasByPkCorreoUsuario;
+    private String placaTaxiManeja;
+    private String placaTaxiDueno;
     private UsuarioEntidad usuarioByPkCorreoUsuario;
+    private TaxiEntidad taxiByPlacaTaxiManeja;
+    private TaxiEntidad taxiByPlacaTaxiDueno;
+    private Collection<ViajeEntidad> viajesByPkCorreoUsuario;
 
     @Id
     @Column(name = "pk_correo_usuario", nullable = false, length = 64)
@@ -65,6 +69,26 @@ public class TaxistaEntidad {
         this.estrellas = estrellas;
     }
 
+    @Basic
+    @Column(name = "placa_taxi_maneja", nullable = false, length = 8)
+    public String getPlacaTaxiManeja() {
+        return placaTaxiManeja;
+    }
+
+    public void setPlacaTaxiManeja(String placaTaxiManeja) {
+        this.placaTaxiManeja = placaTaxiManeja;
+    }
+
+    @Basic
+    @Column(name = "placa_taxi_dueno", nullable = true, length = 8)
+    public String getPlacaTaxiDueno() {
+        return placaTaxiDueno;
+    }
+
+    public void setPlacaTaxiDueno(String placaTaxiDueno) {
+        this.placaTaxiDueno = placaTaxiDueno;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -74,21 +98,14 @@ public class TaxistaEntidad {
                 hojaDelincuencia == that.hojaDelincuencia &&
                 estrellas == that.estrellas &&
                 Objects.equals(pkCorreoUsuario, that.pkCorreoUsuario) &&
-                Objects.equals(faltas, that.faltas);
+                Objects.equals(faltas, that.faltas) &&
+                Objects.equals(placaTaxiManeja, that.placaTaxiManeja) &&
+                Objects.equals(placaTaxiDueno, that.placaTaxiDueno);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(pkCorreoUsuario, faltas, estado, hojaDelincuencia, estrellas);
-    }
-
-    @OneToMany(mappedBy = "taxistaByPkCorreoTaxista")
-    public Collection<AutenticaEntidad> getAutenticasByPkCorreoUsuario() {
-        return autenticasByPkCorreoUsuario;
-    }
-
-    public void setAutenticasByPkCorreoUsuario(Collection<AutenticaEntidad> autenticasByPkCorreoUsuario) {
-        this.autenticasByPkCorreoUsuario = autenticasByPkCorreoUsuario;
+        return Objects.hash(pkCorreoUsuario, faltas, estado, hojaDelincuencia, estrellas, placaTaxiManeja, placaTaxiDueno);
     }
 
     @OneToOne
@@ -99,5 +116,34 @@ public class TaxistaEntidad {
 
     public void setUsuarioByPkCorreoUsuario(UsuarioEntidad usuarioByPkCorreoUsuario) {
         this.usuarioByPkCorreoUsuario = usuarioByPkCorreoUsuario;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "placa_taxi_maneja", referencedColumnName = "pk_placa", nullable = false)
+    public TaxiEntidad getTaxiByPlacaTaxiManeja() {
+        return taxiByPlacaTaxiManeja;
+    }
+
+    public void setTaxiByPlacaTaxiManeja(TaxiEntidad taxiByPlacaTaxiManeja) {
+        this.taxiByPlacaTaxiManeja = taxiByPlacaTaxiManeja;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "placa_taxi_dueno", referencedColumnName = "pk_placa")
+    public TaxiEntidad getTaxiByPlacaTaxiDueno() {
+        return taxiByPlacaTaxiDueno;
+    }
+
+    public void setTaxiByPlacaTaxiDueno(TaxiEntidad taxiByPlacaTaxiDueno) {
+        this.taxiByPlacaTaxiDueno = taxiByPlacaTaxiDueno;
+    }
+
+    @OneToMany(mappedBy = "taxistaByCorreoTaxi")
+    public Collection<ViajeEntidad> getViajesByPkCorreoUsuario() {
+        return viajesByPkCorreoUsuario;
+    }
+
+    public void setViajesByPkCorreoUsuario(Collection<ViajeEntidad> viajesByPkCorreoUsuario) {
+        this.viajesByPkCorreoUsuario = viajesByPkCorreoUsuario;
     }
 }

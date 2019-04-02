@@ -6,7 +6,6 @@
   <session-factory>
     <property name="connection.url">jdbc:mysql://localhost:3306/coopetico-dev</property>
     <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
-      <mapping class="com.coopetico.coopeticobackend.entidades.AutenticaEntidad"/>
       <mapping class="com.coopetico.coopeticobackend.entidades.ClienteEntidad"/>
       <mapping class="com.coopetico.coopeticobackend.entidades.CoopeticoEntidad"/>
       <mapping class="com.coopetico.coopeticobackend.entidades.GrupoEntidad"/>

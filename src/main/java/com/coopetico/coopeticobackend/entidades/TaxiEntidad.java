@@ -16,7 +16,8 @@ public class TaxiEntidad {
     private Timestamp fechaVenTaxista;
     private Timestamp fechaVenMarchamo;
     private Timestamp fechaVenSeguro;
-    private Collection<AutenticaEntidad> autenticasByPkPlaca;
+    private Collection<TaxistaEntidad> taxistasByPkPlaca;
+    private Collection<TaxistaEntidad> taxistasByPkPlaca_0;
     private Collection<ViajeEntidad> viajesByPkPlaca;
 
     @Id
@@ -119,13 +120,22 @@ public class TaxiEntidad {
         return Objects.hash(pkPlaca, datafono, telefono, clase, tipo, fechaVenTaxista, fechaVenMarchamo, fechaVenSeguro);
     }
 
-    @OneToMany(mappedBy = "taxiByPkPlacaTaxi")
-    public Collection<AutenticaEntidad> getAutenticasByPkPlaca() {
-        return autenticasByPkPlaca;
+    @OneToMany(mappedBy = "taxiByPlacaTaxiManeja")
+    public Collection<TaxistaEntidad> getTaxistasByPkPlaca() {
+        return taxistasByPkPlaca;
     }
 
-    public void setAutenticasByPkPlaca(Collection<AutenticaEntidad> autenticasByPkPlaca) {
-        this.autenticasByPkPlaca = autenticasByPkPlaca;
+    public void setTaxistasByPkPlaca(Collection<TaxistaEntidad> taxistasByPkPlaca) {
+        this.taxistasByPkPlaca = taxistasByPkPlaca;
+    }
+
+    @OneToMany(mappedBy = "taxiByPlacaTaxiDueno")
+    public Collection<TaxistaEntidad> getTaxistasByPkPlaca_0() {
+        return taxistasByPkPlaca_0;
+    }
+
+    public void setTaxistasByPkPlaca_0(Collection<TaxistaEntidad> taxistasByPkPlaca_0) {
+        this.taxistasByPkPlaca_0 = taxistasByPkPlaca_0;
     }
 
     @OneToMany(mappedBy = "taxiByPkPlacaTaxi")

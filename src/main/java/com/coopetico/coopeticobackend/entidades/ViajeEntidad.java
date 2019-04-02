@@ -15,8 +15,10 @@ public class ViajeEntidad {
     private String costo;
     private Integer estrellas;
     private String origenDestino;
+    private String correoTaxi;
     private TaxiEntidad taxiByPkPlacaTaxi;
     private ClienteEntidad clienteByPkCorreoCliente;
+    private TaxistaEntidad taxistaByCorreoTaxi;
 
     @Id
     @Column(name = "pk_placa_taxi", nullable = false, length = 8)
@@ -88,6 +90,16 @@ public class ViajeEntidad {
         this.origenDestino = origenDestino;
     }
 
+    @Basic
+    @Column(name = "correo_taxi", nullable = false, length = 8)
+    public String getCorreoTaxi() {
+        return correoTaxi;
+    }
+
+    public void setCorreoTaxi(String correoTaxi) {
+        this.correoTaxi = correoTaxi;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -99,12 +111,13 @@ public class ViajeEntidad {
                 Objects.equals(fechaFin, that.fechaFin) &&
                 Objects.equals(costo, that.costo) &&
                 Objects.equals(estrellas, that.estrellas) &&
-                Objects.equals(origenDestino, that.origenDestino);
+                Objects.equals(origenDestino, that.origenDestino) &&
+                Objects.equals(correoTaxi, that.correoTaxi);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(pkPlacaTaxi, pkCorreoCliente, pkFechaInicio, fechaFin, costo, estrellas, origenDestino);
+        return Objects.hash(pkPlacaTaxi, pkCorreoCliente, pkFechaInicio, fechaFin, costo, estrellas, origenDestino, correoTaxi);
     }
 
     @ManyToOne
@@ -125,5 +138,15 @@ public class ViajeEntidad {
 
     public void setClienteByPkCorreoCliente(ClienteEntidad clienteByPkCorreoCliente) {
         this.clienteByPkCorreoCliente = clienteByPkCorreoCliente;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "correo_taxi", referencedColumnName = "pk_correo_usuario", nullable = false)
+    public TaxistaEntidad getTaxistaByCorreoTaxi() {
+        return taxistaByCorreoTaxi;
+    }
+
+    public void setTaxistaByCorreoTaxi(TaxistaEntidad taxistaByCorreoTaxi) {
+        this.taxistaByCorreoTaxi = taxistaByCorreoTaxi;
     }
 }
