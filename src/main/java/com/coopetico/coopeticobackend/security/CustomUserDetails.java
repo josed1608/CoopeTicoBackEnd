@@ -8,26 +8,33 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
+/**
+ * Implementación custom de UserDetails para introducir la lógica especial de negocio de los grupos y permisos
+ */
 public class CustomUserDetails implements UserDetails {
     private UsuarioEntidad user;
+    private Collection<SimpleGrantedAuthority> permisos;
+    private String grupoId;
 
     public CustomUserDetails(UsuarioEntidad user) {
         this.user = user;
-    }
-
-    @Override
-    public Collection<SimpleGrantedAuthority> getAuthorities() {
-        return user
+        this.permisos = user
                 .getGrupoByIdGrupo()
                 .getPermisosGruposByPkId()
                 .stream()
                 .map(PermisosGrupoEntidad::getPermisoByPkIdPermisos)
                 .map(permiso -> new SimpleGrantedAuthority(Integer.toString(permiso.getPkId())))
                 .collect(Collectors.toList());
+        this.grupoId = user.getGrupoByIdGrupo().getPkId();
+    }
+
+    @Override
+    public Collection<SimpleGrantedAuthority> getAuthorities() {
+        return this.permisos;
     }
 
     public String getGrupo(){
-        return user.getGrupoByIdGrupo().getPkId();
+        return this.grupoId;
     }
 
     @Override

@@ -15,6 +15,10 @@ import javax.crypto.SecretKey;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Servicio que genera keys de tamaño apropiado para el SHA que se esté utilizando
+ */
+@SuppressWarnings("ALL")
 @Service
 public class SecretServicio {
 
