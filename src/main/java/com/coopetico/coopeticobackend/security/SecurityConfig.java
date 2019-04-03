@@ -81,7 +81,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/auth/signin").permitAll()
                 // El has authority se usa para definir cuáles permisos permiten acceder a ese endpoint
                 .antMatchers("/auth/usuarios").hasAuthority("1")
-                .anyRequest().authenticated()
+                .anyRequest().permitAll()
                 .and()
                 // Se aplica el filtro de los JWT
                 .apply(new JwtConfigurer(jwtTokenProvider));
