@@ -14,7 +14,7 @@ public class ViajeEntidad {
     private ViajeEntidadPK viajeEntidadPK;
     private Timestamp fechaFin;
     private String costo;
-    private Integer estrellas;
+    private float estrellas;
     private String origenDestino;
     private TaxiEntidad taxiByPkPlacaTaxi;
     private ClienteEntidad clienteByPkCorreoCliente;
@@ -51,11 +51,11 @@ public class ViajeEntidad {
 
     @Basic
     @Column(name = "estrellas")
-    public Integer getEstrellas() {
+    public float getEstrellas() {
         return estrellas;
     }
 
-    public void setEstrellas(Integer estrellas) {
+    public void setEstrellas(float estrellas) {
         this.estrellas = estrellas;
     }
 

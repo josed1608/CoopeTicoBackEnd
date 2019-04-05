@@ -15,7 +15,7 @@ public class TaxistaEntidad {
     private String faltas;
     private boolean estado;
     private boolean hojaDelincuencia;
-    private int estrellas;
+    private float estrellas;
     private UsuarioEntidad usuarioByPkCorreoUsuario;
     private TaxiEntidad taxiByPlacaTaxiManeja;
     private TaxiEntidad taxiByPlacaTaxiDueno;
@@ -63,11 +63,11 @@ public class TaxistaEntidad {
 
     @Basic
     @Column(name = "estrellas", nullable = false)
-    public int getEstrellas() {
+    public float getEstrellas() {
         return estrellas;
     }
 
-    public void setEstrellas(int estrellas) {
+    public void setEstrellas(float estrellas) {
         this.estrellas = estrellas;
     }
 
