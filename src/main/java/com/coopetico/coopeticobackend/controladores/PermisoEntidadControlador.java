@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/coopetico")
+@RequestMapping("/permisos")
 public class PermisoEntidadControlador {
 
     @Autowired
     PermisosRepositorio permisosRepo;
 
-    @GetMapping("/permisos")
+    @GetMapping("/listarPermisos")
     public List<PermisoEntidad> getPermisos(){
         return permisosRepo.findAll();
     }
