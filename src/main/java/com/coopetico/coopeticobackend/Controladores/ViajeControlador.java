@@ -3,17 +3,55 @@ package com.coopetico.coopeticobackend.Controladores;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import java.sql.Timestamp;
 
-@Controller    // This means that this class is a Controller
-@RequestMapping(path="/viajes") // This means URL's start with /demo (after Application path)
+import com.coopetico.coopeticobackend.repositorios.ViajesRepositorio;
+import com.coopetico.coopeticobackend.entidades.ViajeEntidad;
+
+/*
+ * TO_DO: comentar según las convenciones.
+ */
+@Controller
+@RequestMapping(path="/viajes")
 public class ViajeControlador {
-    @GetMapping(path="/restablecerContrasena")
-    public @ResponseBody String addNewUser () {
+	private final ViajesRepositorio VIAJES;
 
-        return "Hola joe";
+	/*
+	 * TO_DO: comentar según las convenciones.
+	 */
+	@Autowired
+    public ViajeControlador(ViajesRepositorio vjs) {
+        this.VIAJES = vjs;
+    }
+
+	/*
+	 * TO_DO: comentar según las convenciones.
+	 */
+    @GetMapping/*TO_DO: PostMapping*/(path="/agregar_viaje")
+    public @ResponseBody String agregar_viaje (
+    	String 		placa, 
+    	String 		correo_cliente, 
+    	Timestamp	fecha_inicio, 
+    	Timestamp	fecha_fin,
+    	String 		costo,
+    	Integer 	estrellas,
+    	String 		origen_destino,
+    	String 		correo_taxista
+    ) {
+    	// ViajeEntidadPK viajeEntidadPK,
+	    // Timestamp fechaFin,
+	    // String costo,
+	    // Integer estrellas,
+	    // String origenDestino,
+	    // TaxiEntidad taxiByPkPlacaTaxi,
+	    // ClienteEntidad clienteByPkCorreoCliente,
+	    // TaxistaEntidad taxistaByCorreoTaxi
+        return "test1 + test2";
     }
 }
