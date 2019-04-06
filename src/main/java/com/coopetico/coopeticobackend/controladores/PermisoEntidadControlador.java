@@ -6,7 +6,6 @@ package com.coopetico.coopeticobackend.controladores;
 
 import com.coopetico.coopeticobackend.entidades.PermisoEntidad;
 import com.coopetico.coopeticobackend.servicios.PermisosServicio;
-import com.coopetico.coopeticobackend.servicios.PermisosServicioImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

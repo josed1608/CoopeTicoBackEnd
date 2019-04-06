@@ -1,4 +1,8 @@
 package com.coopetico.coopeticobackend.repositorios;
+//Programador: Jefferson Alvarez
+//Fecha: 04/04/2019
+//Version: 0.1
+//Repositorio de la entidad Permisos.
 
 import com.coopetico.coopeticobackend.entidades.PermisoEntidad;
 import org.springframework.data.jpa.repository.JpaRepository;

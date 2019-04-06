@@ -1,5 +1,10 @@
 package com.coopetico.coopeticobackend.servicios;
 
+//Programador: Jefferson Alvarez
+//Fecha: 04/04/2019
+//Version: 0.01
+//Implementacion de la interfaz del Servicio de Permiso.
+
 import com.coopetico.coopeticobackend.entidades.PermisoEntidad;
 import com.coopetico.coopeticobackend.repositorios.PermisosRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
