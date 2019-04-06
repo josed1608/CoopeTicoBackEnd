@@ -109,7 +109,7 @@ public class ViajeEntidad {
     }
 
     @ManyToOne
-    @JoinColumn(name = "correo_taxi", referencedColumnName = "pk_correo_usuario", nullable = false)
+    @JoinColumn(name = "correo_taxista", referencedColumnName = "pk_correo_usuario", nullable = false)
     public TaxistaEntidad getTaxistaByCorreoTaxi() {
         return taxistaByCorreoTaxi;
     }
