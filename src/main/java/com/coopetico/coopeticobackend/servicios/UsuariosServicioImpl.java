@@ -1,3 +1,11 @@
+/**
+ * Autor: Joseph Rementería (b55824).
+ * Fecha: 06/04/2019.
+ *
+ * Esta es la implentación de la intefaz ./UsuarioServicio.java
+ * que referencia a la tabla Cliente del ISA Usuario en el ER.
+ *
+ */
 package com.coopetico.coopeticobackend.servicios;
 
 import com.coopetico.coopeticobackend.entidades.UsuarioEntidad;
