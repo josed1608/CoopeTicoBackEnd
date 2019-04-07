@@ -8,8 +8,6 @@
  * la capa V y el M viajes.
  **/
 package com.coopetico.coopeticobackend.controladores;
-
-
 import com.coopetico.coopeticobackend.servicios.ViajesServicio;
 
 import org.springframework.stereotype.Controller;
@@ -71,14 +69,6 @@ public class ViajeControlador {
             String origen_destino,
             String correo_taxista
     ) {
-        // ViajeEntidadPK viajeEntidadPK,
-        // Timestamp fechaFin,
-        // String costo,
-        // Integer estrellas,
-        // String origenDestino,
-        // TaxiEntidad taxiByPkPlacaTaxi,
-        // ClienteEntidad clienteByPkCorreoCliente,
-        // TaxistaEntidad taxistaByCorreoTaxi
         return this.viajesRepositorio.guardar(
                 placa,
                 correo_cliente,
@@ -91,34 +81,3 @@ public class ViajeControlador {
         );
     }
 }
-
-//@RestController
-//@RequestMapping("/api")
-//public class UsuarioControlador {
-//	/**
-//	 * Variables globales de la clase UsuarioControlador
-//	 **/
-//	private UsuariosServicio usuarioServicio;
-//
-//	/**
-//	 * Constructor de la clase UsuarioControlador.
-//	 *
-//	 * @param usrSer el servicio de usuarios ya creado.
-//	 */
-//	@Autowired
-//	public UsuarioControlador(UsuariosServicio usrSer) {
-//		this.usuarioServicio = usrSer;
-//	}
-//
-//	/**
-//	 * Busca el cliente en la base de datos.
-//	 *
-//	 * @param correo El identificador del cliente.
-//	 * @return UsuarioEntidad si el correo está en la tabla Cliente,
-//	 * null de otra manera.
-//	 */
-//	@GetMapping(path="/usuarios/{correo}")
-//	public UsuarioEntidad obtener_usuario (@PathVariable String correo) {
-//		return this.usuarioServicio.consultarPorId(correo);
-//	}
-//}

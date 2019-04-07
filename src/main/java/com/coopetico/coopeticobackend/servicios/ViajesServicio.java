@@ -9,8 +9,6 @@
  */
 package com.coopetico.coopeticobackend.servicios;
 
-import com.coopetico.coopeticobackend.entidades.UsuarioEntidad;
-
 import java.sql.Timestamp;
 //import java.util.List;
 
