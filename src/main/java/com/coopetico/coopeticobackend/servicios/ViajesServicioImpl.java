@@ -7,6 +7,8 @@
  * que referencia a la tabla Cliente del ISA Usuario en el ER.
  */
 package com.coopetico.coopeticobackend.servicios;
+import com.coopetico.coopeticobackend.entidades.ViajeEntidad;
+import com.coopetico.coopeticobackend.entidades.ViajeEntidadPK;
 import com.coopetico.coopeticobackend.repositorios.ViajesRepositorio;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,16 +41,43 @@ public class ViajesServicioImpl implements ViajesServicio {
     @Transactional
     public String guardar(
             String placa,
-            String correo_cliente,
-            Timestamp fecha_inicio,
-            Timestamp fecha_fin,
+            String correoCliente,
+            Timestamp fechaInicio,
+            Timestamp fechaFin,
             String costo,
             Integer estrellas,
-            String origen_destino,
-            String correo_taxista
+            String origenDestino,
+            String correoTaxista
     ) {
-        // TODO: crear la entidad.
-        return null;//usuarioRepositorio.save(taxista);
+        //---------------------------------------------------------------------
+        // Creación de la llave primaria para la entidad Vaije.
+        ViajeEntidadPK pk = new ViajeEntidadPK();
+        pk.setPkCorreoCliente(correoCliente);
+        pk.setPkPlacaTaxi(placa);
+        pk.setPkFechaInicio(fechaInicio);
+        //---------------------------------------------------------------------
+        // Obtención de la Entidad Taxi para a partir de la placa.
+        // TODO: taxiEntidad = taxiServico.consultarPorId(placa);
+        //---------------------------------------------------------------------
+        // Obtención de la Entidad Taxista para a partir del correo.
+        // TODO: taxistaEntidad = taxistaServico.consultarPorId(correoTaxista);
+        //---------------------------------------------------------------------
+        // Obtención de la Entidad Cliente para a partir del correo.
+        // TODO: clienteEntidad = usuarioServico.consultarPorId(correoCliente);
+        //---------------------------------------------------------------------
+        // Creación de entidad Viaje per sé.
+        ViajeEntidad viajeInsertando = new ViajeEntidad();
+        viajeInsertando.setViajeEntidadPK(pk);
+        viajeInsertando.setFechaFin(fechaFin);
+        viajeInsertando.setCosto(costo);
+        viajeInsertando.setEstrellas(estrellas);
+        viajeInsertando.setOrigenDestino(origenDestino);
+        // TODO: viajeInsertando.setTaxiByPkPlacaTaxi(taxiEntidad);
+        // TODO: viajeInsertando.setTaxistaByCorreoTaxi(taxistaEntidad);
+        // TODO: viajeInsertando.setClienteByPkCorreoCliente(clienteEntidad);
+        //---------------------------------------------------------------------
+        viajeInsertando = viajesRepositorio.save(viajeInsertando);
+        return viajeInsertando.toString();//usuarioRepositorio.save(taxista);
     }
 
     // @Override
