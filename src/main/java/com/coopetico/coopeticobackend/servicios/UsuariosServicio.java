@@ -1,5 +1,7 @@
 /**
- * Autor: Joseph Rementería (b55824).
+ * Autor:
+ * (1) Joseph Rementería (b55824).
+ *
  * Fecha: 06/04/2019.
  *
  * Esta es la interfaz para el servicio que maneja la comunicación
@@ -18,6 +20,9 @@ public interface UsuariosServicio {
     // UsuarioEntidad guardar(UsuarioEntidad taxista);
 
     /**
+     * Autor: Joseph Rementería (b55824).
+     * Fecha: 06/04/2019.
+     * <p>
      * Trae una Entidad usuario que corresponde al correo ingresado.
      *
      * @param correo el correo a consultar.

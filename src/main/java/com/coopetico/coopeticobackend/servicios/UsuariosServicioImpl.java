@@ -1,5 +1,6 @@
 /**
- * Autor: Joseph Rementería (b55824).
+ * Autor:
+ * (1) Joseph Rementería (b55824).
  * Fecha: 06/04/2019.
  *
  * Esta es la implentación de la intefaz ./UsuarioServicio.java
@@ -19,7 +20,9 @@ import javax.transaction.Transactional;
 
 @Service
 public class UsuariosServicioImpl implements  UsuariosServicio {
-
+    /**
+     * Variables globales.
+     */
     @Autowired
     private UsuariosRepositorio usuarioRepositorio;
 
@@ -38,10 +41,20 @@ public class UsuariosServicioImpl implements  UsuariosServicio {
     //     return usuarioRepositorio.save(taxista);
     // }
 
+    /**
+     * Autor: Joseph Rementería (b55824).
+     * Fecha: 06/04/2019.
+     *
+     * Trae una Entidad usuario que corresponde al correo ingresado.
+     *
+     * @param correo el correo a consultar.
+     * @return UsuarioEntidad del correo en la base, null de otra manera.
+     */
     @Override
     @Transactional
     public UsuarioEntidad consultarPorId(String correo){
-        UsuarioEntidad resultado = usuarioRepositorio.findById(correo).orElse(null);
+        UsuarioEntidad resultado = usuarioRepositorio.findById(correo)
+                .orElse(null);
         if (clienteRepositorio.findById(correo).orElse(null) == null){
             resultado = null;
         }
