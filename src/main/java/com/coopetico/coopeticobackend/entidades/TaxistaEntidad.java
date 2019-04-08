@@ -21,6 +21,21 @@ public class TaxistaEntidad {
     private TaxiEntidad taxiByPlacaTaxiDueno;
     private Collection<ViajeEntidad> viajesByPkCorreoUsuario;
 
+    public TaxistaEntidad(String pkCorreoUsuario, String faltas, boolean estado, boolean hojaDelincuencia, float estrellas, UsuarioEntidad usuarioByPkCorreoUsuario, TaxiEntidad taxiByPlacaTaxiManeja, TaxiEntidad taxiByPlacaTaxiDueno, Collection<ViajeEntidad> viajesByPkCorreoUsuario) {
+        this.pkCorreoUsuario = pkCorreoUsuario;
+        this.faltas = faltas;
+        this.estado = estado;
+        this.hojaDelincuencia = hojaDelincuencia;
+        this.estrellas = estrellas;
+        this.usuarioByPkCorreoUsuario = usuarioByPkCorreoUsuario;
+        this.taxiByPlacaTaxiManeja = taxiByPlacaTaxiManeja;
+        this.taxiByPlacaTaxiDueno = taxiByPlacaTaxiDueno;
+        this.viajesByPkCorreoUsuario = viajesByPkCorreoUsuario;
+    }
+
+    public TaxistaEntidad() {
+    }
+
     @Id
     @Column(name = "pk_correo_usuario", nullable = false, length = 64)
     public String getPkCorreoUsuario() {

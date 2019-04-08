@@ -20,6 +20,20 @@ public class ViajeEntidad {
     private ClienteEntidad clienteByPkCorreoCliente;
     private TaxistaEntidad taxistaByCorreoTaxi;
 
+    public ViajeEntidad(ViajeEntidadPK viajeEntidadPK, Timestamp fechaFin, String costo, float estrellas, String origenDestino, TaxiEntidad taxiByPkPlacaTaxi, ClienteEntidad clienteByPkCorreoCliente, TaxistaEntidad taxistaByCorreoTaxi) {
+        this.viajeEntidadPK = viajeEntidadPK;
+        this.fechaFin = fechaFin;
+        this.costo = costo;
+        this.estrellas = estrellas;
+        this.origenDestino = origenDestino;
+        this.taxiByPkPlacaTaxi = taxiByPkPlacaTaxi;
+        this.clienteByPkCorreoCliente = clienteByPkCorreoCliente;
+        this.taxistaByCorreoTaxi = taxistaByCorreoTaxi;
+    }
+
+    public ViajeEntidad() {
+    }
+
     @EmbeddedId
     public ViajeEntidadPK getViajeEntidadPK() {
         return viajeEntidadPK;
