@@ -9,6 +9,7 @@
  */
 package com.coopetico.coopeticobackend.servicios;
 
+import com.coopetico.coopeticobackend.entidades.ClienteEntidad;
 import com.coopetico.coopeticobackend.entidades.UsuarioEntidad;
 import com.coopetico.coopeticobackend.repositorios.ClientesRepositorio;
 import com.coopetico.coopeticobackend.repositorios.UsuariosRepositorio;
@@ -59,6 +60,21 @@ public class UsuariosServicioImpl implements  UsuariosServicio {
             resultado = null;
         }
         return resultado;
+    }
+
+    /**
+     * Autor: Joseph Rementería (b55824).
+     * Fecha: 08/04/2019.
+     *
+     * Trae una Entidad Cliente que corresponde al correo ingresado.
+     *
+     * @param correo el correo a consultar.
+     * @return ClienteEntidad del correo en la base, null de otra manera.
+     */
+    @Override
+    @Transactional
+    public ClienteEntidad consultarClientePorId(String correo){
+        return clienteRepositorio.findById(correo).orElse(null);
     }
 
     // @Override

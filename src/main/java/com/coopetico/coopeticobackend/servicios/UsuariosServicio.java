@@ -9,6 +9,7 @@
  *
  */
 package com.coopetico.coopeticobackend.servicios;
+import com.coopetico.coopeticobackend.entidades.ClienteEntidad;
 import com.coopetico.coopeticobackend.entidades.UsuarioEntidad;
 
 //import java.util.List;
@@ -29,6 +30,8 @@ public interface UsuariosServicio {
      * @return UsuarioEntidad del correo en la base, null de otra manera.
      */
     UsuarioEntidad consultarPorId(String correo);
+
+    ClienteEntidad consultarClientePorId (String corre);
 
     // void eliminar(String correo);
 

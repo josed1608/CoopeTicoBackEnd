@@ -24,6 +24,19 @@ public class ViajesServicioImpl implements ViajesServicio {
      */
     @Autowired
     private ViajesRepositorio viajesRepositorio;
+    private UsuariosServicio usuariosServicio;
+    private TaxisServicio taxisServicio;
+    private TaxistasServicio taxistasServicio;
+
+    public ViajesServicioImpl(
+            UsuariosServicio usrSer,
+            TaxisServicio txsSer,
+            TaxistasServicio txstSer
+    ){
+        this.usuariosServicio = usrSer;
+        this.taxisServicio = txsSer;
+        this.taxistasServicio = txstSer;
+    }
 
     // @Override
     // @Transactional
@@ -33,7 +46,7 @@ public class ViajesServicioImpl implements ViajesServicio {
 
     /**
      * Autor: Joseph Rementería (b55824).
-     * Fecha: 06/04/2019.
+     * Fecha: 08/04/2019.
      * <p>
      * Guarda una tupla en la base de datos.
      */
@@ -56,15 +69,6 @@ public class ViajesServicioImpl implements ViajesServicio {
         pk.setPkPlacaTaxi(placa);
         pk.setPkFechaInicio(fechaInicio);
         //---------------------------------------------------------------------
-        // Obtención de la Entidad Taxi para a partir de la placa.
-        // TODO: taxiEntidad = taxiServico.consultarPorId(placa);
-        //---------------------------------------------------------------------
-        // Obtención de la Entidad Taxista para a partir del correo.
-        // TODO: taxistaEntidad = taxistaServico.consultarPorId(correoTaxista);
-        //---------------------------------------------------------------------
-        // Obtención de la Entidad Cliente para a partir del correo.
-        // TODO: clienteEntidad = usuarioServico.consultarPorId(correoCliente);
-        //---------------------------------------------------------------------
         // Creación de entidad Viaje per sé.
         ViajeEntidad viajeInsertando = new ViajeEntidad();
         viajeInsertando.setViajeEntidadPK(pk);
@@ -72,12 +76,18 @@ public class ViajesServicioImpl implements ViajesServicio {
         viajeInsertando.setCosto(costo);
         viajeInsertando.setEstrellas(estrellas);
         viajeInsertando.setOrigenDestino(origenDestino);
-        // TODO: viajeInsertando.setTaxiByPkPlacaTaxi(taxiEntidad);
-        // TODO: viajeInsertando.setTaxistaByCorreoTaxi(taxistaEntidad);
-        // TODO: viajeInsertando.setClienteByPkCorreoCliente(clienteEntidad);
+        viajeInsertando.setTaxiByPkPlacaTaxi(
+                this.taxisServicio.consultarPorId(placa)
+        );
+        viajeInsertando.setTaxistaByCorreoTaxi(
+                this.taxistasServicio.consultarPorId(correoTaxista)
+        );
+        viajeInsertando.setClienteByPkCorreoCliente(
+                this.usuariosServicio.consultarClientePorId(correoCliente)
+        );
         //---------------------------------------------------------------------
         viajeInsertando = viajesRepositorio.save(viajeInsertando);
-        return viajeInsertando.toString();//usuarioRepositorio.save(taxista);
+        return viajeInsertando.toString();
     }
 
     // @Override
