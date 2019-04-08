@@ -14,11 +14,25 @@ public class ViajeEntidad {
     private ViajeEntidadPK viajeEntidadPK;
     private Timestamp fechaFin;
     private String costo;
-    private Integer estrellas;
+    private float estrellas;
     private String origenDestino;
     private TaxiEntidad taxiByPkPlacaTaxi;
     private ClienteEntidad clienteByPkCorreoCliente;
     private TaxistaEntidad taxistaByCorreoTaxi;
+
+    public ViajeEntidad(ViajeEntidadPK viajeEntidadPK, Timestamp fechaFin, String costo, float estrellas, String origenDestino, TaxiEntidad taxiByPkPlacaTaxi, ClienteEntidad clienteByPkCorreoCliente, TaxistaEntidad taxistaByCorreoTaxi) {
+        this.viajeEntidadPK = viajeEntidadPK;
+        this.fechaFin = fechaFin;
+        this.costo = costo;
+        this.estrellas = estrellas;
+        this.origenDestino = origenDestino;
+        this.taxiByPkPlacaTaxi = taxiByPkPlacaTaxi;
+        this.clienteByPkCorreoCliente = clienteByPkCorreoCliente;
+        this.taxistaByCorreoTaxi = taxistaByCorreoTaxi;
+    }
+
+    public ViajeEntidad() {
+    }
 
     @EmbeddedId
     public ViajeEntidadPK getViajeEntidadPK() {
@@ -51,11 +65,11 @@ public class ViajeEntidad {
 
     @Basic
     @Column(name = "estrellas")
-    public Integer getEstrellas() {
+    public float getEstrellas() {
         return estrellas;
     }
 
-    public void setEstrellas(Integer estrellas) {
+    public void setEstrellas(float estrellas) {
         this.estrellas = estrellas;
     }
 
