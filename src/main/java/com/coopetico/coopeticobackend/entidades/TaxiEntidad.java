@@ -24,6 +24,23 @@ public class TaxiEntidad {
     private Collection<TaxistaEntidad> taxistasByPkPlaca_0;
     private Collection<ViajeEntidad> viajesByPkPlaca;
 
+    public TaxiEntidad(String pkPlaca, Boolean datafono, String telefono, String clase, String tipo, Timestamp fechaVenTaxista, Timestamp fechaVenMarchamo, Timestamp fechaVenSeguro, Collection<TaxistaEntidad> taxistasByPkPlaca, Collection<TaxistaEntidad> taxistasByPkPlaca_0, Collection<ViajeEntidad> viajesByPkPlaca) {
+        this.pkPlaca = pkPlaca;
+        this.datafono = datafono;
+        this.telefono = telefono;
+        this.clase = clase;
+        this.tipo = tipo;
+        this.fechaVenTaxista = fechaVenTaxista;
+        this.fechaVenMarchamo = fechaVenMarchamo;
+        this.fechaVenSeguro = fechaVenSeguro;
+        this.taxistasByPkPlaca = taxistasByPkPlaca;
+        this.taxistasByPkPlaca_0 = taxistasByPkPlaca_0;
+        this.viajesByPkPlaca = viajesByPkPlaca;
+    }
+
+    public TaxiEntidad() {
+    }
+
     @Id
     @Column(name = "pk_placa", nullable = false, length = 8)
     public String getPkPlaca() {

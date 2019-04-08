@@ -13,6 +13,14 @@ public class CoopeticoEntidad {
     private String pkCorreoUsuario;
     private UsuarioEntidad usuarioByPkCorreoUsuario;
 
+    public CoopeticoEntidad(String pkCorreoUsuario, UsuarioEntidad usuarioByPkCorreoUsuario) {
+        this.pkCorreoUsuario = pkCorreoUsuario;
+        this.usuarioByPkCorreoUsuario = usuarioByPkCorreoUsuario;
+    }
+
+    public CoopeticoEntidad() {
+    }
+
     @Id
     @Column(name = "pk_correo_usuario", nullable = false, length = 64)
     public String getPkCorreoUsuario() {

@@ -5,7 +5,7 @@ package com.coopetico.coopeticobackend.controladores;
 //Controlador de la entidad Permisos que contiene los permisos existentes en el sistema.
 
 import com.coopetico.coopeticobackend.entidades.PermisoEntidad;
-import com.coopetico.coopeticobackend.repositorios.PermisosRepositorio;
+import com.coopetico.coopeticobackend.servicios.PermisosServicio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,15 +14,16 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/coopetico")
+@RequestMapping("/permisos")
 public class PermisoEntidadControlador {
 
     @Autowired
-    PermisosRepositorio permisosRepo;
+    PermisosServicio permisos;
 
-    @GetMapping("/permisos")
+    @GetMapping("/listarPermisos")
     public List<PermisoEntidad> getPermisos(){
-        return permisosRepo.findAll();
+        List<PermisoEntidad> lista = permisos.getPermisos();
+        return lista;
     }
 
 }

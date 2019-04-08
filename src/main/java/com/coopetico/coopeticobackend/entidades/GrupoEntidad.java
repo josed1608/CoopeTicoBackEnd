@@ -15,6 +15,15 @@ public class GrupoEntidad {
     private Collection<PermisosGrupoEntidad> permisosGruposByPkId;
     private Collection<UsuarioEntidad> usuariosByPkId;
 
+    public GrupoEntidad(String pkId, Collection<PermisosGrupoEntidad> permisosGruposByPkId, Collection<UsuarioEntidad> usuariosByPkId) {
+        this.pkId = pkId;
+        this.permisosGruposByPkId = permisosGruposByPkId;
+        this.usuariosByPkId = usuariosByPkId;
+    }
+
+    public GrupoEntidad() {
+    }
+
     @Id
     @Column(name = "pk_id", nullable = false, length = 32)
     public String getPkId() {

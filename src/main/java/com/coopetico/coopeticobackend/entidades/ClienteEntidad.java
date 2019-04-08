@@ -15,6 +15,15 @@ public class ClienteEntidad {
     private UsuarioEntidad usuarioByPkCorreoUsuario;
     private Collection<ViajeEntidad> viajesByPkCorreoUsuario;
 
+    public ClienteEntidad(String pkCorreoUsuario, UsuarioEntidad usuarioByPkCorreoUsuario, Collection<ViajeEntidad> viajesByPkCorreoUsuario) {
+        this.pkCorreoUsuario = pkCorreoUsuario;
+        this.usuarioByPkCorreoUsuario = usuarioByPkCorreoUsuario;
+        this.viajesByPkCorreoUsuario = viajesByPkCorreoUsuario;
+    }
+
+    public ClienteEntidad() {
+    }
+
     @Id
     @Column(name = "pk_correo_usuario", nullable = false, length = 64)
     public String getPkCorreoUsuario() {
