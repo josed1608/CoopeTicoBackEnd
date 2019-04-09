@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 import java.util.Objects;
 
 @Entity
-@Table(name = "token_recuperacion_contrasena", schema = "coopetico-dev")
+@Table(name = "token_recuperacion_contrasena", schema = "coopetico-dev", catalog = "")
 public class TokenRecuperacionContrasenaEntidad {
     private String fkCorreoUsuario;
     private String token;
