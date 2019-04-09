@@ -1,6 +1,7 @@
 package com.coopetico.coopeticobackend.servicios;
 
 import com.coopetico.coopeticobackend.entidades.GrupoEntidad;
+import com.coopetico.coopeticobackend.entidades.PermisosGrupoEntidad;
 import com.coopetico.coopeticobackend.entidades.UsuarioEntidad;
 import com.coopetico.coopeticobackend.excepciones.CorreoTomadoExcepcion;
 import com.coopetico.coopeticobackend.excepciones.GrupoNoExisteExcepcion;
@@ -11,7 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UsuarioServicioImpl implements UsuarioServicio{
@@ -42,5 +45,16 @@ public class UsuarioServicioImpl implements UsuarioServicio{
     @Override
     public Optional<UsuarioEntidad> usuarioPorCorreo(String correo) {
         return usuariosRepositorio.findById(correo);
+    }
+
+    @Override
+    public List<String> obtenerPermisos(UsuarioEntidad usuario) {
+        return usuario
+                .getGrupoByIdGrupo()
+                .getPermisosGruposByPkId()
+                .stream()
+                .map(PermisosGrupoEntidad::getPermisoByPkIdPermisos)
+                .map(permiso -> Integer.toString(permiso.getPkId()))
+                .collect(Collectors.toList());
     }
 }
