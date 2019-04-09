@@ -16,20 +16,18 @@ public class UsuarioEntidad {
     private String telefono;
     private String contrasena;
     private String foto;
-    private String salt;
     private ClienteEntidad clienteByPkCorreo;
     private CoopeticoEntidad coopeticoByPkCorreo;
     private TaxistaEntidad taxistaByPkCorreo;
     private GrupoEntidad grupoByIdGrupo;
 
-    public UsuarioEntidad(String pkCorreo, String nombre, String apellidos, String telefono, String contrasena, String foto, String salt, ClienteEntidad clienteByPkCorreo, CoopeticoEntidad coopeticoByPkCorreo, TaxistaEntidad taxistaByPkCorreo, GrupoEntidad grupoByIdGrupo) {
+    public UsuarioEntidad(String pkCorreo, String nombre, String apellidos, String telefono, String contrasena, String foto, ClienteEntidad clienteByPkCorreo, CoopeticoEntidad coopeticoByPkCorreo, TaxistaEntidad taxistaByPkCorreo, GrupoEntidad grupoByIdGrupo) {
         this.pkCorreo = pkCorreo;
         this.nombre = nombre;
         this.apellidos = apellidos;
         this.telefono = telefono;
         this.contrasena = contrasena;
         this.foto = foto;
-        this.salt = salt;
         this.clienteByPkCorreo = clienteByPkCorreo;
         this.coopeticoByPkCorreo = coopeticoByPkCorreo;
         this.taxistaByPkCorreo = taxistaByPkCorreo;
@@ -99,16 +97,6 @@ public class UsuarioEntidad {
         this.foto = foto;
     }
 
-    @Basic
-    @Column(name = "salt", nullable = false, length = 128)
-    public String getSalt() {
-        return salt;
-    }
-
-    public void setSalt(String salt) {
-        this.salt = salt;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -119,13 +107,12 @@ public class UsuarioEntidad {
                 Objects.equals(apellidos, that.apellidos) &&
                 Objects.equals(telefono, that.telefono) &&
                 Objects.equals(contrasena, that.contrasena) &&
-                Objects.equals(foto, that.foto) &&
-                Objects.equals(salt, that.salt);
+                Objects.equals(foto, that.foto);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(pkCorreo, nombre, apellidos, telefono, contrasena, foto, salt);
+        return Objects.hash(pkCorreo, nombre, apellidos, telefono, contrasena, foto);
     }
 
     @OneToOne(mappedBy = "usuarioByPkCorreoUsuario")

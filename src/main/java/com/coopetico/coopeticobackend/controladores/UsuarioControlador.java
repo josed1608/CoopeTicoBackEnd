@@ -2,18 +2,13 @@ package com.coopetico.coopeticobackend.controladores;
 
 import com.coopetico.coopeticobackend.entidades.UsuarioEntidad;
 import com.coopetico.coopeticobackend.repositorios.UsuariosRepositorio;
-import com.coopetico.coopeticobackend.security.PasswordEncoderImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
-import java.util.Random;
 
 
 @Controller    // This means that this class is a Controller
@@ -22,11 +17,10 @@ public class UsuarioControlador {
 
     private UsuariosRepositorio usuariosRepositorio;
 
-    @Autowired
-    private PasswordEncoderImpl encoder;
+    private PasswordEncoder encoder;
 
     @Autowired
-    public UsuarioControlador(UsuariosRepositorio usuariosRepositorio, PasswordEncoderImpl encoder) {
+    public UsuarioControlador(UsuariosRepositorio usuariosRepositorio, PasswordEncoder encoder) {
         this.usuariosRepositorio = usuariosRepositorio;
         this.encoder = encoder;
     }
