@@ -10,9 +10,10 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface PermisosRepositorio extends JpaRepository<PermisoEntidad, String> {
+public interface PermisosRepositorio extends JpaRepository<PermisoEntidad, Integer> {
 
         @Override
         @Query("select p.pkId, p.descripcion from PermisoEntidad p ")
         List<PermisoEntidad> findAll();
+
 }
