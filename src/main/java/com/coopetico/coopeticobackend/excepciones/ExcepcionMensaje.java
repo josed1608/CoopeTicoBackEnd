@@ -4,12 +4,15 @@ import org.springframework.http.HttpStatus;
 
 import java.security.Timestamp;
 
+/**
+ * Clase con el contenido de información de una excepción
+ */
 public class ExcepcionMensaje {
     private HttpStatus estado;
     private String mensaje;
     private long timestamp;
 
-    public ExcepcionMensaje(HttpStatus estado, String mensaje, long timestamp) {
+    ExcepcionMensaje(HttpStatus estado, String mensaje, long timestamp) {
         this.estado = estado;
         this.mensaje = mensaje;
         this.timestamp = timestamp;
@@ -18,7 +21,7 @@ public class ExcepcionMensaje {
     public ExcepcionMensaje() {
     }
 
-    public HttpStatus getEstado() {
+    HttpStatus getEstado() {
         return estado;
     }
 

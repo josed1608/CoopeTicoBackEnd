@@ -2,19 +2,22 @@ package com.coopetico.coopeticobackend.excepciones;
 
 import org.springframework.http.HttpStatus;
 
-public class ExcepcionGeneral extends RuntimeException {
+/**
+ * Clase de la que todas las excepciones custom van a heredar
+ */
+class ExcepcionGeneral extends RuntimeException {
     private ExcepcionMensaje excepcionMensaje;
 
-    public ExcepcionGeneral(String mensaje, HttpStatus estado, long timestamp) {
+    ExcepcionGeneral(String mensaje, HttpStatus estado, long timestamp) {
         super(mensaje);
         this.excepcionMensaje = new ExcepcionMensaje(estado, mensaje, timestamp);
     }
 
-    public ExcepcionMensaje getExcepcionMensaje() {
+    ExcepcionMensaje getExcepcionMensaje() {
         return excepcionMensaje;
     }
 
-    public void setExcepcionMensaje(ExcepcionMensaje excepcionMensaje) {
+    void setExcepcionMensaje(ExcepcionMensaje excepcionMensaje) {
         this.excepcionMensaje = excepcionMensaje;
     }
 }

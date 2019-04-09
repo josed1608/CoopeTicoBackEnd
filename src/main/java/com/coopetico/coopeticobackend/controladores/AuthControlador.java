@@ -1,11 +1,14 @@
 package com.coopetico.coopeticobackend.controladores;
 
 import com.coopetico.coopeticobackend.entidades.UsuarioEntidad;
+import com.coopetico.coopeticobackend.excepciones.MalasCredencialesExcepcion;
+import com.coopetico.coopeticobackend.excepciones.UsuarioNoEncontradoExcepcion;
 import com.coopetico.coopeticobackend.repositorios.UsuariosRepositorio;
 import com.coopetico.coopeticobackend.security.CustomUserDetails;
 import com.coopetico.coopeticobackend.security.jwt.JwtTokenProvider;
 import com.coopetico.coopeticobackend.servicios.UsuarioServicio;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -54,7 +57,7 @@ public class AuthControlador {
         try {
             String username = data.getUsername();
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, data.getPassword()));
-            UsuarioEntidad usuarioEntidad = this.users.usuarioPorCorreo(username).orElseThrow(() -> new UsernameNotFoundException("Username " + username + "not found"));
+            UsuarioEntidad usuarioEntidad = this.users.usuarioPorCorreo(username).orElseThrow(() -> new UsuarioNoEncontradoExcepcion("Usuario " + username + " no encontrado", HttpStatus.NOT_FOUND, System.currentTimeMillis()));
             List<String> roles = new CustomUserDetails(usuarioEntidad)
                     .getAuthorities()
                     .stream()
@@ -64,7 +67,7 @@ public class AuthControlador {
 
             return ok(token);
         } catch (AuthenticationException e) {
-            throw new BadCredentialsException("Correo o contraseña inválido");
+            throw new MalasCredencialesExcepcion("Correo o contraseña inválido", HttpStatus.UNAUTHORIZED, System.currentTimeMillis());
         }
     }
 }
