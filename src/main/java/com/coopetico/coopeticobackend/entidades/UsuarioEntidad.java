@@ -22,6 +22,23 @@ public class UsuarioEntidad {
     private TaxistaEntidad taxistaByPkCorreo;
     private GrupoEntidad grupoByIdGrupo;
 
+    public UsuarioEntidad(String pkCorreo, String nombre, String apellidos, String telefono, String contrasena, String foto, String salt, ClienteEntidad clienteByPkCorreo, CoopeticoEntidad coopeticoByPkCorreo, TaxistaEntidad taxistaByPkCorreo, GrupoEntidad grupoByIdGrupo) {
+        this.pkCorreo = pkCorreo;
+        this.nombre = nombre;
+        this.apellidos = apellidos;
+        this.telefono = telefono;
+        this.contrasena = contrasena;
+        this.foto = foto;
+        this.salt = salt;
+        this.clienteByPkCorreo = clienteByPkCorreo;
+        this.coopeticoByPkCorreo = coopeticoByPkCorreo;
+        this.taxistaByPkCorreo = taxistaByPkCorreo;
+        this.grupoByIdGrupo = grupoByIdGrupo;
+    }
+
+    public UsuarioEntidad() {
+    }
+
     @Id
     @Column(name = "pk_correo", nullable = false, length = 64)
     public String getPkCorreo() {
