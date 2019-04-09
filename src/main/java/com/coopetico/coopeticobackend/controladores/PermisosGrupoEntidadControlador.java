@@ -29,4 +29,9 @@ public class PermisosGrupoEntidadControlador {
     public void guardarPermisoGrupo(@RequestBody PermisosGrupoEntidadPK pG) {
         permisosGrupo.guardarPermisosGrupo(pG);
     }
+
+    @DeleteMapping("listarPermisosGrupo")
+    public void eliminarPermisoGrupo(@RequestBody PermisosGrupoEntidadPK pG) {
+        permisosGrupo.eliminarPermisosGrupo(pG);
+    }
 }

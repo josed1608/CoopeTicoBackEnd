@@ -15,4 +15,6 @@ public interface PermisoGrupoServicio {
     public List<PermisosGrupoEntidad> getPermisosGrupo();
 
     public void guardarPermisosGrupo(PermisosGrupoEntidadPK pG);
+
+    public void eliminarPermisosGrupo(PermisosGrupoEntidadPK pG);
 }

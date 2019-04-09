@@ -58,6 +58,14 @@ public class PermisoGrupoServicioImpl implements PermisoGrupoServicio {
         //Guardamos en la base
         permisosGrupoRepo.save(permisoGrupoInsertar);
 
+    }
+
+    public void eliminarPermisosGrupo(PermisosGrupoEntidadPK pG){
+        //Obtenemos la instancia del Permiso - Grupo
+        Optional<PermisosGrupoEntidad> permisoGrupoEliminar = permisosGrupoRepo.findById(pG);
+
+        //Eliminarmos el Permiso - Grupo
+        permisosGrupoRepo.delete(permisoGrupoEliminar.get());
 
     }
 }
