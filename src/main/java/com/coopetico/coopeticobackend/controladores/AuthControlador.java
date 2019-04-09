@@ -1,10 +1,14 @@
 package com.coopetico.coopeticobackend.controladores;
 
 import com.coopetico.coopeticobackend.entidades.UsuarioEntidad;
+import com.coopetico.coopeticobackend.excepciones.MalasCredencialesExcepcion;
+import com.coopetico.coopeticobackend.excepciones.UsuarioNoEncontradoExcepcion;
 import com.coopetico.coopeticobackend.repositorios.UsuariosRepositorio;
 import com.coopetico.coopeticobackend.security.CustomUserDetails;
 import com.coopetico.coopeticobackend.security.jwt.JwtTokenProvider;
+import com.coopetico.coopeticobackend.servicios.UsuarioServicio;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -33,10 +37,10 @@ public class AuthControlador {
     JwtTokenProvider jwtTokenProvider;
 
     private final
-    UsuariosRepositorio users;
+    UsuarioServicio users;
 
     @Autowired
-    public AuthControlador(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, UsuariosRepositorio users) {
+    public AuthControlador(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, UsuarioServicio users) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenProvider = jwtTokenProvider;
         this.users = users;
@@ -53,7 +57,7 @@ public class AuthControlador {
         try {
             String username = data.getUsername();
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, data.getPassword()));
-            UsuarioEntidad usuarioEntidad = this.users.findById(username).orElseThrow(() -> new UsernameNotFoundException("Username " + username + "not found"));
+            UsuarioEntidad usuarioEntidad = this.users.usuarioPorCorreo(username).orElseThrow(() -> new UsuarioNoEncontradoExcepcion("Usuario " + username + " no encontrado", HttpStatus.NOT_FOUND, System.currentTimeMillis()));
             List<String> roles = new CustomUserDetails(usuarioEntidad)
                     .getAuthorities()
                     .stream()
@@ -63,17 +67,7 @@ public class AuthControlador {
 
             return ok(token);
         } catch (AuthenticationException e) {
-            throw new BadCredentialsException("Invalid username/password supplied");
+            throw new MalasCredencialesExcepcion("Correo o contraseña inválido", HttpStatus.UNAUTHORIZED, System.currentTimeMillis());
         }
-    }
-
-    /**
-     * Endpoint de prueba asegurado para probar que el filtro del JWT sirva
-     *
-     * @return Lista con todos los usuarios del sistema
-     */
-    @GetMapping("/usuarios")
-    public List<UsuarioEntidad> todosLosUsuarios() {
-        return users.findAll();
     }
 }
