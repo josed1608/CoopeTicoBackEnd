@@ -71,4 +71,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // Se aplica el filtro de los JWT
                 .apply(new JwtConfigurer(jwtTokenProvider));
     }
+
+
 }
