@@ -1,6 +1,8 @@
 package com.coopetico.coopeticobackend.controladores;
 
+import com.coopetico.coopeticobackend.entidades.TokenRecuperacionContrasenaEntidad;
 import com.coopetico.coopeticobackend.entidades.UsuarioEntidad;
+import com.coopetico.coopeticobackend.repositorios.TokensRecuperacionContrasenaRepositorio;
 import com.coopetico.coopeticobackend.repositorios.UsuariosRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,29 +27,31 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller    // This means that this class is a Controller
 @RequestMapping(path="/usuario") // This means URL's start with /demo (after Application path)
 public class UsuarioControlador {
-    @Autowired
-    TokensRecuperacionContrasenaServicioImpl tokensServicio;
-    @Autowired
-    EmailServiceImpl mail ;
+
+    private TokensRecuperacionContrasenaServicioImpl tokensServicio;
+
+    private EmailServiceImpl mail ;
 
     private UsuariosRepositorio usuariosRepositorio;
     private PasswordEncoder encoder;
-    //private TokensRecuperacionContrasenaRepositorio tokensRecuperacionContrasenaRepositorio;
+    private TokensRecuperacionContrasenaRepositorio tokensRecuperacionContrasenaRepositorio;
+
+
+    @Autowired
+    public UsuarioControlador(UsuariosRepositorio usuariosRepositorio, PasswordEncoder encoder, TokensRecuperacionContrasenaRepositorio tokensRecuperacionContrasenaRepositorio) {
+        this.usuariosRepositorio = usuariosRepositorio;
+        this.encoder = encoder;
+        this.tokensRecuperacionContrasenaRepositorio = tokensRecuperacionContrasenaRepositorio;
+    }
 
     @GetMapping(path="/contrasenaToken")
     public @ResponseBody ResponseEntity recuperarContrasena (@RequestParam("correo") String correo) {
         String token = tokensServicio.insertarToken(correo);
-        if (token == null){
-            return new ResponseEntity(HttpStatus.NOT_FOUND );
+        if (token == null) {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
-        mail.sendSimpleMessage(correo,"Codigo de reseteo", token);
+        mail.sendSimpleMessage(correo, "Codigo de reseteo", token);
         return new ResponseEntity(HttpStatus.OK);
-
-    @Autowired
-    public UsuarioControlador(UsuariosRepositorio usuariosRepositorio, PasswordEncoder encoder) {
-        this.usuariosRepositorio = usuariosRepositorio;
-        this.encoder = encoder;
-        //this.tokensRecuperacionContrasenaRepositorio = tokensRecuperacionContrasenaRepositorio;
     }
 
     @PutMapping(path = "/recuperarContrasena")
@@ -63,6 +67,7 @@ public class UsuarioControlador {
             usuariosRepositorio.save(usuarioEntidad);
 
             // TODO BORRAR TOKEN EN LA TABLA
+            tokensRecuperacionContrasenaRepositorio.deleteById(nombreUsuario);
 
             return new ResponseEntity(HttpStatus.OK);
         }
@@ -71,16 +76,14 @@ public class UsuarioControlador {
     }
 
     ///// BEGIN -- PRUEBA DE VALIDACION DE TOKEN
-    @GetMapping(path="/recuperarContrasena")
-    public @ResponseBody String linkRecuperarContrasena () {
-        return "MOSTRAR INTERFAZ DE RECUPERACIÓN DE CONTRASEÑA";
-    }
-
-    @GetMapping(path="/recuperarContrasenaFallido")
-    public @ResponseBody String linkRecuperarContrasena2 () {
-        return "NO MOSTRAR INTERFAZ DE RECUPERACIÓN DE CONTRASEÑA";
-    }
-    ///// END -- PRUEBA DE VALIDACION DE TOKEN
+      @GetMapping(path="/recuperarContrasenaEnProceso")
+      public @ResponseBody String linkRecuperarContrasena (@RequestParam("id") String id) {
+          return "MOSTRAR INTERFAZ DE RECUPERACIÓN DE CONTRASEÑA";
+      }      @GetMapping(path="/recuperarContrasenaFallido")
+      public @ResponseBody String linkRecuperarContrasena2 () {
+          return "NO MOSTRAR INTERFAZ DE RECUPERACIÓN DE CONTRASEÑA";
+      }
+     ///// END -- PRUEBA DE VALIDACION DE TOKEN
 
     @RequestMapping(value = "/recuperarContrasena", method = RequestMethod.GET)
     public String mostrarInterfazCambioContrasena( @RequestParam("id") String id, @RequestParam("token") String token) {
@@ -90,22 +93,22 @@ public class UsuarioControlador {
             return "redirect:/usuario/recuperarContrasenaFallido";
         }
         // TODO Se necesita el id en el path para hacer el cambio de contraseña, verdad?
-        return "redirect:/usuario/recuperarContrasena?id=" + id;
+        return "redirect:/usuario/recuperarContrasenaEnProceso?id=" + id;
     }
 
     private boolean validarTokenRecuperarContrasena(String id, String token) {
         // TODO Implementar el findByToken
-        // TokenRecuperacionContrasenaEntidad tokenContrasena  = tokensRecuperacionContrasenaRepositorio.findByToken(token);
-        // if ((tokenContrasena == null || (tokenContrasena.getFkCorreoUsuario() != id)) {
-        //        return false;
-        // }
+        TokenRecuperacionContrasenaEntidad tokenContrasena  = tokensRecuperacionContrasenaRepositorio.findbByToken(token);
+        if (tokenContrasena == null || !tokenContrasena.getFkCorreoUsuario().equals(id)) {
+               return false;
+        }
 
         Calendar calendario = Calendar.getInstance();
-        // if ((tokenContrasena.getExpiryDate()
-        //         .getTime() - cal.getTime()
-        //         .getTime()) <= 0) {
-        //     return false;
-        // }
+        if ((tokenContrasena.getFechaExpiracion()
+                .getTime() - calendario.getTime()
+                .getTime()) <= 0) {
+            return false;
+        }
 
         return true;
     }
