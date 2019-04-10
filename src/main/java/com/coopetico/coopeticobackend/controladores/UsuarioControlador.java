@@ -1,5 +1,6 @@
 package com.coopetico.coopeticobackend.controladores;
 
+import com.coopetico.coopeticobackend.mail.EmailServiceImpl;
 import com.coopetico.coopeticobackend.servicios.TokensRecuperacionContrasenaServicioImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,12 +17,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class UsuarioControlador {
     @Autowired
     TokensRecuperacionContrasenaServicioImpl tokensServicio;
+    @Autowired
+    EmailServiceImpl mail ;
 
     @GetMapping(path="/contrasenaToken")
     public @ResponseBody ResponseEntity recuperarContrasena (@RequestParam("correo") String correo) {
-        if (tokensServicio.insertarToken(correo) == null){
+        String token = tokensServicio.insertarToken(correo);
+        if (token == null){
             return new ResponseEntity(HttpStatus.NOT_FOUND );
         }
+        mail.sendSimpleMessage(correo,"Codigo de reseteo", token);
         return new ResponseEntity(HttpStatus.OK);
     }
 }
