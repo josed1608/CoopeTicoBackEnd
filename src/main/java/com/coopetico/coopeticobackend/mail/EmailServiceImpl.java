@@ -13,9 +13,7 @@ import java.io.File;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
-/**
- * Created by Olga on 7/15/2016.
- */
+
 @Component
 public class EmailServiceImpl implements EmailService {
 
