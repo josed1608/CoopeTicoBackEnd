@@ -7,20 +7,41 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import com.coopetico.coopeticobackend.mail.EmailServiceImpl;
+import com.coopetico.coopeticobackend.servicios.TokensRecuperacionContrasenaServicioImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Calendar;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 
 @Controller    // This means that this class is a Controller
 @RequestMapping(path="/usuario") // This means URL's start with /demo (after Application path)
 public class UsuarioControlador {
+    @Autowired
+    TokensRecuperacionContrasenaServicioImpl tokensServicio;
+    @Autowired
+    EmailServiceImpl mail ;
 
     private UsuariosRepositorio usuariosRepositorio;
     private PasswordEncoder encoder;
     //private TokensRecuperacionContrasenaRepositorio tokensRecuperacionContrasenaRepositorio;
 
+    @GetMapping(path="/contrasenaToken")
+    public @ResponseBody ResponseEntity recuperarContrasena (@RequestParam("correo") String correo) {
+        String token = tokensServicio.insertarToken(correo);
+        if (token == null){
+            return new ResponseEntity(HttpStatus.NOT_FOUND );
+        }
+        mail.sendSimpleMessage(correo,"Codigo de reseteo", token);
+        return new ResponseEntity(HttpStatus.OK);
 
     @Autowired
     public UsuarioControlador(UsuariosRepositorio usuariosRepositorio, PasswordEncoder encoder) {
@@ -89,4 +110,3 @@ public class UsuarioControlador {
         return true;
     }
 }
-
