@@ -13,8 +13,8 @@ import java.util.List;
 public interface TokensRecuperacionContrasenaRepositorio extends JpaRepository<TokenRecuperacionContrasenaEntidad, String> {
 
 
-    @Query("select t.fkCorreoUsuario, t.token, t.fechaExpiracion from TokenRecuperacionContrasenaEntidad t where t.token = token")
-    TokenRecuperacionContrasenaEntidad findbByToken(@Param("token") String token);
+    @Query("select t.fkCorreoUsuario, t.fechaExpiracion, t.token from TokenRecuperacionContrasenaEntidad t where t.token = token")
+    List<TokenRecuperacionContrasenaEntidad> findByToken(@Param("token") String token);
 
 
     @Query("delete from TokenRecuperacionContrasenaEntidad t where t.token = token")

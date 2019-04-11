@@ -18,6 +18,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Calendar;
+import java.util.List;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -98,18 +100,25 @@ public class UsuarioControlador {
 
     private boolean validarTokenRecuperarContrasena(String id, String token) {
         // TODO Implementar el findByToken
-        TokenRecuperacionContrasenaEntidad tokenContrasena  = tokensRecuperacionContrasenaRepositorio.findbByToken(token);
-        if (tokenContrasena == null || !tokenContrasena.getFkCorreoUsuario().equals(id)) {
-               return false;
+        List<TokenRecuperacionContrasenaEntidad> tokenContrasenaLista  = tokensRecuperacionContrasenaRepositorio.findByToken(token);
+
+        if(!tokenContrasenaLista.isEmpty()) {
+            TokenRecuperacionContrasenaEntidad tokenContrasena = tokenContrasenaLista.get(0);
+
+           //if (tokenContrasena == null || !tokenContrasena.getFkCorreoUsuario().equals(id)) {
+           //    return false;
+           //}
+
+           //Calendar calendario = Calendar.getInstance();
+           //if ((tokenContrasena.getFechaExpiracion()
+           //        .getTime() - calendario.getTime()
+           //        .getTime()) <= 0) {
+           //    return false;
+           //}
+
+            return true;
         }
 
-        Calendar calendario = Calendar.getInstance();
-        if ((tokenContrasena.getFechaExpiracion()
-                .getTime() - calendario.getTime()
-                .getTime()) <= 0) {
-            return false;
-        }
-
-        return true;
+        return false;
     }
 }
