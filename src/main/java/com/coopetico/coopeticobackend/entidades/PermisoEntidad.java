@@ -14,7 +14,7 @@ import java.util.Objects;
 public class PermisoEntidad {
     private int pkId;
     private String descripcion;
-    @JsonIgnore
+    @JsonIgnore //Con JsonIgnore ignoramos las consultas que se hagan para esta variable a la hora de retornar
     private Collection<PermisosGrupoEntidad> permisosGruposByPkId;
 
     public PermisoEntidad(int pkId, String descripcion, Collection<PermisosGrupoEntidad> permisosGruposByPkId) {
