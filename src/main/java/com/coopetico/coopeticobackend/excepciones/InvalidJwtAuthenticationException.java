@@ -1,9 +1,9 @@
 package com.coopetico.coopeticobackend.excepciones;
 
-import org.springframework.security.core.AuthenticationException;
+import org.springframework.http.HttpStatus;
 
-public class InvalidJwtAuthenticationException extends AuthenticationException {
-    public InvalidJwtAuthenticationException(String e) {
-        super(e);
+public class InvalidJwtAuthenticationException extends ExcepcionGeneral {
+    public InvalidJwtAuthenticationException(String mensaje, HttpStatus estado, long timestamp) {
+        super(mensaje, estado, timestamp);
     }
 }
