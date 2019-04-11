@@ -25,12 +25,12 @@ public class PermisosGrupoEntidadControlador {
         return lista;
     }
 
-    @PostMapping("listarPermisosGrupo")
+    @PostMapping("/listarPermisosGrupo")
     public void guardarPermisoGrupo(@RequestBody PermisosGrupoEntidadPK pG) {
         permisosGrupo.guardarPermisosGrupo(pG);
     }
 
-    @DeleteMapping("listarPermisosGrupo")
+    @DeleteMapping("/listarPermisosGrupo")
     public void eliminarPermisoGrupo(@RequestBody PermisosGrupoEntidadPK pG) {
         permisosGrupo.eliminarPermisosGrupo(pG);
     }
