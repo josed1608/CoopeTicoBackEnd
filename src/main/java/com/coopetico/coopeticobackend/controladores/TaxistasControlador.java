@@ -17,6 +17,7 @@ public class TaxistasControlador {
     private TaxistasServicio taxistaServicio;
 
     @GetMapping("/taxistas")
+    @CrossOrigin(origins = "http://localhost:4200")
     public List<TaxistaEntidad> consultar() {
         return taxistaServicio.consultar();
     }
