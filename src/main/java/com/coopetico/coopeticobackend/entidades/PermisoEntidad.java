@@ -14,7 +14,6 @@ import java.util.Objects;
 public class PermisoEntidad {
     private int pkId;
     private String descripcion;
-    @JsonIgnore
     private Collection<PermisosGrupoEntidad> permisosGruposByPkId;
 
     public PermisoEntidad(int pkId, String descripcion, Collection<PermisosGrupoEntidad> permisosGruposByPkId) {
