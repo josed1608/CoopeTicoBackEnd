@@ -16,12 +16,12 @@ public class CoopeticoBackendApplication {
 		SpringApplication.run(CoopeticoBackendApplication.class, args);
 	}
 
-	@Bean
+	@Bean(name="emailThreadExecutor")
 	public Executor asyncExecutor() {
 		ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-		executor.setCorePoolSize(2);
-		executor.setMaxPoolSize(2);
-		executor.setQueueCapacity(500);
+		executor.setCorePoolSize(10);
+		executor.setMaxPoolSize(10);
+		executor.setQueueCapacity(100);
 		executor.setThreadNamePrefix("JDAsync-");
 		executor.initialize();
 		return executor;

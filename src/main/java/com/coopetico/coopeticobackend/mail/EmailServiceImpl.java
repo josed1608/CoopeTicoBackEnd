@@ -66,7 +66,7 @@ public class EmailServiceImpl implements EmailService {
         }
     }
 
-    @Async
+    @Async("emailThreadExecutor")
     @Override
     public void enviarCorreoRecuperarContrasena(String to,  String token) {
         MimeMessage message = emailSender.createMimeMessage();
