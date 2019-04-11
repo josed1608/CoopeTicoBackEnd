@@ -31,7 +31,7 @@ public class PermisosServicioImpl implements PermisosServicio {
      * @return Lista de permisos con el ID y la Descripcion
      */
     public List<PermisoEntidad> getPermisos(){
-        List<PermisoEntidad> lista = permisosRepo.findAll();
+        List<PermisoEntidad> lista = permisosRepo.getPermisoIDyDescripcion();
         return lista;
     }
 
