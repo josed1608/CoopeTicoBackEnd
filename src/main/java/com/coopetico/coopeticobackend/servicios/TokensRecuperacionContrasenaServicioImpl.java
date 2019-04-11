@@ -15,7 +15,8 @@ import java.util.UUID;
 @Service
 public class TokensRecuperacionContrasenaServicioImpl implements TokensRecuperacionContrasenaServicio {
 
-    private TokensRecuperacionContrasenaRepositorio tokensRepo;
+    @Autowired
+    TokensRecuperacionContrasenaRepositorio tokensRepo;
 
     @Override
     public TokenRecuperacionContrasenaEntidad getToken(String correo) {
