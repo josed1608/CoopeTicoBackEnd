@@ -30,7 +30,7 @@ public class UsuarioControlador {
         if (token == null){
             return new ResponseEntity(HttpStatus.NOT_FOUND );
         }
-        mail.sendSimpleMessage(correo,"Codigo de reseteo", token);
+        mail.enviarCorreoRecuperarCoontrasena(correo, token);
         return new ResponseEntity(HttpStatus.OK);
     }
 }
