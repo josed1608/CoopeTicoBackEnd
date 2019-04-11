@@ -15,12 +15,16 @@ import java.util.UUID;
 @Service
 public class TokensRecuperacionContrasenaServicioImpl implements TokensRecuperacionContrasenaServicio {
 
-    @Autowired
-    TokensRecuperacionContrasenaRepositorio tokensRepo;
+    private TokensRecuperacionContrasenaRepositorio tokensRepo;
 
     @Override
     public TokenRecuperacionContrasenaEntidad getToken(String correo) {
-        return tokensRepo.getOne(correo);
+       return  tokensRepo.findByFkCorreoUsuario(correo);
+    }
+
+    @Override
+    public void eliminarToken(String correo) {
+        tokensRepo.deleteById(correo);
     }
 
     @Override

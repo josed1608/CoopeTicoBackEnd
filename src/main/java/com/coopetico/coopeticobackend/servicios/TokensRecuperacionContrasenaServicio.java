@@ -9,5 +9,6 @@ import com.coopetico.coopeticobackend.entidades.TokenRecuperacionContrasenaEntid
 
 public interface TokensRecuperacionContrasenaServicio {
     TokenRecuperacionContrasenaEntidad getToken(String correo);
+    void eliminarToken(String correo);
     String insertarToken(String correo);
 }
