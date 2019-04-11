@@ -6,7 +6,6 @@ import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -70,7 +69,6 @@ public class EmailServiceImpl implements EmailService {
     public void enviarCorreoRecuperarCoontrasena(String to,  String token) {
         MimeMessage message = emailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
-
         try {
             helper.setTo(to);
             helper.setText("<!doctype html>\n" +
@@ -82,8 +80,9 @@ public class EmailServiceImpl implements EmailService {
                     "</head>\n" +
                     "\n" +
                     "<body>\n" +
-                    "  <h1> Codigo para recuperar su contraseña</h1>" +
-                    "<p>Abra el siguiente link para recuperar su contraseña: " + token + "</p>"+
+                    "<h1> Codigo para recuperar su contraseña</h1>" +
+                    "<p>Abra el siguiente link para recuperar su contraseña: https://www.coopeticoapp/usuarios/" +
+                        "recuperarContrasena?usuario=" + to + "&token=" + token + "</p>"+
                     "</body>\n" +
                     "</html>", true);
             helper.setSubject("Recuperar contraseña CoopeticoApp");
