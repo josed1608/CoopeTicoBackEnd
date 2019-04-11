@@ -14,6 +14,10 @@ import java.util.List;
 
 public interface PermisosRepositorio extends JpaRepository<PermisoEntidad, Integer> {
 
-    @Query("select new map(p.descripcion as descripcion, p.pkId as pkId) from PermisoEntidad p")
+    /**
+     * Metodo que obtiene el id y la descripcion de los permisos
+     * @return Lista de entidades de Permisos con sus atributos pkId y descripcion
+     */
+    @Query("select new map(p.pkId as pkId, p.descripcion as descripcion) from PermisoEntidad p")
     List<PermisoEntidad> getPermisoIDyDescripcion();
 }
