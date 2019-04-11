@@ -1,6 +1,9 @@
 package com.coopetico.coopeticobackend.controladores.integration;
 
 import com.coopetico.coopeticobackend.controladores.AuthControlador;
+import com.coopetico.coopeticobackend.controladores.ClienteControlador;
+import com.coopetico.coopeticobackend.excepciones.UsuarioNoEncontradoExcepcion;
+import com.coopetico.coopeticobackend.servicios.ClienteServicio;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,29 +22,39 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standal
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
-public class AuthControladorIntegrationTest {
+public class ClienteControladorIntegrationTest {
     private MockMvc mockMvc;
 
     @Autowired
     protected WebApplicationContext wac;
 
     @Autowired
-    AuthControlador authControlador;
+    ClienteControlador clienteControlador;
+    @Autowired
+    ClienteServicio clienteServicio;
 
     @Before
     public void setup() {
-        this.mockMvc = standaloneSetup(this.authControlador).build();
+        this.mockMvc = standaloneSetup(this.clienteControlador).build();
     }
 
     @Test
     @Transactional
     public void testLoginSuccesfull() throws Exception {
-        mockMvc.perform(post("/auth/signin")
+        try {
+            clienteServicio.borrarCliente("prueba@prueba.com");
+        }
+        catch (UsuarioNoEncontradoExcepcion ignored) {}
+        finally {
+            mockMvc.perform(post("/clientes")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content("{" +
-                        "\"username\": \"cliente@cliente.com\"," +
-                        "\"password\": \"contrasenna\"" +
-                        "}"))
-                .andExpect(status().isOk());
+                            "\"nombre\": \"Eugenio\"," +
+                    "\"apellidos\": \"Morera Soto\"," +
+                    "\"telefono\": \"75842654\"," +
+                    "\"contrasena\": \"contrasenna\"" +
+                            "}"))
+                    .andExpect(status().isOk());
+        }
     }
 }

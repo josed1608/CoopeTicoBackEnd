@@ -9,4 +9,10 @@ public interface ClienteServicio {
      * @param usuarioEntidad usuario al que se linkea el cliente
      */
     void agregarCliente(UsuarioEntidad usuarioEntidad);
+
+    /**
+     * Borra al cliente y el usuario asociado de la base de datos
+     * @param pkCorreo correo del usuario a borrar
+     */
+    void borrarCliente(String pkCorreo);
 }
