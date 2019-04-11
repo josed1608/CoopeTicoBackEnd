@@ -1,3 +1,14 @@
+DELETE FROM taxista;
+DELETE FROM taxi;
+DELETE FROM cliente;
+DELETE FROM coopetico;
+DELETE FROM usuario;
+DELETE FROM permisos_grupo;
+DELETE FROM grupo;
+DELETE FROM permiso;
+DELETE FROM viaje;
+DELETE FROM token_recuperacion_contrasena;
+
 INSERT INTO permiso VALUES  (100, 'Pedir viaje');
 INSERT INTO permiso VALUES  (101, 'Ver taxis cerca');
 INSERT INTO permiso VALUES  (102, 'Editar perfil');

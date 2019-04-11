@@ -48,7 +48,7 @@ public class UsuarioControlador {
         if (token == null){
             return new ResponseEntity(HttpStatus.NOT_FOUND );
         }
-        mail.enviarCorreoRecuperarCoontrasena(correo, token);
+        mail.enviarCorreoRecuperarContrasena(correo, token);
         return new ResponseEntity(HttpStatus.OK);
     }
 
@@ -64,5 +64,6 @@ public class UsuarioControlador {
         usuariosRepositorio.save(usuarioEntidad);
         return new ResponseEntity(HttpStatus.OK);
     }
+
 }
 

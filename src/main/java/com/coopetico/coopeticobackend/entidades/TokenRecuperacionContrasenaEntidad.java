@@ -5,11 +5,19 @@ import java.sql.Timestamp;
 import java.util.Objects;
 
 @Entity
-@Table(name = "token_recuperacion_contrasena", schema = "coopetico-dev", catalog = "")
+@Table(name = "token_recuperacion_contrasena", schema = "coopetico-dev")
 public class TokenRecuperacionContrasenaEntidad {
     private String fkCorreoUsuario;
     private String token;
     private Timestamp fechaExpiracion;
+
+    public TokenRecuperacionContrasenaEntidad() {
+    }
+
+    public TokenRecuperacionContrasenaEntidad(String fkCorreoUsuario, String token) {
+        this.fkCorreoUsuario = fkCorreoUsuario;
+        this.token = token;
+    }
 
     @Id
     @Column(name = "fk_correo_usuario")
