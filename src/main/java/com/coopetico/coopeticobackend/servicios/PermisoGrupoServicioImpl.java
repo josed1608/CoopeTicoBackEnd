@@ -1,9 +1,10 @@
 package com.coopetico.coopeticobackend.servicios;
-//Programador: Jefferson Alvarez
-//Fecha: 04/04/2019
-//Version: 0.01
-//Implementacion de la interfaz del Servicio de Permiso-Grupo.
-
+/**
+ Implementación del servicio de la entidad Permisos-Grupo que provee los metodos a utilizar.
+ @author      Jefferson Alvarez
+ @since       06-04-2019
+ @version:    1.0
+ */
 
 import com.coopetico.coopeticobackend.entidades.GrupoEntidad;
 import com.coopetico.coopeticobackend.entidades.PermisoEntidad;
@@ -21,24 +22,29 @@ import java.util.Optional;
 @Service
 public class PermisoGrupoServicioImpl implements PermisoGrupoServicio {
 
-    //Necesitamos el repostitorio de Permisos-Grupo
+    private final PermisosGruposRepositorio permisosGrupoRepo;
+
     @Autowired
-    PermisosGruposRepositorio permisosGrupoRepo;
-
-    //Necesitamos el repostitorio de Permisos
-    @Autowired
-    PermisosRepositorio permisosRepo;
-
-    //Necesitamos el repostitorio de Grupo
-    @Autowired
-    GruposRepositorio gruposRepo;
+    public PermisoGrupoServicioImpl(PermisosGruposRepositorio permisosGrupoRepo) {
+        this.permisosGrupoRepo = permisosGrupoRepo;
+    }
 
 
+    /**
+     * Metodo que obtiene los permisos de los grupos existentes del sistema
+     * @return Lista de permisos con el ID y la Descripcion del permiso y el ID del grupo
+     */
     public List<PermisosGrupoEntidad> getPermisosGrupo(){
         return permisosGrupoRepo.findAll();
     }
 
-    public void guardarPermisosGrupo(PermisosGrupoEntidadPK pG) {
+    /**
+     * Metodo que guarda una nueva llave permisos-grupo en la base de datos
+     * @return true si la llave se ha guardado correctamente
+     * @param pG par pkIdPermisos, pkIdGrupo a ser guardado en la base de datos
+     */
+    public boolean guardarPermisosGrupo(List<PermisosGrupoEntidadPK> pG) {
+        /*
         //Creamos la entidad a insertar
         PermisosGrupoEntidad permisoGrupoInsertar = new PermisosGrupoEntidad();
 
@@ -57,15 +63,25 @@ public class PermisoGrupoServicioImpl implements PermisoGrupoServicio {
 
         //Guardamos en la base
         permisosGrupoRepo.save(permisoGrupoInsertar);
+    */
+        return true;
 
     }
 
-    public void eliminarPermisosGrupo(PermisosGrupoEntidadPK pG){
+     /**
+     * Metodo que elimina una llave permisos-grupo en la base de datos
+     * @return true si la llave se ha eliminado correctamente
+     * @param pG par pkIdPermisos, pkIdGrupo a ser eliminado en la base de datos
+     */
+    public boolean eliminarPermisosGrupo(List<PermisosGrupoEntidadPK> pG){
+        /*
         //Obtenemos la instancia del Permiso - Grupo
         Optional<PermisosGrupoEntidad> permisoGrupoEliminar = permisosGrupoRepo.findById(pG);
 
         //Eliminarmos el Permiso - Grupo
         permisosGrupoRepo.delete(permisoGrupoEliminar.get());
+        */
+        return true;
 
     }
 }

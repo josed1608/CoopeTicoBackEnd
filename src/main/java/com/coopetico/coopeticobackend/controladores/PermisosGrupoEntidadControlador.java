@@ -1,8 +1,12 @@
 package com.coopetico.coopeticobackend.controladores;
-//Programador: Jefferson Alvarez
-//Fecha: 04/04/2019
-//Version: 0.01
-//Controlador de la entidad Permisos_Grupo que contiene los permisos de cada grupo existentes en el sistema.
+
+/**
+ Controlador de la entidad Permisos_Grupo que contiene los permisos de cada grupo existentes en el sistema.
+ @author      Jefferson Alvarez
+ @since       06-04-2019
+ @version:    1.0
+ */
+
 
 import com.coopetico.coopeticobackend.entidades.PermisosGrupoEntidad;
 import com.coopetico.coopeticobackend.entidades.PermisosGrupoEntidadPK;
@@ -19,19 +23,19 @@ public class PermisosGrupoEntidadControlador {
     @Autowired
     PermisoGrupoServicio permisosGrupo;
 
-    @GetMapping("/listarPermisosGrupo")
+    @GetMapping()
     public List<PermisosGrupoEntidad> getPermisosGrupo(){
         List<PermisosGrupoEntidad> lista = permisosGrupo.getPermisosGrupo();
         return lista;
     }
 
-    @PostMapping("/listarPermisosGrupo")
-    public void guardarPermisoGrupo(@RequestBody PermisosGrupoEntidadPK pG) {
+    @PostMapping()
+    public void guardarPermisoGrupo(@RequestBody List<PermisosGrupoEntidadPK> pG) {
         permisosGrupo.guardarPermisosGrupo(pG);
     }
 
-    @DeleteMapping("/listarPermisosGrupo")
-    public void eliminarPermisoGrupo(@RequestBody PermisosGrupoEntidadPK pG) {
+    @DeleteMapping()
+    public void eliminarPermisoGrupo(@RequestBody List<PermisosGrupoEntidadPK> pG) {
         permisosGrupo.eliminarPermisosGrupo(pG);
     }
 }
