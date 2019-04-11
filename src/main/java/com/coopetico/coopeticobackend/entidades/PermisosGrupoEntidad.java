@@ -14,6 +14,15 @@ public class PermisosGrupoEntidad {
     private PermisoEntidad permisoByPkIdPermisos;
     private GrupoEntidad grupoByPkIdGrupo;
 
+    public PermisosGrupoEntidad(PermisosGrupoEntidadPK permisosGrupoEntidadPK, PermisoEntidad permisoByPkIdPermisos, GrupoEntidad grupoByPkIdGrupo) {
+        this.permisosGrupoEntidadPK = permisosGrupoEntidadPK;
+        this.permisoByPkIdPermisos = permisoByPkIdPermisos;
+        this.grupoByPkIdGrupo = grupoByPkIdGrupo;
+    }
+
+    public PermisosGrupoEntidad() {
+    }
+
     @EmbeddedId
     public PermisosGrupoEntidadPK getPermisosGrupoEntidadPK() {
         return permisosGrupoEntidadPK;
