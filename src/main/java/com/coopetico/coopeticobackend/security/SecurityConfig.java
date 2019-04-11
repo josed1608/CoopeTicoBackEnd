@@ -2,6 +2,7 @@ package com.coopetico.coopeticobackend.security;
 
 import com.coopetico.coopeticobackend.security.jwt.JwtConfigurer;
 import com.coopetico.coopeticobackend.security.jwt.JwtTokenProvider;
+import com.coopetico.coopeticobackend.servicios.TokensRecuperacionContrasenaServicio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,6 +14,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+
 /**
  * Clase de configuración de Spring Security
  */
@@ -20,8 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
-    private final
-    JwtTokenProvider jwtTokenProvider;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Autowired
     public SecurityConfig(JwtTokenProvider jwtTokenProvider) {
