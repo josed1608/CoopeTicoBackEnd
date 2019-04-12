@@ -36,8 +36,7 @@ public class UsuarioControlador {
     private UsuarioServicio usuarioServicio;
 
     @Autowired
-    public UsuarioControlador(UsuariosRepositorio usuariosRepositorio, PasswordEncoder encoder, TokensRecuperacionContrasenaServicio tokensRecuperacionContrasenaServicio) {
-    public UsuarioControlador(UsuariosRepositorio usuariosRepositorio, PasswordEncoder encoder, UsuarioServicio servicio) {
+    public UsuarioControlador(UsuariosRepositorio usuariosRepositorio, PasswordEncoder encoder, TokensRecuperacionContrasenaServicio tokensRecuperacionContrasenaServicio, UsuarioServicio servicio) {
         this.usuarioServicio = servicio;
         this.usuariosRepositorio = usuariosRepositorio;
         this.encoder = encoder;
@@ -153,7 +152,6 @@ public class UsuarioControlador {
 
         return usuarioServicio.agregarUsuario(usuarioTemporal, usuarioTemporal.getPkCorreo());
     }
-}
 
     /**
      * Método para validar el token, revisa que exista un token para ese usuario (correo) y que la fecha del link no haya expirado.
