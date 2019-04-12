@@ -8,19 +8,23 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.annotation.Validated;
 
 import java.io.File;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
 
-
+@Validated
 @Component
 public class EmailServiceImpl implements EmailService {
 
     @Autowired
     public JavaMailSender emailSender;
 
+    // No ha sido formalmente testeado
     public void sendSimpleMessage(String to, String subject, String text) {
         try {
             SimpleMailMessage message = new SimpleMailMessage();
@@ -34,6 +38,7 @@ public class EmailServiceImpl implements EmailService {
         }
     }
 
+    // No ha sido formalmente testeado
     @Override
     public void sendSimpleMessageUsingTemplate(String to,
                                                String subject,
@@ -43,6 +48,7 @@ public class EmailServiceImpl implements EmailService {
         sendSimpleMessage(to, subject, text);
     }
 
+    // No ha sido formalmente testeado
     @Override
     public void sendMessageWithAttachment(String to,
                                           String subject,
@@ -68,7 +74,7 @@ public class EmailServiceImpl implements EmailService {
 
     @Async("emailThreadExecutor")
     @Override
-    public void enviarCorreoRecuperarContrasena(String to,  String token) {
+    public void enviarCorreoRecuperarContrasena(@Email  String to, @NotNull String token) {
         MimeMessage message = emailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
         try {

@@ -9,9 +9,12 @@ import com.coopetico.coopeticobackend.entidades.TokenRecuperacionContrasenaEntid
 import com.coopetico.coopeticobackend.repositorios.TokensRecuperacionContrasenaRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
+import javax.validation.constraints.Email;
 import java.util.UUID;
 
+@Validated
 @Service
 public class TokensRecuperacionContrasenaServicioImpl implements TokensRecuperacionContrasenaServicio {
 
@@ -24,7 +27,7 @@ public class TokensRecuperacionContrasenaServicioImpl implements TokensRecuperac
     }
 
     @Override
-    public String insertarToken(String correo) {
+    public String insertarToken(@Email String correo) {
         String token = UUID.randomUUID().toString();
         TokenRecuperacionContrasenaEntidad tokenEntidad = new TokenRecuperacionContrasenaEntidad();
         tokenEntidad.setFkCorreoUsuario(correo);

@@ -26,5 +26,4 @@ public class CoopeticoBackendApplication {
 		executor.initialize();
 		return executor;
 	}
-
 }
