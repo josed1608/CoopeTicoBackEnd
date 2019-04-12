@@ -6,10 +6,15 @@ package com.coopetico.coopeticobackend.servicios;
 //Interfaz del Servicio de Permiso-Grupo.
 
 import com.coopetico.coopeticobackend.entidades.PermisosGrupoEntidad;
+import com.coopetico.coopeticobackend.entidades.PermisosGrupoEntidadPK;
+
 import java.util.List;
 
 public interface PermisoGrupoServicio {
 
     public List<PermisosGrupoEntidad> getPermisosGrupo();
 
+    public void guardarPermisosGrupo(PermisosGrupoEntidadPK pG);
+
+    public void eliminarPermisosGrupo(PermisosGrupoEntidadPK pG);
 }
