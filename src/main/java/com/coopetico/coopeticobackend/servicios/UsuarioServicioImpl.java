@@ -13,6 +13,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import org.springframework.transaction.annotation.Transactional;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -30,7 +33,7 @@ public class UsuarioServicioImpl implements UsuarioServicio{
     }
 
     @Override
-    public void agregarUsuario(UsuarioEntidad usuarioSinGrupo, String grupoId) throws GrupoNoExisteExcepcion, CorreoTomadoExcepcion {
+    public UsuarioEntidad agregarUsuario(UsuarioEntidad usuarioSinGrupo, String grupoId) throws GrupoNoExisteExcepcion, CorreoTomadoExcepcion {
         GrupoEntidad grupoUsuario = gruposRepositorio.findById(grupoId).orElseThrow(() -> new GrupoNoExisteExcepcion("Grupo de permisos no existe", HttpStatus.NOT_FOUND, System.currentTimeMillis()));
 
         if (usuariosRepositorio.findById(usuarioSinGrupo.getPkCorreo()).isPresent()) {
@@ -39,10 +42,11 @@ public class UsuarioServicioImpl implements UsuarioServicio{
 
         usuarioSinGrupo.setGrupoByIdGrupo(grupoUsuario);
         usuarioSinGrupo.setContrasena(encoder.encode(usuarioSinGrupo.getContrasena()));
-        usuariosRepositorio.save(usuarioSinGrupo);
+        return usuariosRepositorio.save(usuarioSinGrupo);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<UsuarioEntidad> usuarioPorCorreo(String correo) {
         return usuariosRepositorio.findById(correo);
     }
@@ -56,5 +60,23 @@ public class UsuarioServicioImpl implements UsuarioServicio{
                 .map(PermisosGrupoEntidad::getPermisoByPkIdPermisos)
                 .map(permiso -> Integer.toString(permiso.getPkId()))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<UsuarioEntidad> obtenerUsuarios() {
+        return usuariosRepositorio.findAll();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<UsuarioEntidad> obtenerUsuariosPorGrupo(GrupoEntidad grupo) {
+        return usuariosRepositorio.findByGrupoByIdGrupo(grupo);
+    }
+
+    @Override
+    @Transactional
+    public void eliminar(String correo) {
+        usuariosRepositorio.deleteById(correo);
     }
 }
