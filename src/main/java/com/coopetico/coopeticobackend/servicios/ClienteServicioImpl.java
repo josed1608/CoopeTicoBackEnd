@@ -23,12 +23,14 @@ public class ClienteServicioImpl implements ClienteServicio {
     }
 
     @Override
-    public void agregarCliente(UsuarioEntidad usuarioEntidad) {
+    public void agregarCliente(UsuarioEntidad usuarioEntidad) throws UsuarioNoEncontradoExcepcion{
+        if(!usuariosRepositorio.findById(usuarioEntidad.getPkCorreo()).isPresent())
+            throw new UsuarioNoEncontradoExcepcion("No existe el usuario al que se desea asociar el cliente", HttpStatus.NOT_FOUND, System.currentTimeMillis());
         this.clientesRepositorio.save(new ClienteEntidad(usuarioEntidad.getPkCorreo() ,usuarioEntidad, null));
     }
 
     @Override
-    public void borrarCliente(String pkCorreo) {
+    public void borrarCliente(String pkCorreo) throws UsuarioNoEncontradoExcepcion{
         Optional<ClienteEntidad> cliente = clientesRepositorio.findById(pkCorreo);
         if (cliente.isPresent()) {
             clientesRepositorio.delete(cliente.get());

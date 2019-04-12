@@ -40,7 +40,7 @@ public class ClienteControladorIntegrationTest {
 
     @Test
     @Transactional
-    public void testLoginSuccesfull() throws Exception {
+    public void testCrearUsuarioSuccesfull() throws Exception {
         try {
             clienteServicio.borrarCliente("prueba@prueba.com");
         }
@@ -49,6 +49,7 @@ public class ClienteControladorIntegrationTest {
             mockMvc.perform(post("/clientes")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content("{" +
+                            "\"pkCorreo\": \"prueba@prueba.com\"," +
                             "\"nombre\": \"Eugenio\"," +
                     "\"apellidos\": \"Morera Soto\"," +
                     "\"telefono\": \"75842654\"," +
