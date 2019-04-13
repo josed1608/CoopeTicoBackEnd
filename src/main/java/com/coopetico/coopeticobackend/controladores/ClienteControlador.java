@@ -52,7 +52,7 @@ public class ClienteControlador {
      * null de otra manera.
      */
     @GetMapping(path = "/obtenerUsuario/{correo}")
-    public UsuarioEntidad obtenerUsuario(@PathVariable String correo) {
-        return this.clienteServicio.consultarPorId(correo);
+    public String obtenerUsuario(@PathVariable String correo) {
+        return this.clienteServicio.consultarPorId(correo).toString();
     }
 }
