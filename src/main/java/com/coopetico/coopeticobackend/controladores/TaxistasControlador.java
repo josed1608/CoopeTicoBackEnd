@@ -1,4 +1,4 @@
-package com.coopetico.coopeticobackend.controladores;
+package com.coopetico.coopeticobackend.Controladores;
 
 import com.coopetico.coopeticobackend.entidades.TaxistaEntidad;
 import com.coopetico.coopeticobackend.servicios.TaxistasServicio;
@@ -17,6 +17,7 @@ public class TaxistasControlador {
     private TaxistasServicio taxistaServicio;
 
     @GetMapping("/taxistas")
+    @CrossOrigin(origins = "http://localhost:4200")
     public List<TaxistaEntidad> consultar() {
         return taxistaServicio.consultar();
     }
