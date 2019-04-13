@@ -1,4 +1,4 @@
-package com.coopetico.coopeticobackend.controladores;
+package com.coopetico.coopeticobackend.Controladores;
 
 import com.coopetico.coopeticobackend.entidades.TaxiEntidad;
 import com.coopetico.coopeticobackend.servicios.TaxisServicioImpl;
