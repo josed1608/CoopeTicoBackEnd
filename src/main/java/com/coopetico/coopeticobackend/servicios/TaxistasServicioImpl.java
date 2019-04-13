@@ -19,7 +19,7 @@ public class TaxistasServicioImpl implements  TaxistasServicio {
     @Transactional
     @CrossOrigin(origins = "http://localhost:4200")
     public List<TaxistaEntidad> consultar(){
-        return taxistaRepositorio.findAll();
+        return taxistaRepositorio.consultar();
     }
 
     @Override
