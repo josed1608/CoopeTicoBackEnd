@@ -29,6 +29,7 @@ public class UsuarioServicioImpl implements UsuarioServicio{
         this.encoder = encoder;
     }
 
+    /**
     @Override
     public UsuarioEntidad agregarUsuario(UsuarioEntidad usuarioSinGrupo, String grupoId) throws GrupoNoExisteExcepcion, CorreoTomadoExcepcion {
         GrupoEntidad grupoUsuario = gruposRepositorio.findById(grupoId).orElseThrow(() -> new GrupoNoExisteExcepcion("Grupo de permisos no existe", HttpStatus.NOT_FOUND, System.currentTimeMillis()));
@@ -39,6 +40,11 @@ public class UsuarioServicioImpl implements UsuarioServicio{
 
         usuarioSinGrupo.setGrupoByIdGrupo(grupoUsuario);
         usuarioSinGrupo.setContrasena(encoder.encode(usuarioSinGrupo.getContrasena()));
+        return usuariosRepositorio.save(usuarioSinGrupo);
+    }**/
+
+    @Override
+    public UsuarioEntidad agregarUsuario(UsuarioEntidad usuarioSinGrupo, String grupoId)  {
         return usuariosRepositorio.save(usuarioSinGrupo);
     }
 

@@ -8,6 +8,7 @@ package com.coopetico.coopeticobackend.controladores;
 import com.coopetico.coopeticobackend.entidades.GrupoEntidad;
 import com.coopetico.coopeticobackend.entidades.TokenRecuperacionContrasenaEntidad;
 import com.coopetico.coopeticobackend.entidades.UsuarioEntidad;
+import com.coopetico.coopeticobackend.entidades.UsuarioTemporal;
 import com.coopetico.coopeticobackend.mail.EmailServiceImpl;
 import com.coopetico.coopeticobackend.repositorios.UsuariosRepositorio;
 import com.coopetico.coopeticobackend.servicios.TokensRecuperacionContrasenaServicio;
@@ -19,11 +20,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import java.util.List;
 
-
+@CrossOrigin( origins = {"http://localhost:4200"})
 @RestController
 @RequestMapping(path="/usuarios")
 public class UsuarioControlador {
@@ -34,6 +37,7 @@ public class UsuarioControlador {
     private PasswordEncoder encoder;
     private TokensRecuperacionContrasenaServicio tokensRecuperacionContrasenaServicio;
     private UsuarioServicio usuarioServicio;
+    private UsuarioTemporal usuarioTemporal;
 
     @Autowired
     public UsuarioControlador(UsuariosRepositorio usuariosRepositorio, PasswordEncoder encoder, TokensRecuperacionContrasenaServicio tokensRecuperacionContrasenaServicio, UsuarioServicio servicio) {
@@ -41,6 +45,7 @@ public class UsuarioControlador {
         this.usuariosRepositorio = usuariosRepositorio;
         this.encoder = encoder;
         this.tokensRecuperacionContrasenaServicio = tokensRecuperacionContrasenaServicio;
+        this.usuarioTemporal = new UsuarioTemporal();
     }
 
     /**
@@ -114,43 +119,49 @@ public class UsuarioControlador {
 
 
     //TODO ver lo de acoplamiento y cohesion
-    @PostMapping("/usuarios")
+    @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public UsuarioEntidad crearUsuario(@RequestBody UsuarioEntidad usuario){
-        String grupo = usuario.getGrupoByIdGrupo().getPkId();
-        return usuarioServicio.agregarUsuario(usuario, grupo);
+    public UsuarioTemporal crearUsuario(@RequestBody UsuarioTemporal usuario){
+        UsuarioEntidad temp = usuarioServicio.agregarUsuario(usuario.convertirAUsuarioEntidad(), usuario.getIdGrupo());
+        return new UsuarioTemporal(temp);
     }
 
-    @GetMapping("/usuarios/{id}")
-    public UsuarioEntidad obtenerUsuarioPorId(@PathVariable String id){
-        return usuarioServicio.usuarioPorCorreo(id).get();
+    @GetMapping()
+    public List<UsuarioTemporal> obtenerUsuarios(){
+        List<UsuarioEntidad> usuarios = usuarioServicio.obtenerUsuarios();
+        return usuarioTemporal.getListaUsuarioTemporal(usuarios);
     }
 
-    @DeleteMapping("/usuarios/{id}")
+
+    @GetMapping("/{id}")
+    public UsuarioTemporal obtenerUsuarioPorId(@PathVariable String id){
+        return new UsuarioTemporal(usuarioServicio.usuarioPorCorreo(id).get());
+    }
+
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void eliminarUsuarioPorId(@PathVariable String id){
         usuarioServicio.eliminar(id);
     }
 
-    @GetMapping("/usuarios")
-    public List<UsuarioEntidad> obtenerUsuarios(){
-        return usuarioServicio.obtenerUsuarios();
-    }
 
     @GetMapping("/grupo")
-    public List<UsuarioEntidad> obtenerUsuariosPorGrupo(@RequestBody GrupoEntidad grupoEntidad){
-        return usuarioServicio.obtenerUsuariosPorGrupo(grupoEntidad);
+    public List<UsuarioTemporal> obtenerUsuariosPorGrupo(@RequestBody GrupoEntidad grupoEntidad){
+        List<UsuarioEntidad> usuarios = usuarioServicio.obtenerUsuariosPorGrupo(grupoEntidad);
+        return usuarioTemporal.getListaUsuarioTemporal(usuarios);
     }
 
-    @PutMapping("/usuarios/{id}")
+    @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.CREATED)
-    public UsuarioEntidad actualizar(@RequestBody UsuarioEntidad usuario, @PathVariable String id){
+    public UsuarioTemporal actualizar(@RequestBody UsuarioTemporal usuario, @PathVariable String id){
         UsuarioEntidad usuarioTemporal = this.usuarioServicio.usuarioPorCorreo(id).get();
         usuarioTemporal.setApellidos(usuario.getApellidos());
         usuarioTemporal.setNombre(usuario.getNombre());
         usuarioTemporal.setTelefono(usuario.getTelefono());
-
-        return usuarioServicio.agregarUsuario(usuarioTemporal, usuarioTemporal.getPkCorreo());
+        usuarioTemporal.setFoto(usuario.getFoto());
+        //TODO verificar cohesion y acoplamiento
+        UsuarioEntidad temporal = usuarioServicio.agregarUsuario(usuarioTemporal, usuarioTemporal.getGrupoByIdGrupo().getPkId());
+        return new UsuarioTemporal(temporal);
     }
 
     /**
@@ -175,7 +186,6 @@ public class UsuarioControlador {
 
         return true;
     }
-
 
 
 }
