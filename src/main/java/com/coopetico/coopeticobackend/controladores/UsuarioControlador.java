@@ -1,5 +1,7 @@
 /**
- * Autor: Joseph Rementería (b55824).
+ * Autor: 
+ * (1) Joseph Rementería (b55824).
+ * 
  * Fecha: 06/04/2019.
  * <p>
  * Este es el controlador Usuario. Se encarga de la comunicación entre
@@ -43,22 +45,27 @@ public class UsuarioControlador {
     /**
      * Variables globales de la clase UsuarioControlador
      **/
-    private UsuariosServicio usuarioServicio;
-
     private TokensRecuperacionContrasenaServicioImpl tokensServicio;
     private EmailServiceImpl mail ;
     private UsuariosRepositorio usuariosRepositorio;
     private PasswordEncoder encoder;
     private TokensRecuperacionContrasenaServicio tokensRecuperacionContrasenaServicio;
     private UsuarioServicio usuarioServicio;
+    private UsuariosServicio clienteServicio;
 
     @Autowired
-    public UsuarioControlador(UsuariosRepositorio usuariosRepositorio, PasswordEncoder encoder, TokensRecuperacionContrasenaServicio tokensRecuperacionContrasenaServicio, UsuarioServicio servicio) {
+    public UsuarioControlador(
+        UsuariosRepositorio usuariosRepositorio,
+        PasswordEncoder encoder,
+        TokensRecuperacionContrasenaServicio tokensRecuperacionContrasenaServicio,
+        UsuarioServicio servicio,
+        UsuariosServicio clntSer
+    ) {
         this.usuarioServicio = servicio;
         this.usuariosRepositorio = usuariosRepositorio;
         this.encoder = encoder;
         this.tokensRecuperacionContrasenaServicio = tokensRecuperacionContrasenaServicio;
-        this.usuarioServicio = usrSer;
+        this.clienteServicio = clntSer;
     }
 
     /**
@@ -209,6 +216,6 @@ public class UsuarioControlador {
      */
     @GetMapping(path = "/usuarios/{correo}")
     public UsuarioEntidad obtener_usuario(@PathVariable String correo) {
-        return this.usuarioServicio.consultarPorId(correo);
+        return this.clienteServicio.consultarPorId(correo);
     }
 }
