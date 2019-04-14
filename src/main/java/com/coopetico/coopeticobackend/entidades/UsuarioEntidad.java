@@ -167,12 +167,12 @@ public class UsuarioEntidad {
     @Override
     public String toString(){
         String result = "{";
-        result += "correo: "    + this.pkCorreo;
-        result += ",nombre: "    + this.nombre;
-        result += ",apellidos: " + this.apellidos;
-        result += ",teléfono: "  + this.telefono;
-        result += ",foto: "      + this.foto;
-        result += "}";
+        result += "\"correo\": \""          + this.pkCorreo;
+        result += "\",\"nombre\": \""       + this.nombre;
+        result += "\",\"apellidos\": \""    + this.apellidos;
+        result += "\",\"telefono\": \""     + this.telefono;
+        result += "\",\"foto\": \""         + this.foto;
+        result += "\"}";
         return result;
     }
 }
