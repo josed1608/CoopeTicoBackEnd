@@ -54,15 +54,18 @@ public class PermisoGrupoServicioImpl implements PermisoGrupoServicio {
      * @return true si la llave se ha eliminado correctamente
      * @param pG par pkIdPermisos, pkIdGrupo a ser eliminado en la base de datos
      */
-    public boolean eliminarPermisosGrupo(PermisosGrupoEntidadPK pG){
-        /*
-        //Obtenemos la instancia del Permiso - Grupo
-        Optional<PermisosGrupoEntidad> permisoGrupoEliminar = permisosGrupoRepo.findById(pG);
-
-        //Eliminarmos el Permiso - Grupo
-        permisosGrupoRepo.delete(permisoGrupoEliminar.get());
-        */
+    public boolean eliminarPermisosGrupo(PermisosGrupoEntidad pG){
+        permisosGrupoRepo.delete(pG);
         return true;
+    }
 
+    /**
+     * Metodo que obtiene un objeto de la entidad Permiso-Grupo
+     * @param permisoGrupoPK Llave primaria del objeto de interes
+     * @return Objeto de la entidad Permiso-Grupo
+     */
+    public PermisosGrupoEntidad getPermisoGrupoPorPK (PermisosGrupoEntidadPK permisoGrupoPK){
+        Optional<PermisosGrupoEntidad> permisosGrupoEntidad = permisosGrupoRepo.findById(permisoGrupoPK);
+        return permisosGrupoEntidad.get();
     }
 }

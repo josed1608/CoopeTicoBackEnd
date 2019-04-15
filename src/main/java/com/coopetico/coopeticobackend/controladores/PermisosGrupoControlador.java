@@ -15,9 +15,12 @@ import com.coopetico.coopeticobackend.servicios.GrupoServicio;
 import com.coopetico.coopeticobackend.servicios.PermisoGrupoServicio;
 import com.coopetico.coopeticobackend.servicios.PermisosServicio;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
 @RequestMapping("/permisosGrupo")
@@ -43,7 +46,7 @@ public class PermisosGrupoControlador {
     }
 
     @PostMapping()
-    public void guardarPermisoGrupo(@RequestBody List<PermisosGrupoEntidadPK> pG) {
+    public ResponseEntity guardarPermisoGrupo(@RequestBody List<PermisosGrupoEntidadPK> pG) {
 
         for(PermisosGrupoEntidadPK pgEntrante: pG) {
             //Creamos la entidad a insertar
@@ -65,10 +68,19 @@ public class PermisosGrupoControlador {
             //Guardamos el Permiso-Grupo
             permisosGrupoServicio.guardarPermisosGrupo(permisoGrupoInsertar);
         }
+        return ok("Permiso/s de Grupo guardado/s correctamente");
     }
 
     @DeleteMapping()
-    public void eliminarPermisoGrupo(@RequestBody List<PermisosGrupoEntidadPK> pG) {
-        //permisosGrupoServicio.eliminarPermisosGrupo(pG);
+    public ResponseEntity eliminarPermisoGrupo(@RequestBody List<PermisosGrupoEntidadPK> pG) {
+
+        for (PermisosGrupoEntidadPK permisoGrupoEntidadPKEntrante: pG) {
+            //Obtenemos la instancia del Permiso - Grupo
+            PermisosGrupoEntidad permisoGrupoEliminar = permisosGrupoServicio.getPermisoGrupoPorPK(permisoGrupoEntidadPKEntrante);
+
+            //Eliminarmos el Permiso - Grupo
+            permisosGrupoServicio.eliminarPermisosGrupo(permisoGrupoEliminar);
+        }
+        return ok("Permiso/s de Grupo eliminado/s correctamente");
     }
 }

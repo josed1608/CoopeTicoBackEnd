@@ -34,5 +34,12 @@ public interface PermisoGrupoServicio {
       * @return true si las llaves se han eliminado correctamente
       * @param pG Permiso-grupo que guarda el par pkIdPermisos, pkIdGrupo a ser eliminado en la base de datos
      */
-    public boolean eliminarPermisosGrupo(PermisosGrupoEntidadPK pG);
+    public boolean eliminarPermisosGrupo(PermisosGrupoEntidad pG);
+
+    /**
+     * Metodo que obtiene un objeto de la entidad Permiso-Grupo
+     * @param permisoGrupoPK Llave primaria del objeto de interes
+     * @return Objeto de la entidad Permiso-Grupo
+     */
+    public PermisosGrupoEntidad getPermisoGrupoPorPK (PermisosGrupoEntidadPK permisoGrupoPK);
 }
