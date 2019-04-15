@@ -135,7 +135,10 @@ public class UsuarioControlador {
 
     @GetMapping("/{id}")
     public UsuarioTemporal obtenerUsuarioPorId(@PathVariable String id){
-        return new UsuarioTemporal(usuarioServicio.usuarioPorCorreo(id).get());
+        UsuarioEntidad usuarioEntidad = null;
+        if( usuarioServicio.usuarioPorCorreo(id).isPresent() )
+            usuarioEntidad = usuarioServicio.usuarioPorCorreo(id).get();
+        return new UsuarioTemporal(usuarioEntidad);
     }
 
     @DeleteMapping("/{id}")
@@ -154,13 +157,15 @@ public class UsuarioControlador {
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.CREATED)
     public UsuarioTemporal actualizar(@RequestBody UsuarioTemporal usuario, @PathVariable String id){
-        UsuarioEntidad usuarioTemporal = this.usuarioServicio.usuarioPorCorreo(id).get();
-        usuarioTemporal.setApellidos(usuario.getApellidos());
-        usuarioTemporal.setNombre(usuario.getNombre());
-        usuarioTemporal.setTelefono(usuario.getTelefono());
-        usuarioTemporal.setFoto(usuario.getFoto());
-        //TODO verificar cohesion y acoplamiento
-        UsuarioEntidad temporal = usuarioServicio.agregarUsuario(usuarioTemporal, usuarioTemporal.getGrupoByIdGrupo().getPkId());
+        UsuarioEntidad usuarioEntidad = new UsuarioEntidad();
+        if(this.usuarioServicio.usuarioPorCorreo(id).isPresent())
+            usuarioEntidad = this.usuarioServicio.usuarioPorCorreo(id).get();
+        usuarioEntidad.setApellidos(usuario.getApellidos());
+        usuarioEntidad.setNombre(usuario.getNombre());
+        usuarioEntidad.setTelefono(usuario.getTelefono());
+        usuarioEntidad.setFoto(usuario.getFoto());
+
+        UsuarioEntidad temporal = usuarioServicio.agregarUsuario(usuarioEntidad, usuarioEntidad.getGrupoId());
         return new UsuarioTemporal(temporal);
     }
 

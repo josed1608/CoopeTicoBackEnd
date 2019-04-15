@@ -22,6 +22,8 @@ public class UsuarioServicioImpl implements UsuarioServicio{
     private final GruposRepositorio gruposRepositorio;
     private final PasswordEncoder encoder;
 
+    //En caso de que no se haya asignado contrasena
+    private final String CONTRASENA_DEFAULT = "aguatico123";
     @Autowired
     public UsuarioServicioImpl(UsuariosRepositorio usuariosRepositorio, GruposRepositorio gruposRepositorio, PasswordEncoder encoder) {
         this.usuariosRepositorio = usuariosRepositorio;
@@ -29,24 +31,24 @@ public class UsuarioServicioImpl implements UsuarioServicio{
         this.encoder = encoder;
     }
 
-    /**
+
     @Override
     public UsuarioEntidad agregarUsuario(UsuarioEntidad usuarioSinGrupo, String grupoId) throws GrupoNoExisteExcepcion, CorreoTomadoExcepcion {
         GrupoEntidad grupoUsuario = gruposRepositorio.findById(grupoId).orElseThrow(() -> new GrupoNoExisteExcepcion("Grupo de permisos no existe", HttpStatus.NOT_FOUND, System.currentTimeMillis()));
 
+        /**
+         * Comentado porque para actualizar se necesita tener el mismo correo
         if (usuariosRepositorio.findById(usuarioSinGrupo.getPkCorreo()).isPresent()) {
             throw new CorreoTomadoExcepcion("Correo tomado", HttpStatus.BAD_REQUEST, System.currentTimeMillis());
-        }
+        }**/
 
         usuarioSinGrupo.setGrupoByIdGrupo(grupoUsuario);
+        if (usuarioSinGrupo.getContrasena() == null)
+            usuarioSinGrupo.setContrasena(CONTRASENA_DEFAULT);
         usuarioSinGrupo.setContrasena(encoder.encode(usuarioSinGrupo.getContrasena()));
         return usuariosRepositorio.save(usuarioSinGrupo);
-    }**/
-
-    @Override
-    public UsuarioEntidad agregarUsuario(UsuarioEntidad usuarioSinGrupo, String grupoId)  {
-        return usuariosRepositorio.save(usuarioSinGrupo);
     }
+
 
     @Override
     @Transactional(readOnly = true)

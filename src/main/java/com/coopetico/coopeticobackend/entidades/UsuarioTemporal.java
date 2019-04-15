@@ -24,8 +24,7 @@ public class UsuarioTemporal {
         this.telefono = usuarioEntidad.getTelefono();
         this.foto = usuarioEntidad.getFoto();
         this.contrasena = usuarioEntidad.getContrasena();
-        if( usuarioEntidad.getGrupoByIdGrupo() != null)
-            this.idGrupo = usuarioEntidad.getGrupoByIdGrupo().getPkId();
+        this.idGrupo = usuarioEntidad.getGrupoId();
     }
 
     public String getCorreo() {
