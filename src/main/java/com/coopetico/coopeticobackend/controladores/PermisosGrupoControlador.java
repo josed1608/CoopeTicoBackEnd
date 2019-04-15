@@ -18,7 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/permisosGrupo")
-public class PermisosGrupoEntidadControlador {
+public class PermisosGrupoControlador {
 
     @Autowired
     PermisoGrupoServicio permisosGrupo;
