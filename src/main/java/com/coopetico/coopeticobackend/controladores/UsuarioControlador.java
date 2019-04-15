@@ -1,9 +1,12 @@
 package com.coopetico.coopeticobackend.controladores;
-// Programador: Hannia Aguilar Salas
-// Fecha: 11/04/2019
-// Version: 2.0
-// Controlador de usuarios, hice los métodos de actualizarContrasena: Cambiar la contraseña en la base de datos
-// y mostrarInterfazCambioContrasena: Validar el token que se envío al mail del usuario para el cambio de contraseña.
+
+/**
+ Controlador de usuarios, hice los m&eacute;todos de actualizarContrasena: Cambiar la contrase&ntilde;a en la base de datos
+ y mostrarInterfazCambioContrasena: Validar el token que se env&iacute;o al mail del usuario para el cambio de contrase&ntilde;a.
+ @author Hannia Aguilar Salas
+ @since 12-04-2019
+ @version: 2.0
+ */
 
 import com.coopetico.coopeticobackend.entidades.GrupoEntidad;
 import com.coopetico.coopeticobackend.entidades.TokenRecuperacionContrasenaEntidad;
@@ -17,10 +20,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import java.util.Calendar;
 
+import java.util.Calendar;
 import java.util.List;
 
 
@@ -100,6 +102,7 @@ public class UsuarioControlador {
      * @param token Token del link enviado al correo, generado para el cambio de contraseña
      * @return Retorna la dirección a la que se dirije al usuario.
      */
+    @CrossOrigin
     @RequestMapping(value = "/recuperarContrasena", method = RequestMethod.GET)
     public String mostrarInterfazCambioContrasena( @RequestParam("id") String id, @RequestParam("token") String token) {
         System.out.println("Intenta entrar a recuperar contrasena");
@@ -175,7 +178,4 @@ public class UsuarioControlador {
 
         return true;
     }
-
-
-
 }
