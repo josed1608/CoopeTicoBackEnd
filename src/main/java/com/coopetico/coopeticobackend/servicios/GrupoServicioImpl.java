@@ -29,7 +29,7 @@ public class GrupoServicioImpl implements GrupoServicio{
      * @return Lista de grupos con el ID
      */
     public List<GrupoEntidad> getGrupos(){
-        List<GrupoEntidad> listaGrupos = this.grupoRepo.getIDGrupos();
+        List<GrupoEntidad> listaGrupos = grupoRepo.getIDGrupos();
         return  listaGrupos;
     }
 

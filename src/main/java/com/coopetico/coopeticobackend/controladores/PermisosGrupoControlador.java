@@ -8,6 +8,7 @@ package com.coopetico.coopeticobackend.controladores;
  */
 
 
+import com.coopetico.coopeticobackend.entidades.GrupoEntidad;
 import com.coopetico.coopeticobackend.entidades.PermisosGrupoEntidad;
 import com.coopetico.coopeticobackend.entidades.PermisosGrupoEntidadPK;
 import com.coopetico.coopeticobackend.servicios.PermisoGrupoServicio;
@@ -20,22 +21,26 @@ import java.util.List;
 @RequestMapping("/permisosGrupo")
 public class PermisosGrupoControlador {
 
+    private final PermisoGrupoServicio permisosGrupoServicio;
+
     @Autowired
-    PermisoGrupoServicio permisosGrupo;
+    PermisosGrupoControlador (PermisoGrupoServicio permisosGrupoServicio){
+        this.permisosGrupoServicio = permisosGrupoServicio;
+    }
 
     @GetMapping()
-    public List<PermisosGrupoEntidad> getPermisosGrupo(){
-        List<PermisosGrupoEntidad> lista = permisosGrupo.getPermisosGrupo();
+    public List<PermisosGrupoEntidad> getPermisosGrupo(@RequestBody GrupoEntidad grupo){
+        List<PermisosGrupoEntidad> lista = permisosGrupoServicio.getPermisosGrupo(grupo);
         return lista;
     }
 
     @PostMapping()
     public void guardarPermisoGrupo(@RequestBody List<PermisosGrupoEntidadPK> pG) {
-        permisosGrupo.guardarPermisosGrupo(pG);
+        permisosGrupoServicio.guardarPermisosGrupo(pG);
     }
 
     @DeleteMapping()
     public void eliminarPermisoGrupo(@RequestBody List<PermisosGrupoEntidadPK> pG) {
-        permisosGrupo.eliminarPermisosGrupo(pG);
+        permisosGrupoServicio.eliminarPermisosGrupo(pG);
     }
 }

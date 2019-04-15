@@ -31,7 +31,7 @@ public class GrupoControlador {
     @GetMapping()
     @CrossOrigin(origins = "http://localhost:4200")
     public List<GrupoEntidad> getGrupos(){
-        List<GrupoEntidad> listaGrupos = this.grupoServicio.getGrupos();
+        List<GrupoEntidad> listaGrupos = grupoServicio.getGrupos();
         return  listaGrupos;
     }
 

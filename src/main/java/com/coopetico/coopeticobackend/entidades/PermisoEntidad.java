@@ -59,6 +59,7 @@ public class PermisoEntidad {
         return Objects.hash(pkId, descripcion);
     }
 
+    @JsonIgnore
     @OneToMany(mappedBy = "permisoByPkIdPermisos")
     public Collection<PermisosGrupoEntidad> getPermisosGruposByPkId() {
         return permisosGruposByPkId;
