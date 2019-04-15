@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PermisosServicioImpl implements PermisosServicio {
@@ -26,7 +27,7 @@ public class PermisosServicioImpl implements PermisosServicio {
         this.permisosRepo = permisosRepo;
     }
 
-    /**
+     /**
      * Metodo que obtiene los permisos existentes del sistema
      * @return Lista de permisos con el ID y la Descripcion
      */
@@ -35,4 +36,13 @@ public class PermisosServicioImpl implements PermisosServicio {
         return lista;
     }
 
+     /**
+     * Metodo que obtiene un objeto de la entidad Permiso
+     * @param permisoPK Llave primaria del objeto de interes
+     * @return Objeto de la entidad permiso
+     */
+    public PermisoEntidad getPermisoPorPK(int permisoPK){
+        Optional<PermisoEntidad> permisoEntidad = permisosRepo.findById(permisoPK);
+        return permisoEntidad.get();
+    }
 }

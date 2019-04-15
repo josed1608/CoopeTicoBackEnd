@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class GrupoServicioImpl implements GrupoServicio{
@@ -24,7 +25,7 @@ public class GrupoServicioImpl implements GrupoServicio{
         this.grupoRepo = grupoRepo;
     }
 
-    /**
+     /**
      * Metodo que obtiene los grupos existentes del sistema
      * @return Lista de grupos con el ID
      */
@@ -33,4 +34,13 @@ public class GrupoServicioImpl implements GrupoServicio{
         return  listaGrupos;
     }
 
+     /**
+     * Metodo que obtiene un objeto de la entidad Grupo
+     * @param grupoPK Llave primaria del objeto de interes
+     * @return Objeto de la entidad Grupo
+     */
+    public GrupoEntidad getGrupoPorPK(String grupoPK){
+        Optional<GrupoEntidad> grupoEntidad = grupoRepo.findById(grupoPK);
+        return grupoEntidad.get();
+    }
 }

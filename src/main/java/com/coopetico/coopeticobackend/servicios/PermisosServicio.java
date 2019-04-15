@@ -18,4 +18,11 @@ public interface PermisosServicio {
      */
     public List<PermisoEntidad> getPermisos();
 
+    /**
+     * Metodo que obtiene un objeto de la entidad Permiso
+     * @param permisoPK Llave primaria del objeto de interes
+     * @return Objeto de la entidad permiso
+     */
+    public PermisoEntidad getPermisoPorPK(int permisoPK);
+
 }

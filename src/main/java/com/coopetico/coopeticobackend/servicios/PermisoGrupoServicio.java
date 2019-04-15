@@ -25,14 +25,14 @@ public interface PermisoGrupoServicio {
      /**
      * Metodo que guarda una nueva llave permisos-grupo en la base de datos
      * @return true si las llaves se han guardado correctamente
-     * @param pGLista Lista que guarda pares pkIdPermisos, pkIdGrupo a ser guardados en la base de datos
+     * @param pG Lista que guarda el par pkIdPermisos, pkIdGrupo a ser guardado en la base de datos
      */
-    public boolean guardarPermisosGrupo(List<PermisosGrupoEntidadPK> pGLista);
+    public boolean guardarPermisosGrupo(PermisosGrupoEntidad pG);
 
      /**
      * Metodo que elimina una llave permisos-grupo en la base de datos
       * @return true si las llaves se han eliminado correctamente
-      * @param pGLista Lista que guarda pares pkIdPermisos, pkIdGrupo a ser guardados en la base de datos
+      * @param pG Permiso-grupo que guarda el par pkIdPermisos, pkIdGrupo a ser eliminado en la base de datos
      */
-    public boolean eliminarPermisosGrupo(List<PermisosGrupoEntidadPK> pGLista);
+    public boolean eliminarPermisosGrupo(PermisosGrupoEntidadPK pG);
 }
