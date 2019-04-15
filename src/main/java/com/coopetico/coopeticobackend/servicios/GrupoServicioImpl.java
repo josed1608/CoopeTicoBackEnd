@@ -8,12 +8,14 @@ package com.coopetico.coopeticobackend.servicios;
  */
 
 import com.coopetico.coopeticobackend.entidades.GrupoEntidad;
+import com.coopetico.coopeticobackend.excepciones.GrupoNoExisteExcepcion;
 import com.coopetico.coopeticobackend.repositorios.GruposRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class GrupoServicioImpl implements GrupoServicio{
@@ -29,6 +31,8 @@ public class GrupoServicioImpl implements GrupoServicio{
      * Metodo que obtiene los grupos existentes del sistema
      * @return Lista de grupos con el ID
      */
+     @Override
+     @Transactional (readOnly = true)
     public List<GrupoEntidad> getGrupos(){
         List<GrupoEntidad> listaGrupos = grupoRepo.getIDGrupos();
         return  listaGrupos;
@@ -38,9 +42,15 @@ public class GrupoServicioImpl implements GrupoServicio{
      * Metodo que obtiene un objeto de la entidad Grupo
      * @param grupoPK Llave primaria del objeto de interes
      * @return Objeto de la entidad Grupo
+     * @throws GrupoNoExisteExcepcion si el grupo no existe
      */
+     @Override
+     @Transactional(readOnly = true)
     public GrupoEntidad getGrupoPorPK(String grupoPK){
-        Optional<GrupoEntidad> grupoEntidad = grupoRepo.findById(grupoPK);
-        return grupoEntidad.get();
+        GrupoEntidad grupoEntidad = grupoRepo.findById(grupoPK)
+                .orElseThrow(() -> new GrupoNoExisteExcepcion("Grupo "
+                        + grupoPK
+                        +" no existe", HttpStatus.BAD_REQUEST, System.currentTimeMillis()));
+        return grupoEntidad;
     }
 }

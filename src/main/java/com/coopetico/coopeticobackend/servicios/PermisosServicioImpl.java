@@ -9,9 +9,12 @@ package com.coopetico.coopeticobackend.servicios;
 
 
 import com.coopetico.coopeticobackend.entidades.PermisoEntidad;
+import com.coopetico.coopeticobackend.excepciones.PermisoNoExisteExcepcion;
 import com.coopetico.coopeticobackend.repositorios.PermisosRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,6 +34,8 @@ public class PermisosServicioImpl implements PermisosServicio {
      * Metodo que obtiene los permisos existentes del sistema
      * @return Lista de permisos con el ID y la Descripcion
      */
+     @Override
+     @Transactional (readOnly = true)
     public List<PermisoEntidad> getPermisos(){
         List<PermisoEntidad> lista = permisosRepo.getPermisoIDyDescripcion();
         return lista;
@@ -40,9 +45,15 @@ public class PermisosServicioImpl implements PermisosServicio {
      * Metodo que obtiene un objeto de la entidad Permiso
      * @param permisoPK Llave primaria del objeto de interes
      * @return Objeto de la entidad permiso
+     * @throws PermisoNoExisteExcepcion si el permiso no existe
      */
+     @Override
+     @Transactional(readOnly = true)
     public PermisoEntidad getPermisoPorPK(int permisoPK){
-        Optional<PermisoEntidad> permisoEntidad = permisosRepo.findById(permisoPK);
-        return permisoEntidad.get();
+        PermisoEntidad permisoEntidad = permisosRepo.findById(permisoPK)
+                .orElseThrow(() -> new PermisoNoExisteExcepcion("Permiso "
+                        + permisoPK
+                        +" no existe", HttpStatus.BAD_REQUEST, System.currentTimeMillis()));
+        return permisoEntidad;
     }
 }
