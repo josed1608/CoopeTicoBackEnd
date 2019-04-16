@@ -40,12 +40,14 @@ public class PermisosGrupoControlador {
     }
 
     @GetMapping()
+    @CrossOrigin(origins = "http://localhost:4200")
     public List<PermisosGrupoEntidad> getPermisosGrupo(@RequestBody GrupoEntidad grupo){
         List<PermisosGrupoEntidad> lista = permisosGrupoServicio.getPermisosGrupo(grupo);
         return lista;
     }
 
     @PostMapping()
+    @CrossOrigin(origins = "http://localhost:4200")
     public ResponseEntity guardarPermisoGrupo(@RequestBody List<PermisosGrupoEntidadPK> pG) {
 
         for(PermisosGrupoEntidadPK pgEntrante: pG) {
@@ -72,6 +74,7 @@ public class PermisosGrupoControlador {
     }
 
     @DeleteMapping()
+    @CrossOrigin(origins = "http://localhost:4200")
     public ResponseEntity eliminarPermisoGrupo(@RequestBody List<PermisosGrupoEntidadPK> pG) {
 
         for (PermisosGrupoEntidadPK permisoGrupoEntidadPKEntrante: pG) {
