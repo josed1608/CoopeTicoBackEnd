@@ -39,10 +39,11 @@ public class PermisosGrupoControlador {
         this.grupoServicio = grupoServicio;
     }
 
-    @GetMapping()
+    @GetMapping("/{id}")
     @CrossOrigin(origins = "http://localhost:4200")
-    public List<PermisosGrupoEntidad> getPermisosGrupo(@RequestBody GrupoEntidad grupo){
-        List<PermisosGrupoEntidad> lista = permisosGrupoServicio.getPermisosGrupo(grupo);
+    public List<PermisosGrupoEntidad> getPermisosGrupo(@PathVariable String id){
+        GrupoEntidad grupoEntidad = grupoServicio.getGrupoPorPK(id);
+        List<PermisosGrupoEntidad> lista = permisosGrupoServicio.getPermisosGrupo(grupoEntidad);
         return lista;
     }
 
