@@ -28,6 +28,10 @@ public class GrupoControlador {
         this.grupoServicio = grupoServicio;
     }
 
+    /**
+     * Metodo que obtiene los grupos existentes del sistema
+     * @return Lista de permisos con el ID
+     */
     @GetMapping()
     @CrossOrigin(origins = "http://localhost:4200")
     public List<GrupoEntidad> getGrupos(){

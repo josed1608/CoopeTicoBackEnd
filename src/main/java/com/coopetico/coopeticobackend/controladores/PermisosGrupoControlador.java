@@ -39,6 +39,11 @@ public class PermisosGrupoControlador {
         this.grupoServicio = grupoServicio;
     }
 
+    /**
+     * Metodo que devuelve los permisos del Grupo dado
+     * @param id id del grupo
+     * @return Lista con los permisos en objetos de PermisosGrupoEntidad
+     */
     @GetMapping("/{id}")
     @CrossOrigin(origins = "http://localhost:4200")
     public List<PermisosGrupoEntidad> getPermisosGrupo(@PathVariable String id){
@@ -47,6 +52,11 @@ public class PermisosGrupoControlador {
         return lista;
     }
 
+    /**
+     * Metodo para guardar llaves permiso-grupo
+     * @param pG Lista de objetos que contienen las llaves a guardar
+     * @return ok Si las llaves son guardadas correctamente
+     */
     @PostMapping()
     @CrossOrigin(origins = "http://localhost:4200")
     public ResponseEntity guardarPermisoGrupo(@RequestBody List<PermisosGrupoEntidadPK> pG) {
@@ -74,6 +84,11 @@ public class PermisosGrupoControlador {
         return ok("Permiso/s de Grupo guardado/s correctamente");
     }
 
+    /**
+     * Metodo para eliminar llaves permiso-grupo
+     * @param pG Lista de objetos que contienen las llaves a guardar
+     * @return ok Si las llaves son eliminadas correctamente
+     */
     @DeleteMapping()
     @CrossOrigin(origins = "http://localhost:4200")
     public ResponseEntity eliminarPermisoGrupo(@RequestBody List<PermisosGrupoEntidadPK> pG) {
