@@ -8,6 +8,7 @@ package com.coopetico.coopeticobackend.repositorios;
  */
 
 import com.coopetico.coopeticobackend.entidades.GrupoEntidad;
+import com.coopetico.coopeticobackend.entidades.PermisoEntidad;
 import com.coopetico.coopeticobackend.entidades.PermisosGrupoEntidad;
 import com.coopetico.coopeticobackend.entidades.PermisosGrupoEntidadPK;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,7 +18,7 @@ import java.util.List;
 
 public interface PermisosGruposRepositorio extends JpaRepository<PermisosGrupoEntidad, PermisosGrupoEntidadPK> {
 
-    @Query("select new map (pg.permisoByPkIdPermisos as permisoByPkIdPermisos) from PermisosGrupoEntidad  pg where pg.grupoByPkIdGrupo = :idGrupo")
-    List<PermisosGrupoEntidad> findPermisosGrupo(GrupoEntidad idGrupo);
+    @Query("select PermisoEntidad from PermisosGrupoEntidad  pg join pg.permisoByPkIdPermisos PermisoEntidad where pg.grupoByPkIdGrupo = :idGrupo")
+    List<PermisoEntidad> findPermisosGrupo(GrupoEntidad idGrupo);
 
 }

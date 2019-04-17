@@ -7,6 +7,7 @@ package com.coopetico.coopeticobackend.servicios;
  */
 
 import com.coopetico.coopeticobackend.entidades.GrupoEntidad;
+import com.coopetico.coopeticobackend.entidades.PermisoEntidad;
 import com.coopetico.coopeticobackend.entidades.PermisosGrupoEntidad;
 import com.coopetico.coopeticobackend.entidades.PermisosGrupoEntidadPK;
 import com.coopetico.coopeticobackend.excepciones.PermisoGrupoNoExisteExcepcion;
@@ -35,7 +36,7 @@ public class PermisoGrupoServicioImpl implements PermisoGrupoServicio {
      */
     @Override
     @Transactional (readOnly = true)
-    public List<PermisosGrupoEntidad> getPermisosGrupo(GrupoEntidad idGrupo){
+    public List<PermisoEntidad> getPermisosGrupo(GrupoEntidad idGrupo){
         return permisosGrupoRepo.findPermisosGrupo(idGrupo);
     }
 

@@ -8,6 +8,7 @@ package com.coopetico.coopeticobackend.servicios;
  */
 
 import com.coopetico.coopeticobackend.entidades.GrupoEntidad;
+import com.coopetico.coopeticobackend.entidades.PermisoEntidad;
 import com.coopetico.coopeticobackend.entidades.PermisosGrupoEntidad;
 import com.coopetico.coopeticobackend.entidades.PermisosGrupoEntidadPK;
 
@@ -20,7 +21,7 @@ public interface PermisoGrupoServicio {
      * Metodo que obtiene los permisos de los grupos existentes del sistema
      * @return Lista de permisos con el ID y la Descripcion del permiso y el ID del grupo
      */
-    public List<PermisosGrupoEntidad> getPermisosGrupo(GrupoEntidad idGrupo);
+    public List<PermisoEntidad> getPermisosGrupo(GrupoEntidad idGrupo);
 
      /**
      * Metodo que guarda una nueva llave permisos-grupo en la base de datos

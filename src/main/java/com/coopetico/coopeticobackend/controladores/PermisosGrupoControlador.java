@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.springframework.http.ResponseEntity.ok;
@@ -46,10 +47,28 @@ public class PermisosGrupoControlador {
      */
     @GetMapping("/{id}")
     @CrossOrigin(origins = "http://localhost:4200")
-    public List<PermisosGrupoEntidad> getPermisosGrupo(@PathVariable String id){
+    public List<PermisoEntidad> getPermisosGrupo(@PathVariable String id){
         GrupoEntidad grupoEntidad = grupoServicio.getGrupoPorPK(id);
-        List<PermisosGrupoEntidad> lista = permisosGrupoServicio.getPermisosGrupo(grupoEntidad);
-        return lista;
+        List<PermisoEntidad> listaPermisosGrupo = permisosGrupoServicio.getPermisosGrupo(grupoEntidad);
+        return listaPermisosGrupo;
+    }
+
+    /**
+     * Metodo que devuelve los permisos que no tiene el Grupo dado
+     * @param id id del grupo
+     * @return Lista con los permisos en objetos de PermisosGrupoEntidad
+     */
+    @GetMapping("/-{id}")
+    @CrossOrigin(origins = "http://localhost:4200")
+    public List<PermisoEntidad> getNoPermisosGrupo(@PathVariable String id){
+        GrupoEntidad grupoEntidad = grupoServicio.getGrupoPorPK(id);
+        List<PermisoEntidad> listaPermisos = permisosServicio.getPermisos();
+        List<PermisoEntidad> listaPermisosGrupo = permisosGrupoServicio.getPermisosGrupo(grupoEntidad);
+
+        //Aqui quitamos los permisos que tiene un grupo de los permisos generales
+        //SOLUCION INICIAL
+        listaPermisos.removeAll(listaPermisosGrupo);
+        return listaPermisos;
     }
 
     /**
