@@ -6,6 +6,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -16,14 +17,11 @@ public class CustomUserDetails implements UserDetails {
     private Collection<SimpleGrantedAuthority> permisos;
     private String grupoId;
 
-    public CustomUserDetails(UsuarioEntidad user) {
+    public CustomUserDetails(UsuarioEntidad user, List<String> permisos) {
         this.user = user;
-        this.permisos = user
-                .getGrupoByIdGrupo()
-                .getPermisosGruposByPkId()
+        this.permisos = permisos
                 .stream()
-                .map(PermisosGrupoEntidad::getPermisoByPkIdPermisos)
-                .map(permiso -> new SimpleGrantedAuthority(Integer.toString(permiso.getPkId())))
+                .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
         this.grupoId = user.getGrupoByIdGrupo().getPkId();
     }
