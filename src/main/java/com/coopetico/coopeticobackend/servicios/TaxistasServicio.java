@@ -11,13 +11,13 @@ import java.util.List;
  @since       16-04-2019.
  @version:    1.0.
  */
+@CrossOrigin(origins = "http://localhost:4200")
 public interface TaxistasServicio {
 
     /**
      * Funcion que retorna los taxistas del sistema.
      * @return Lista de taxistas del sistema.
      */
-    @CrossOrigin(origins = "http://localhost:4200")
     List<TaxistaEntidad> consultar();
 
     /**

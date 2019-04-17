@@ -16,6 +16,7 @@ import java.util.List;
  @version:    1.0.
  */
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api")
 public class TaxistasControlador {
@@ -31,7 +32,6 @@ public class TaxistasControlador {
      * @return Lista de taxistas, correo, nombre, apellidos, telefono y estado.
      */
     @GetMapping("/taxistas")
-    @CrossOrigin(origins = "http://localhost:4200")
     public List<TaxistaEntidad> consultar() {
         return taxistaServicio.consultar();
     }

@@ -15,6 +15,7 @@ import java.util.List;
  @since       16-04-2019.
  @version:    1.0.
  */
+@CrossOrigin(origins = "http://localhost:4200")
 @Service
 public class TaxistasServicioImpl implements  TaxistasServicio {
 
@@ -30,7 +31,6 @@ public class TaxistasServicioImpl implements  TaxistasServicio {
      */
     @Override
     @Transactional
-    @CrossOrigin(origins = "http://localhost:4200")
     public List<TaxistaEntidad> consultar(){
         return taxistaRepositorio.consultar();
     }
