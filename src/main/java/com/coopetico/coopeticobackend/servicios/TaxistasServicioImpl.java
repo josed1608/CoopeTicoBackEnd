@@ -1,6 +1,8 @@
 package com.coopetico.coopeticobackend.servicios;
 
 import com.coopetico.coopeticobackend.entidades.TaxistaEntidad;
+import com.coopetico.coopeticobackend.entidades.TaxistaEntidadTemporal;
+import com.coopetico.coopeticobackend.entidades.UsuarioEntidad;
 import com.coopetico.coopeticobackend.repositorios.TaxistasRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -8,12 +10,13 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.ArrayList;
 
 /**
  Servicio de la entidad Taxista.
  @author      Christofer Rodriguez Sanchez.
  @since       16-04-2019.
- @version:    1.0.
+ @version    1.0.
  */
 @CrossOrigin(origins = "http://localhost:4200")
 @Service
@@ -31,19 +34,42 @@ public class TaxistasServicioImpl implements  TaxistasServicio {
      */
     @Override
     @Transactional
-    public List<TaxistaEntidad> consultar(){
-        return taxistaRepositorio.consultar();
+    public List<TaxistaEntidadTemporal> consultar(){
+        List<TaxistaEntidad> listaTaxistaEntidad = taxistaRepositorio.findAll();
+        List<TaxistaEntidadTemporal> listaTaxistaEntidadTemporal = new ArrayList<>();
+        for (TaxistaEntidad taxista : listaTaxistaEntidad) {
+            listaTaxistaEntidadTemporal.add(new TaxistaEntidadTemporal(taxista));
+        }
+        return listaTaxistaEntidadTemporal;
     }
 
     /**
      * Funcion que guarda la informacion del taxista que entra por parametro.
-     * @param taxista Taxista que se quiere guardar
+     * @param taxistaEntidadTemporal Taxista que se quiere guardar.
+     * @param pkCorreoUsuario Antiguo correo del taxista que se quiere guardar.
      * @return Taxista guardado en el sistema.
      */
     @Override
     @Transactional
-    public TaxistaEntidad guardar(TaxistaEntidad taxista){
-        return taxistaRepositorio.save(taxista);
+    public TaxistaEntidadTemporal guardar(TaxistaEntidadTemporal taxistaEntidadTemporal, String pkCorreoUsuario){
+        TaxistaEntidad taxistaEntidad = taxistaRepositorio.findById(pkCorreoUsuario)
+                .orElse(null);
+        if (taxistaEntidad == null){
+            taxistaEntidad = new TaxistaEntidad();
+            taxistaEntidad.setUsuarioByPkCorreoUsuario(new UsuarioEntidad());
+        }
+        taxistaEntidad.setPkCorreoUsuario(taxistaEntidadTemporal.getPkCorreoUsuario());
+        taxistaEntidad.setFaltas(taxistaEntidadTemporal.getFaltas());
+        taxistaEntidad.setEstado(taxistaEntidadTemporal.isEstado());
+        taxistaEntidad.setHojaDelincuencia(taxistaEntidadTemporal.isHojaDelincuencia());
+        taxistaEntidad.setEstrellas(taxistaEntidadTemporal.getEstrellas());
+        taxistaEntidad.getUsuarioByPkCorreoUsuario().setNombre(taxistaEntidadTemporal.getNombre());
+        taxistaEntidad.getUsuarioByPkCorreoUsuario().setApellidos(taxistaEntidadTemporal.getApellidos());
+        taxistaEntidad.getUsuarioByPkCorreoUsuario().setTelefono(taxistaEntidadTemporal.getTelefono());
+        taxistaEntidad.getUsuarioByPkCorreoUsuario().setFoto(taxistaEntidadTemporal.getFoto());
+
+        TaxistaEntidad retornoSave = taxistaRepositorio.save(taxistaEntidad);
+        return new TaxistaEntidadTemporal(retornoSave);
     }
 
     /**
@@ -53,8 +79,15 @@ public class TaxistasServicioImpl implements  TaxistasServicio {
      */
     @Override
     @Transactional
-    public TaxistaEntidad consultarPorId(String correoUsuario){
-        return taxistaRepositorio.findById(correoUsuario).orElse(null);
+    public TaxistaEntidadTemporal consultarPorId(String correoUsuario){
+        TaxistaEntidad taxistaEntidad = taxistaRepositorio.findById(correoUsuario).orElse(null);
+        TaxistaEntidadTemporal taxistaEntidadTemporal;
+        if (taxistaEntidad == null){
+            taxistaEntidadTemporal = new TaxistaEntidadTemporal();
+        }else{
+            taxistaEntidadTemporal = new TaxistaEntidadTemporal(taxistaEntidad);
+        }
+        return taxistaEntidadTemporal;
     }
 
     /**
