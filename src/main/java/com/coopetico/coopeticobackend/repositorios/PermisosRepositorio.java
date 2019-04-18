@@ -18,6 +18,6 @@ public interface PermisosRepositorio extends JpaRepository<PermisoEntidad, Integ
      * Metodo que obtiene el id y la descripcion de los permisos
      * @return Lista de entidades de Permisos con sus atributos pkId y descripcion
      */
-    @Query("select new map(p.pkId as pkId, p.descripcion as descripcion) from PermisoEntidad p")
+    @Query("select new PermisoEntidad (p.pkId as pkId, p.descripcion as descripcion) from PermisoEntidad p")
     List<PermisoEntidad> getPermisoIDyDescripcion();
 }

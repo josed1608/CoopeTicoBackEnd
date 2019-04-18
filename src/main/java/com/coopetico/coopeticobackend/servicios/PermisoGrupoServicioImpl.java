@@ -1,71 +1,84 @@
 package com.coopetico.coopeticobackend.servicios;
-//Programador: Jefferson Alvarez
-//Fecha: 04/04/2019
-//Version: 0.01
-//Implementacion de la interfaz del Servicio de Permiso-Grupo.
-
+/**
+ Implementación del servicio de la entidad Permisos-Grupo que provee los metodos a utilizar.
+ @author      Jefferson Alvarez
+ @since       06-04-2019
+ @version:    1.0
+ */
 
 import com.coopetico.coopeticobackend.entidades.GrupoEntidad;
 import com.coopetico.coopeticobackend.entidades.PermisoEntidad;
 import com.coopetico.coopeticobackend.entidades.PermisosGrupoEntidad;
 import com.coopetico.coopeticobackend.entidades.PermisosGrupoEntidadPK;
-import com.coopetico.coopeticobackend.repositorios.GruposRepositorio;
+import com.coopetico.coopeticobackend.excepciones.PermisoGrupoNoExisteExcepcion;
 import com.coopetico.coopeticobackend.repositorios.PermisosGruposRepositorio;
-import com.coopetico.coopeticobackend.repositorios.PermisosRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class PermisoGrupoServicioImpl implements PermisoGrupoServicio {
 
-    //Necesitamos el repostitorio de Permisos-Grupo
+    private final PermisosGruposRepositorio permisosGrupoRepo;
+
     @Autowired
-    PermisosGruposRepositorio permisosGrupoRepo;
-
-    //Necesitamos el repostitorio de Permisos
-    @Autowired
-    PermisosRepositorio permisosRepo;
-
-    //Necesitamos el repostitorio de Grupo
-    @Autowired
-    GruposRepositorio gruposRepo;
-
-
-    public List<PermisosGrupoEntidad> getPermisosGrupo(){
-        return permisosGrupoRepo.findAll();
+    public PermisoGrupoServicioImpl(PermisosGruposRepositorio permisosGrupoRepo) {
+        this.permisosGrupoRepo = permisosGrupoRepo;
     }
 
-    public void guardarPermisosGrupo(PermisosGrupoEntidadPK pG) {
-        //Creamos la entidad a insertar
-        PermisosGrupoEntidad permisoGrupoInsertar = new PermisosGrupoEntidad();
 
-        //Para insertar la entidad ocupamos la entidad Permiso
-        int permisoID = pG.getPkIdPermisos();
-        Optional<PermisoEntidad> permiso = permisosRepo.findById(permisoID);
+    /**
+     * Metodo que obtiene los permisos de los grupos existentes del sistema
+     * @return Lista de permisos con el ID y la Descripcion del permiso y el ID del grupo
+     */
+    @Override
+    @Transactional (readOnly = true)
+    public List<PermisoEntidad> getPermisosGrupo(GrupoEntidad idGrupo){
+        return permisosGrupoRepo.findPermisosGrupo(idGrupo);
+    }
 
-        //Para insertar la entidad ocupamos la entidad del Grupo
-        String grupoID = pG.getPkIdGrupo();
-        Optional<GrupoEntidad> grupo = gruposRepo.findById(grupoID);
-
-        //Insertamos los atributos de la entidad a insertar
-        permisoGrupoInsertar.setPermisosGrupoEntidadPK(pG);
-        permisoGrupoInsertar.setGrupoByPkIdGrupo(grupo.get());
-        permisoGrupoInsertar.setPermisoByPkIdPermisos(permiso.get());
-
+    /**
+     * Metodo que guarda una nueva llave permisos-grupo en la base de datos
+     * @return true si la llave se ha guardado correctamente
+     * @param pG par pkIdPermisos, pkIdGrupo a ser guardado en la base de datos
+     */
+    @Override
+    @Transactional
+    public boolean guardarPermisosGrupo(PermisosGrupoEntidad pG) {
         //Guardamos en la base
-        permisosGrupoRepo.save(permisoGrupoInsertar);
-
+        permisosGrupoRepo.save(pG);
+        return true;
     }
 
-    public void eliminarPermisosGrupo(PermisosGrupoEntidadPK pG){
-        //Obtenemos la instancia del Permiso - Grupo
-        Optional<PermisosGrupoEntidad> permisoGrupoEliminar = permisosGrupoRepo.findById(pG);
+     /**
+     * Metodo que elimina una llave permisos-grupo en la base de datos
+     * @return true si la llave se ha eliminado correctamente
+     * @param pG par pkIdPermisos, pkIdGrupo a ser eliminado en la base de datos
+     */
+     @Override
+     @Transactional
+    public boolean eliminarPermisosGrupo(PermisosGrupoEntidad pG){
+        permisosGrupoRepo.delete(pG);
+        return true;
+    }
 
-        //Eliminarmos el Permiso - Grupo
-        permisosGrupoRepo.delete(permisoGrupoEliminar.get());
-
+    /**
+     * Metodo que obtiene un objeto de la entidad Permiso-Grupo
+     * @param permisoGrupoPK Llave primaria del objeto de interes
+     * @return Objeto de la entidad Permiso-Grupo
+     * @throws PermisoGrupoNoExisteExcepcion si el Permiso-Grupo no existe
+     */
+    @Override
+    @Transactional (readOnly = true)
+    public PermisosGrupoEntidad getPermisoGrupoPorPK (PermisosGrupoEntidadPK permisoGrupoPK){
+        PermisosGrupoEntidad permisosGrupoEntidad = permisosGrupoRepo.findById(permisoGrupoPK)
+                .orElseThrow(() -> new PermisoGrupoNoExisteExcepcion("Permiso - Grupo ("
+                + permisoGrupoPK.getPkIdPermisos() + " - "
+                + permisoGrupoPK.getPkIdGrupo()
+                + ") no existe", HttpStatus.BAD_REQUEST, System.currentTimeMillis()));
+        return permisosGrupoEntidad;
     }
 }

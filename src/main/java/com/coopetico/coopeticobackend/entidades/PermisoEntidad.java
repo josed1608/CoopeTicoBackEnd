@@ -22,6 +22,11 @@ public class PermisoEntidad {
         this.permisosGruposByPkId = permisosGruposByPkId;
     }
 
+    public PermisoEntidad(int pkId, String descripcion) { //Para mapear consultas
+        this.pkId = pkId;
+        this.descripcion = descripcion;
+    }
+
     public PermisoEntidad() {
     }
 
@@ -59,6 +64,7 @@ public class PermisoEntidad {
         return Objects.hash(pkId, descripcion);
     }
 
+    @JsonIgnore
     @OneToMany(mappedBy = "permisoByPkIdPermisos")
     public Collection<PermisosGrupoEntidad> getPermisosGruposByPkId() {
         return permisosGruposByPkId;
