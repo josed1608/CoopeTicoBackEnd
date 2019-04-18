@@ -23,7 +23,12 @@ public class TokensRecuperacionContrasenaServicioImpl implements TokensRecuperac
 
     @Override
     public TokenRecuperacionContrasenaEntidad getToken(String correo) {
-        return tokensRepo.getOne(correo);
+       return  tokensRepo.findByFkCorreoUsuario(correo);
+    }
+
+    @Override
+    public void eliminarToken(String correo) {
+        tokensRepo.deleteById(correo);
     }
 
     @Override
