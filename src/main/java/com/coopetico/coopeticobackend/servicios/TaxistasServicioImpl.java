@@ -1,9 +1,10 @@
 package com.coopetico.coopeticobackend.servicios;
 
-import com.coopetico.coopeticobackend.entidades.TaxistaEntidad;
-import com.coopetico.coopeticobackend.entidades.TaxistaEntidadTemporal;
-import com.coopetico.coopeticobackend.entidades.UsuarioEntidad;
+import com.coopetico.coopeticobackend.entidades.*;
+import com.coopetico.coopeticobackend.repositorios.GruposRepositorio;
+import com.coopetico.coopeticobackend.repositorios.TaxisRepositorio;
 import com.coopetico.coopeticobackend.repositorios.TaxistasRepositorio;
+import com.coopetico.coopeticobackend.repositorios.UsuariosRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -29,6 +30,32 @@ public class TaxistasServicioImpl implements  TaxistasServicio {
     private TaxistasRepositorio taxistaRepositorio;
 
     /**
+     * Repositorio de grupos.
+     */
+    private final GruposRepositorio gruposRepositorio;
+
+    /**
+     * Repositorio de usuario.
+     */
+    private final UsuariosRepositorio usuarioRepositorio;
+
+    /**
+     * Repositorio de taxi.
+     */
+    private final TaxisRepositorio taxiRepositorio;
+
+    /**
+     * Id del grupo de Taxistas.
+     */
+    private final String idGrupoTaxista = "Taxista";
+
+    public TaxistasServicioImpl(GruposRepositorio gruposRepositorio, UsuariosRepositorio usuarioRepositorio, TaxisRepositorio taxiRepositorio) {
+        this.gruposRepositorio = gruposRepositorio;
+        this.usuarioRepositorio = usuarioRepositorio;
+        this.taxiRepositorio = taxiRepositorio;
+    }
+
+    /**
      * Funcion que retorna los taxistas del sistema.
      * @return Lista de taxistas del sistema.
      */
@@ -52,22 +79,32 @@ public class TaxistasServicioImpl implements  TaxistasServicio {
     @Override
     @Transactional
     public TaxistaEntidadTemporal guardar(TaxistaEntidadTemporal taxistaEntidadTemporal, String pkCorreoUsuario){
+        boolean nuevo = false;
         TaxistaEntidad taxistaEntidad = taxistaRepositorio.findById(pkCorreoUsuario)
                 .orElse(null);
         if (taxistaEntidad == null){
             taxistaEntidad = new TaxistaEntidad();
             taxistaEntidad.setUsuarioByPkCorreoUsuario(new UsuarioEntidad());
+            nuevo = true;
         }
         taxistaEntidad.setPkCorreoUsuario(taxistaEntidadTemporal.getPkCorreoUsuario());
         taxistaEntidad.setFaltas(taxistaEntidadTemporal.getFaltas());
         taxistaEntidad.setEstado(taxistaEntidadTemporal.isEstado());
         taxistaEntidad.setHojaDelincuencia(taxistaEntidadTemporal.isHojaDelincuencia());
         taxistaEntidad.setEstrellas(taxistaEntidadTemporal.getEstrellas());
+        taxistaEntidad.getUsuarioByPkCorreoUsuario().setPkCorreo(taxistaEntidadTemporal.getPkCorreoUsuario());
         taxistaEntidad.getUsuarioByPkCorreoUsuario().setNombre(taxistaEntidadTemporal.getNombre());
         taxistaEntidad.getUsuarioByPkCorreoUsuario().setApellidos(taxistaEntidadTemporal.getApellidos());
         taxistaEntidad.getUsuarioByPkCorreoUsuario().setTelefono(taxistaEntidadTemporal.getTelefono());
         taxistaEntidad.getUsuarioByPkCorreoUsuario().setFoto(taxistaEntidadTemporal.getFoto());
-
+        taxistaEntidad.getUsuarioByPkCorreoUsuario().setContrasena("$2a$10$gJ0hUnsEvTp5zyBVo19IHe.GoYKkL3Wy268wGJxG5.k.tUFhSUify");
+        GrupoEntidad grupoTaxista = this.gruposRepositorio.findById(this.idGrupoTaxista).orElse(null);
+        taxistaEntidad.getUsuarioByPkCorreoUsuario().setGrupoByIdGrupo(grupoTaxista);
+        if (nuevo){
+            this.usuarioRepositorio.save(taxistaEntidad.getUsuarioByPkCorreoUsuario());
+        }
+        TaxiEntidad taxiManeja = this.taxiRepositorio.findById(taxistaEntidadTemporal.getPkPlaca()).orElse(null);
+        taxistaEntidad.setTaxiByPlacaTaxiManeja(taxiManeja);
         TaxistaEntidad retornoSave = taxistaRepositorio.save(taxistaEntidad);
         return new TaxistaEntidadTemporal(retornoSave);
     }

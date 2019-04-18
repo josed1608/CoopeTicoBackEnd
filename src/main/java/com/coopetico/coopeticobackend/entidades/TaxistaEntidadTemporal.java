@@ -232,7 +232,11 @@ public class TaxistaEntidadTemporal {
         this.apellidos = taxista.getUsuarioByPkCorreoUsuario().getApellidos();
         this.telefono = taxista.getUsuarioByPkCorreoUsuario().getTelefono();
         this.foto = taxista.getUsuarioByPkCorreoUsuario().getFoto();
-        this.pkPlaca = taxista.getTaxiByPlacaTaxiManeja().getPkPlaca();
+        if (taxista.getTaxiByPlacaTaxiManeja() != null){
+            this.pkPlaca = taxista.getTaxiByPlacaTaxiManeja().getPkPlaca();
+        }else{
+            this.pkPlaca = null;
+        }
     }
 
     /**
