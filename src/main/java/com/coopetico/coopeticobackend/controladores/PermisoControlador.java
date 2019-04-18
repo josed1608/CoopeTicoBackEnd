@@ -19,12 +19,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "/permisos")
-public class PermisoEntidadControlador {
+public class PermisoControlador {
     
     private final PermisosServicio permisos;
 
     @Autowired
-    public PermisoEntidadControlador(PermisosServicio permisos) {
+    public PermisoControlador(PermisosServicio permisos) {
         this.permisos = permisos;
     }
 

@@ -16,7 +16,6 @@ package com.coopetico.coopeticobackend.controladores;
 
 import com.coopetico.coopeticobackend.entidades.GrupoEntidad;
 import com.coopetico.coopeticobackend.entidades.TokenRecuperacionContrasenaEntidad;
-import com.coopetico.coopeticobackend.entidades.UsuarioEntidad;
 import com.coopetico.coopeticobackend.mail.EmailServiceImpl;
 import com.coopetico.coopeticobackend.repositorios.UsuariosRepositorio;
 import com.coopetico.coopeticobackend.servicios.TokensRecuperacionContrasenaServicio;
@@ -25,47 +24,45 @@ import com.coopetico.coopeticobackend.servicios.UsuarioServicio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import com.coopetico.coopeticobackend.entidades.UsuarioEntidad;
+import com.coopetico.coopeticobackend.repositorios.UsuariosRepositorio;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.*;
 import java.util.Calendar;
-import com.coopetico.coopeticobackend.entidades.UsuarioEntidad;
-import com.coopetico.coopeticobackend.servicios.UsuariosServicio;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-
+import javax.validation.constraints.Email;
 
 @RestController
 @RequestMapping(path="/usuarios")
+@Validated
 public class UsuarioControlador {
-    /**
-     * Variables globales de la clase UsuarioControlador
-     **/
+
+    @Autowired
     private TokensRecuperacionContrasenaServicioImpl tokensServicio;
-    private EmailServiceImpl mail ;
+    @Autowired
+    private EmailServiceImpl mail;
     private UsuariosRepositorio usuariosRepositorio;
     private PasswordEncoder encoder;
-    private TokensRecuperacionContrasenaServicio tokensRecuperacionContrasenaServicio;
     private UsuarioServicio usuarioServicio;
     private UsuariosServicio clienteServicio;
 
     @Autowired
-    public UsuarioControlador(
-        UsuariosRepositorio usuariosRepositorio,
-        PasswordEncoder encoder,
-        TokensRecuperacionContrasenaServicio tokensRecuperacionContrasenaServicio,
-        UsuarioServicio servicio,
-        UsuariosServicio clntSer
-    ) {
+    public UsuarioControlador(UsuariosRepositorio usuariosRepositorio, PasswordEncoder encoder, TokensRecuperacionContrasenaServicio tokensRecuperacionContrasenaServicio, UsuarioServicio servicio, EmailServiceImpl mail) {
         this.usuarioServicio = servicio;
         this.usuariosRepositorio = usuariosRepositorio;
         this.encoder = encoder;
-        this.tokensRecuperacionContrasenaServicio = tokensRecuperacionContrasenaServicio;
-        this.clienteServicio = clntSer;
+        //this.tokensRecuperacionContrasenaServicio = tokensRecuperacionContrasenaServicio;
+        //this.mail = mail;
     }
 
     /**
@@ -79,7 +76,7 @@ public class UsuarioControlador {
         if (token == null) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
-        mail.sendSimpleMessage(correo, "Codigo de reseteo", token);
+        mail.enviarCorreoRecuperarContrasena(correo, token);
         return new ResponseEntity(HttpStatus.OK);
     }
 
@@ -100,7 +97,7 @@ public class UsuarioControlador {
             //Actualizar el usuario
             usuariosRepositorio.save(usuarioEntidad);
             // Se borra de la tabla el Token
-            tokensRecuperacionContrasenaServicio.eliminarToken(nombreUsuario);
+            tokensServicio.eliminarToken(nombreUsuario);
             return new ResponseEntity(HttpStatus.OK);
         }
 
@@ -184,7 +181,7 @@ public class UsuarioControlador {
      * @return Boolean que indica si es válido o no.
      */
     private boolean validarTokenRecuperarContrasena(String id) {
-        TokenRecuperacionContrasenaEntidad tokenContrasena  = tokensRecuperacionContrasenaServicio.getToken(id);
+        TokenRecuperacionContrasenaEntidad tokenContrasena  = tokensServicio.getToken(id);
         //Validación con el usuario
         if (tokenContrasena == null || !tokenContrasena.getFkCorreoUsuario().equals(id)) {
             return false;
