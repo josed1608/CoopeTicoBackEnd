@@ -1,12 +1,3 @@
-/**
- * Autor: 
- * (1) Joseph Rementería (b55824).
- * 
- * Fecha: 06/04/2019.
- * <p>
- * Este es el controlador Usuario. Se encarga de la comunicación entre
- * la capa V y el M Cliente, especialización de Usuario.
- **/
 package com.coopetico.coopeticobackend.controladores;
 // Programador: Hannia Aguilar Salas
 // Fecha: 11/04/2019
@@ -54,7 +45,6 @@ public class UsuarioControlador {
     private UsuariosRepositorio usuariosRepositorio;
     private PasswordEncoder encoder;
     private UsuarioServicio usuarioServicio;
-    private UsuariosServicio clienteServicio;
 
     @Autowired
     public UsuarioControlador(UsuariosRepositorio usuariosRepositorio, PasswordEncoder encoder, TokensRecuperacionContrasenaServicio tokensRecuperacionContrasenaServicio, UsuarioServicio servicio, EmailServiceImpl mail) {
@@ -196,23 +186,5 @@ public class UsuarioControlador {
         }
 
         return true;
-    }
-
-
-
-
-    /**
-     * Autor: Joseph Rementería (b55824).
-     * Fecha: 06/04/2019.
-     *
-     * Busca el cliente en la base de datos.
-     *
-     * @param correo El identificador del cliente.
-     * @return UsuarioEntidad si el correo está en la tabla Cliente,
-     * null de otra manera.
-     */
-    @GetMapping(path = "/usuarios/{correo}")
-    public UsuarioEntidad obtener_usuario(@PathVariable String correo) {
-        return this.clienteServicio.consultarPorId(correo);
     }
 }
