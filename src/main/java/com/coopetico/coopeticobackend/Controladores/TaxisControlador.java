@@ -1,6 +1,7 @@
 package com.coopetico.coopeticobackend.Controladores;
 
 import com.coopetico.coopeticobackend.entidades.TaxiEntidad;
+import com.coopetico.coopeticobackend.servicios.TaxisServicio;
 import com.coopetico.coopeticobackend.servicios.TaxisServicioImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,9 +14,10 @@ import java.util.List;
 public class TaxisControlador {
 
     @Autowired
-    private TaxisServicioImpl taxisServicio;
+    private TaxisServicio taxisServicio;
 
     @GetMapping("/taxis")
+    @CrossOrigin(origins = "http://localhost:4200")
     public List<TaxiEntidad> consultarTaxis(){
         System.out.println("Hola");
         return taxisServicio.consultar();
