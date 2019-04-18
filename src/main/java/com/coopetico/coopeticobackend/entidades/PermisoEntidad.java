@@ -22,6 +22,11 @@ public class PermisoEntidad {
         this.permisosGruposByPkId = permisosGruposByPkId;
     }
 
+    public PermisoEntidad(int pkId, String descripcion) { //Para mapear consultas
+        this.pkId = pkId;
+        this.descripcion = descripcion;
+    }
+
     public PermisoEntidad() {
     }
 
