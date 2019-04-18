@@ -38,11 +38,12 @@ import javax.validation.constraints.Email;
 @Validated
 public class UsuarioControlador {
 
+    @Autowired
     private TokensRecuperacionContrasenaServicioImpl tokensServicio;
+    @Autowired
     private EmailServiceImpl mail;
     private UsuariosRepositorio usuariosRepositorio;
     private PasswordEncoder encoder;
-    private TokensRecuperacionContrasenaServicio tokensRecuperacionContrasenaServicio;
     private UsuarioServicio usuarioServicio;
 
     @Autowired
@@ -50,8 +51,8 @@ public class UsuarioControlador {
         this.usuarioServicio = servicio;
         this.usuariosRepositorio = usuariosRepositorio;
         this.encoder = encoder;
-        this.tokensRecuperacionContrasenaServicio = tokensRecuperacionContrasenaServicio;
-        this.mail = mail;
+        //this.tokensRecuperacionContrasenaServicio = tokensRecuperacionContrasenaServicio;
+        //this.mail = mail;
     }
 
     /**
@@ -65,7 +66,7 @@ public class UsuarioControlador {
         if (token == null) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
-        mail.sendSimpleMessage(correo, "Codigo de reseteo", token);
+        mail.enviarCorreoRecuperarContrasena(correo, token);
         return new ResponseEntity(HttpStatus.OK);
     }
 
@@ -86,7 +87,7 @@ public class UsuarioControlador {
             //Actualizar el usuario
             usuariosRepositorio.save(usuarioEntidad);
             // Se borra de la tabla el Token
-            tokensRecuperacionContrasenaServicio.eliminarToken(nombreUsuario);
+            tokensServicio.eliminarToken(nombreUsuario);
             return new ResponseEntity(HttpStatus.OK);
         }
 
@@ -170,7 +171,7 @@ public class UsuarioControlador {
      * @return Boolean que indica si es válido o no.
      */
     private boolean validarTokenRecuperarContrasena(String id) {
-        TokenRecuperacionContrasenaEntidad tokenContrasena  = tokensRecuperacionContrasenaServicio.getToken(id);
+        TokenRecuperacionContrasenaEntidad tokenContrasena  = tokensServicio.getToken(id);
         //Validación con el usuario
         if (tokenContrasena == null || !tokenContrasena.getFkCorreoUsuario().equals(id)) {
             return false;
