@@ -6,6 +6,7 @@ package com.coopetico.coopeticobackend.controladores;
 // y mostrarInterfazCambioContrasena: Validar el token que se envío al mail del usuario para el cambio de contraseña.
 
 import com.coopetico.coopeticobackend.entidades.GrupoEntidad;
+import com.coopetico.coopeticobackend.entidades.TokenRecuperacionContrasenaEntidad;
 import com.coopetico.coopeticobackend.mail.EmailServiceImpl;
 import com.coopetico.coopeticobackend.repositorios.UsuariosRepositorio;
 import com.coopetico.coopeticobackend.servicios.TokensRecuperacionContrasenaServicio;
@@ -51,16 +52,6 @@ public class UsuarioControlador {
         this.encoder = encoder;
         this.tokensRecuperacionContrasenaServicio = tokensRecuperacionContrasenaServicio;
         this.mail = mail;
-    }
-    
-    @GetMapping(path="/contrasenaToken")
-    public @ResponseBody ResponseEntity recuperarContrasena (@Email @RequestParam("correo") String correo) {
-        String token = tokensServicio.insertarToken(correo);
-        if (token == null){
-            return new ResponseEntity(HttpStatus.NOT_FOUND );
-        }
-        mail.enviarCorreoRecuperarContrasena(correo, token);
-        return new ResponseEntity(HttpStatus.OK);
     }
 
     /**
