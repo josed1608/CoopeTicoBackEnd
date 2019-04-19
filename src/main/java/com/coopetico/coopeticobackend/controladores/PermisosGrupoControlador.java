@@ -100,7 +100,7 @@ public class PermisosGrupoControlador {
             //Guardamos el Permiso-Grupo
             permisosGrupoServicio.guardarPermisosGrupo(permisoGrupoInsertar);
         }
-        return ok("Permiso/s de Grupo guardado/s correctamente");
+        return ok("");
     }
 
     /**
@@ -119,6 +119,6 @@ public class PermisosGrupoControlador {
             //Eliminarmos el Permiso - Grupo
             permisosGrupoServicio.eliminarPermisosGrupo(permisoGrupoEliminar);
         }
-        return ok("Permiso/s de Grupo eliminado/s correctamente");
+        return ok("");
     }
 }
