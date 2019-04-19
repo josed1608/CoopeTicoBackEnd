@@ -9,17 +9,16 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/taxis")
 public class TaxisControlador {
 
     @Autowired
     private TaxisServicio taxisServicio;
 
     @GetMapping("/taxis")
-    @CrossOrigin(origins = "http://localhost:4200")
     public List<TaxiEntidad> consultarTaxis(){
-        System.out.println("Hola");
         return taxisServicio.consultar();
     }
 
