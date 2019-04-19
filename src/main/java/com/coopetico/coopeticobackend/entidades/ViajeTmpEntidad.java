@@ -3,20 +3,14 @@
 package com.coopetico.coopeticobackend.entidades;
 //-----------------------------------------------------------------------------
 // Imports.
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
-import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.Objects;
 //-----------------------------------------------------------------------------
-@Entity
-@Table(name = "viajeTmp", schema = "coopetico-dev")
 /**
  * Autor: Joseph Rementería (b55824).
  * Fecha: 18/04/2019.
  * 
- * Clase temporal previa a la insercin de una tupla de viaje en la base de datos.
+ * Clase temporal previa a la insercin de una tupla de
+ * viaje en la base de datos.
  */
 public class ViajeTmpEntidad {
     //-------------------------------------------------------------------------
@@ -36,13 +30,13 @@ public class ViajeTmpEntidad {
      * Constructor con todos los parmetros
      * 
      * @param placa id del carro.
-     * @param correo_cliente correo del pasajero.
-     * @param fecha_inicio fecha de inicio del viaje.
-     * @param fecha_fin fecha de fin del viaje.
+     * @param correoCliente correo del pasajero.
+     * @param fechaInicio fecha de inicio del viaje.
+     * @param fechaFin fecha de fin del viaje.
      * @param costo monto total del viaje.
      * @param estrellas calificación del pasajero al taxista
-     * @param origen_destino punto de origen y destino.
-     * @param correo_taxista correo del conductor.
+     * @param origenDestino punto de origen y destino.
+     * @param correoTaxista correo del conductor.
      */
     public ViajeTmpEntidad(
         String placa,
