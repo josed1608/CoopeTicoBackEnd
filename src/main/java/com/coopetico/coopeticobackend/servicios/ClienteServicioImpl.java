@@ -23,7 +23,7 @@ public class ClienteServicioImpl implements ClienteServicio {
         UsuariosRepositorio usrRep
     ) {
         this.clientesRepositorio = clientesRepositorio;
-        this.usuarioRepositorio = usrRep;
+        this.usuariosRepositorio = usrRep;
     }
 
     @Override
@@ -56,7 +56,7 @@ public class ClienteServicioImpl implements ClienteServicio {
     @Override
     @Transactional
     public UsuarioEntidad consultarPorId(String correo){
-        UsuarioEntidad resultado = usuarioRepositorio.findById(correo)
+        UsuarioEntidad resultado = usuariosRepositorio.findById(correo)
                 .orElse(null);
         if (clientesRepositorio.findById(correo).orElse(null) == null){
             resultado = null;
