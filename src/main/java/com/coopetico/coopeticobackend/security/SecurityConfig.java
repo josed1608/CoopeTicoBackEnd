@@ -2,7 +2,6 @@ package com.coopetico.coopeticobackend.security;
 
 import com.coopetico.coopeticobackend.security.jwt.JwtConfigurer;
 import com.coopetico.coopeticobackend.security.jwt.JwtTokenProvider;
-import com.coopetico.coopeticobackend.servicios.TokensRecuperacionContrasenaServicio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
