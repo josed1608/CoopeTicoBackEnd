@@ -53,7 +53,7 @@ public class AuthControlador {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, data.getPassword()));
             UsuarioEntidad usuarioEntidad = this.usuarioServicio.usuarioPorCorreo(username).orElseThrow(() -> new UsuarioNoEncontradoExcepcion("Usuario " + username + " no encontrado", HttpStatus.NOT_FOUND, System.currentTimeMillis()));
             List<String> roles = usuarioServicio.obtenerPermisos(usuarioEntidad);
-            String token = jwtTokenProvider.createToken(username, roles, usuarioEntidad.getGrupoByIdGrupo().getPkId());
+            String token = jwtTokenProvider.createToken(usuarioEntidad, roles);
 
             return ok(token);
         } catch (AuthenticationException e) {

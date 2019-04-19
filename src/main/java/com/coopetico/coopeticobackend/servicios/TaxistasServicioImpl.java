@@ -4,6 +4,7 @@ import com.coopetico.coopeticobackend.entidades.TaxistaEntidad;
 import com.coopetico.coopeticobackend.repositorios.TaxistasRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -16,8 +17,9 @@ public class TaxistasServicioImpl implements  TaxistasServicio {
 
     @Override
     @Transactional
+    @CrossOrigin(origins = "http://localhost:4200")
     public List<TaxistaEntidad> consultar(){
-        return taxistaRepositorio.findAll();
+        return taxistaRepositorio.consultar();
     }
 
     @Override
