@@ -7,7 +7,6 @@ import com.coopetico.coopeticobackend.repositorios.ClientesRepositorio;
 import com.coopetico.coopeticobackend.repositorios.UsuariosRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import javax.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -18,12 +17,9 @@ public class ClienteServicioImpl implements ClienteServicio {
     private final UsuariosRepositorio usuariosRepositorio;
 
     @Autowired
-    public ClienteServicioImpl(
-        ClientesRepositorio clientesRepositorio,
-        UsuariosRepositorio usrRep
-    ) {
+    public ClienteServicioImpl(ClientesRepositorio clientesRepositorio, UsuariosRepositorio usuariosRepositorio) {
         this.clientesRepositorio = clientesRepositorio;
-        this.usuariosRepositorio = usrRep;
+        this.usuariosRepositorio = usuariosRepositorio;
     }
 
     @Override
@@ -42,25 +38,5 @@ public class ClienteServicioImpl implements ClienteServicio {
         }
         else
             throw new UsuarioNoEncontradoExcepcion("El usuario que se iba a borrar no existe", HttpStatus.NOT_FOUND, System.currentTimeMillis());
-    }
-
-    /**
-     * Autor: Joseph Rementería (b55824).
-     * Fecha: 06/04/2019.
-     *
-     * Trae una Entidad usuario que corresponde al correo ingresado.
-     *
-     * @param correo el correo a consultar.
-     * @return UsuarioEntidad del correo en la base, null de otra manera.
-     */
-    @Override
-    @Transactional
-    public UsuarioEntidad consultarPorId(String correo){
-        UsuarioEntidad resultado = usuariosRepositorio.findById(correo)
-                .orElse(null);
-        if (clientesRepositorio.findById(correo).orElse(null) == null){
-            resultado = null;
-        }
-        return resultado;
     }
 }

@@ -151,28 +151,4 @@ public class UsuarioEntidad {
     public void setGrupoByIdGrupo(GrupoEntidad grupoByIdGrupo) {
         this.grupoByIdGrupo = grupoByIdGrupo;
     }
-
-    /**
-     * Autor: Joseph Rementería (b55824)
-     * Fecha: 13/04/2019
-     * 
-     * Sobre-escrritura del método toString de la clase ClienteEntidad
-     * Se usa para tener ver los datos del pefil y los datos necesarios 
-     * para luego ser editador.
-     * 
-     * @return una string con los datos de la entidad cliente en 
-     * formato JSON =.
-     */
-    
-    @Override
-    public String toString(){
-        String result = "{";
-        result += "\"correo\": \""          + this.pkCorreo;
-        result += "\",\"nombre\": \""       + this.nombre;
-        result += "\",\"apellidos\": \""    + this.apellidos;
-        result += "\",\"telefono\": \""     + this.telefono;
-        result += "\",\"foto\": \""         + this.foto;
-        result += "\"}";
-        return result;
-    }
 }

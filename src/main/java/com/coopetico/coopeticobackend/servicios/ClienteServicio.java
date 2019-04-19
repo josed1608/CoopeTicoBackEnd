@@ -18,14 +18,4 @@ public interface ClienteServicio {
      * @throws UsuarioNoEncontradoExcepcion si el usuario que se desea borrar no existe
      */
     void borrarCliente(String pkCorreo) throws  UsuarioNoEncontradoExcepcion;
-    /**
-     * Autor: Joseph Rementería (b55824).
-     * Fecha: 06/04/2019.
-     * <p>
-     * Trae una Entidad usuario que corresponde al correo ingresado.
-     *
-     * @param correo el correo a consultar.
-     * @return UsuarioEntidad del correo en la base, null de otra manera.
-     */
-    UsuarioEntidad consultarPorId(String correo);
 }
