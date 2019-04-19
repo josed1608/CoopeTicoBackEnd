@@ -138,7 +138,7 @@ public class UsuarioControlador {
         return usuarioServicio.usuarioPorCorreo(id).get();
     }
 
-    @DeleteMapping("/usuarios/{id}")
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void eliminarUsuarioPorId(@PathVariable String id){
         usuarioServicio.eliminar(id);
