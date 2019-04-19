@@ -3,23 +3,18 @@ package com.coopetico.coopeticobackend.controladores;
 import com.coopetico.coopeticobackend.entidades.UsuarioEntidad;
 import com.coopetico.coopeticobackend.excepciones.MalasCredencialesExcepcion;
 import com.coopetico.coopeticobackend.excepciones.UsuarioNoEncontradoExcepcion;
-import com.coopetico.coopeticobackend.repositorios.UsuariosRepositorio;
-import com.coopetico.coopeticobackend.security.CustomUserDetails;
 import com.coopetico.coopeticobackend.security.jwt.JwtTokenProvider;
 import com.coopetico.coopeticobackend.servicios.UsuarioServicio;
+import com.coopetico.coopeticobackend.controladores.AuthenticationRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.springframework.http.ResponseEntity.ok;
 
@@ -37,13 +32,13 @@ public class AuthControlador {
     JwtTokenProvider jwtTokenProvider;
 
     private final
-    UsuarioServicio users;
+    UsuarioServicio usuarioServicio;
 
     @Autowired
     public AuthControlador(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, UsuarioServicio users) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenProvider = jwtTokenProvider;
-        this.users = users;
+        this.usuarioServicio = users;
     }
 
     /**
@@ -57,13 +52,9 @@ public class AuthControlador {
         try {
             String username = data.getUsername();
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, data.getPassword()));
-            UsuarioEntidad usuarioEntidad = this.users.usuarioPorCorreo(username).orElseThrow(() -> new UsuarioNoEncontradoExcepcion("Usuario " + username + " no encontrado", HttpStatus.NOT_FOUND, System.currentTimeMillis()));
-            List<String> roles = new CustomUserDetails(usuarioEntidad)
-                    .getAuthorities()
-                    .stream()
-                    .map(SimpleGrantedAuthority::getAuthority)
-                    .collect(Collectors.toList());
-            String token = jwtTokenProvider.createToken(username, roles, usuarioEntidad.getGrupoByIdGrupo().getPkId());
+            UsuarioEntidad usuarioEntidad = this.usuarioServicio.usuarioPorCorreo(username).orElseThrow(() -> new UsuarioNoEncontradoExcepcion("Usuario " + username + " no encontrado", HttpStatus.NOT_FOUND, System.currentTimeMillis()));
+            List<String> roles = usuarioServicio.obtenerPermisos(usuarioEntidad);
+            String token = jwtTokenProvider.createToken(usuarioEntidad, roles);
 
             return ok(token);
         } catch (AuthenticationException e) {
