@@ -1,7 +1,7 @@
-package com.coopetico.coopeticobackend.controladores.unit;
+package com.coopetico.coopeticobackend.controladores.integration;
 
 /**
- Test de unidad del GrupoControlador
+ Test de integracion del GrupoControlador
  @author      Jefferson Alvarez
  @since       18-04-2019
  @version:    1.0
@@ -9,6 +9,7 @@ package com.coopetico.coopeticobackend.controladores.unit;
 
 import com.coopetico.coopeticobackend.controladores.GrupoControlador;
 import com.coopetico.coopeticobackend.entidades.GrupoEntidad;
+import com.coopetico.coopeticobackend.repositorios.GruposRepositorio;
 import com.coopetico.coopeticobackend.servicios.GrupoServicio;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
@@ -16,7 +17,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -24,18 +24,16 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.util.Arrays;
-import java.util.List;
+import javax.transaction.Transactional;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.BDDMockito.given;
+import static org.junit.Assert.assertNotNull;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
-public class GrupoControladorUnitTest {
-
+public class GrupoControladorIntegrationTest {
     private MockMvc mockMvc;
 
     @Autowired
@@ -44,29 +42,38 @@ public class GrupoControladorUnitTest {
     @Autowired
     GrupoControlador grupoControlador;
 
-    @MockBean
+    @Autowired
     GrupoServicio grupoServicio;
+
+    @Autowired
+    GruposRepositorio gruposRepositorio;
 
     @Before
     public void setup() {
         this.mockMvc = standaloneSetup(this.grupoControlador).build();
     }
 
-    //ObjectMapper objectMapper = new ObjectMapper();
-    //return objectMapper.writeValueAsString(obj);
-
     @Test
-    public void testObtenerGrupos() throws Exception {
+    @Transactional
+    public void testGetGrupos() throws Exception {
+        //Para que el test funcione la tabla de grupos debe estar vacia
+
         String url = "/grupos";
 
         GrupoEntidad grupoEntidad = new GrupoEntidad();
         grupoEntidad.setPkId("Administrativo");
 
-        GrupoEntidad grupoEntidad2 = new GrupoEntidad();
-        grupoEntidad.setPkId("Cliente");
+        gruposRepositorio.save(grupoEntidad);
 
-        List<GrupoEntidad> enitdades = Arrays.asList(grupoEntidad, grupoEntidad2);
-        given(grupoServicio.getGrupos()).willReturn(enitdades);
+        GrupoEntidad grupoEntidad2 = new GrupoEntidad();
+        grupoEntidad2.setPkId("Cliente");
+
+        gruposRepositorio.save(grupoEntidad2);
+
+        GrupoEntidad grupoEntidad3 = new GrupoEntidad();
+        grupoEntidad3.setPkId("Taxista");
+
+        gruposRepositorio.save(grupoEntidad3);
 
 
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(url).accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
@@ -74,10 +81,10 @@ public class GrupoControladorUnitTest {
         int status = mvcResult.getResponse().getStatus();
         assertEquals(200, status);
 
-        String content = mvcResult.getResponse().getContentAsString();
+        String contenido = mvcResult.getResponse().getContentAsString();
         ObjectMapper objectMapper = new ObjectMapper();
-        GrupoEntidad[] listaGrupos = objectMapper.readValue(content, GrupoEntidad[].class);
-        assertTrue(listaGrupos.length > 0);
+        GrupoEntidad[] listaGrupos = objectMapper.readValue(contenido, GrupoEntidad[].class);
+        assertNotNull(listaGrupos);
+        assertTrue(listaGrupos.length == 3);
     }
-
 }

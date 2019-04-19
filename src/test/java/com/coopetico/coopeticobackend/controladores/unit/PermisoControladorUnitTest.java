@@ -1,15 +1,15 @@
 package com.coopetico.coopeticobackend.controladores.unit;
 
 /**
- Test de unidad del GrupoControlador
+ Test de unidad del PermisoControlador
  @author      Jefferson Alvarez
  @since       18-04-2019
  @version:    1.0
  */
 
-import com.coopetico.coopeticobackend.controladores.GrupoControlador;
-import com.coopetico.coopeticobackend.entidades.GrupoEntidad;
-import com.coopetico.coopeticobackend.servicios.GrupoServicio;
+import com.coopetico.coopeticobackend.controladores.PermisoControlador;
+import com.coopetico.coopeticobackend.entidades.PermisoEntidad;
+import com.coopetico.coopeticobackend.servicios.PermisosServicio;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,7 +34,7 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standal
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
-public class GrupoControladorUnitTest {
+public class PermisoControladorUnitTest {
 
     private MockMvc mockMvc;
 
@@ -42,31 +42,33 @@ public class GrupoControladorUnitTest {
     protected WebApplicationContext wac;
 
     @Autowired
-    GrupoControlador grupoControlador;
+    PermisoControlador permisoControlador;
 
     @MockBean
-    GrupoServicio grupoServicio;
+    PermisosServicio permisosServicio;
 
     @Before
     public void setup() {
-        this.mockMvc = standaloneSetup(this.grupoControlador).build();
+        this.mockMvc = standaloneSetup(this.permisoControlador).build();
     }
 
     //ObjectMapper objectMapper = new ObjectMapper();
     //return objectMapper.writeValueAsString(obj);
 
     @Test
-    public void testObtenerGrupos() throws Exception {
-        String url = "/grupos";
+    public void testObtenerPermisos() throws Exception {
+        String url = "/permisos";
 
-        GrupoEntidad grupoEntidad = new GrupoEntidad();
-        grupoEntidad.setPkId("Administrativo");
+        PermisoEntidad permisoEntidad = new PermisoEntidad();
+        permisoEntidad.setPkId(100);
+        permisoEntidad.setDescripcion("Pedir Viaje");
 
-        GrupoEntidad grupoEntidad2 = new GrupoEntidad();
-        grupoEntidad.setPkId("Cliente");
+        PermisoEntidad permisoEntidad2 = new PermisoEntidad();
+        permisoEntidad2.setPkId(101);
+        permisoEntidad2.setDescripcion("Cancelar Viaje");
 
-        List<GrupoEntidad> enitdades = Arrays.asList(grupoEntidad, grupoEntidad2);
-        given(grupoServicio.getGrupos()).willReturn(enitdades);
+        List<PermisoEntidad> entidades = Arrays.asList(permisoEntidad, permisoEntidad2);
+        given(permisosServicio.getPermisos()).willReturn(entidades);
 
 
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(url).accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
@@ -74,10 +76,10 @@ public class GrupoControladorUnitTest {
         int status = mvcResult.getResponse().getStatus();
         assertEquals(200, status);
 
-        String content = mvcResult.getResponse().getContentAsString();
+        String contenido = mvcResult.getResponse().getContentAsString();
         ObjectMapper objectMapper = new ObjectMapper();
-        GrupoEntidad[] listaGrupos = objectMapper.readValue(content, GrupoEntidad[].class);
-        assertTrue(listaGrupos.length > 0);
+        PermisoEntidad[] listaPermisos = objectMapper.readValue(contenido, PermisoEntidad[].class);
+        assertTrue(listaPermisos.length == 2);
     }
 
 }
