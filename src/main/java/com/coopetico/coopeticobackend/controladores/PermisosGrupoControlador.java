@@ -104,21 +104,22 @@ public class PermisosGrupoControlador {
     }
 
     /**
-     * Metodo para eliminar llaves permiso-grupo
-     * @param pG Lista de objetos que contienen las llaves a guardar
-     * @return ok Si las llaves son eliminadas correctamente
+     * Metodo para eliminar una llave permiso-grupo
+     * @param idPermiso id del permiso
+     * @param idGrupo id del Grupo
+     * @return ok Si la llave es eliminada correctamente
      */
-    @DeleteMapping()
+    @DeleteMapping("/{idPermiso}/{idGrupo}")
     @CrossOrigin(origins = "http://localhost:4200")
-    public ResponseEntity eliminarPermisoGrupo(@RequestBody List<PermisosGrupoEntidadPK> pG) {
+    public ResponseEntity eliminarPermisoGrupo(@PathVariable("idPermiso")int idPermiso, @PathVariable("idGrupo") String idGrupo) {
 
-        for (PermisosGrupoEntidadPK permisoGrupoEntidadPKEntrante: pG) {
-            //Obtenemos la instancia del Permiso - Grupo
-            PermisosGrupoEntidad permisoGrupoEliminar = permisosGrupoServicio.getPermisoGrupoPorPK(permisoGrupoEntidadPKEntrante);
+        PermisosGrupoEntidadPK entidad = new PermisosGrupoEntidadPK(idPermiso, idGrupo);
+        //Obtenemos la instancia del Permiso - Grupo
+        PermisosGrupoEntidad permisoGrupoEliminar = permisosGrupoServicio.getPermisoGrupoPorPK(entidad);
 
-            //Eliminarmos el Permiso - Grupo
-            permisosGrupoServicio.eliminarPermisosGrupo(permisoGrupoEliminar);
-        }
+        //Eliminarmos el Permiso - Grupo
+        permisosGrupoServicio.eliminarPermisosGrupo(permisoGrupoEliminar);
+
         return ok("");
     }
 }
