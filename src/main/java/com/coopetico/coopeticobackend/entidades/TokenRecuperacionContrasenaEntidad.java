@@ -11,6 +11,14 @@ public class TokenRecuperacionContrasenaEntidad {
     private String token;
     private Timestamp fechaExpiracion;
 
+    public TokenRecuperacionContrasenaEntidad() {
+    }
+
+    public TokenRecuperacionContrasenaEntidad(String fkCorreoUsuario, String token) {
+        this.fkCorreoUsuario = fkCorreoUsuario;
+        this.token = token;
+    }
+
     @Id
     @Column(name = "fk_correo_usuario")
     public String getFkCorreoUsuario() {
