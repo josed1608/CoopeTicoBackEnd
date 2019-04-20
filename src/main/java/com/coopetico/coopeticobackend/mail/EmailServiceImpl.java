@@ -89,7 +89,7 @@ public class EmailServiceImpl implements EmailService {
                     "\n" +
                     "<body>\n" +
                     "<h1> Codigo para recuperar su contraseña</h1>" +
-                    "<p>Abra el siguiente link para recuperar su contraseña: http://localhost:8080/usuarios/" +
+                    "<p>Abra el siguiente link para recuperar su contraseña: http://localhost:4200/usuarios/" +
                         "cambiarContrasena/" + to + "/" + token + "</p>"+
                     "</body>\n" +
                     "</html>", true);

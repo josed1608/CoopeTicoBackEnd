@@ -87,17 +87,16 @@ public class UsuarioControlador {
     @ResponseStatus(HttpStatus.OK)
     public boolean cambiarContrasena(@RequestBody AuthenticationRequest datosUsuario){
         //Obtener el usuario con ese nombre o correo
-        String nombreUsuario = datosUsuario.getUsername();
-        if(nombreUsuario != null) {
+        if(datosUsuario.getUsername() != null & datosUsuario.getPassword() != null) {
 
-            if (this.usuarioServicio.usuarioPorCorreo(nombreUsuario).isPresent()) {
-                UsuarioEntidad usuarioEntidad = this.usuarioServicio.usuarioPorCorreo(nombreUsuario).get();
+            if (this.usuarioServicio.usuarioPorCorreo(datosUsuario.getUsername()).isPresent()) {
+                UsuarioEntidad usuarioEntidad = this.usuarioServicio.usuarioPorCorreo(datosUsuario.getUsername()).get();
                 //Encriptar la contraseña
                 usuarioEntidad.setContrasena(encoder.encode(datosUsuario.getPassword()));
                 //Actualizar el usuario
                 usuariosRepositorio.save(usuarioEntidad);
                 // Se borra de la tabla el Token
-                tokensServicio.eliminarToken(nombreUsuario);
+                tokensServicio.eliminarToken(datosUsuario.getUsername());
                 return true;
             }
 
