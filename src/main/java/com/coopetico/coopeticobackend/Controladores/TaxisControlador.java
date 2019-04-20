@@ -29,7 +29,8 @@ public class TaxisControlador {
 
     @PostMapping("/taxis")
     @ResponseStatus(HttpStatus.CREATED)
-    public TaxiEntidad agregarTaxi(@RequestBody TaxiEntidad taxi){
+    public TaxiEntidad agregar(@RequestBody TaxiEntidad taxi){
+
         return taxisServicio.guardar(taxi);
     }
 

@@ -1,6 +1,7 @@
 package com.coopetico.coopeticobackend.entidades;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
@@ -20,8 +21,11 @@ public class TaxiEntidad {
     private Timestamp fechaVenTaxista;
     private Timestamp fechaVenMarchamo;
     private Timestamp fechaVenSeguro;
+    @JsonIgnore
     private Collection<TaxistaEntidad> taxistasByPkPlaca;
+    @JsonIgnore
     private Collection<TaxistaEntidad> taxistasByPkPlaca_0;
+    @JsonIgnore
     private Collection<ViajeEntidad> viajesByPkPlaca;
 
     public TaxiEntidad(String pkPlaca, Boolean datafono, String telefono, String clase, String tipo, Timestamp fechaVenTaxista, Timestamp fechaVenMarchamo, Timestamp fechaVenSeguro, Collection<TaxistaEntidad> taxistasByPkPlaca, Collection<TaxistaEntidad> taxistasByPkPlaca_0, Collection<ViajeEntidad> viajesByPkPlaca) {
