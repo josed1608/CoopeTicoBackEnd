@@ -84,22 +84,27 @@ public class UsuarioControlador {
      * @return El JWT en caso de un cambio exitoso o fallido.
      */
     @PutMapping(path = "/cambiarContrasena")
-    public ResponseEntity cambiarContrasena(@RequestBody AuthenticationRequest datosUsuario){
+    @ResponseStatus(HttpStatus.OK)
+    public boolean cambiarContrasena(@RequestBody AuthenticationRequest datosUsuario){
         //Obtener el usuario con ese nombre o correo
         String nombreUsuario = datosUsuario.getUsername();
-        UsuarioEntidad usuarioEntidad = this.usuariosRepositorio.findById(nombreUsuario).orElseThrow(null);
+        if(nombreUsuario != null) {
 
-        if(usuarioEntidad != null){
-            //Encriptar la contraseña
-            usuarioEntidad.setContrasena(encoder.encode(datosUsuario.getPassword()));
-            //Actualizar el usuario
-            usuariosRepositorio.save(usuarioEntidad);
-            // Se borra de la tabla el Token
-            tokensServicio.eliminarToken(nombreUsuario);
-            return new ResponseEntity(HttpStatus.OK);
+            if (this.usuarioServicio.usuarioPorCorreo(nombreUsuario).isPresent()) {
+                UsuarioEntidad usuarioEntidad = this.usuarioServicio.usuarioPorCorreo(nombreUsuario).get();
+                //Encriptar la contraseña
+                usuarioEntidad.setContrasena(encoder.encode(datosUsuario.getPassword()));
+                //Actualizar el usuario
+                usuariosRepositorio.save(usuarioEntidad);
+                // Se borra de la tabla el Token
+                tokensServicio.eliminarToken(nombreUsuario);
+                return true;
+            }
+
+            return false;
         }
 
-        return new ResponseEntity(HttpStatus.NOT_FOUND);
+        return false;
     }
 
     /**
