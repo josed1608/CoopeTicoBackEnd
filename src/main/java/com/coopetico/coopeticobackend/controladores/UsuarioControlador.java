@@ -1,9 +1,13 @@
 package com.coopetico.coopeticobackend.controladores;
-// Programador: Hannia Aguilar Salas
-// Fecha: 11/04/2019
-// Version: 2.0
-// Controlador de usuarios, hice los métodos de actualizarContrasena: Cambiar la contraseña en la base de datos
-// y mostrarInterfazCambioContrasena: Validar el token que se envío al mail del usuario para el cambio de contraseña.
+
+/**
+ Controlador de usuarios, hice los métodos de actualizarContrasena: Cambiar la contraseña en la base de datos
+ y mostrarInterfazCambioContrasena: Validar el token que se envío al mail del usuario para el cambio de contraseña.
+ @author      Hannia Aguilar Salas
+ @since       19-04-2019
+ @version:   3.0
+ */
+
 
 import com.coopetico.coopeticobackend.entidades.GrupoEntidad;
 import com.coopetico.coopeticobackend.entidades.TokenRecuperacionContrasenaEntidad;
@@ -35,6 +39,7 @@ import java.util.Calendar;
 import java.util.List;
 import javax.validation.constraints.Email;
 
+@CrossOrigin( origins = {"http://localhost:4200"})
 @RestController
 @RequestMapping(path="/usuarios")
 @Validated
@@ -63,14 +68,14 @@ public class UsuarioControlador {
      * @param correo Correo del usuario
      * @return El JWT en caso de un éxito o fallo.
      */
-    @GetMapping(path="/contrasenaToken")
-    public @ResponseBody ResponseEntity recuperarContrasena (@RequestParam("correo") String correo) {
+    @GetMapping(path="/recuperarContrasena/{correo}")
+    public boolean recuperarContrasena (@PathVariable String correo) {
         String token = tokensServicio.insertarToken(correo);
         if (token == null) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            return false;
         }
         mail.enviarCorreoRecuperarContrasena(correo, token);
-        return new ResponseEntity(HttpStatus.OK);
+        return true;
     }
 
     /**
@@ -78,8 +83,8 @@ public class UsuarioControlador {
      * @param datosUsuario Modelo del request de autenticación. Espera los atributos username y password
      * @return El JWT en caso de un cambio exitoso o fallido.
      */
-    @PutMapping(path = "/recuperarContrasena")
-    public ResponseEntity actualizarContrasena(@RequestBody AuthenticationRequest datosUsuario){
+    @PutMapping(path = "/cambiarContrasena")
+    public ResponseEntity cambiarContrasena(@RequestBody AuthenticationRequest datosUsuario){
         //Obtener el usuario con ese nombre o correo
         String nombreUsuario = datosUsuario.getUsername();
         UsuarioEntidad usuarioEntidad = this.usuariosRepositorio.findById(nombreUsuario).orElseThrow(null);
@@ -97,35 +102,58 @@ public class UsuarioControlador {
         return new ResponseEntity(HttpStatus.NOT_FOUND);
     }
 
-    ///// BEGIN -- PRUEBA DE VALIDACION DE TOKEN
-      @GetMapping(path="/recuperarContrasenaEnProceso")
-      public @ResponseBody String linkRecuperarContrasena (@RequestParam("id") String id) {
-          return "MOSTRAR INTERFAZ DE RECUPERACIÓN DE CONTRASEÑA";
-      }
-      @GetMapping(path="/recuperarContrasenaFallido")
-      public @ResponseBody String linkRecuperarContrasena2 () {
-          return "NO MOSTRAR INTERFAZ DE RECUPERACIÓN DE CONTRASEÑA";
-      }
-     ///// END -- PRUEBA DE VALIDACION DE TOKEN
-
     /**
-     * Método que revisa el token de cambio de contraseña con el que ingresa el usuario (link enviado al correo)
-     * Valida el token y lo redirecciona a realizar el cambio o a un error en el link.
+     * Método para validar el token, revisa que exista un token para ese usuario (correo) y que la fecha del link no haya expirado.
      * @param id Correo del usuario
-     * @param token Token del link enviado al correo, generado para el cambio de contraseña
-     * @return Retorna la dirección a la que se dirije al usuario.
+     * @return Boolean que indica si es válido o no.
      */
-    @RequestMapping(value = "/recuperarContrasena", method = RequestMethod.GET)
-    public String mostrarInterfazCambioContrasena( @RequestParam("id") String id, @RequestParam("token") String token) {
-        System.out.println("Intenta entrar a recuperar contrasena");
-        boolean resultadoValidacion = validarTokenRecuperarContrasena(id);
-        if (!resultadoValidacion) {
-            return "redirect:/usuarios/recuperarContrasenaFallido";
+    @GetMapping("/cambiarContrasena/{id}/{token}")
+    @ResponseStatus(HttpStatus.OK)
+    public boolean validarTokenRecuperarContrasena(@PathVariable String id, @PathVariable String token) {
+        TokenRecuperacionContrasenaEntidad tokenContrasena  = tokensServicio.getToken(id);
+        //Validación con el usuario
+        if (tokenContrasena == null || !tokenContrasena.getFkCorreoUsuario().equals(id) || !tokenContrasena.getToken().equals(token)) {
+            return false;
         }
-        return "redirect:/usuarios/recuperarContrasenaEnProceso?id=" + id;
+
+        //Revisa la fecha del link
+        Calendar calendario = Calendar.getInstance();
+        if ((tokenContrasena.getFechaExpiracion()
+                .getTime() - calendario.getTime()
+                .getTime()) <= 0) {
+            return false;
+        }
+
+        return true;
     }
 
-
+   //  ///// BEGIN -- PRUEBA DE VALIDACION DE TOKEN
+   //    @GetMapping(path="/recuperarContrasenaEnProceso")
+   //    public @ResponseBody String linkRecuperarContrasena (@RequestParam("id") String id) {
+   //        return "MOSTRAR INTERFAZ DE RECUPERACIÓN DE CONTRASEÑA";
+   //    }
+   //    @GetMapping(path="/recuperarContrasenaFallido")
+   //    public @ResponseBody String linkRecuperarContrasena2 () {
+   //        return "NO MOSTRAR INTERFAZ DE RECUPERACIÓN DE CONTRASEÑA";
+   //    }
+   //   ///// END -- PRUEBA DE VALIDACION DE TOKEN
+//
+   //  /**
+   //   * Método que revisa el token de cambio de contraseña con el que ingresa el usuario (link enviado al correo)
+   //   * Valida el token y lo redirecciona a realizar el cambio o a un error en el link.
+   //   * @param id Correo del usuario
+   //   * @param token Token del link enviado al correo, generado para el cambio de contraseña
+   //   * @return Retorna la dirección a la que se dirije al usuario.
+   //   */
+   //  @RequestMapping(value = "/recuperarContrasena", method = RequestMethod.GET)
+   //  public String mostrarInterfazCambioContrasena( @RequestParam("usuario") String id, @RequestParam("token") String token) {
+   //      System.out.println("Intenta entrar a recuperar contrasena");
+   //      boolean resultadoValidacion = validarTokenRecuperarContrasena(id);
+   //      if (!resultadoValidacion) {
+   //          return "redirect:/usuarios/recuperarContrasenaFallido";
+   //      }
+   //      return "redirect:/usuarios/recuperarContrasenaEnProceso?id=" + id;
+   //  }
 
 
     //TODO ver lo de acoplamiento y cohesion
@@ -167,30 +195,5 @@ public class UsuarioControlador {
 
         return usuarioServicio.agregarUsuario(usuarioTemporal, usuarioTemporal.getPkCorreo());
     }
-
-    /**
-     * Método para validar el token, revisa que exista un token para ese usuario (correo) y que la fecha del link no haya expirado.
-     * @param id Correo del usuario
-     * @return Boolean que indica si es válido o no.
-     */
-    private boolean validarTokenRecuperarContrasena(String id) {
-        TokenRecuperacionContrasenaEntidad tokenContrasena  = tokensServicio.getToken(id);
-        //Validación con el usuario
-        if (tokenContrasena == null || !tokenContrasena.getFkCorreoUsuario().equals(id)) {
-            return false;
-        }
-
-        //Revisa la fecha del link
-        Calendar calendario = Calendar.getInstance();
-        if ((tokenContrasena.getFechaExpiracion()
-                .getTime() - calendario.getTime()
-                .getTime()) <= 0) {
-            return false;
-        }
-
-        return true;
-    }
-
-
 
 }

@@ -90,7 +90,7 @@ public class EmailServiceImpl implements EmailService {
                     "<body>\n" +
                     "<h1> Codigo para recuperar su contraseña</h1>" +
                     "<p>Abra el siguiente link para recuperar su contraseña: http://localhost:8080/usuarios/" +
-                        "recuperarContrasena?usuario=" + to + "&token=" + token + "</p>"+
+                        "cambiarContrasena/" + to + "/" + token + "</p>"+
                     "</body>\n" +
                     "</html>", true);
             helper.setSubject("Recuperar contraseña CoopeticoApp");
