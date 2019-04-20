@@ -152,23 +152,4 @@ public class UsuarioEntidad {
         this.grupoByIdGrupo = grupoByIdGrupo;
     }
 
-    /**
-     * Metodo para retornar el id del grupo de un usario
-     * @return Id del grupo
-     */
-    public String getGrupoId(){
-        if( this.grupoByIdGrupo != null)
-            return grupoByIdGrupo.getPkId();
-        return null;
-    }
-
-    /**
-     * Metodo para setear el id del grupo
-     * @param id identificador nuevo
-     */
-    public void setGrupoId(String id){
-        if( this.grupoByIdGrupo == null)
-            this.grupoByIdGrupo = new GrupoEntidad();
-        this.grupoByIdGrupo.setPkId(id);
-    }
 }

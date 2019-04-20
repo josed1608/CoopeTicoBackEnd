@@ -32,16 +32,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.Email;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 @CrossOrigin( origins = {"http://localhost:4200"})
-import javax.validation.constraints.Email;
-
 @RestController
 @RequestMapping(path="/usuarios")
-@Validated
 public class UsuarioControlador {
 
     @Autowired
@@ -179,8 +178,7 @@ public class UsuarioControlador {
         usuarioEntidad.setNombre(usuario.getNombre());
         usuarioEntidad.setTelefono(usuario.getTelefono());
         usuarioEntidad.setFoto(usuario.getFoto());
-
-        UsuarioEntidad temporal = usuarioServicio.agregarUsuario(usuarioEntidad, usuarioEntidad.getGrupoId());
+        UsuarioEntidad temporal = usuarioServicio.agregarUsuario(usuarioEntidad, usuarioEntidad.getGrupoByIdGrupo().getPkId());
         return new UsuarioTemporal(temporal);
     }
 
@@ -206,6 +204,7 @@ public class UsuarioControlador {
 
         return true;
     }
+
 
 
 }
