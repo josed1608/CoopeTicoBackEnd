@@ -119,7 +119,7 @@ public class PermisoGrupoServicioUnitTest {
 
         PermisosGrupoEntidad permisosGrupoEntidad = new PermisosGrupoEntidad(permisosGrupoEntidadPK, permisoEntidad, grupoEntidad);
 
-        boolean retorno = permisoGrupoServicio.guardarPermisosGrupo(permisosGrupoEntidad);
+        boolean retorno = permisoGrupoServicio.eliminarPermisosGrupo(permisosGrupoEntidad);
 
         assertTrue(retorno);
 
