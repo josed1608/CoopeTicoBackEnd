@@ -11,7 +11,6 @@ package com.coopetico.coopeticobackend.controladores;
 
 import com.coopetico.coopeticobackend.entidades.GrupoEntidad;
 import com.coopetico.coopeticobackend.entidades.TokenRecuperacionContrasenaEntidad;
-import com.coopetico.coopeticobackend.entidades.UsuarioEntidad;
 import com.coopetico.coopeticobackend.mail.EmailServiceImpl;
 import com.coopetico.coopeticobackend.repositorios.UsuariosRepositorio;
 import com.coopetico.coopeticobackend.servicios.TokensRecuperacionContrasenaServicio;
@@ -35,7 +34,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.*;
 import java.util.Calendar;
-
 import java.util.List;
 import javax.validation.constraints.Email;
 
@@ -199,5 +197,30 @@ public class UsuarioControlador {
 
         return usuarioServicio.agregarUsuario(usuarioTemporal, usuarioTemporal.getPkCorreo());
     }
+
+    /**
+     * Método para validar el token, revisa que exista un token para ese usuario (correo) y que la fecha del link no haya expirado.
+     * @param id Correo del usuario
+     * @return Boolean que indica si es válido o no.
+     */
+    private boolean validarTokenRecuperarContrasena(String id) {
+        TokenRecuperacionContrasenaEntidad tokenContrasena  = tokensServicio.getToken(id);
+        //Validación con el usuario
+        if (tokenContrasena == null || !tokenContrasena.getFkCorreoUsuario().equals(id)) {
+            return false;
+        }
+
+        //Revisa la fecha del link
+        Calendar calendario = Calendar.getInstance();
+        if ((tokenContrasena.getFechaExpiracion()
+                .getTime() - calendario.getTime()
+                .getTime()) <= 0) {
+            return false;
+        }
+
+        return true;
+    }
+
+
 
 }
