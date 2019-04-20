@@ -9,35 +9,46 @@ package com.coopetico.coopeticobackend.servicios.unit;
 
 import com.coopetico.coopeticobackend.entidades.GrupoEntidad;
 import com.coopetico.coopeticobackend.repositorios.GruposRepositorio;
-import com.coopetico.coopeticobackend.servicios.GrupoServicio;
+import com.coopetico.coopeticobackend.servicios.GrupoServicioImpl;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
-@RunWith(SpringRunner.class)
+@RunWith(SpringJUnit4ClassRunner.class)
 public class GrupoServicioUnitTest {
 
     @Autowired
     protected WebApplicationContext wac;
 
     @MockBean
-    GrupoServicio grupoServicio;
-
-    @MockBean
     GruposRepositorio gruposRepositorio;
+
+    @InjectMocks
+    GrupoServicioImpl grupoServicio;
+
+    @Before
+    public void setUp() {
+        gruposRepositorio = mock(GruposRepositorio.class);
+        grupoServicio = new GrupoServicioImpl(gruposRepositorio);
+        MockitoAnnotations.initMocks( this );
+    }
 
 
     @Test
@@ -53,9 +64,12 @@ public class GrupoServicioUnitTest {
         when(gruposRepositorio.getIDGrupos()).thenReturn(entidades);
 
 
-        List<GrupoEntidad> enitdadesServicio = grupoServicio.getGrupos();
+        List<GrupoEntidad> entidadesServicio = grupoServicio.getGrupos();
 
-        assertNotNull(enitdadesServicio);
+        assertNotNull(entidadesServicio);
+        assertTrue(entidadesServicio.size() == 2);
+        assertTrue(entidadesServicio.get(0).getPkId() == "Administrativo"
+        || entidadesServicio.get(0).getPkId() == "Cliente");
     }
 
     @Test
@@ -66,9 +80,9 @@ public class GrupoServicioUnitTest {
 
         when(gruposRepositorio.findById("Administrativo")).thenReturn(Optional.of(grupoEntidad));
 
-        Optional<GrupoEntidad> entidadServicio = gruposRepositorio.findById("Administrativo");
+        GrupoEntidad entidadServicio = grupoServicio.getGrupoPorPK("Administrativo");
 
-        assertThat(entidadServicio).isNotEmpty();
-        assertThat(entidadServicio).hasValue(grupoEntidad);
+        assertNotNull(entidadServicio);
+        assertTrue(entidadServicio.getPkId() == "Administrativo");
     }
 }

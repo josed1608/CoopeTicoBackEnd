@@ -9,38 +9,46 @@ package com.coopetico.coopeticobackend.servicios.unit;
 
 import com.coopetico.coopeticobackend.entidades.PermisoEntidad;
 import com.coopetico.coopeticobackend.repositorios.PermisosRepositorio;
-import com.coopetico.coopeticobackend.servicios.PermisosServicio;
+import com.coopetico.coopeticobackend.servicios.PermisosServicioImpl;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
 public class PermisoServicioUnitTest {
 
-    private MockMvc mockMvc;
-
     @Autowired
     protected WebApplicationContext wac;
 
     @MockBean
-    PermisosServicio permisosServicio;
-
-    @MockBean
     PermisosRepositorio permisosRepositorio;
+
+    @InjectMocks
+    PermisosServicioImpl permisosServicio;
+
+    @Before
+    public void setUp() {
+        permisosRepositorio = mock(PermisosRepositorio.class);
+        permisosServicio = new PermisosServicioImpl(permisosRepositorio);
+        MockitoAnnotations.initMocks( this );
+    }
 
 
     @Test
@@ -58,6 +66,9 @@ public class PermisoServicioUnitTest {
         List<PermisoEntidad> entidadesServicio = permisosServicio.getPermisos();
 
         assertNotNull(entidadesServicio);
+        assertTrue(entidadesServicio.size() == 2);
+        assertTrue(entidadesServicio.get(0).getPkId() == 100
+                || entidadesServicio.get(0).getPkId() == 200);
     }
 
     @Test
@@ -68,9 +79,9 @@ public class PermisoServicioUnitTest {
 
         when(permisosRepositorio.findById(100)).thenReturn(Optional.of(permisoEntidad));
 
-        Optional<PermisoEntidad> entidadServicio = permisosRepositorio.findById(100);
+        PermisoEntidad entidadServicio = permisosServicio.getPermisoPorPK(100);
 
-        assertThat(entidadServicio).isNotEmpty();
-        assertThat(entidadServicio).hasValue(permisoEntidad);
+        assertNotNull(entidadServicio);
+        assertTrue(entidadServicio.getPkId() == 100);
     }
 }
