@@ -53,6 +53,10 @@ public class ClienteControlador {
      */
     @GetMapping(path = "/obtenerUsuario/{correo}")
     public String obtenerUsuario(@PathVariable String correo) {
-        return this.clienteServicio.consultarUsuarioPorId(correo).toString();
+        try {
+            return this.clienteServicio.consultarUsuarioPorId(correo).toString();
+        } catch (Exception e) {
+            return "Not found";
+        }
     }
 }
