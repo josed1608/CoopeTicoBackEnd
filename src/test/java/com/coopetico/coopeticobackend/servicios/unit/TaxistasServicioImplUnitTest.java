@@ -1,7 +1,7 @@
 package com.coopetico.coopeticobackend.servicios.unit;
 
 /**
- Test de unidad del PermisoServicio
+ Pruebas de unidad para el servicio de taxistas.
  @author      Christofer Rodriguez
  @since       19-04-2019
  @version:    1.0
@@ -31,11 +31,10 @@ import java.util.List;
 import java.util.Optional;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 /**
- * Pruebas para el servicio de taxistas.
+ * Pruebas de unidad para el servicio de taxistas.
  */
 @SpringBootTest
 @RunWith(SpringRunner.class)
@@ -53,24 +52,6 @@ public class TaxistasServicioImplUnitTest {
     TaxistasRepositorio taxistasRepositorio;
 
     /**
-     * Repositorio de grupos.
-     */
-    @MockBean
-    GruposRepositorio gruposRepositorio;
-
-    /**
-     * Repositorio de usuarios.
-     */
-    @MockBean
-    UsuariosRepositorio usuarioRepositorio;
-
-    /**
-     * Repositorio de taxis.
-     */
-    @MockBean
-    TaxisRepositorio taxiRepositorio;
-
-    /**
      * Servicio de taxistas.
      */
     @InjectMocks
@@ -81,12 +62,7 @@ public class TaxistasServicioImplUnitTest {
      */
     @Before
     public void setUp() {
-        taxistasRepositorio = mock(TaxistasRepositorio.class);
-        gruposRepositorio = mock(GruposRepositorio.class) ;
-        usuarioRepositorio = mock(UsuariosRepositorio.class);
-        taxiRepositorio = mock(TaxisRepositorio.class);
-
-        taxistasServicio = new TaxistasServicioImpl(gruposRepositorio,usuarioRepositorio,taxiRepositorio);
+        taxistasServicio = new TaxistasServicioImpl();
         MockitoAnnotations.initMocks( this );
     }
 
