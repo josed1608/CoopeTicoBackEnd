@@ -1,3 +1,7 @@
+/***
+ * Implementacion del servicio de Usuarios.
+ */
+
 package com.coopetico.coopeticobackend.servicios;
 
 import com.coopetico.coopeticobackend.entidades.GrupoEntidad;
@@ -5,6 +9,7 @@ import com.coopetico.coopeticobackend.entidades.PermisosGrupoEntidad;
 import com.coopetico.coopeticobackend.entidades.UsuarioEntidad;
 import com.coopetico.coopeticobackend.excepciones.CorreoTomadoExcepcion;
 import com.coopetico.coopeticobackend.excepciones.GrupoNoExisteExcepcion;
+import com.coopetico.coopeticobackend.excepciones.UsuarioNoEncontradoExcepcion;
 import com.coopetico.coopeticobackend.repositorios.GruposRepositorio;
 import com.coopetico.coopeticobackend.repositorios.UsuariosRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,9 +79,21 @@ public class UsuarioServicioImpl implements UsuarioServicio{
         return usuariosRepositorio.findByGrupoByIdGrupo(grupo);
     }
 
+
+    /***
+     * Elimina un usuario
+     *
+     * @param correo Usuario a eliminar
+     * @throws UsuarioNoEncontradoExcepcion Si el ususario no existe
+     */
+    // Kevin Jimenez
     @Override
     @Transactional
-    public void eliminar(String correo) {
-        usuariosRepositorio.deleteById(correo);
+    public void eliminar(String correo) throws UsuarioNoEncontradoExcepcion {
+        if(usuariosRepositorio.existsById(correo)) {
+            usuariosRepositorio.deleteById(correo);
+        }else{
+            throw new UsuarioNoEncontradoExcepcion("El usuario no existe.", HttpStatus.NOT_FOUND, System.currentTimeMillis());
+        }
     }
 }
