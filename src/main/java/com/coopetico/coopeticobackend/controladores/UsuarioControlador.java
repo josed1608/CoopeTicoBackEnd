@@ -37,6 +37,7 @@ import java.util.Calendar;
 import java.util.List;
 import javax.validation.constraints.Email;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping(path="/usuarios")
 @Validated
