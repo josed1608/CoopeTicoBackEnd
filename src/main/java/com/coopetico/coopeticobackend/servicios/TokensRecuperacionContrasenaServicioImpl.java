@@ -1,9 +1,7 @@
+/***
+ * Interface del servicio de tokens de recuperacion de contraseña
+ */
 package com.coopetico.coopeticobackend.servicios;
-//Programador: TODO
-//Fecha: 04/04/2019
-//Version: 0.01
-//Implementacion de la interfaz del Servicio de Permiso-Grupo.
-
 
 import com.coopetico.coopeticobackend.entidades.TokenRecuperacionContrasenaEntidad;
 import com.coopetico.coopeticobackend.entidades.UsuarioEntidad;
@@ -14,10 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
-
 import javax.validation.constraints.Email;
 import java.util.UUID;
 
+
+/***
+ * Interface del servicio de tokens de recuperacion de contraseña
+ */
 @Validated
 @Service
 public class TokensRecuperacionContrasenaServicioImpl implements TokensRecuperacionContrasenaServicio {
@@ -32,16 +33,32 @@ public class TokensRecuperacionContrasenaServicioImpl implements TokensRecuperac
     @Autowired
     TokensRecuperacionContrasenaRepositorio tokensRepo;
 
+    // Kevin Jimenez
+    /***
+     * Devuelve un token para recuperar una contraseña
+     * @param correo Identificador del usuario
+     * @return Token para recuperar una contraseña
+     */
     @Override
     public TokenRecuperacionContrasenaEntidad getToken(String correo) {
        return  tokensRepo.findByFkCorreoUsuario(correo);
     }
 
+    /***
+     * Elimina el token perteneciente al usuario [correo}
+     * @param correo Identificador del usuario
+     */
     @Override
     public void eliminarToken(String correo) {
         tokensRepo.deleteById(correo);
     }
 
+    // Kevin Jimenez
+    /***
+     * Crea e inserta un nuevo token en la base de datos
+     * @param correo Identificador del usuario
+     * @return El token generado, en caso de fallo devuelve null
+     */
     @Override
     public String insertarToken(@Email String correo) {
         String token = UUID.randomUUID().toString();

@@ -37,7 +37,6 @@ import java.util.Calendar;
 import java.util.List;
 import javax.validation.constraints.Email;
 
-@CrossOrigin( origins = {"http://localhost:4200"})
 @RestController
 @RequestMapping(path="/usuarios")
 @Validated
@@ -49,7 +48,6 @@ public class UsuarioControlador {
     private EmailServiceImpl mail;
     private UsuariosRepositorio usuariosRepositorio;
     private PasswordEncoder encoder;
-    private TokensRecuperacionContrasenaServicio tokensRecuperacionContrasenaServicio;
     private UsuarioServicio usuarioServicio;
 
     @Autowired
@@ -118,6 +116,8 @@ public class UsuarioControlador {
         if (tokenContrasena == null || !tokenContrasena.getFkCorreoUsuario().equals(id) || !tokenContrasena.getToken().equals(token)) {
             return false;
         }
+        return "redirect:/usuarios/recuperarContrasenaEnProceso?id=" + id;
+    }
 
         //Revisa la fecha del link
         Calendar calendario = Calendar.getInstance();
@@ -143,10 +143,20 @@ public class UsuarioControlador {
         return usuarioServicio.usuarioPorCorreo(id).get();
     }
 
+    /***
+     * Borra un usuario del sistema.
+     *
+     * @param id Correo del usuario a borrar
+     * @return Si el correo pertenece a un usuario valido, retorna OK, si no, NOT_FOUND
+     */
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void eliminarUsuarioPorId(@PathVariable String id){
-        usuarioServicio.eliminar(id);
+    public @ResponseBody ResponseEntity eliminarUsuarioPorId(@PathVariable String id){
+        try {
+            usuarioServicio.eliminar(id);
+        }catch (UsernameNotFoundException e){
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     @GetMapping("/usuarios")
@@ -170,5 +180,26 @@ public class UsuarioControlador {
         return usuarioServicio.agregarUsuario(usuarioTemporal, usuarioTemporal.getPkCorreo());
     }
 
+    /**
+     * Método para validar el token, revisa que exista un token para ese usuario (correo) y que la fecha del link no haya expirado.
+     * @param id Correo del usuario
+     * @return Boolean que indica si es válido o no.
+     */
+    private boolean validarTokenRecuperarContrasena(String id) {
+        TokenRecuperacionContrasenaEntidad tokenContrasena  = tokensServicio.getToken(id);
+        //Validación con el usuario
+        if (tokenContrasena == null || !tokenContrasena.getFkCorreoUsuario().equals(id)) {
+            return false;
+        }
 
+        //Revisa la fecha del link
+        Calendar calendario = Calendar.getInstance();
+        if ((tokenContrasena.getFechaExpiracion()
+                .getTime() - calendario.getTime()
+                .getTime()) <= 0) {
+            return false;
+        }
+
+        return true;
+    }
 }

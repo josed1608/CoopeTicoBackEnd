@@ -23,7 +23,7 @@ public class GrupoServicioImpl implements GrupoServicio{
     private final GruposRepositorio grupoRepo;
 
     @Autowired
-    GrupoServicioImpl (GruposRepositorio grupoRepo){
+    public GrupoServicioImpl (GruposRepositorio grupoRepo){
         this.grupoRepo = grupoRepo;
     }
 

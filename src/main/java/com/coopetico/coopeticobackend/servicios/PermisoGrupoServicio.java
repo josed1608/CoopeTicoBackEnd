@@ -18,8 +18,8 @@ public interface PermisoGrupoServicio {
 
 
      /**
-     * Metodo que obtiene los permisos de los grupos existentes del sistema
-     * @return Lista de permisos con el ID y la Descripcion del permiso y el ID del grupo
+     * Metodo que obtiene los permisos del grupo
+     * @return Lista de permisos con el ID y la Descripcion del permiso, del grupo
      */
     public List<PermisoEntidad> getPermisosGrupo(GrupoEntidad idGrupo);
 
