@@ -116,8 +116,6 @@ public class UsuarioControlador {
         if (tokenContrasena == null || !tokenContrasena.getFkCorreoUsuario().equals(id) || !tokenContrasena.getToken().equals(token)) {
             return false;
         }
-        return "redirect:/usuarios/recuperarContrasenaEnProceso?id=" + id;
-    }
 
         //Revisa la fecha del link
         Calendar calendario = Calendar.getInstance();
@@ -185,7 +183,7 @@ public class UsuarioControlador {
      * @param id Correo del usuario
      * @return Boolean que indica si es válido o no.
      */
-    private boolean validarTokenRecuperarContrasena(String id) {
+    public boolean validarTokenRecuperarContrasena(String id) {
         TokenRecuperacionContrasenaEntidad tokenContrasena  = tokensServicio.getToken(id);
         //Validación con el usuario
         if (tokenContrasena == null || !tokenContrasena.getFkCorreoUsuario().equals(id)) {
