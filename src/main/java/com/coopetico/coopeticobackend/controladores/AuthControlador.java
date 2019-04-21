@@ -6,7 +6,6 @@ import com.coopetico.coopeticobackend.excepciones.UsuarioNoEncontradoExcepcion;
 import com.coopetico.coopeticobackend.security.jwt.JwtTokenProvider;
 import com.coopetico.coopeticobackend.servicios.UsuarioServicio;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,7 +13,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static org.springframework.http.ResponseEntity.ok;
@@ -25,7 +23,6 @@ import static org.springframework.http.ResponseEntity.ok;
 @RestController
 @RequestMapping("/auth")
 public class AuthControlador {
-    private final Environment env;
 
     private final
     AuthenticationManager authenticationManager;
@@ -37,8 +34,7 @@ public class AuthControlador {
     UsuarioServicio usuarioServicio;
 
     @Autowired
-    public AuthControlador(Environment env, AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, UsuarioServicio users) {
-        this.env = env;
+    public AuthControlador(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, UsuarioServicio users) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenProvider = jwtTokenProvider;
         this.usuarioServicio = users;
@@ -63,10 +59,5 @@ public class AuthControlador {
         } catch (AuthenticationException e) {
             throw new MalasCredencialesExcepcion("Correo o contraseña inválido", HttpStatus.UNAUTHORIZED, System.currentTimeMillis());
         }
-    }
-
-    @GetMapping("env")
-    public ResponseEntity getActiveProfiles() {
-        return ok(Arrays.asList(env.getActiveProfiles()));
     }
 }

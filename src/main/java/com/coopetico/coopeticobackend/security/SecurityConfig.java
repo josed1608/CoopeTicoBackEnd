@@ -3,17 +3,16 @@ package com.coopetico.coopeticobackend.security;
 import com.coopetico.coopeticobackend.security.jwt.JwtConfigurer;
 import com.coopetico.coopeticobackend.security.jwt.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
 
 /**
  * Clase de configuración de Spring Security
@@ -22,16 +21,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
-    private final
-    JwtTokenProvider jwtTokenProvider;
-
-    private final
-    UserDetailsService userDetailsService;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Autowired
-    public SecurityConfig(JwtTokenProvider jwtTokenProvider, @Qualifier("customUserDetailsService") UserDetailsService userDetailsService) {
+    public SecurityConfig(JwtTokenProvider jwtTokenProvider) {
         this.jwtTokenProvider = jwtTokenProvider;
-        this.userDetailsService = userDetailsService;
     }
 
     /**
@@ -52,16 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new PasswordEncoder() {
-            @Override
-            public String encode(CharSequence rawPassword) {
-                return rawPassword.toString();
-            }
-            @Override
-            public boolean matches(CharSequence rawPassword, String encodedPassword) {
-                return rawPassword.toString().equals(encodedPassword);
-            }
-        };
+        return new BCryptPasswordEncoder();
     }
 
     /**
@@ -78,9 +63,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 // Aquí se agregan las reglas de autenticación para acceder a los endpoint
-                .antMatchers("/auth/signin").permitAll()
+                .antMatchers(HttpMethod.POST,"/auth/signin").permitAll()
+                .antMatchers(HttpMethod.POST,"/clientes").permitAll()
                 // El has authority se usa para definir cuáles permisos permiten acceder a ese endpoint
-                .antMatchers("/auth/usuarios").hasAuthority("1")
                 .anyRequest().permitAll()
                 .and()
                 // Se aplica el filtro de los JWT

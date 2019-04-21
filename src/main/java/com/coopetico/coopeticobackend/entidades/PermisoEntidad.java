@@ -1,6 +1,7 @@
 package com.coopetico.coopeticobackend.entidades;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
@@ -14,6 +15,20 @@ public class PermisoEntidad {
     private int pkId;
     private String descripcion;
     private Collection<PermisosGrupoEntidad> permisosGruposByPkId;
+
+    public PermisoEntidad(int pkId, String descripcion, Collection<PermisosGrupoEntidad> permisosGruposByPkId) {
+        this.pkId = pkId;
+        this.descripcion = descripcion;
+        this.permisosGruposByPkId = permisosGruposByPkId;
+    }
+
+    public PermisoEntidad(int pkId, String descripcion) { //Para mapear consultas
+        this.pkId = pkId;
+        this.descripcion = descripcion;
+    }
+
+    public PermisoEntidad() {
+    }
 
     @Id
     @Column(name = "pk_id", nullable = false)
@@ -49,6 +64,7 @@ public class PermisoEntidad {
         return Objects.hash(pkId, descripcion);
     }
 
+    @JsonIgnore
     @OneToMany(mappedBy = "permisoByPkIdPermisos")
     public Collection<PermisosGrupoEntidad> getPermisosGruposByPkId() {
         return permisosGruposByPkId;

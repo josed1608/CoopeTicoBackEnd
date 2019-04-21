@@ -1,5 +1,6 @@
 package com.coopetico.coopeticobackend.security.jwt;
 
+import com.coopetico.coopeticobackend.entidades.UsuarioEntidad;
 import com.coopetico.coopeticobackend.excepciones.InvalidJwtAuthenticationException;
 import com.coopetico.coopeticobackend.security.SecretServicio;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -10,6 +11,7 @@ import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -44,16 +46,19 @@ public class JwtTokenProvider {
 
     /**
      * Crea el token de JWT con los claims deseados de usuario, rol, permisos, tiempo de creación y tiempo de expiración
-     * @param username correo del usuario
+     * @param usuario usuario
      * @param permisos lista de permisos del usuario
-     * @param rol rol del usuario
      * @return retorna String que representa el JWT
      */
-    public String createToken(String username, List<String> permisos, String rol) {
+    public String createToken(UsuarioEntidad usuario, List<String> permisos) {
 
-        Claims claims = Jwts.claims().setSubject(username);
+        Claims claims = Jwts.claims().setSubject(usuario.getPkCorreo());
+        claims.put("nombre", usuario.getNombre());
+        claims.put("apellidos", usuario.getApellidos());
+        claims.put("telefono", usuario.getTelefono());
+        claims.put("fotoUrl", usuario.getFoto());
         claims.put("permisos", permisos);
-        claims.put("rol", rol);
+        claims.put("rol", usuario.getGrupoByIdGrupo().getPkId());
 
         Date now = new Date();
         Date validity = new Date(now.getTime() + validityInMilliseconds);
@@ -113,7 +118,7 @@ public class JwtTokenProvider {
             return !claims.getBody().getExpiration().before(new Date());
         }
         catch (JwtException | IllegalArgumentException e) {
-            throw new InvalidJwtAuthenticationException("Expired or invalid JWT token");
+            throw new InvalidJwtAuthenticationException("Expired or invalid JWT token", HttpStatus.UNAUTHORIZED, System.currentTimeMillis());
         }
     }
 

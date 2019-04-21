@@ -16,11 +16,26 @@ public class UsuarioEntidad {
     private String telefono;
     private String contrasena;
     private String foto;
-    private String salt;
     private ClienteEntidad clienteByPkCorreo;
     private CoopeticoEntidad coopeticoByPkCorreo;
     private TaxistaEntidad taxistaByPkCorreo;
     private GrupoEntidad grupoByIdGrupo;
+
+    public UsuarioEntidad(String pkCorreo, String nombre, String apellidos, String telefono, String contrasena, String foto, ClienteEntidad clienteByPkCorreo, CoopeticoEntidad coopeticoByPkCorreo, TaxistaEntidad taxistaByPkCorreo, GrupoEntidad grupoByIdGrupo) {
+        this.pkCorreo = pkCorreo;
+        this.nombre = nombre;
+        this.apellidos = apellidos;
+        this.telefono = telefono;
+        this.contrasena = contrasena;
+        this.foto = foto;
+        this.clienteByPkCorreo = clienteByPkCorreo;
+        this.coopeticoByPkCorreo = coopeticoByPkCorreo;
+        this.taxistaByPkCorreo = taxistaByPkCorreo;
+        this.grupoByIdGrupo = grupoByIdGrupo;
+    }
+
+    public UsuarioEntidad() {
+    }
 
     @Id
     @Column(name = "pk_correo", nullable = false, length = 64)
@@ -82,16 +97,6 @@ public class UsuarioEntidad {
         this.foto = foto;
     }
 
-    @Basic
-    @Column(name = "salt", nullable = false, length = 128)
-    public String getSalt() {
-        return salt;
-    }
-
-    public void setSalt(String salt) {
-        this.salt = salt;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -102,13 +107,12 @@ public class UsuarioEntidad {
                 Objects.equals(apellidos, that.apellidos) &&
                 Objects.equals(telefono, that.telefono) &&
                 Objects.equals(contrasena, that.contrasena) &&
-                Objects.equals(foto, that.foto) &&
-                Objects.equals(salt, that.salt);
+                Objects.equals(foto, that.foto);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(pkCorreo, nombre, apellidos, telefono, contrasena, foto, salt);
+        return Objects.hash(pkCorreo, nombre, apellidos, telefono, contrasena, foto);
     }
 
     @OneToOne(mappedBy = "usuarioByPkCorreoUsuario")
@@ -146,5 +150,29 @@ public class UsuarioEntidad {
 
     public void setGrupoByIdGrupo(GrupoEntidad grupoByIdGrupo) {
         this.grupoByIdGrupo = grupoByIdGrupo;
+    }
+
+    /**
+     * Autor: Joseph Rementería (b55824)
+     * Fecha: 13/04/2019
+     * 
+     * Sobre-escrritura del método toString de la clase ClienteEntidad
+     * Se usa para tener ver los datos del pefil y los datos necesarios 
+     * para luego ser editador.
+     * 
+     * @return una string con los datos de la entidad cliente en 
+     * formato JSON =.
+     */
+    
+    @Override
+    public String toString(){
+        String result = "{";
+        result += "\"correo\": \""          + this.pkCorreo;
+        result += "\",\"nombre\": \""       + this.nombre;
+        result += "\",\"apellidos\": \""    + this.apellidos;
+        result += "\",\"telefono\": \""     + this.telefono;
+        result += "\",\"foto\": \""         + this.foto;
+        result += "\"}";
+        return result;
     }
 }
