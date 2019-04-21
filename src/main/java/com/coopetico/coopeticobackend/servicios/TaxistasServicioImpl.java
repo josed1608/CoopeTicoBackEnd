@@ -32,27 +32,30 @@ public class TaxistasServicioImpl implements  TaxistasServicio {
     /**
      * Repositorio de grupos.
      */
-    private final GruposRepositorio gruposRepositorio;
+    @Autowired
+    private GruposRepositorio gruposRepositorio;
 
     /**
      * Repositorio de usuario.
      */
-    private final UsuariosRepositorio usuarioRepositorio;
+    @Autowired
+    private UsuariosRepositorio usuarioRepositorio;
 
     /**
      * Repositorio de taxi.
      */
-    private final TaxisRepositorio taxiRepositorio;
+    @Autowired
+    private TaxisRepositorio taxiRepositorio;
 
     /**
      * Id del grupo de Taxistas.
      */
     private final String idGrupoTaxista = "Taxista";
 
-    public TaxistasServicioImpl(GruposRepositorio gruposRepositorio, UsuariosRepositorio usuarioRepositorio, TaxisRepositorio taxiRepositorio) {
-        this.gruposRepositorio = gruposRepositorio;
-        this.usuarioRepositorio = usuarioRepositorio;
-        this.taxiRepositorio = taxiRepositorio;
+    public TaxistasServicioImpl(/*GruposRepositorio gruposRepositorio, UsuariosRepositorio usuarioRepositorio, TaxisRepositorio taxiRepositorio*/) {
+        //this.gruposRepositorio = gruposRepositorio;
+        //this.usuarioRepositorio = usuarioRepositorio;
+        //this.taxiRepositorio = taxiRepositorio;
     }
 
     /**
