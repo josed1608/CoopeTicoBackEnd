@@ -138,10 +138,20 @@ public class UsuarioControlador {
         return usuarioServicio.usuarioPorCorreo(id).get();
     }
 
-    @DeleteMapping("/usuarios/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void eliminarUsuarioPorId(@PathVariable String id){
-        usuarioServicio.eliminar(id);
+    /***
+     * Borra un usuario del sistema.
+     *
+     * @param id Correo del usuario a borrar
+     * @return Si el correo pertenece a un usuario valido, retorna OK, si no, NOT_FOUND
+     */
+    @DeleteMapping("/{id}")
+    public @ResponseBody ResponseEntity eliminarUsuarioPorId(@PathVariable String id){
+        try {
+            usuarioServicio.eliminar(id);
+        }catch (UsernameNotFoundException e){
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     @GetMapping("/usuarios")
