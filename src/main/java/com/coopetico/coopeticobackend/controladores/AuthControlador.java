@@ -1,21 +1,21 @@
 package com.coopetico.coopeticobackend.controladores;
 
 import com.coopetico.coopeticobackend.entidades.UsuarioEntidad;
-import com.coopetico.coopeticobackend.repositorios.UsuariosRepositorio;
-import com.coopetico.coopeticobackend.security.CustomUserDetails;
+import com.coopetico.coopeticobackend.excepciones.MalasCredencialesExcepcion;
+import com.coopetico.coopeticobackend.excepciones.UsuarioNoEncontradoExcepcion;
 import com.coopetico.coopeticobackend.security.jwt.JwtTokenProvider;
+import com.coopetico.coopeticobackend.servicios.UsuarioServicio;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.springframework.http.ResponseEntity.ok;
 
@@ -25,6 +25,7 @@ import static org.springframework.http.ResponseEntity.ok;
 @RestController
 @RequestMapping("/auth")
 public class AuthControlador {
+    private final Environment env;
 
     private final
     AuthenticationManager authenticationManager;
@@ -33,13 +34,14 @@ public class AuthControlador {
     JwtTokenProvider jwtTokenProvider;
 
     private final
-    UsuariosRepositorio users;
+    UsuarioServicio usuarioServicio;
 
     @Autowired
-    public AuthControlador(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, UsuariosRepositorio users) {
+    public AuthControlador(Environment env, AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, UsuarioServicio users) {
+        this.env = env;
         this.authenticationManager = authenticationManager;
         this.jwtTokenProvider = jwtTokenProvider;
-        this.users = users;
+        this.usuarioServicio = users;
     }
 
     /**
@@ -53,27 +55,18 @@ public class AuthControlador {
         try {
             String username = data.getUsername();
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, data.getPassword()));
-            UsuarioEntidad usuarioEntidad = this.users.findById(username).orElseThrow(() -> new UsernameNotFoundException("Username " + username + "not found"));
-            List<String> roles = new CustomUserDetails(usuarioEntidad)
-                    .getAuthorities()
-                    .stream()
-                    .map(SimpleGrantedAuthority::getAuthority)
-                    .collect(Collectors.toList());
-            String token = jwtTokenProvider.createToken(username, roles, usuarioEntidad.getGrupoByIdGrupo().getPkId());
+            UsuarioEntidad usuarioEntidad = this.usuarioServicio.usuarioPorCorreo(username).orElseThrow(() -> new UsuarioNoEncontradoExcepcion("Usuario " + username + " no encontrado", HttpStatus.NOT_FOUND, System.currentTimeMillis()));
+            List<String> roles = usuarioServicio.obtenerPermisos(usuarioEntidad);
+            String token = jwtTokenProvider.createToken(usuarioEntidad, roles);
 
             return ok(token);
         } catch (AuthenticationException e) {
-            throw new BadCredentialsException("Invalid username/password supplied");
+            throw new MalasCredencialesExcepcion("Correo o contraseña inválido", HttpStatus.UNAUTHORIZED, System.currentTimeMillis());
         }
     }
 
-    /**
-     * Endpoint de prueba asegurado para probar que el filtro del JWT sirva
-     *
-     * @return Lista con todos los usuarios del sistema
-     */
-    @GetMapping("/usuarios")
-    public List<UsuarioEntidad> todosLosUsuarios() {
-        return users.findAll();
+    @GetMapping("env")
+    public ResponseEntity getActiveProfiles() {
+        return ok(Arrays.asList(env.getActiveProfiles()));
     }
 }
