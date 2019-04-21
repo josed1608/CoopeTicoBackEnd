@@ -107,6 +107,7 @@ public class UsuarioControlador {
     /**
      * Método para validar el token, revisa que exista un token para ese usuario (correo) y que la fecha del link no haya expirado.
      * @param id Correo del usuario
+     * @param token Token del link de recuperación.
      * @return Boolean que indica si es válido o no.
      */
     @GetMapping("/cambiarContrasena/{id}/{token}")
@@ -128,35 +129,6 @@ public class UsuarioControlador {
 
         return true;
     }
-
-   //  ///// BEGIN -- PRUEBA DE VALIDACION DE TOKEN
-   //    @GetMapping(path="/recuperarContrasenaEnProceso")
-   //    public @ResponseBody String linkRecuperarContrasena (@RequestParam("id") String id) {
-   //        return "MOSTRAR INTERFAZ DE RECUPERACIÓN DE CONTRASEÑA";
-   //    }
-   //    @GetMapping(path="/recuperarContrasenaFallido")
-   //    public @ResponseBody String linkRecuperarContrasena2 () {
-   //        return "NO MOSTRAR INTERFAZ DE RECUPERACIÓN DE CONTRASEÑA";
-   //    }
-   //   ///// END -- PRUEBA DE VALIDACION DE TOKEN
-//
-   //  /**
-   //   * Método que revisa el token de cambio de contraseña con el que ingresa el usuario (link enviado al correo)
-   //   * Valida el token y lo redirecciona a realizar el cambio o a un error en el link.
-   //   * @param id Correo del usuario
-   //   * @param token Token del link enviado al correo, generado para el cambio de contraseña
-   //   * @return Retorna la dirección a la que se dirije al usuario.
-   //   */
-   //  @RequestMapping(value = "/recuperarContrasena", method = RequestMethod.GET)
-   //  public String mostrarInterfazCambioContrasena( @RequestParam("usuario") String id, @RequestParam("token") String token) {
-   //      System.out.println("Intenta entrar a recuperar contrasena");
-   //      boolean resultadoValidacion = validarTokenRecuperarContrasena(id);
-   //      if (!resultadoValidacion) {
-   //          return "redirect:/usuarios/recuperarContrasenaFallido";
-   //      }
-   //      return "redirect:/usuarios/recuperarContrasenaEnProceso?id=" + id;
-   //  }
-
 
     //TODO ver lo de acoplamiento y cohesion
     @PostMapping("/usuarios")
@@ -197,30 +169,6 @@ public class UsuarioControlador {
 
         return usuarioServicio.agregarUsuario(usuarioTemporal, usuarioTemporal.getPkCorreo());
     }
-
-    /**
-     * Método para validar el token, revisa que exista un token para ese usuario (correo) y que la fecha del link no haya expirado.
-     * @param id Correo del usuario
-     * @return Boolean que indica si es válido o no.
-     */
-    private boolean validarTokenRecuperarContrasena(String id) {
-        TokenRecuperacionContrasenaEntidad tokenContrasena  = tokensServicio.getToken(id);
-        //Validación con el usuario
-        if (tokenContrasena == null || !tokenContrasena.getFkCorreoUsuario().equals(id)) {
-            return false;
-        }
-
-        //Revisa la fecha del link
-        Calendar calendario = Calendar.getInstance();
-        if ((tokenContrasena.getFechaExpiracion()
-                .getTime() - calendario.getTime()
-                .getTime()) <= 0) {
-            return false;
-        }
-
-        return true;
-    }
-
 
 
 }
