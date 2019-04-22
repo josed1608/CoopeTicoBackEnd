@@ -29,7 +29,7 @@ public class ViajesServicioImpl implements ViajesServicio {
     private ViajesRepositorio viajesRepositorio;
     private ClienteServicio clientesServicio;
     private TaxisServicio taxisServicio;
-    private TaxistasServicio taxistasServicio;
+    private TaxistasServicioImpl taxistasServicio;
     //-------------------------------------------------------------------------
     // Métodos.
     /**
@@ -46,7 +46,7 @@ public class ViajesServicioImpl implements ViajesServicio {
         ViajesRepositorio vjsRep,
         ClienteServicio cntSer,
         TaxisServicio txsSer,
-        TaxistasServicio txstSer
+        TaxistasServicioImpl txstSer
     ){
         this.viajesRepositorio = vjsRep;
         this.clientesServicio = cntSer;
@@ -90,7 +90,7 @@ public class ViajesServicioImpl implements ViajesServicio {
             this.taxisServicio.consultarPorId(placa)
         );
         viajeInsertando.setTaxistaByCorreoTaxi(
-                this.taxistasServicio.consultarPorId(correoTaxista)
+                this.taxistasServicio.taxistaRepositorio.findById(correoTaxista).orElse(null)
         );
         viajeInsertando.setClienteByPkCorreoCliente(
                 this.clientesServicio

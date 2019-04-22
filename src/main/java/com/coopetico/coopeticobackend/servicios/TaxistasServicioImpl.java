@@ -27,7 +27,7 @@ public class TaxistasServicioImpl implements  TaxistasServicio {
      * Repositorio de taxistas.
      */
     @Autowired
-    private TaxistasRepositorio taxistaRepositorio;
+    public TaxistasRepositorio taxistaRepositorio;
 
     /**
      * Repositorio de grupos.
