@@ -18,13 +18,13 @@ public class TaxisControlador {
     private TaxisServicio taxisServicio;
 
     @GetMapping("/taxis")
-    public List<TaxiEntidad> consultarTaxis(){
+    public List<TaxiEntidad> consultar(){
         return taxisServicio.consultar();
     }
 
     @GetMapping("/taxis/{id}")
-    public TaxiEntidad consultarTaxi(@PathVariable String placa){
-        return taxisServicio.consultarPorId(placa);
+    public TaxiEntidad consultarPorId(@PathVariable String id){
+        return taxisServicio.consultarPorId(id);
     }
 
     @PostMapping("/taxis")
@@ -34,10 +34,10 @@ public class TaxisControlador {
         return taxisServicio.guardar(taxi);
     }
 
-    @PutMapping("/taxis/{id]")
+    @PutMapping("/taxis/{id}")
     @ResponseStatus(HttpStatus.CREATED)
-    public TaxiEntidad modificarTaxi(@RequestBody TaxiEntidad taxi, @PathVariable String placa){
-        TaxiEntidad taxiActual = taxisServicio.consultarPorId(placa);
+    public TaxiEntidad modificar(@RequestBody TaxiEntidad taxi, @PathVariable String id){
+        TaxiEntidad taxiActual = taxisServicio.consultarPorId(id);
         taxiActual.setPkPlaca(taxi.getPkPlaca());
         taxiActual.setClase(taxi.getClase());
         taxiActual.setDatafono(taxi.getDatafono());
@@ -52,7 +52,7 @@ public class TaxisControlador {
 
     @DeleteMapping("/taxis/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable String placa){
-        taxisServicio.eliminar(placa);
+    public void eliminar(@PathVariable String id){
+        taxisServicio.eliminar(id);
     }
 }
