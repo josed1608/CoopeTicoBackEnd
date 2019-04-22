@@ -1,8 +1,7 @@
-package com.coopetico.coopeticobackend.Controladores;
+package com.coopetico.coopeticobackend.controladores;
 
 import com.coopetico.coopeticobackend.entidades.TaxiEntidad;
 import com.coopetico.coopeticobackend.servicios.TaxisServicio;
-import com.coopetico.coopeticobackend.servicios.TaxisServicioImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
