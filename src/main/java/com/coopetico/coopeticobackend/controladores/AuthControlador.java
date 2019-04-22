@@ -47,6 +47,7 @@ public class AuthControlador {
      * @param data Modelo del request de autenticación. Espera los atributos username y password
      * @return el JWT en caso de un sign in exitoso
      */
+    @CrossOrigin
     @PostMapping("/signin")
     public ResponseEntity signin(@RequestBody AuthenticationRequest data) {
         try {
