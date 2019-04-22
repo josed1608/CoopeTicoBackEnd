@@ -14,9 +14,17 @@ import com.coopetico.coopeticobackend.repositorios.UsuariosRepositorio;
 import com.coopetico.coopeticobackend.servicios.TokensRecuperacionContrasenaServicio;
 import com.coopetico.coopeticobackend.servicios.TokensRecuperacionContrasenaServicioImpl;
 import com.coopetico.coopeticobackend.servicios.UsuarioServicio;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.*;
 import com.coopetico.coopeticobackend.entidades.UsuarioEntidad;
 import com.coopetico.coopeticobackend.repositorios.UsuariosRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,18 +33,27 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Email;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @CrossOrigin( origins = {"http://localhost:4200"})
 @RestController
@@ -51,6 +68,8 @@ public class UsuarioControlador {
     private PasswordEncoder encoder;
     private UsuarioServicio usuarioServicio;
     private UsuarioTemporal usuarioTemporal;
+    private final Integer TAMANIO = 4;
+    private final Logger log = LoggerFactory.getLogger(UsuarioControlador.class);
 
     @Autowired
     public UsuarioControlador(UsuariosRepositorio usuariosRepositorio, PasswordEncoder encoder, TokensRecuperacionContrasenaServicio tokensRecuperacionContrasenaServicio, UsuarioServicio servicio, EmailServiceImpl mail) {
@@ -134,10 +153,34 @@ public class UsuarioControlador {
 
     //TODO ver lo de acoplamiento y cohesion
     @PostMapping()
-    @ResponseStatus(HttpStatus.CREATED)
-    public UsuarioTemporal crearUsuario(@RequestBody UsuarioTemporal usuario){
-        UsuarioEntidad temp = usuarioServicio.agregarUsuario(usuario.convertirAUsuarioEntidad(), usuario.getIdGrupo());
-        return new UsuarioTemporal(temp);
+    public ResponseEntity<?> crearUsuario(@Valid @RequestBody UsuarioTemporal usuario, BindingResult resultado){
+
+        Map<String, Object> response = new HashMap<>();
+        UsuarioEntidad usuarioEntidad = null;
+
+        if (resultado.hasErrors()) {
+            List<String> errores = resultado.getFieldErrors()
+                    .stream()
+                    .map(error -> "El campo '"+ error.getField()+"' "+error.getDefaultMessage())
+                    .collect(Collectors.toList());
+
+            response.put("errores", errores);
+            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
+        }
+
+        try {
+            usuarioEntidad =  usuarioServicio.crearUsuario(usuario.convertirAUsuarioEntidad());
+        }catch (DataAccessException e){
+            response.put("mensaje", "Error al insertar en la base de datos");
+            response.put("error", e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
+            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        UsuarioTemporal usuarioTemporal = new UsuarioTemporal(usuarioEntidad);
+        response.put("mensaje", "Usuario creado con éxito");
+        response.put("usuario", usuarioTemporal);
+
+        return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
     }
 
     @GetMapping()
@@ -146,19 +189,52 @@ public class UsuarioControlador {
         return usuarioTemporal.getListaUsuarioTemporal(usuarios);
     }
 
-
-    @GetMapping("/{id}")
-    public UsuarioTemporal obtenerUsuarioPorId(@PathVariable String id){
-        UsuarioEntidad usuarioEntidad = null;
-        if( usuarioServicio.usuarioPorCorreo(id).isPresent() )
-            usuarioEntidad = usuarioServicio.usuarioPorCorreo(id).get();
-        return new UsuarioTemporal(usuarioEntidad);
+    @GetMapping("/page/{pagina}")
+    public Page<UsuarioTemporal> obtenerUsuarios(@PathVariable Integer pagina){
+        Pageable pageable = PageRequest.of(pagina, TAMANIO);
+        Page<UsuarioEntidad> pageUsuario = usuarioServicio.obtenerUsuarios(pageable);
+        List<UsuarioEntidad> listaUsuarios = pageUsuario.getContent();
+        List<UsuarioTemporal> listaUsuarioTemp = usuarioTemporal.getListaUsuarioTemporal(listaUsuarios);
+        Page<UsuarioTemporal> pageUsuarioTemp = new PageImpl<>(listaUsuarioTemp, pageable, pageUsuario.getTotalElements());
+        return pageUsuarioTemp;
     }
 
-    @DeleteMapping("/usuarios/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void eliminarUsuarioPorId(@PathVariable String id){
-        usuarioServicio.eliminar(id);
+    @GetMapping("/{id}")
+    public ResponseEntity<?> obtenerUsuarioPorId(@PathVariable String id){
+        UsuarioEntidad usuarioEntidad = null;
+        Map<String, Object> response = new HashMap<>();
+        try {
+            Optional<UsuarioEntidad> optionalUsuarioEntidad = usuarioServicio.usuarioPorCorreo(id);
+            usuarioEntidad = optionalUsuarioEntidad.orElse(null);
+        }catch (DataAccessException e){
+            response.put("mensaje", "Error al realizar consulta en la base de datos");
+            response.put("error", e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
+            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        if( usuarioEntidad == null){
+            response.put("mensaje", "El usuario ID: ".concat(id.concat(" no existe en la base de datos")));
+            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+        }
+
+        UsuarioTemporal usuario = new UsuarioTemporal(usuarioEntidad);
+        return new ResponseEntity<UsuarioTemporal>(usuario, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> eliminarUsuarioPorId(@PathVariable String id){
+        Map<String, Object> response = new HashMap<>();
+        try {
+            UsuarioEntidad usuarioEntidad = usuarioServicio.usuarioPorCorreo(id).get();
+            this.eliminarFoto(usuarioEntidad.getFoto());
+            usuarioServicio.eliminar(id);
+        }catch (DataAccessException e){
+            response.put("mensaje", "Error al eliminar usuario en la base de datos");
+            response.put("error", e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
+            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        response.put("mensaje", "Usuario eliminado con éxito");
+        return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
     }
 
 
@@ -169,17 +245,45 @@ public class UsuarioControlador {
     }
 
     @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.CREATED)
-    public UsuarioTemporal actualizar(@RequestBody UsuarioTemporal usuario, @PathVariable String id){
-        UsuarioEntidad usuarioEntidad = new UsuarioEntidad();
-        if(this.usuarioServicio.usuarioPorCorreo(id).isPresent())
-            usuarioEntidad = this.usuarioServicio.usuarioPorCorreo(id).get();
-        usuarioEntidad.setApellidos(usuario.getApellidos());
-        usuarioEntidad.setNombre(usuario.getNombre());
-        usuarioEntidad.setTelefono(usuario.getTelefono());
-        usuarioEntidad.setFoto(usuario.getFoto());
-        UsuarioEntidad temporal = usuarioServicio.agregarUsuario(usuarioEntidad, usuarioEntidad.getGrupoByIdGrupo().getPkId());
-        return new UsuarioTemporal(temporal);
+    public ResponseEntity<?> actualizar(@Valid @RequestBody UsuarioTemporal usuario, @PathVariable String id, BindingResult resultado){
+        UsuarioEntidad usuarioEntidad = null;
+        UsuarioEntidad temporal = null;
+        Map<String, Object> response = new HashMap<>();
+
+        if (resultado.hasErrors()) {
+            List<String> errores = resultado.getFieldErrors()
+                    .stream()
+                    .map(error -> "El campo '"+ error.getField()+"' "+error.getDefaultMessage())
+                    .collect(Collectors.toList());
+
+            response.put("errores", errores);
+            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
+        }
+
+        Optional<UsuarioEntidad> optionalUsuarioEntidad= this.usuarioServicio.usuarioPorCorreo(id);
+        usuarioEntidad = optionalUsuarioEntidad.orElse(null);
+
+        if( usuarioEntidad == null){
+            response.put("mensaje", "Error: no se pudo editar, el usuario ID: ".concat(id.concat(" no existe en la base de datos")));
+            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+        }
+        try {
+            usuarioEntidad.setApellidos(usuario.getApellidos());
+            usuarioEntidad.setNombre(usuario.getNombre());
+            usuarioEntidad.setTelefono(usuario.getTelefono());
+            usuarioEntidad.setFoto(usuario.getFoto());
+
+            temporal = usuarioServicio.crearUsuario(usuarioEntidad);
+        }catch (DataAccessException e){
+            response.put("mensaje", "Error al actualizar usuario en la base de datos");
+            response.put("error", e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
+            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        response.put("mensaje", "Usuario actualizado con éxito");
+        response.put("usuario", new UsuarioTemporal(temporal));
+
+        return new ResponseEntity<Map<String,Object>>(response, HttpStatus.CREATED);
     }
 
     /**
@@ -203,5 +307,72 @@ public class UsuarioControlador {
         }
 
         return true;
+    }
+
+    @PostMapping("/upload")
+    public ResponseEntity<?> subirImagen(@RequestParam("archivo") MultipartFile archivo, @RequestParam("id") String id){
+        Map<String, Object> response = new HashMap<>();
+
+        Optional<UsuarioEntidad> optionalUsuarioEntidad = usuarioServicio.usuarioPorCorreo(id);
+        UsuarioEntidad usuarioEntidad = null;
+        usuarioEntidad = optionalUsuarioEntidad.orElse(null);
+        if( usuarioEntidad == null) {
+            response.put("mensaje", "Error: no se pudo editar, el usuario ID: ".concat(id.concat(" no existe en la base de datos")));
+            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+        }
+
+        if( !archivo.isEmpty()){
+            String nombreArchivo = UUID.randomUUID().toString()+"_" + archivo.getOriginalFilename().replace(" ","");
+            Path rutaArchivo = Paths.get("images").resolve(nombreArchivo).toAbsolutePath();
+            log.info(rutaArchivo.toString());
+
+            try {
+                Files.copy(archivo.getInputStream(), rutaArchivo);
+            } catch (IOException e) {
+                response.put("mensaje", "Error al subir la imagen del usuario");
+                response.put("error", e.getMessage().concat(":").concat(e.getCause().getMessage()));
+                return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+
+            this.eliminarFoto(usuarioEntidad.getFoto());
+
+
+            usuarioEntidad.setFoto(nombreArchivo);
+            UsuarioTemporal usuarioTemporal = new UsuarioTemporal(usuarioServicio.crearUsuario(usuarioEntidad));
+            response.put("usuario",usuarioTemporal);
+            response.put("mensaje", "Has subido correctamente la imagen "+nombreArchivo);
+        }
+        return new ResponseEntity<Map<String,Object>>(response, HttpStatus.CREATED);
+    }
+
+    public void eliminarFoto(String nombreFotoAnterior){
+        if( nombreFotoAnterior != null && nombreFotoAnterior.length()>0){
+            Path rutaArchivoAnterior = Paths.get("images").resolve(nombreFotoAnterior).toAbsolutePath();
+            File archivoFotoAnterior = rutaArchivoAnterior.toFile();
+            if(archivoFotoAnterior.exists() && archivoFotoAnterior.canRead()){
+                archivoFotoAnterior.delete();
+            }
+        }
+    }
+
+    @GetMapping("/uploads/img/{nombreFoto:.+}")
+    public ResponseEntity<Resource> verFoto(@PathVariable String nombreFoto){
+        Path rutaArchivo = Paths.get("images").resolve(nombreFoto).toAbsolutePath();
+        Resource recurso = null;
+
+        log.info(rutaArchivo.toString());
+        try {
+            recurso = new UrlResource(rutaArchivo.toUri());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        if(!recurso.exists()&& !recurso.isReadable()){
+            throw new RuntimeException("No se pudo cargar la imagen: "+ nombreFoto);
+        }
+
+        HttpHeaders cabecera = new HttpHeaders();
+        cabecera.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename= \""+recurso.getFilename()+"\"");
+        return new ResponseEntity<Resource>(recurso, cabecera, HttpStatus.OK);
     }
 }

@@ -2,6 +2,8 @@ package com.coopetico.coopeticobackend.servicios;
 
 import com.coopetico.coopeticobackend.entidades.GrupoEntidad;
 import com.coopetico.coopeticobackend.entidades.UsuarioEntidad;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +17,14 @@ public interface UsuarioServicio {
      * @return Retorna el usuario agregado
      */
     UsuarioEntidad agregarUsuario(UsuarioEntidad usuarioSinGrupo, String grupoId);
+
+
+    /**
+     * Metodo para agregar un usuario a la BD
+     * @param usuarioEntidad Usuario a agregar
+     * @return Nuevo usuario creado
+     */
+    UsuarioEntidad crearUsuario(UsuarioEntidad usuarioEntidad);
 
     /**
      * Encuentra un usuario por correo
@@ -37,6 +47,14 @@ public interface UsuarioServicio {
      * @return Retorna una lista de usuarios
      */
     List<UsuarioEntidad> obtenerUsuarios();
+
+
+    /**
+     * Metodo para realizar la paginacion de los datos
+     * @param pageable Cantidad de elementos a recuperar y el numero de la pagina
+     * @return Elementos de la pagina
+     */
+    Page<UsuarioEntidad> obtenerUsuarios(Pageable pageable);
 
     /**
      * Permite obtener todos los usuarios de un grupo

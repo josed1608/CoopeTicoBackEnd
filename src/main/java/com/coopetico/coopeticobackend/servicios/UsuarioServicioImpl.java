@@ -8,6 +8,8 @@ import com.coopetico.coopeticobackend.excepciones.GrupoNoExisteExcepcion;
 import com.coopetico.coopeticobackend.repositorios.GruposRepositorio;
 import com.coopetico.coopeticobackend.repositorios.UsuariosRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -39,11 +41,9 @@ public class UsuarioServicioImpl implements UsuarioServicio{
     public UsuarioEntidad agregarUsuario(UsuarioEntidad usuarioSinGrupo, String grupoId) throws GrupoNoExisteExcepcion, CorreoTomadoExcepcion {
         GrupoEntidad grupoUsuario = gruposRepositorio.findById(grupoId).orElseThrow(() -> new GrupoNoExisteExcepcion("Grupo de permisos no existe", HttpStatus.NOT_FOUND, System.currentTimeMillis()));
 
-        /**
-         * Comentado porque para actualizar se necesita tener el mismo correo
         if (usuariosRepositorio.findById(usuarioSinGrupo.getPkCorreo()).isPresent()) {
             throw new CorreoTomadoExcepcion("Correo tomado", HttpStatus.BAD_REQUEST, System.currentTimeMillis());
-        }**/
+        }
 
         usuarioSinGrupo.setGrupoByIdGrupo(grupoUsuario);
         if (usuarioSinGrupo.getContrasena() == null)
@@ -52,6 +52,13 @@ public class UsuarioServicioImpl implements UsuarioServicio{
         return usuariosRepositorio.save(usuarioSinGrupo);
     }
 
+    @Override
+    public UsuarioEntidad crearUsuario(UsuarioEntidad usuarioEntidad){
+        if (usuarioEntidad.getContrasena() == null)
+            usuarioEntidad.setContrasena(CONTRASENA_DEFAULT);
+        usuarioEntidad.setContrasena(encoder.encode(usuarioEntidad.getContrasena()));
+        return usuariosRepositorio.save(usuarioEntidad);
+    }
 
     @Override
     @Transactional(readOnly = true)
@@ -83,8 +90,16 @@ public class UsuarioServicioImpl implements UsuarioServicio{
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public Page<UsuarioEntidad> obtenerUsuarios(Pageable pageable) {
+        return usuariosRepositorio.findAll(pageable);
+    }
+
+    @Override
     @Transactional
     public void eliminar(String correo) {
         usuariosRepositorio.deleteById(correo);
     }
+
+
 }

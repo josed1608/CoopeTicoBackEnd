@@ -1,9 +1,10 @@
 package com.coopetico.coopeticobackend.controladores.integration;
 
-import com.coopetico.coopeticobackend.controladores.AuthControlador;
 import com.coopetico.coopeticobackend.controladores.ClienteControlador;
+import com.coopetico.coopeticobackend.controladores.UsuarioControlador;
 import com.coopetico.coopeticobackend.excepciones.UsuarioNoEncontradoExcepcion;
 import com.coopetico.coopeticobackend.servicios.ClienteServicio;
+import com.coopetico.coopeticobackend.servicios.UsuarioServicio;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,41 +21,49 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
+
 @SpringBootTest
 @RunWith(SpringRunner.class)
-public class ClienteControladorIntegrationTest {
+public class UsuarioControladorIntegrationTest {
     private MockMvc mockMvc;
 
     @Autowired
     protected WebApplicationContext wac;
 
     @Autowired
-    ClienteControlador clienteControlador;
+    UsuarioControlador usuarioControlador;
     @Autowired
-    ClienteServicio clienteServicio;
+    UsuarioServicio usuarioServicio;
 
     @Before
     public void setup() {
-        this.mockMvc = standaloneSetup(this.clienteControlador).build();
+        this.mockMvc = standaloneSetup(this.usuarioControlador).build();
     }
 
     @Test
     @Transactional
     public void testCrearUsuarioSuccesfull() throws Exception {
         try {
-            clienteServicio.borrarCliente("prueba@prueba.com");
+            usuarioServicio.eliminar("gerente11@gerente.com");
         }
         catch (UsuarioNoEncontradoExcepcion ignored) {}
         finally {
-            mockMvc.perform(post("/clientes")
+            mockMvc.perform(post("/usuarios")
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content("{" +
-                            "\"pkCorreo\": \"prueba@prueba.com\"," +
-                            "\"nombre\": \"Eugenio\"," +
-                    "\"apellidos\": \"Morera Soto\"," +
-                    "\"telefono\": \"75842654\"," +
-                    "\"contrasena\": \"contrasenna\"" +
-                            "}"))
+                    .content("{"+
+                            "\"pkCorreo\": \"gerente11@gerente.com\","+
+                            "\"nombre\": \"Gerente\","+
+                            "\"apellidos\": \"apellido\","+
+                            "\"telefono\": \"11111111\","+
+                            "\"contrasena\": \"$2a$10$gJ0hUnsEvTp5zyBVo19IHe.GoYKkL3Wy268wGJxG5.k.tUFhSUify\","+
+                            "\"foto\": \"foto\","+
+                            "\"clienteByPkCorreo\": null,"+
+                            "\"coopeticoByPkCorreo\": null,"+
+                            "\"taxistaByPkCorreo\": null,"+
+                            "\"grupoByIdGrupo\": {"+
+                            "\"pkId\": \"Gerente\""+
+                            "}"
+                    ))
                     .andExpect(status().isCreated());
         }
     }
