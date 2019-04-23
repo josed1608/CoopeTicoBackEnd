@@ -138,7 +138,7 @@ public class UsuarioControlador {
     @GetMapping("/cambiarContrasena/{id}/{token}")
     @ResponseStatus(HttpStatus.OK)
     public boolean validarTokenRecuperarContrasena(@PathVariable String id, @PathVariable String token) {
-        TokenRecuperacionContrasenaEntidad tokenContrasena  = tokensServicio.getToken(id);
+        TokenRecuperacionContrasenaEntidad tokenContrasena = tokensServicio.getToken(id);
         //Validación con el usuario
         if (tokenContrasena == null || !tokenContrasena.getFkCorreoUsuario().equals(id) || !tokenContrasena.getToken().equals(token)) {
             return false;
@@ -151,6 +151,8 @@ public class UsuarioControlador {
                 .getTime()) <= 0) {
             return false;
         }
+        return true;
+    }
 
     /**
      * Metodo que se encarga de crear un usuario

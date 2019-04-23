@@ -90,7 +90,4 @@ public class UsuarioControladorUnitTest {
                 .andExpect(status().isOk());
     }
 }
-@RunWith(SpringJUnit4ClassRunner.class)
 
-public class UsuarioControladorUnitTest {
-}
