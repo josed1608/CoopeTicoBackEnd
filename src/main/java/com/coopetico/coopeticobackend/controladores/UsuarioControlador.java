@@ -405,7 +405,7 @@ public class UsuarioControlador {
     /**
      * Metodo para obtener una imagen
      * @param nombreFoto Nombre de la imagen
-     * @return Imagen 
+     * @return Imagen
      */
     @GetMapping("/uploads/img/{nombreFoto:.+}")
     public ResponseEntity<Resource> verFoto(@PathVariable String nombreFoto){
