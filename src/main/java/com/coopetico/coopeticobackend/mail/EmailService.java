@@ -35,7 +35,7 @@ public interface EmailService {
      * Envia un correo que contiene un link para cambiar la contraseña del usuario
      * @param correoDestino Direccion de destino
      * @param token Token para recuperar contraseña
-     * @author Kevin Jimenez
+     * @author Christofer Rodriguez
      */
     void enviarCorreoRegistro(@Email  String correoDestino, @NotNull String token);
 }
