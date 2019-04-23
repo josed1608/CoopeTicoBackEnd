@@ -72,13 +72,19 @@ public class EmailServiceImpl implements EmailService {
         }
     }
 
+    /***
+     * Envia un correo que contiene un link para recuperar la contraseña del usuario
+     * @param para Direccion de destino
+     * @param token Token para recuperar contraseña
+     * @author Kevin Jimenez
+     */
     @Async("emailThreadExecutor")
     @Override
-    public void enviarCorreoRecuperarContrasena(@Email  String to, @NotNull String token) {
+    public void enviarCorreoRecuperarContrasena(@Email  String para, @NotNull String token) {
         MimeMessage message = emailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
         try {
-            helper.setTo(to);
+            helper.setTo(para);
             helper.setText("<!doctype html>\n" +
                     "\n" +
                     "<html lang=\"es\">\n" +
@@ -89,12 +95,46 @@ public class EmailServiceImpl implements EmailService {
                     "\n" +
                     "<body>\n" +
                     "<h1> Codigo para recuperar su contraseña</h1>" +
-                    "<p>Abra el siguiente link para recuperar su contraseña: http://localhost:8080/usuarios/" +
-                        "recuperarContrasena?usuario=" + to + "&token=" + token + "</p>"+
+                    "<p>Abra el siguiente link para recuperar su contraseña: http://localhost:4200/usuarios/" +
+                        "cambiarContrasena/" + para + "/" + token + "</p>"+
                     "</body>\n" +
                     "</html>", true);
             helper.setSubject("Recuperar contraseña CoopeticoApp");
             emailSender.send(message);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    /***
+     * Envia un correo que contiene un link para cambiar la contraseña del usuario
+     * @param correoDestino Direccion de destino
+     * @param token Token para recuperar contraseña
+     * @author Christofer Rodriguez
+     */
+    @Async("emailThreadExecutor")
+    @Override
+    public void enviarCorreoRegistro(@Email  String correoDestino, @NotNull String token) {
+        MimeMessage mensaje = emailSender.createMimeMessage();
+        MimeMessageHelper mensajeHelper = new MimeMessageHelper(mensaje);
+        try {
+            mensajeHelper.setTo(correoDestino);
+            mensajeHelper.setText("<!doctype html>\n" +
+                    "\n" +
+                    "<html lang=\"es\">\n" +
+                    "<head>\n" +
+                    "  <meta charset=\"utf-8\">\n" +
+                    "\n" +
+                    "</head>\n" +
+                    "\n" +
+                    "<body>\n" +
+                    "<h1> Registro de taxista</h1>" +
+                    "<p>Abra el siguiente link para para establecer su contraseña: http://localhost:4200/usuarios/" +
+                    "cambiarContrasena/" + correoDestino + "/" + token + "</p>"+
+                    "</body>\n" +
+                    "</html>", true);
+            mensajeHelper.setSubject("Establecer contraseña CoopeticoApp");
+            emailSender.send(mensaje);
         } catch (Exception exception) {
             exception.printStackTrace();
         }

@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class PermisosServicioImpl implements PermisosServicio {
@@ -26,7 +25,7 @@ public class PermisosServicioImpl implements PermisosServicio {
     private final PermisosRepositorio permisosRepo;
 
     @Autowired
-    PermisosServicioImpl (PermisosRepositorio permisosRepo){
+    public PermisosServicioImpl (PermisosRepositorio permisosRepo){
         this.permisosRepo = permisosRepo;
     }
 
