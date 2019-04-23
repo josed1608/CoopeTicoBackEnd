@@ -1,7 +1,9 @@
 package com.coopetico.coopeticobackend.controladores;
 
 import com.coopetico.coopeticobackend.entidades.TaxistaEntidadTemporal;
+import com.coopetico.coopeticobackend.mail.EmailServiceImpl;
 import com.coopetico.coopeticobackend.servicios.TaxistasServicio;
+import com.coopetico.coopeticobackend.servicios.TokensRecuperacionContrasenaServicioImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 
@@ -26,6 +28,18 @@ public class TaxistasControlador {
      */
     @Autowired
     private TaxistasServicio taxistaServicio;
+
+    /**
+     * Servicio generador de token para establecer la contrasenna.
+     */
+    @Autowired
+    private TokensRecuperacionContrasenaServicioImpl tokensServicio;
+
+    /**
+     * Servicio para enviar correos.
+     */
+    @Autowired
+    private EmailServiceImpl correoServicio;
 
     /**
      * Funcion que obtiene los taxistas existentes en el sistema.
@@ -54,7 +68,14 @@ public class TaxistasControlador {
     @PostMapping("/taxistas")
     @ResponseStatus(HttpStatus.CREATED)
     public TaxistaEntidadTemporal agregar(@RequestBody TaxistaEntidadTemporal taxista){
-        return taxistaServicio.guardar(taxista, taxista.getPkCorreoUsuario());
+        TaxistaEntidadTemporal taxistaCreado = taxistaServicio.guardar(taxista, taxista.getPkCorreoUsuario());
+        if (taxistaCreado != null) {
+            String token = tokensServicio.insertarToken(taxistaCreado.getPkCorreoUsuario());
+            if (token != null) {
+                this.correoServicio.enviarCorreoRegistro(taxistaCreado.getPkCorreoUsuario(), token);
+            }
+        }
+        return taxistaCreado;
     }
 
     /**
