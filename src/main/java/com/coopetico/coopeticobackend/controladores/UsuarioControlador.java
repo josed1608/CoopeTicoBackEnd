@@ -149,9 +149,12 @@ public class UsuarioControlador {
     }
 
 
-
-
-    //TODO ver lo de acoplamiento y cohesion
+    /**
+     * Metodo que se encarga de crear un usuario
+     * @param usuario Usuario nuevo a crear
+     * @param resultado Valida que usuario tenga un formato correcto
+     * @return El un hashmap con el nuevo usuario agregado
+     */
     @PostMapping()
     public ResponseEntity<?> crearUsuario(@Valid @RequestBody UsuarioTemporal usuario, BindingResult resultado){
 
@@ -183,12 +186,21 @@ public class UsuarioControlador {
         return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
     }
 
+    /**
+     * Metodo para obtener una lista de usuarios
+     * @return Lista de usuarios
+     */
     @GetMapping()
     public List<UsuarioTemporal> obtenerUsuarios(){
         List<UsuarioEntidad> usuarios = usuarioServicio.obtenerUsuarios();
         return usuarioTemporal.getListaUsuarioTemporal(usuarios);
     }
 
+    /**
+     * Metodo para obtener usuarios por pagina
+     * @param pagina Numero de pagina a recuperar
+     * @return Retorna los usuarios que contiene la pagina
+     */
     @GetMapping("/page/{pagina}")
     public Page<UsuarioTemporal> obtenerUsuarios(@PathVariable Integer pagina){
         Pageable pageable = PageRequest.of(pagina, TAMANIO);
@@ -199,6 +211,12 @@ public class UsuarioControlador {
         return pageUsuarioTemp;
     }
 
+
+    /**
+     * Metodo para obtener un usuario por id
+     * @param id Id del usuario
+     * @return Usuario identificado por el id
+     */
     @GetMapping("/{id}")
     public ResponseEntity<?> obtenerUsuarioPorId(@PathVariable String id){
         UsuarioEntidad usuarioEntidad = null;
@@ -221,6 +239,11 @@ public class UsuarioControlador {
         return new ResponseEntity<UsuarioTemporal>(usuario, HttpStatus.OK);
     }
 
+    /**
+     * Metodo para eliminar un usuario por el id
+     * @param id Id del usuario
+     * @return Mensaje de exito o error
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<?> eliminarUsuarioPorId(@PathVariable String id){
         Map<String, Object> response = new HashMap<>();
@@ -238,12 +261,24 @@ public class UsuarioControlador {
     }
 
 
+    /**
+     * Metodo para obtener los usuarios por un determinado grupo
+     * @param grupoEntidad Entidad a buscar
+     * @return Lista de usuarios del grupo
+     */
     @GetMapping("/grupo")
     public List<UsuarioTemporal> obtenerUsuariosPorGrupo(@RequestBody GrupoEntidad grupoEntidad){
         List<UsuarioEntidad> usuarios = usuarioServicio.obtenerUsuariosPorGrupo(grupoEntidad);
         return usuarioTemporal.getListaUsuarioTemporal(usuarios);
     }
 
+    /**
+     * Metodo para actualizar un usuario
+     * @param usuario usuario nuevo
+     * @param id identificador del usuario a actualizar
+     * @param resultado Valida si el usuario tiene el formato correcto
+     * @return Usuario modificado
+     */
     @PutMapping("/{id}")
     public ResponseEntity<?> actualizar(@Valid @RequestBody UsuarioTemporal usuario, @PathVariable String id, BindingResult resultado){
         UsuarioEntidad usuarioEntidad = null;
@@ -309,6 +344,13 @@ public class UsuarioControlador {
         return true;
     }
 
+
+    /**
+     * Metodo para subir imagen
+     * @param archivo Archivo a subir
+     * @param id Identificador del usuario
+     * @return Respuesta correcto o incorrecto y el usuario con la foto agregada
+     */
     @PostMapping("/upload")
     public ResponseEntity<?> subirImagen(@RequestParam("archivo") MultipartFile archivo, @RequestParam("id") String id){
         Map<String, Object> response = new HashMap<>();
@@ -345,6 +387,11 @@ public class UsuarioControlador {
         return new ResponseEntity<Map<String,Object>>(response, HttpStatus.CREATED);
     }
 
+
+    /**
+     * Metodo para eliminar una foto
+     * @param nombreFotoAnterior Nombre de la foto  a eliminar
+     */
     public void eliminarFoto(String nombreFotoAnterior){
         if( nombreFotoAnterior != null && nombreFotoAnterior.length()>0){
             Path rutaArchivoAnterior = Paths.get("images").resolve(nombreFotoAnterior).toAbsolutePath();
@@ -355,6 +402,11 @@ public class UsuarioControlador {
         }
     }
 
+    /**
+     * Metodo para obtener una imagen
+     * @param nombreFoto Nombre de la imagen
+     * @return Imagen 
+     */
     @GetMapping("/uploads/img/{nombreFoto:.+}")
     public ResponseEntity<Resource> verFoto(@PathVariable String nombreFoto){
         Path rutaArchivo = Paths.get("images").resolve(nombreFoto).toAbsolutePath();
