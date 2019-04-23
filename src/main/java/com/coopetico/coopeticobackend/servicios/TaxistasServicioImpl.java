@@ -138,6 +138,7 @@ public class TaxistasServicioImpl implements  TaxistasServicio {
     @Transactional
     public void eliminar(String correoUsuario){
         taxistaRepositorio.deleteById(correoUsuario);
+        usuarioRepositorio.deleteById(correoUsuario);
     }
 
 }
