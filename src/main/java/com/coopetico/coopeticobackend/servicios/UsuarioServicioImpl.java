@@ -95,6 +95,13 @@ public class UsuarioServicioImpl implements UsuarioServicio{
     }
 
 
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<UsuarioEntidad> obtenerUsuarios(Pageable pageable) {
+        return usuariosRepositorio.findAll(pageable);
+    }
+
     /***
      * Elimina un usuario
      *
@@ -102,12 +109,6 @@ public class UsuarioServicioImpl implements UsuarioServicio{
      * @throws UsuarioNoEncontradoExcepcion Si el ususario no existe
      */
     // Kevin Jimenez
-    @Override
-    @Transactional(readOnly = true)
-    public Page<UsuarioEntidad> obtenerUsuarios(Pageable pageable) {
-        return usuariosRepositorio.findAll(pageable);
-    }
-
     @Override
     @Transactional
     public void eliminar(String correo) throws UsuarioNoEncontradoExcepcion {

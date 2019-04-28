@@ -237,6 +237,7 @@ public class UsuarioControlador {
 
         if( usuarioEntidad == null){
             response.put("mensaje", "El usuario ID: ".concat(id.concat(" no existe en la base de datos")));
+            response.put("usuario", usuarioEntidad);
             return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
         }
 
