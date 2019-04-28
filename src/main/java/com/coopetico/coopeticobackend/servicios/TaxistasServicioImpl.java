@@ -52,11 +52,7 @@ public class TaxistasServicioImpl implements  TaxistasServicio {
      */
     private final String idGrupoTaxista = "Taxista";
 
-    public TaxistasServicioImpl(/*GruposRepositorio gruposRepositorio, UsuariosRepositorio usuarioRepositorio, TaxisRepositorio taxiRepositorio*/) {
-        //this.gruposRepositorio = gruposRepositorio;
-        //this.usuarioRepositorio = usuarioRepositorio;
-        //this.taxiRepositorio = taxiRepositorio;
-    }
+    public TaxistasServicioImpl() { }
 
     /**
      * Funcion que retorna los taxistas del sistema.
