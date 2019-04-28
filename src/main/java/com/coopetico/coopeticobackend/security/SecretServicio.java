@@ -17,6 +17,7 @@ import java.util.Map;
 
 /**
  * Servicio que genera keys de tamaño apropiado para el SHA que se esté utilizando
+ * @author      Jose David Vargas Artavia
  */
 @SuppressWarnings("ALL")
 @Service

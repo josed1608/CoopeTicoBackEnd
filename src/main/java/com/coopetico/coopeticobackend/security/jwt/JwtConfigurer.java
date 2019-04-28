@@ -7,6 +7,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 /**
  * Configura el filtro general para que utilice el JwtProvider
+ * @author      Jose David Vargas Artavia
  */
 public class JwtConfigurer extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> {
 

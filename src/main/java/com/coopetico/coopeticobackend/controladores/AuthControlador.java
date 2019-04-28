@@ -5,7 +5,7 @@ import com.coopetico.coopeticobackend.excepciones.MalasCredencialesExcepcion;
 import com.coopetico.coopeticobackend.excepciones.UsuarioNoEncontradoExcepcion;
 import com.coopetico.coopeticobackend.security.jwt.JwtTokenProvider;
 import com.coopetico.coopeticobackend.servicios.UsuarioServicio;
-import com.coopetico.coopeticobackend.controladores.AuthenticationRequest;
+import com.coopetico.coopeticobackend.entidades.AuthenticationRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +20,7 @@ import static org.springframework.http.ResponseEntity.ok;
 
 /**
  * Controlador para los request relacionados con autenticación
+ * @author      Jose David Vargas Artavia
  */
 @RestController
 @RequestMapping("/auth")

@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 /**
  * Implementación custom de UserDetails para introducir la lógica especial de negocio de los grupos y permisos
+ * @author      Jose David Vargas Artavia
  */
 public class CustomUserDetails implements UserDetails {
     private UsuarioEntidad user;

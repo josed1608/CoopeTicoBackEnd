@@ -33,6 +33,7 @@ public class ClienteControlador {
      * @return retorna ok si se crea el usuario correctamente
      * @throws CorreoTomadoExcepcion Si el usuario ya existe
      * @throws GrupoNoExisteExcepcion si el grupo Cliente no existe en la base de datos
+     * @author      Jose David Vargas Artavia
      */
     @PostMapping()
     public ResponseEntity crearCliente(@RequestBody UsuarioEntidad usuarioEntidad) throws CorreoTomadoExcepcion, GrupoNoExisteExcepcion {

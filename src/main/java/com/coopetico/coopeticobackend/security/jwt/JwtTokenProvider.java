@@ -24,6 +24,7 @@ import java.util.List;
 
 /**
  * Clase con lógica para crear, validar y procesar JWTs
+ * @author      Jose David Vargas Artavia
  */
 @Component
 public class JwtTokenProvider {
