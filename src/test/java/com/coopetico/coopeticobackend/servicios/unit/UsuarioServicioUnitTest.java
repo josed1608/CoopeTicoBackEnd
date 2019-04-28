@@ -7,10 +7,12 @@ package com.coopetico.coopeticobackend.servicios.unit;
  @version:    1.0
  */
 
+import com.coopetico.coopeticobackend.entidades.GrupoEntidad;
 import com.coopetico.coopeticobackend.entidades.UsuarioEntidad;
 import com.coopetico.coopeticobackend.servicios.UsuarioServicio;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -53,10 +55,44 @@ public class UsuarioServicioUnitTest {
         Assert.assertEquals(7, listaUsuarios.size());
     }
 
-//    @
-//    public void agregarUsuario(){
-//        UsuarioEntidad usuarioNuevo = new UsuarioEntidad();
-//        UsuarioEntidad usuarioAgregado = servicio.crearUsuario(usuarioNuevo);
-//    }
+    @Test
+    public void testAgregarUsuario(){
+        UsuarioEntidad usuarioNuevo = getUsuarioDefecto();
+        UsuarioEntidad usuarioAgregado = servicio.crearUsuario(usuarioNuevo);
+        assertNotNull(usuarioAgregado);
+        servicio.eliminar(getUsuarioDefecto().getPkCorreo());
+    }
+
+    @Test
+    public void testUsuarioPorCorreo(){
+        servicio.crearUsuario(getUsuarioDefecto());
+        Optional<UsuarioEntidad> usuario = servicio.usuarioPorCorreo(getUsuarioDefecto().getPkCorreo());
+        assertNotNull(usuario.get());
+        servicio.eliminar(getUsuarioDefecto().getPkCorreo());
+        testListarUsuarios();
+    }
+
+    @Test
+    public void testEliminarUsuario(){
+        servicio.crearUsuario(getUsuarioDefecto());
+        servicio.eliminar(getUsuarioDefecto().getPkCorreo());
+        testListarUsuarios();
+    }
+
+    @Ignore
+    public static UsuarioEntidad getUsuarioDefecto(){
+        UsuarioEntidad usuarioEntidad = new UsuarioEntidad();
+        usuarioEntidad.setFoto("");
+        usuarioEntidad.setContrasena("aguacatico");
+        usuarioEntidad.setPkCorreo("test@test.com");
+        usuarioEntidad.setNombre("testNombre");
+        usuarioEntidad.setApellidos("test1 test2");
+        usuarioEntidad.setGrupoByIdGrupo(new GrupoEntidad());
+        usuarioEntidad.getGrupoByIdGrupo().setPkId("Administrativo");
+        usuarioEntidad.setTelefono("88887777");
+        return usuarioEntidad;
+    }
+
+
 
 }
