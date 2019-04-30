@@ -1,12 +1,16 @@
-package com.coopetico.coopeticobackend.controladores;
+package com.coopetico.coopeticobackend.entidades;
 
 import java.io.Serializable;
 
+/**
+ * Clase para representar el request que trae la contraseña y el nombre de usuario del cliente que se quiere loggear
+ * @author      Jose David Vargas Artavia
+ */
 public class AuthenticationRequest implements Serializable {
     private String username;
     private String password;
 
-    String getUsername() {
+    public String getUsername() {
         return username;
     }
 
@@ -14,7 +18,7 @@ public class AuthenticationRequest implements Serializable {
         this.username = username;
     }
 
-    String getPassword() {
+    public String getPassword() {
         return password;
     }
 

@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 
 /**
  * Implementación custom de UserDetailsService para devolver instancias de nuestro UserDetails custom
+ * @author      Jose David Vargas Artavia
  */
 @Component
 public class CustomUserDetailsService implements UserDetailsService {

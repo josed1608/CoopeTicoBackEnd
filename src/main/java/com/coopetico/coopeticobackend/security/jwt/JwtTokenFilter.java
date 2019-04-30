@@ -15,6 +15,7 @@ import java.io.IOException;
 
 /**
  * Filtro que utiliza por debajo el JwtProvider para la lógica de autenticación de los tokens
+ * @author      Jose David Vargas Artavia
  */
 public class JwtTokenFilter extends OncePerRequestFilter {
 

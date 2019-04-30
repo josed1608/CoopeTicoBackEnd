@@ -55,7 +55,7 @@ public class ClienteControladorIntegrationTest {
                     "\"telefono\": \"75842654\"," +
                     "\"contrasena\": \"contrasenna\"" +
                             "}"))
-                    .andExpect(status().isOk());
+                    .andExpect(status().isCreated());
         }
     }
 }

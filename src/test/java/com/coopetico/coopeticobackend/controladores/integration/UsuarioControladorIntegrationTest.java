@@ -9,6 +9,11 @@ package com.coopetico.coopeticobackend.controladores.integration;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.coopetico.coopeticobackend.controladores.ClienteControlador;
+import com.coopetico.coopeticobackend.controladores.UsuarioControlador;
+import com.coopetico.coopeticobackend.excepciones.UsuarioNoEncontradoExcepcion;
+import com.coopetico.coopeticobackend.servicios.ClienteServicio;
+import com.coopetico.coopeticobackend.servicios.UsuarioServicio;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,8 +28,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import javax.transaction.Transactional;
-import java.util.Arrays;
-import java.util.List;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;

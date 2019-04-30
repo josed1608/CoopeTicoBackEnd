@@ -4,17 +4,22 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.util.Objects;
 
 @Entity
 @Table(name = "usuario", schema = "coopetico-dev")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "pkCorreo")
 public class UsuarioEntidad {
+
     private String pkCorreo;
     private String nombre;
     private String apellidos;
     private String telefono;
     private String contrasena;
+
     private String foto;
     private ClienteEntidad clienteByPkCorreo;
     private CoopeticoEntidad coopeticoByPkCorreo;
@@ -37,6 +42,8 @@ public class UsuarioEntidad {
     public UsuarioEntidad() {
     }
 
+    @NotEmpty
+    @Email
     @Id
     @Column(name = "pk_correo", nullable = false, length = 64)
     public String getPkCorreo() {
@@ -47,6 +54,7 @@ public class UsuarioEntidad {
         this.pkCorreo = pkCorreo;
     }
 
+    @NotEmpty
     @Basic
     @Column(name = "nombre", nullable = false, length = 32)
     public String getNombre() {
@@ -57,6 +65,7 @@ public class UsuarioEntidad {
         this.nombre = nombre;
     }
 
+    @NotEmpty
     @Basic
     @Column(name = "apellidos", nullable = false, length = 64)
     public String getApellidos() {
@@ -67,6 +76,8 @@ public class UsuarioEntidad {
         this.apellidos = apellidos;
     }
 
+    @NotEmpty
+    @Size(min = 8, max = 8)
     @Basic
     @Column(name = "telefono", nullable = false, length = 8)
     public String getTelefono() {
@@ -77,6 +88,7 @@ public class UsuarioEntidad {
         this.telefono = telefono;
     }
 
+    @NotEmpty
     @Basic
     @Column(name = "contrasena", nullable = false, length = 128)
     public String getContrasena() {
@@ -155,15 +167,15 @@ public class UsuarioEntidad {
     /**
      * Autor: Joseph Rementería (b55824)
      * Fecha: 13/04/2019
-     * 
+     *
      * Sobre-escrritura del método toString de la clase ClienteEntidad
-     * Se usa para tener ver los datos del pefil y los datos necesarios 
+     * Se usa para tener ver los datos del pefil y los datos necesarios
      * para luego ser editador.
-     * 
-     * @return una string con los datos de la entidad cliente en 
+     *
+     * @return una string con los datos de la entidad cliente en
      * formato JSON =.
      */
-    
+
     @Override
     public String toString(){
         String result = "{";
@@ -175,4 +187,5 @@ public class UsuarioEntidad {
         result += "\"}";
         return result;
     }
+
 }

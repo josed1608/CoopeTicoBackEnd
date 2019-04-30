@@ -13,6 +13,8 @@ import com.coopetico.coopeticobackend.excepciones.UsuarioNoEncontradoExcepcion;
 import com.coopetico.coopeticobackend.repositorios.GruposRepositorio;
 import com.coopetico.coopeticobackend.repositorios.UsuariosRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -30,12 +32,15 @@ public class UsuarioServicioImpl implements UsuarioServicio{
     private final GruposRepositorio gruposRepositorio;
     private final PasswordEncoder encoder;
 
+    //En caso de que no se haya asignado contrasena
+    private final String CONTRASENA_DEFAULT = "aguatico123";
     @Autowired
     public UsuarioServicioImpl(UsuariosRepositorio usuariosRepositorio, GruposRepositorio gruposRepositorio, PasswordEncoder encoder) {
         this.usuariosRepositorio = usuariosRepositorio;
         this.gruposRepositorio = gruposRepositorio;
         this.encoder = encoder;
     }
+
 
     @Override
     public UsuarioEntidad agregarUsuario(UsuarioEntidad usuarioSinGrupo, String grupoId) throws GrupoNoExisteExcepcion, CorreoTomadoExcepcion {
@@ -46,8 +51,18 @@ public class UsuarioServicioImpl implements UsuarioServicio{
         }
 
         usuarioSinGrupo.setGrupoByIdGrupo(grupoUsuario);
+        if (usuarioSinGrupo.getContrasena() == null)
+            usuarioSinGrupo.setContrasena(CONTRASENA_DEFAULT);
         usuarioSinGrupo.setContrasena(encoder.encode(usuarioSinGrupo.getContrasena()));
         return usuariosRepositorio.save(usuarioSinGrupo);
+    }
+
+    @Override
+    public UsuarioEntidad crearUsuario(UsuarioEntidad usuarioEntidad){
+        if (usuarioEntidad.getContrasena() == null)
+            usuarioEntidad.setContrasena(CONTRASENA_DEFAULT);
+        usuarioEntidad.setContrasena(encoder.encode(usuarioEntidad.getContrasena()));
+        return usuariosRepositorio.save(usuarioEntidad);
     }
 
     @Override
@@ -80,6 +95,13 @@ public class UsuarioServicioImpl implements UsuarioServicio{
     }
 
 
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<UsuarioEntidad> obtenerUsuarios(Pageable pageable) {
+        return usuariosRepositorio.findAll(pageable);
+    }
+
     /***
      * Elimina un usuario
      *
@@ -96,4 +118,6 @@ public class UsuarioServicioImpl implements UsuarioServicio{
             throw new UsuarioNoEncontradoExcepcion("El usuario no existe.", HttpStatus.NOT_FOUND, System.currentTimeMillis());
         }
     }
+
+
 }

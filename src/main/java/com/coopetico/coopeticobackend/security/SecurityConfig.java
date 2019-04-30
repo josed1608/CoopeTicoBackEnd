@@ -16,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
  * Clase de configuración de Spring Security
+ * @author      Jose David Vargas Artavia
  */
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
