@@ -1,5 +1,7 @@
 package com.coopetico.coopeticobackend.entidades;
 
+import java.sql.Timestamp;
+
 /**
  Clase temporal para comunicacion con el frontend de la entidad Taxista.
  @author      Christofer Rodriguez Sanchez.
@@ -39,9 +41,14 @@ public class TaxistaEntidadTemporal {
     private String nombre;
 
     /**
-     * Apellidos del taxista.
+     * Apellido1 del taxista.
      */
-    private String apellidos;
+    private String apellido1;
+
+    /**
+     * Apellido2 del taxista.
+     */
+    private String apellido2;
 
     /**
      * Telefono del taxista.
@@ -54,9 +61,14 @@ public class TaxistaEntidadTemporal {
     private String foto;
 
     /**
-     * Placa del taxi que maneja el taxista.
+     * Justificacion para desactivar taxista.
      */
-    private String pkPlaca;
+    private String justificacion;
+
+    /**
+     * Fecha de vencimiento del taxista.
+     */
+    private Timestamp vence_licencia;
 
     /**
      * Funcion que retorna el correo del taxista.
@@ -110,8 +122,16 @@ public class TaxistaEntidadTemporal {
      * Funcion que retorna los apellidos del taxista.
      * @return Apellidos del taxista.
      */
-    public String getApellidos() {
-        return apellidos;
+    public String getApellido1() {
+        return apellido1;
+    }
+
+    /**
+     * Funcion que retorna los apellidos del taxista.
+     * @return Apellidos del taxista.
+     */
+    public String getApellido2() {
+        return apellido2;
     }
 
     /**
@@ -131,11 +151,11 @@ public class TaxistaEntidadTemporal {
     }
 
     /**
-     * Funcion que retorna la placa del taxi que maneja el taxista.
-     * @return Placa del taxi que maneja el taxista.
+     * Funcion que retorna la justificacion de desactivacion del taxista.
+     * @return Fecha de vencimiento de la licencia del taxista.
      */
-    public String getPkPlaca() {
-        return pkPlaca;
+    public Timestamp getVence_licencia() {
+        return vence_licencia;
     }
 
     /**
@@ -188,10 +208,18 @@ public class TaxistaEntidadTemporal {
 
     /**
      * Metodo que modifica los apellidos del taxista.
-     * @param apellidos Nuevos apellidos que se quiere guardar.
+     * @param apellido1 Nuevos apellidos que se quiere guardar.
      */
-    public void setApellidos(String apellidos) {
-        this.apellidos = apellidos;
+    public void setApellido1(String apellido1) {
+        this.apellido1 = apellido1;
+    }
+
+    /**
+     * Metodo que modifica los apellidos del taxista.
+     * @param apellido2 Nuevos apellidos que se quiere guardar.
+     */
+    public void setApellido2(String apellido2) {
+        this.apellido2 = apellido2;
     }
 
     /**
@@ -211,11 +239,11 @@ public class TaxistaEntidadTemporal {
     }
 
     /**
-     * Metodo que modifica la placa del taxi que maneja el taxista.
-     * @param pkPlaca Nueva placa del taxi que maneja el taxista que se quiere guardar.
+     * Metodo que modifica la fecha de vencimiento de la licencia del taxista.
+     * @param vence_licencia Nueva fecha de vencimiento de licencia que se quiere guardar.
      */
-    public void setPkPlaca(String pkPlaca) {
-        this.pkPlaca = pkPlaca;
+    public void setVence_licencia(Timestamp vence_licencia) {
+        this.vence_licencia = vence_licencia;
     }
 
     /**
@@ -228,15 +256,13 @@ public class TaxistaEntidadTemporal {
         this.estado = taxista.isEstado();
         this.hojaDelincuencia = taxista.isHojaDelincuencia();
         this.estrellas = taxista.getEstrellas();
+        this.justificacion = taxista.getPkCorreoUsuario();
+        this.vence_licencia = taxista.getVence_licencia();
         this.nombre = taxista.getUsuarioByPkCorreoUsuario().getNombre();
-        this.apellidos = taxista.getUsuarioByPkCorreoUsuario().getApellidos();
+        this.apellido1 = taxista.getUsuarioByPkCorreoUsuario().getApellido1();
+        this.apellido2 = taxista.getUsuarioByPkCorreoUsuario().getApellido2();
         this.telefono = taxista.getUsuarioByPkCorreoUsuario().getTelefono();
         this.foto = taxista.getUsuarioByPkCorreoUsuario().getFoto();
-        if (taxista.getTaxiByPlacaTaxiManeja() != null){
-            this.pkPlaca = taxista.getTaxiByPlacaTaxiManeja().getPkPlaca();
-        }else{
-            this.pkPlaca = null;
-        }
     }
 
     /**

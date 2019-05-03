@@ -93,7 +93,8 @@ public class TaxistasServicioImpl implements  TaxistasServicio {
         taxistaEntidad.setEstrellas(taxistaEntidadTemporal.getEstrellas());
         taxistaEntidad.getUsuarioByPkCorreoUsuario().setPkCorreo(taxistaEntidadTemporal.getPkCorreoUsuario());
         taxistaEntidad.getUsuarioByPkCorreoUsuario().setNombre(taxistaEntidadTemporal.getNombre());
-        taxistaEntidad.getUsuarioByPkCorreoUsuario().setApellidos(taxistaEntidadTemporal.getApellidos());
+        taxistaEntidad.getUsuarioByPkCorreoUsuario().setApellido1(taxistaEntidadTemporal.getApellido1());
+        taxistaEntidad.getUsuarioByPkCorreoUsuario().setApellido2(taxistaEntidadTemporal.getApellido2());
         taxistaEntidad.getUsuarioByPkCorreoUsuario().setTelefono(taxistaEntidadTemporal.getTelefono());
         taxistaEntidad.getUsuarioByPkCorreoUsuario().setFoto(taxistaEntidadTemporal.getFoto());
         taxistaEntidad.getUsuarioByPkCorreoUsuario().setContrasena("$2a$10$gJ0hUnsEvTp5zyBVo19IHe.GoYKkL3Wy268wGJxG5.k.tUFhSUify");
@@ -102,8 +103,6 @@ public class TaxistasServicioImpl implements  TaxistasServicio {
         if (nuevo){
             this.usuarioRepositorio.save(taxistaEntidad.getUsuarioByPkCorreoUsuario());
         }
-        TaxiEntidad taxiManeja = this.taxiRepositorio.findById(taxistaEntidadTemporal.getPkPlaca()).orElse(null);
-        taxistaEntidad.setTaxiByPlacaTaxiManeja(taxiManeja);
         TaxistaEntidad retornoSave = taxistaRepositorio.save(taxistaEntidad);
         return new TaxistaEntidadTemporal(retornoSave);
     }
