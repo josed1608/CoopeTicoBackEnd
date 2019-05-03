@@ -55,7 +55,8 @@ public class JwtTokenProvider {
 
         Claims claims = Jwts.claims().setSubject(usuario.getPkCorreo());
         claims.put("nombre", usuario.getNombre());
-        claims.put("apellidos", usuario.getApellidos());
+        claims.put("apellido1", usuario.getApellido1());
+        claims.put("apellido2", usuario.getApellido2());
         claims.put("telefono", usuario.getTelefono());
         claims.put("fotoUrl", usuario.getFoto());
         claims.put("permisos", permisos);
