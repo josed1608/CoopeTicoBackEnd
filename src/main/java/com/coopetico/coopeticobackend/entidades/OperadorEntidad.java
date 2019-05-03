@@ -4,21 +4,24 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.Objects;
 
 @Entity
-@Table(name = "coopetico", schema = "coopetico-dev")
+@Table(name = "operador", schema = "coopetico-dev")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "pkCorreoUsuario")
-public class CoopeticoEntidad {
+public class OperadorEntidad {
     private String pkCorreoUsuario;
     private UsuarioEntidad usuarioByPkCorreoUsuario;
+    private Collection<ViajeEntidad> viajesByPkCorreoUsuario;
 
-    public CoopeticoEntidad(String pkCorreoUsuario, UsuarioEntidad usuarioByPkCorreoUsuario) {
+    public OperadorEntidad(String pkCorreoUsuario, UsuarioEntidad usuarioByPkCorreoUsuario, Collection<ViajeEntidad> viajesByPkCorreoUsuario) {
         this.pkCorreoUsuario = pkCorreoUsuario;
         this.usuarioByPkCorreoUsuario = usuarioByPkCorreoUsuario;
+        this.viajesByPkCorreoUsuario = viajesByPkCorreoUsuario;
     }
 
-    public CoopeticoEntidad() {
+    public OperadorEntidad() {
     }
 
     @Id
@@ -35,7 +38,7 @@ public class CoopeticoEntidad {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        CoopeticoEntidad that = (CoopeticoEntidad) o;
+        OperadorEntidad that = (OperadorEntidad) o;
         return Objects.equals(pkCorreoUsuario, that.pkCorreoUsuario);
     }
 
@@ -52,5 +55,14 @@ public class CoopeticoEntidad {
 
     public void setUsuarioByPkCorreoUsuario(UsuarioEntidad usuarioByPkCorreoUsuario) {
         this.usuarioByPkCorreoUsuario = usuarioByPkCorreoUsuario;
+    }
+
+    @OneToMany(mappedBy = "agendaOperador")
+    public Collection<ViajeEntidad> getViajesByPkCorreoUsuario() {
+        return viajesByPkCorreoUsuario;
+    }
+
+    public void setViajesByPkCorreoUsuario(Collection<ViajeEntidad> viajesByPkCorreoUsuario) {
+        this.viajesByPkCorreoUsuario = viajesByPkCorreoUsuario;
     }
 }

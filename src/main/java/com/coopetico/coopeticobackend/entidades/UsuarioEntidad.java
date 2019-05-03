@@ -16,23 +16,27 @@ public class UsuarioEntidad {
 
     private String pkCorreo;
     private String nombre;
-    private String apellidos;
+    private String apellido1;
+    private String apellido2;
     private String telefono;
     private String contrasena;
-
     private String foto;
+    private boolean valid;
+
     private ClienteEntidad clienteByPkCorreo;
-    private CoopeticoEntidad coopeticoByPkCorreo;
+    private OperadorEntidad coopeticoByPkCorreo;
     private TaxistaEntidad taxistaByPkCorreo;
     private GrupoEntidad grupoByIdGrupo;
 
-    public UsuarioEntidad(String pkCorreo, String nombre, String apellidos, String telefono, String contrasena, String foto, ClienteEntidad clienteByPkCorreo, CoopeticoEntidad coopeticoByPkCorreo, TaxistaEntidad taxistaByPkCorreo, GrupoEntidad grupoByIdGrupo) {
+    public UsuarioEntidad(String pkCorreo, String nombre, String apellido1, String apellido2, String telefono, String contrasena, String foto, boolean valid, ClienteEntidad clienteByPkCorreo, OperadorEntidad coopeticoByPkCorreo, TaxistaEntidad taxistaByPkCorreo, GrupoEntidad grupoByIdGrupo) {
         this.pkCorreo = pkCorreo;
         this.nombre = nombre;
-        this.apellidos = apellidos;
+        this.apellido1 = apellido1;
+        this.apellido2 = apellido2;
         this.telefono = telefono;
         this.contrasena = contrasena;
         this.foto = foto;
+        this.valid = valid;
         this.clienteByPkCorreo = clienteByPkCorreo;
         this.coopeticoByPkCorreo = coopeticoByPkCorreo;
         this.taxistaByPkCorreo = taxistaByPkCorreo;
@@ -67,13 +71,24 @@ public class UsuarioEntidad {
 
     @NotEmpty
     @Basic
-    @Column(name = "apellidos", nullable = false, length = 64)
-    public String getApellidos() {
-        return apellidos;
+    @Column(name = "apellido1", nullable = false, length = 64)
+    public String getApellido1() {
+        return apellido1;
     }
 
-    public void setApellidos(String apellidos) {
-        this.apellidos = apellidos;
+    public void setApellido1(String apellido1) {
+        this.apellido1 = apellido1;
+    }
+
+    @NotEmpty
+    @Basic
+    @Column(name = "apellido2", nullable = false, length = 64)
+    public String getApellido2() {
+        return apellido2;
+    }
+
+    public void setApellido2(String apellido2) {
+        this.apellido2 = apellido2;
     }
 
     @NotEmpty
@@ -109,6 +124,16 @@ public class UsuarioEntidad {
         this.foto = foto;
     }
 
+    @Basic
+    @Column(name = "valid", length = 512)
+    public boolean getValid() {
+        return valid;
+    }
+
+    public void setValid(boolean valid) {
+        this.valid = valid;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -116,7 +141,8 @@ public class UsuarioEntidad {
         UsuarioEntidad that = (UsuarioEntidad) o;
         return Objects.equals(pkCorreo, that.pkCorreo) &&
                 Objects.equals(nombre, that.nombre) &&
-                Objects.equals(apellidos, that.apellidos) &&
+                Objects.equals(apellido1, that.apellido1) &&
+                Objects.equals(apellido2, that.apellido2) &&
                 Objects.equals(telefono, that.telefono) &&
                 Objects.equals(contrasena, that.contrasena) &&
                 Objects.equals(foto, that.foto);
@@ -124,7 +150,7 @@ public class UsuarioEntidad {
 
     @Override
     public int hashCode() {
-        return Objects.hash(pkCorreo, nombre, apellidos, telefono, contrasena, foto);
+        return Objects.hash(pkCorreo, nombre, apellido1, apellido2, telefono, contrasena, foto);
     }
 
     @OneToOne(mappedBy = "usuarioByPkCorreoUsuario")
@@ -137,11 +163,11 @@ public class UsuarioEntidad {
     }
 
     @OneToOne(mappedBy = "usuarioByPkCorreoUsuario")
-    public CoopeticoEntidad getCoopeticoByPkCorreo() {
+    public OperadorEntidad getCoopeticoByPkCorreo() {
         return coopeticoByPkCorreo;
     }
 
-    public void setCoopeticoByPkCorreo(CoopeticoEntidad coopeticoByPkCorreo) {
+    public void setCoopeticoByPkCorreo(OperadorEntidad coopeticoByPkCorreo) {
         this.coopeticoByPkCorreo = coopeticoByPkCorreo;
     }
 
@@ -181,7 +207,8 @@ public class UsuarioEntidad {
         String result = "{";
         result += "\"correo\": \""          + this.pkCorreo;
         result += "\",\"nombre\": \""       + this.nombre;
-        result += "\",\"apellidos\": \""    + this.apellidos;
+        result += "\",\"apellido1\": \""    + this.apellido1;
+        result += "\",\"apellido2\": \""    + this.apellido2;
         result += "\",\"telefono\": \""     + this.telefono;
         result += "\",\"foto\": \""         + this.foto;
         result += "\"}";

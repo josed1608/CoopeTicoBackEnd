@@ -16,19 +16,26 @@ public class ViajeEntidad {
     private String costo;
     private float estrellas;
     private String origenDestino;
+    private String agendaTelefono;
+    private String agendaNombre;
+
     private TaxiEntidad taxiByPkPlacaTaxi;
     private ClienteEntidad clienteByPkCorreoCliente;
     private TaxistaEntidad taxistaByCorreoTaxi;
+    private OperadorEntidad agendaOperador;
 
-    public ViajeEntidad(ViajeEntidadPK viajeEntidadPK, Timestamp fechaFin, String costo, float estrellas, String origenDestino, TaxiEntidad taxiByPkPlacaTaxi, ClienteEntidad clienteByPkCorreoCliente, TaxistaEntidad taxistaByCorreoTaxi) {
+    public ViajeEntidad(ViajeEntidadPK viajeEntidadPK, Timestamp fechaFin, String costo, float estrellas, String origenDestino, String agendaTelefono, String agendaNombre, TaxiEntidad taxiByPkPlacaTaxi, ClienteEntidad clienteByPkCorreoCliente, TaxistaEntidad taxistaByCorreoTaxi, OperadorEntidad agendaOperador) {
         this.viajeEntidadPK = viajeEntidadPK;
         this.fechaFin = fechaFin;
         this.costo = costo;
         this.estrellas = estrellas;
         this.origenDestino = origenDestino;
+        this.agendaTelefono = agendaTelefono;
+        this.agendaNombre = agendaNombre;
         this.taxiByPkPlacaTaxi = taxiByPkPlacaTaxi;
         this.clienteByPkCorreoCliente = clienteByPkCorreoCliente;
         this.taxistaByCorreoTaxi = taxistaByCorreoTaxi;
+        this.agendaOperador = agendaOperador;
     }
 
     public ViajeEntidad() {
@@ -83,6 +90,26 @@ public class ViajeEntidad {
         this.origenDestino = origenDestino;
     }
 
+    @Basic
+    @Column(name = "agenda_telefono")
+    public String getAgendaTelefono() {
+        return agendaTelefono;
+    }
+
+    public void setAgendaTelefono(String agendaTelefono) {
+        this.agendaTelefono = agendaTelefono;
+    }
+
+    @Basic
+    @Column(name = "agenda_nombre")
+    public String getAgendaNombre() {
+        return agendaNombre;
+    }
+
+    public void setAgendaNombre(String agendaNombre) {
+        this.agendaNombre = agendaNombre;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -112,8 +139,7 @@ public class ViajeEntidad {
     }
 
     @ManyToOne
-    @MapsId("pkCorreoCliente")
-    @JoinColumn(name = "pk_correo_cliente", referencedColumnName = "pk_correo_usuario", nullable = false)
+    @JoinColumn(name = "correo_cliente", referencedColumnName = "pk_correo_usuario", nullable = false)
     public ClienteEntidad getClienteByPkCorreoCliente() {
         return clienteByPkCorreoCliente;
     }
@@ -130,5 +156,15 @@ public class ViajeEntidad {
 
     public void setTaxistaByCorreoTaxi(TaxistaEntidad taxistaByCorreoTaxi) {
         this.taxistaByCorreoTaxi = taxistaByCorreoTaxi;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "fk_agenda_correo_operador", referencedColumnName = "pk_correo_usuario", nullable = false)
+    public OperadorEntidad getAgendaOperador() {
+        return agendaOperador;
+    }
+
+    public void setAgendaOperador(OperadorEntidad agendaOperador) {
+        this.agendaOperador = agendaOperador;
     }
 }

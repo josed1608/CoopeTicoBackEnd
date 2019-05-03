@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.Objects;
 
@@ -16,21 +17,23 @@ public class TaxistaEntidad {
     private boolean estado;
     private boolean hojaDelincuencia;
     private float estrellas;
+    private String justificacion;
+    private Timestamp vence_licencia;
     private UsuarioEntidad usuarioByPkCorreoUsuario;
-    private TaxiEntidad taxiByPlacaTaxiManeja;
-    private TaxiEntidad taxiByPlacaTaxiDueno;
     private Collection<ViajeEntidad> viajesByPkCorreoUsuario;
+    private Collection<ConduceEntidad> taxisConducidos;
 
-    public TaxistaEntidad(String pkCorreoUsuario, String faltas, boolean estado, boolean hojaDelincuencia, float estrellas, UsuarioEntidad usuarioByPkCorreoUsuario, TaxiEntidad taxiByPlacaTaxiManeja, TaxiEntidad taxiByPlacaTaxiDueno, Collection<ViajeEntidad> viajesByPkCorreoUsuario) {
+    public TaxistaEntidad(String pkCorreoUsuario, String faltas, boolean estado, boolean hojaDelincuencia, float estrellas, String justificacion, Timestamp vence_licencia, UsuarioEntidad usuarioByPkCorreoUsuario, Collection<ViajeEntidad> viajesByPkCorreoUsuario, Collection<ConduceEntidad> taxisConducidos) {
         this.pkCorreoUsuario = pkCorreoUsuario;
         this.faltas = faltas;
         this.estado = estado;
         this.hojaDelincuencia = hojaDelincuencia;
         this.estrellas = estrellas;
+        this.justificacion = justificacion;
+        this.vence_licencia = vence_licencia;
         this.usuarioByPkCorreoUsuario = usuarioByPkCorreoUsuario;
-        this.taxiByPlacaTaxiManeja = taxiByPlacaTaxiManeja;
-        this.taxiByPlacaTaxiDueno = taxiByPlacaTaxiDueno;
         this.viajesByPkCorreoUsuario = viajesByPkCorreoUsuario;
+        this.taxisConducidos = taxisConducidos;
     }
 
     public TaxistaEntidad() {
@@ -86,6 +89,26 @@ public class TaxistaEntidad {
         this.estrellas = estrellas;
     }
 
+    @Basic
+    @Column(name = "justificacion", nullable = false)
+    public String getJustificacion() {
+        return justificacion;
+    }
+
+    public void setJustificacion(String justificacion) {
+        this.justificacion = justificacion;
+    }
+
+    @Basic
+    @Column(name = "vence_licencia", nullable = false)
+    public Timestamp getVence_licencia() {
+        return vence_licencia;
+    }
+
+    public void setVence_licencia(Timestamp vence_licencia) {
+        this.vence_licencia = vence_licencia;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -113,26 +136,6 @@ public class TaxistaEntidad {
         this.usuarioByPkCorreoUsuario = usuarioByPkCorreoUsuario;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "placa_taxi_maneja", referencedColumnName = "pk_placa", nullable = false)
-    public TaxiEntidad getTaxiByPlacaTaxiManeja() {
-        return taxiByPlacaTaxiManeja;
-    }
-
-    public void setTaxiByPlacaTaxiManeja(TaxiEntidad taxiByPlacaTaxiManeja) {
-        this.taxiByPlacaTaxiManeja = taxiByPlacaTaxiManeja;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "placa_taxi_dueno", referencedColumnName = "pk_placa")
-    public TaxiEntidad getTaxiByPlacaTaxiDueno() {
-        return taxiByPlacaTaxiDueno;
-    }
-
-    public void setTaxiByPlacaTaxiDueno(TaxiEntidad taxiByPlacaTaxiDueno) {
-        this.taxiByPlacaTaxiDueno = taxiByPlacaTaxiDueno;
-    }
-
     @OneToMany(mappedBy = "taxistaByCorreoTaxi")
     public Collection<ViajeEntidad> getViajesByPkCorreoUsuario() {
         return viajesByPkCorreoUsuario;
@@ -140,5 +143,14 @@ public class TaxistaEntidad {
 
     public void setViajesByPkCorreoUsuario(Collection<ViajeEntidad> viajesByPkCorreoUsuario) {
         this.viajesByPkCorreoUsuario = viajesByPkCorreoUsuario;
+    }
+
+    @OneToMany(mappedBy = "taxistaConduce")
+    public Collection<ConduceEntidad> getTaxisConducidos() {
+        return taxisConducidos;
+    }
+
+    public void setTaxisConducidos(Collection<ConduceEntidad> taxisConducidos) {
+        this.taxisConducidos = taxisConducidos;
     }
 }

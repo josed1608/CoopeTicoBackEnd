@@ -70,7 +70,7 @@ public class TaxisControlador {
         taxiActual.setDatafono(taxi.getDatafono());
         taxiActual.setFechaVenMarchamo(taxi.getFechaVenMarchamo());
         taxiActual.setFechaVenSeguro(taxi.getFechaVenSeguro());
-        taxiActual.setFechaVenTaxista(taxi.getFechaVenTaxista());
+        taxiActual.setFechaVenRtv(taxi.getFechaVenRtv());
         taxiActual.setTelefono(taxi.getTelefono());
         taxiActual.setTipo(taxi.getTipo());
 

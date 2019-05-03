@@ -18,28 +18,24 @@ public class TaxiEntidad {
     private String telefono;
     private String clase;
     private String tipo;
-    private Timestamp fechaVenTaxista;
+    private Timestamp fechaVenRtv;
     private Timestamp fechaVenMarchamo;
     private Timestamp fechaVenSeguro;
     @JsonIgnore
-    private Collection<TaxistaEntidad> taxistasByPkPlaca;
-    @JsonIgnore
-    private Collection<TaxistaEntidad> taxistasByPkPlaca_0;
-    @JsonIgnore
     private Collection<ViajeEntidad> viajesByPkPlaca;
+    private Collection<ConduceEntidad> taxistasQueMeConducen;
 
-    public TaxiEntidad(String pkPlaca, Boolean datafono, String telefono, String clase, String tipo, Timestamp fechaVenTaxista, Timestamp fechaVenMarchamo, Timestamp fechaVenSeguro, Collection<TaxistaEntidad> taxistasByPkPlaca, Collection<TaxistaEntidad> taxistasByPkPlaca_0, Collection<ViajeEntidad> viajesByPkPlaca) {
+    public TaxiEntidad(String pkPlaca, Boolean datafono, String telefono, String clase, String tipo, Timestamp fechaVenRtv, Timestamp fechaVenMarchamo, Timestamp fechaVenSeguro, Collection<ViajeEntidad> viajesByPkPlaca, Collection<ConduceEntidad> taxistasQueMeConducen) {
         this.pkPlaca = pkPlaca;
         this.datafono = datafono;
         this.telefono = telefono;
         this.clase = clase;
         this.tipo = tipo;
-        this.fechaVenTaxista = fechaVenTaxista;
+        this.fechaVenRtv = fechaVenRtv;
         this.fechaVenMarchamo = fechaVenMarchamo;
         this.fechaVenSeguro = fechaVenSeguro;
-        this.taxistasByPkPlaca = taxistasByPkPlaca;
-        this.taxistasByPkPlaca_0 = taxistasByPkPlaca_0;
         this.viajesByPkPlaca = viajesByPkPlaca;
+        this.taxistasQueMeConducen = taxistasQueMeConducen;
     }
 
     public TaxiEntidad() {
@@ -96,13 +92,13 @@ public class TaxiEntidad {
     }
 
     @Basic
-    @Column(name = "fecha_ven_taxista", nullable = false)
-    public Timestamp getFechaVenTaxista() {
-        return fechaVenTaxista;
+    @Column(name = "fecha_ven_rtv", nullable = false)
+    public Timestamp getFechaVenRtv() {
+        return fechaVenRtv;
     }
 
-    public void setFechaVenTaxista(Timestamp fechaVenTaxista) {
-        this.fechaVenTaxista = fechaVenTaxista;
+    public void setFechaVenRtv(Timestamp fechaVenTaxista) {
+        this.fechaVenRtv = fechaVenTaxista;
     }
 
     @Basic
@@ -135,32 +131,14 @@ public class TaxiEntidad {
                 Objects.equals(telefono, that.telefono) &&
                 Objects.equals(clase, that.clase) &&
                 Objects.equals(tipo, that.tipo) &&
-                Objects.equals(fechaVenTaxista, that.fechaVenTaxista) &&
+                Objects.equals(fechaVenRtv, that.fechaVenRtv) &&
                 Objects.equals(fechaVenMarchamo, that.fechaVenMarchamo) &&
                 Objects.equals(fechaVenSeguro, that.fechaVenSeguro);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(pkPlaca, datafono, telefono, clase, tipo, fechaVenTaxista, fechaVenMarchamo, fechaVenSeguro);
-    }
-
-    @OneToMany(mappedBy = "taxiByPlacaTaxiManeja")
-    public Collection<TaxistaEntidad> getTaxistasByPkPlaca() {
-        return taxistasByPkPlaca;
-    }
-
-    public void setTaxistasByPkPlaca(Collection<TaxistaEntidad> taxistasByPkPlaca) {
-        this.taxistasByPkPlaca = taxistasByPkPlaca;
-    }
-
-    @OneToMany(mappedBy = "taxiByPlacaTaxiDueno")
-    public Collection<TaxistaEntidad> getTaxistasByPkPlaca_0() {
-        return taxistasByPkPlaca_0;
-    }
-
-    public void setTaxistasByPkPlaca_0(Collection<TaxistaEntidad> taxistasByPkPlaca_0) {
-        this.taxistasByPkPlaca_0 = taxistasByPkPlaca_0;
+        return Objects.hash(pkPlaca, datafono, telefono, clase, tipo, fechaVenRtv, fechaVenMarchamo, fechaVenSeguro);
     }
 
     @OneToMany(mappedBy = "taxiByPkPlacaTaxi")
@@ -170,5 +148,14 @@ public class TaxiEntidad {
 
     public void setViajesByPkPlaca(Collection<ViajeEntidad> viajesByPkPlaca) {
         this.viajesByPkPlaca = viajesByPkPlaca;
+    }
+
+    @OneToMany(mappedBy = "taxiConducido")
+    public Collection<ConduceEntidad> getTaxistasQueMeConducen() {
+        return taxistasQueMeConducen;
+    }
+
+    public void setTaxistasQueMeConducen(Collection<ConduceEntidad> taxistasQueMeConducen) {
+        this.taxistasQueMeConducen = taxistasQueMeConducen;
     }
 }
