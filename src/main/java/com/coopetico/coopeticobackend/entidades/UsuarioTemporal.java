@@ -6,7 +6,8 @@ import java.util.List;
 public class UsuarioTemporal {
     private String correo;
     private String nombre;
-    private String apellidos;
+    private String apellido1;
+    private String apellido2;
     private String telefono;
     private String contrasena;
     private String foto;
@@ -20,7 +21,8 @@ public class UsuarioTemporal {
     public UsuarioTemporal(UsuarioEntidad usuarioEntidad){
         this.correo = usuarioEntidad.getPkCorreo();
         this.nombre = usuarioEntidad.getNombre();
-        this.apellidos = usuarioEntidad.getApellidos();
+        this.apellido1 = usuarioEntidad.getApellido1();
+        this.apellido2 = usuarioEntidad.getApellido2();
         this.telefono = usuarioEntidad.getTelefono();
         this.foto = usuarioEntidad.getFoto();
         this.contrasena = usuarioEntidad.getContrasena();
@@ -43,12 +45,20 @@ public class UsuarioTemporal {
         this.nombre = nombre;
     }
 
-    public String getApellidos() {
-        return apellidos;
+    public String getApellido1() {
+        return apellido1;
     }
 
-    public void setApellidos(String apellidos) {
-        this.apellidos = apellidos;
+    public void setApellido1(String apellido1) {
+        this.apellido1 = apellido1;
+    }
+
+    public String getApellido2() {
+        return apellido2;
+    }
+
+    public void setApellido2(String apellido2) {
+        this.apellido2 = apellido2;
     }
 
     public String getTelefono() {
@@ -96,7 +106,8 @@ public class UsuarioTemporal {
         UsuarioEntidad usuarioEntidad = new UsuarioEntidad();
         usuarioEntidad.setTelefono(this.telefono);
         usuarioEntidad.setNombre(this.nombre);
-        usuarioEntidad.setApellidos(this.apellidos);
+        usuarioEntidad.setApellido1(this.apellido1);
+        usuarioEntidad.setApellido2(this.apellido2);
         usuarioEntidad.setContrasena(this.contrasena);
         usuarioEntidad.setPkCorreo(this.correo);
         usuarioEntidad.setFoto(this.foto);

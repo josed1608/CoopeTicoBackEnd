@@ -299,7 +299,8 @@ public class UsuarioControlador {
             return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
         }
         try {
-            usuarioEntidad.setApellidos(usuario.getApellidos());
+            usuarioEntidad.setApellido1(usuario.getApellido1());
+            usuarioEntidad.setApellido2(usuario.getApellido2());
             usuarioEntidad.setNombre(usuario.getNombre());
             usuarioEntidad.setTelefono(usuario.getTelefono());
             usuarioEntidad.setFoto(usuario.getFoto());
