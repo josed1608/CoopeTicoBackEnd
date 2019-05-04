@@ -67,7 +67,7 @@ public class TaxistasControladorIntegrationTest {
         String contenido = mvcResult.getResponse().getContentAsString();
         ObjectMapper objectMapper = new ObjectMapper();
         TaxistaEntidadTemporal[] taxista = objectMapper.readValue(contenido, TaxistaEntidadTemporal[].class);
-        assertEquals(taxista.length,1);
+        assertEquals(taxista.length,2);
     }
 
     /**
@@ -77,10 +77,10 @@ public class TaxistasControladorIntegrationTest {
     @Transactional
     public void testConsultarPorId() throws Exception {
         // Se hace la consulta al controlador
-        TaxistaEntidadTemporal entidadRetornada = taxistasControlador.consultarPorId("taxista@taxista.com");
+        TaxistaEntidadTemporal entidadRetornada = taxistasControlador.consultarPorId("taxista1@taxista.com");
         //Se compara que no sea nulo
         assertNotNull(entidadRetornada);
         //Se compara que sea el taxista solicitado
-        Assert.assertTrue(entidadRetornada.getPkCorreoUsuario().equals("taxista@taxista.com"));
+        Assert.assertTrue(entidadRetornada.getPkCorreoUsuario().equals("taxista1@taxista.com"));
     }
 }

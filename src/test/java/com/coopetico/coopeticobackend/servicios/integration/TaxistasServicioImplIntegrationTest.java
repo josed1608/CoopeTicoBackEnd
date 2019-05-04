@@ -48,7 +48,7 @@ public class TaxistasServicioImplIntegrationTest {
         //Se compara que no sea nulo
         assertNotNull(entidadesServicio);
         //Se comprueba que contengan 1 taxistas
-        assertEquals(entidadesServicio.size(), 1);
+        assertEquals(entidadesServicio.size(), 2);
     }
 
     /**
@@ -58,10 +58,10 @@ public class TaxistasServicioImplIntegrationTest {
     @Transactional
     public void testConsultarPorId() throws Exception {
         // Se le pide el taxista al servicio
-        TaxistaEntidadTemporal entidadRetornada = taxistasServicio.consultarPorId("taxista@taxista.com");
+        TaxistaEntidadTemporal entidadRetornada = taxistasServicio.consultarPorId("taxista1@taxista.com");
         //Se compara que no sea nulo
         assertNotNull(entidadRetornada);
         //Se compara que sea el taxista solicitado
-        assertTrue(entidadRetornada.getPkCorreoUsuario().equals("taxista@taxista.com"));
+        assertTrue(entidadRetornada.getPkCorreoUsuario().equals("taxista1@taxista.com"));
     }
 }
