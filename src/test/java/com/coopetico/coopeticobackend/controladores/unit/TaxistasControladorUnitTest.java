@@ -79,10 +79,10 @@ public class TaxistasControladorUnitTest {
         taxistaEntidad1.setEstado(true);
         taxistaEntidad1.setHojaDelincuencia(true);
         taxistaEntidad1.setEstrellas(5);
-        taxistaEntidad1.setApellidos("Apellidos1");
+        taxistaEntidad1.setApellido1("Apellido1");
+        taxistaEntidad1.setApellido2("Apellido2");
         taxistaEntidad1.setFoto("foto");
         taxistaEntidad1.setNombre("Taxista1");
-        taxistaEntidad1.setPkPlaca("AAA111");
         taxistaEntidad1.setTelefono("22333322");
         //Taxista2
         TaxistaEntidadTemporal taxistaEntidad2 = new TaxistaEntidadTemporal();
@@ -91,10 +91,10 @@ public class TaxistasControladorUnitTest {
         taxistaEntidad2.setEstado(true);
         taxistaEntidad2.setHojaDelincuencia(true);
         taxistaEntidad2.setEstrellas(5);
-        taxistaEntidad2.setApellidos("Apellidos2");
+        taxistaEntidad2.setApellido1("Apellido1");
+        taxistaEntidad2.setApellido2("Apellido2");
         taxistaEntidad2.setFoto("foto");
         taxistaEntidad2.setNombre("Taxista2");
-        taxistaEntidad2.setPkPlaca("AAA111");
         taxistaEntidad2.setTelefono("22333322");
         //Txistas
         List<TaxistaEntidadTemporal> entidades = Arrays.asList(taxistaEntidad1,taxistaEntidad2);
@@ -125,10 +125,11 @@ public class TaxistasControladorUnitTest {
         taxistaEntidad1.setHojaDelincuencia(true);
         taxistaEntidad1.setEstrellas(5);
         taxistaEntidad1.setNombre("Taxista01");
-        taxistaEntidad1.setApellidos("apellido01");
+        taxistaEntidad1.setApellido1("apellido01");
+        taxistaEntidad1.setApellido2("apellido02");
         taxistaEntidad1.setTelefono("11111111");
         taxistaEntidad1.setFoto("foto");
-        taxistaEntidad1.setPkPlaca("AAA111");
+        //taxistaEntidad1.setPkPlaca("AAA111");
         //Se le indica que caundo pregunten por ese taxista retorne la entidad anterior
         when(taxistasServicio.consultarPorId("taxistaMoka1@coopetico.com")).thenReturn(taxistaEntidad1);
         // Se le pide el taxista al servicio

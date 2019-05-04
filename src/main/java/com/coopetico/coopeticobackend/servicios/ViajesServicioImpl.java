@@ -75,7 +75,7 @@ public class ViajesServicioImpl implements ViajesServicio {
         //---------------------------------------------------------------------
         // Creación de la llave primaria para la entidad Viaje.
         ViajeEntidadPK pk = new ViajeEntidadPK();
-        pk.setPkCorreoCliente(correoCliente);
+        //pk.setPkCorreoCliente(correoCliente);
         pk.setPkPlacaTaxi(placa);
         pk.setPkFechaInicio(fechaInicio);
         //---------------------------------------------------------------------

@@ -86,7 +86,8 @@ public class UsuarioServicioUnitTest {
         usuarioEntidad.setContrasena("aguacatico");
         usuarioEntidad.setPkCorreo("test@test.com");
         usuarioEntidad.setNombre("testNombre");
-        usuarioEntidad.setApellidos("test1 test2");
+        usuarioEntidad.setApellido1("test1");
+        usuarioEntidad.setApellido2("test2");
         usuarioEntidad.setGrupoByIdGrupo(new GrupoEntidad());
         usuarioEntidad.getGrupoByIdGrupo().setPkId("Administrativo");
         usuarioEntidad.setTelefono("88887777");

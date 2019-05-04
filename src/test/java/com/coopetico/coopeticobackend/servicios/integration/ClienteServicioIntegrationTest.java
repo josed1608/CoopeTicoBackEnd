@@ -42,7 +42,7 @@ public class ClienteServicioIntegrationTest {
         }
         catch (UsuarioNoEncontradoExcepcion ignored) {}
         finally {
-            UsuarioEntidad usuario = new UsuarioEntidad("prueba@prueba.com", "nombre", "apellido", "telefono", "contrasenna", "",null, null, null, null);
+            UsuarioEntidad usuario = new UsuarioEntidad("prueba@prueba.com", "nombre", "apellido1", "apellido2", "telefono", "contrasenna", "", true,null, null, null, null);
             usuarioServicio.agregarUsuario(usuario, "Cliente");
 
             //Act

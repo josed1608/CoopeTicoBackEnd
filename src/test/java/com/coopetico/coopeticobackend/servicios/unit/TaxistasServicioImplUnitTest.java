@@ -71,36 +71,38 @@ public class TaxistasServicioImplUnitTest {
         //Primer taxista
         UsuarioEntidad usuario1 = new UsuarioEntidad();
         usuario1.setNombre("Taxista1");
-        usuario1.setApellidos("Apellidos1");
+        usuario1.setApellido1("Apellido1");
+        usuario1.setApellido2("Apellido2");
         usuario1.setPkCorreo("taxistaMoka1@coopetico.com");
         usuario1.setTelefono("22333322");
         usuario1.setFoto("foto");
-        TaxiEntidad taxi1 = new TaxiEntidad();
-        taxi1.setPkPlaca("AAA111");
+        //TaxiEntidad taxi1 = new TaxiEntidad();
+        //taxi1.setPkPlaca("AAA111");
         TaxistaEntidad taxistaEntidad1 = new TaxistaEntidad();
         taxistaEntidad1.setPkCorreoUsuario("taxistaMoka1@coopetico.com");
         taxistaEntidad1.setFaltas("0");
         taxistaEntidad1.setEstado(true);
         taxistaEntidad1.setHojaDelincuencia(true);
         taxistaEntidad1.setEstrellas(5);
-        taxistaEntidad1.setTaxiByPlacaTaxiManeja(taxi1);
+        //taxistaEntidad1.setTaxiByPlacaTaxiManeja(taxi1);
         taxistaEntidad1.setUsuarioByPkCorreoUsuario(usuario1);
         //Segundo taxista
         UsuarioEntidad usuario2 = new UsuarioEntidad();
         usuario2.setNombre("Taxista1");
-        usuario2.setApellidos("Apellidos1");
+        usuario2.setApellido1("Apellido1");
+        usuario2.setApellido2("Apellido2");
         usuario2.setPkCorreo("taxistaMoka1@coopetico.com");
         usuario2.setTelefono("22333322");
         usuario2.setFoto("foto");
-        TaxiEntidad taxi2 = new TaxiEntidad();
-        taxi2.setPkPlaca("AAA111");
+        //TaxiEntidad taxi2 = new TaxiEntidad();
+        //taxi2.setPkPlaca("AAA111");
         TaxistaEntidad taxistaEntidad2 = new TaxistaEntidad();
         taxistaEntidad2.setPkCorreoUsuario("taxistaMoka1@coopetico.com");
         taxistaEntidad2.setFaltas("0");
         taxistaEntidad2.setEstado(true);
         taxistaEntidad2.setHojaDelincuencia(true);
         taxistaEntidad2.setEstrellas(5);
-        taxistaEntidad2.setTaxiByPlacaTaxiManeja(taxi2);
+        //taxistaEntidad2.setTaxiByPlacaTaxiManeja(taxi2);
         taxistaEntidad2.setUsuarioByPkCorreoUsuario(usuario2);
         // Se le indica al mock que retorne esa lista cuando consultan al repo
         List<TaxistaEntidad> entidades = Arrays.asList(taxistaEntidad1, taxistaEntidad2);
@@ -121,19 +123,20 @@ public class TaxistasServicioImplUnitTest {
         //Primer taxista
         UsuarioEntidad usuario = new UsuarioEntidad();
         usuario.setNombre("Taxista1");
-        usuario.setApellidos("Apellidos1");
+        usuario.setApellido1("Apellido1");
+        usuario.setApellido2("Apellido2");
         usuario.setPkCorreo("taxistaMoka1@coopetico.com");
         usuario.setTelefono("22333322");
         usuario.setFoto("foto");
-        TaxiEntidad taxi = new TaxiEntidad();
-        taxi.setPkPlaca("AAA111");
+        //TaxiEntidad taxi = new TaxiEntidad();
+        //taxi.setPkPlaca("AAA111");
         TaxistaEntidad taxistaEntidad1 = new TaxistaEntidad();
         taxistaEntidad1.setPkCorreoUsuario("taxistaMoka1@coopetico.com");
         taxistaEntidad1.setFaltas("0");
         taxistaEntidad1.setEstado(true);
         taxistaEntidad1.setHojaDelincuencia(true);
         taxistaEntidad1.setEstrellas(5);
-        taxistaEntidad1.setTaxiByPlacaTaxiManeja(taxi);
+        //taxistaEntidad1.setTaxiByPlacaTaxiManeja(taxi);
         taxistaEntidad1.setUsuarioByPkCorreoUsuario(usuario);
         //Se le indica al mock que cuando pregunten al repo por ese taxista que retorne ese taxista.
         when(taxistasRepositorio.findById("taxistaMoka1@coopetico.com")).thenReturn(Optional.of(taxistaEntidad1));
