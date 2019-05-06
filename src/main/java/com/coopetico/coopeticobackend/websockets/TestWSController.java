@@ -5,11 +5,13 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.stereotype.Controller;
 
+import java.security.Principal;
+
 @Controller
 public class TestWSController {
     @SubscribeMapping("/test")
-    public String retrieveParticipants() {
-        return "Thanks for subscribing";
+    public String retrieveParticipants(Principal principal) {
+        return principal.getName();
     }
 
 }

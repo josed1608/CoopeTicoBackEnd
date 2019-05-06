@@ -63,4 +63,10 @@ public class AuthControlador {
             throw new MalasCredencialesExcepcion("Correo o contraseña inválido", HttpStatus.UNAUTHORIZED, System.currentTimeMillis());
         }
     }
+
+    @CrossOrigin
+    @GetMapping("validar-token")
+    public boolean validarToken(@RequestBody String token) {
+        return jwtTokenProvider.validateToken(token);
+    }
 }
