@@ -79,7 +79,7 @@ public class JwtTokenProvider {
      * @param token JWT que envió el cliente
      * @return instancia de Authentication para hacer lógica de autenticación
      */
-    Authentication getAuthentication(String token) {
+    public Authentication getAuthentication(String token) {
         UserDetails userDetails = this.userDetailsService.loadUserByUsername(getUsername(token));
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
@@ -100,7 +100,7 @@ public class JwtTokenProvider {
      * @param req request del cliente
      * @return String que representa el token JWT
      */
-    String resolveToken(HttpServletRequest req) {
+    public String resolveToken(HttpServletRequest req) {
         String bearerToken = req.getHeader("Authorization");
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7);
@@ -114,7 +114,7 @@ public class JwtTokenProvider {
      * @param token token JWT
      * @return retorna true si es un token válido o false si no
      */
-    boolean validateToken(String token) {
+    public boolean validateToken(String token) throws InvalidJwtAuthenticationException {
         try {
             Jws<Claims> claims = Jwts.parser().setSigningKey(secretkey.getHS256SecretBytes()).parseClaimsJws(token);
             return !claims.getBody().getExpiration().before(new Date());
