@@ -8,6 +8,9 @@ import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
+/**
+ * Configura el interceptor de autenticación del websocket
+ */
 @Configuration
 @Order(Ordered.HIGHEST_PRECEDENCE + 99)
 public class WebSocketAuthenticationSecurityConfig implements WebSocketMessageBrokerConfigurer {

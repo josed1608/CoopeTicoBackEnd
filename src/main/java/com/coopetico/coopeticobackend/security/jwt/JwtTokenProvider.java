@@ -114,7 +114,7 @@ public class JwtTokenProvider {
      * @param token token JWT
      * @return retorna true si es un token válido o false si no
      */
-    public boolean validateToken(String token) {
+    public boolean validateToken(String token) throws InvalidJwtAuthenticationException {
         try {
             Jws<Claims> claims = Jwts.parser().setSigningKey(secretkey.getHS256SecretBytes()).parseClaimsJws(token);
             return !claims.getBody().getExpiration().before(new Date());

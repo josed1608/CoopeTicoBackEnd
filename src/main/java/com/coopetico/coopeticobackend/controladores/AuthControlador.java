@@ -1,6 +1,7 @@
 package com.coopetico.coopeticobackend.controladores;
 
 import com.coopetico.coopeticobackend.entidades.UsuarioEntidad;
+import com.coopetico.coopeticobackend.excepciones.InvalidJwtAuthenticationException;
 import com.coopetico.coopeticobackend.excepciones.MalasCredencialesExcepcion;
 import com.coopetico.coopeticobackend.excepciones.UsuarioNoEncontradoExcepcion;
 import com.coopetico.coopeticobackend.security.jwt.JwtTokenProvider;
@@ -64,9 +65,15 @@ public class AuthControlador {
         }
     }
 
+    /**
+     * Endpoint para validar un token que se le pase en el body del request
+     *
+     * @param token string del token que se pasa en el body
+     * @return devuelve true si el token es válido o una excepción si el token es inválido
+     */
     @CrossOrigin
     @GetMapping("validar-token")
-    public boolean validarToken(@RequestBody String token) {
+    public boolean validarToken(@RequestBody String token) throws InvalidJwtAuthenticationException {
         return jwtTokenProvider.validateToken(token);
     }
 }
