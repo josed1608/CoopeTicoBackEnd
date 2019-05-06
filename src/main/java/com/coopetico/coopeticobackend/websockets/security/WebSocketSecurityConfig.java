@@ -1,4 +1,4 @@
-package com.coopetico.coopeticobackend.websockets;
+package com.coopetico.coopeticobackend.websockets.security;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.messaging.MessageSecurityMetadataSourceRegistry;
@@ -9,8 +9,9 @@ public class WebSocketSecurityConfig extends AbstractSecurityWebSocketMessageBro
 
     @Override
     protected void configureInbound(MessageSecurityMetadataSourceRegistry messages) {
-       /* messages
-                .anyMessage().permitAll();*/
+        messages
+                .simpSubscribeDestMatchers("/topic/test").authenticated()
+                .anyMessage().permitAll();
     }
 
     @Override
