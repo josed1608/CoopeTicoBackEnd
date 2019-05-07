@@ -59,6 +59,8 @@ public class AuthControlador {
             List<String> roles = usuarioServicio.obtenerPermisos(usuarioEntidad);
             String token = jwtTokenProvider.createToken(usuarioEntidad, roles);
 
+            // TODO: enviar justificacion y estado si es taxista
+
             return ok(token);
         } catch (AuthenticationException e) {
             throw new MalasCredencialesExcepcion("Correo o contraseña inválido", HttpStatus.UNAUTHORIZED, System.currentTimeMillis());
