@@ -18,6 +18,7 @@ public class TaxiEntidad {
     private String telefono;
     private String clase;
     private String tipo;
+    private String foto;
     private Timestamp fechaVenRtv;
     private Timestamp fechaVenMarchamo;
     private Timestamp fechaVenSeguro;
@@ -25,12 +26,13 @@ public class TaxiEntidad {
     private Collection<ViajeEntidad> viajesByPkPlaca;
     private Collection<ConduceEntidad> taxistasQueMeConducen;
 
-    public TaxiEntidad(String pkPlaca, Boolean datafono, String telefono, String clase, String tipo, Timestamp fechaVenRtv, Timestamp fechaVenMarchamo, Timestamp fechaVenSeguro, Collection<ViajeEntidad> viajesByPkPlaca, Collection<ConduceEntidad> taxistasQueMeConducen) {
+    public TaxiEntidad(String pkPlaca, Boolean datafono, String telefono, String clase, String tipo, Timestamp fechaVenRtv, Timestamp fechaVenMarchamo, Timestamp fechaVenSeguro, Collection<ViajeEntidad> viajesByPkPlaca, String foto, Collection<ConduceEntidad> taxistasQueMeConducen) {
         this.pkPlaca = pkPlaca;
         this.datafono = datafono;
         this.telefono = telefono;
         this.clase = clase;
         this.tipo = tipo;
+        this.foto = foto;
         this.fechaVenRtv = fechaVenRtv;
         this.fechaVenMarchamo = fechaVenMarchamo;
         this.fechaVenSeguro = fechaVenSeguro;
@@ -92,6 +94,14 @@ public class TaxiEntidad {
     }
 
     @Basic
+    @Column(name = "foto", nullable = false)
+    public String getFoto() { return foto; }
+
+    public void setFoto(String foto) {
+        this.foto = foto;
+    }
+
+    @Basic
     @Column(name = "fecha_ven_rtv", nullable = false)
     public Timestamp getFechaVenRtv() {
         return fechaVenRtv;
@@ -138,7 +148,7 @@ public class TaxiEntidad {
 
     @Override
     public int hashCode() {
-        return Objects.hash(pkPlaca, datafono, telefono, clase, tipo, fechaVenRtv, fechaVenMarchamo, fechaVenSeguro);
+        return Objects.hash(pkPlaca, datafono, telefono, clase, tipo, foto, fechaVenRtv, fechaVenMarchamo, fechaVenSeguro);
     }
 
     @OneToMany(mappedBy = "taxiByPkPlacaTaxi")

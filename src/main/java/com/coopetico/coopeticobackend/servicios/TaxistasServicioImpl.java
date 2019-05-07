@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Optional;
 
 /**
  Servicio de la entidad Taxista.
@@ -68,6 +69,13 @@ public class TaxistasServicioImpl implements  TaxistasServicio {
         }
         return listaTaxistaEntidadTemporal;
     }
+
+    @Override
+    @Transactional
+    public Optional<TaxistaEntidad> taxistaPorCorreo(String correo) {
+        return taxistaRepositorio.findById(correo);
+    }
+
 
     /**
      * Funcion que guarda la informacion del taxista que entra por parametro.
