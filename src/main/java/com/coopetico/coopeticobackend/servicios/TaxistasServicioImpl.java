@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 import javax.transaction.Transactional;
+import java.util.Collection;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -55,6 +56,35 @@ public class TaxistasServicioImpl implements  TaxistasServicio {
     public TaxistasServicioImpl() { }
 
     /**
+     * Funcion que retorna una lista de los taxis que conduce un taxista.
+     * @param taxisSiConduce Lista de ConduceEntidad(taxis) que conduce el taxista
+     * @return Lista de placas que el taxistas puede manejar.
+     */
+    public List<String> taxisConduce(Collection<ConduceEntidad> taxisSiConduce){
+        List<String> siConduce = new ArrayList();
+        for(ConduceEntidad taxi : taxisSiConduce){
+            siConduce.add(taxi.getTaxiConducido().getPkPlaca());
+        }
+        return siConduce;
+    }
+
+    /**
+     * Funcion que retorna una lista de los taxis que no puede conducir un taxista.
+     * @param siConduce Lista de placas que conduce el taxista
+     * @return Lista de placas que no conduce el taxistas.
+     */
+    public List<String> taxisNoConduce(List<String> siConduce){
+        List<TaxiEntidad> taxis = this.taxiRepositorio.findAll();
+        List<String> noConduce = new ArrayList();
+        for (TaxiEntidad taxi: taxis){
+            if(siConduce.indexOf(taxi.getPkPlaca()) == -1 ){
+                noConduce.add(taxi.getPkPlaca());
+            }
+        }
+        return noConduce;
+    }
+
+    /**
      * Funcion que retorna los taxistas del sistema.
      * @return Lista de taxistas del sistema.
      */
@@ -64,7 +94,11 @@ public class TaxistasServicioImpl implements  TaxistasServicio {
         List<TaxistaEntidad> listaTaxistaEntidad = taxistaRepositorio.findAll();
         List<TaxistaEntidadTemporal> listaTaxistaEntidadTemporal = new ArrayList<>();
         for (TaxistaEntidad taxista : listaTaxistaEntidad) {
-            listaTaxistaEntidadTemporal.add(new TaxistaEntidadTemporal(taxista));
+            //Sacar los taxis que puede conducir ese taxisa
+            List<String> siConduce = taxisConduce(taxista.getTaxisConducidos());
+            //Sacar los taxis que no puede conducir ese taxista
+            List<String> noConduce = taxisNoConduce(siConduce);
+            listaTaxistaEntidadTemporal.add(new TaxistaEntidadTemporal(taxista, siConduce, noConduce));
         }
         return listaTaxistaEntidadTemporal;
     }
@@ -98,13 +132,29 @@ public class TaxistasServicioImpl implements  TaxistasServicio {
         taxistaEntidad.getUsuarioByPkCorreoUsuario().setTelefono(taxistaEntidadTemporal.getTelefono());
         taxistaEntidad.getUsuarioByPkCorreoUsuario().setFoto(taxistaEntidadTemporal.getFoto());
         taxistaEntidad.getUsuarioByPkCorreoUsuario().setContrasena("$2a$10$gJ0hUnsEvTp5zyBVo19IHe.GoYKkL3Wy268wGJxG5.k.tUFhSUify");
+        //Se agrega el grupo del taxista
         GrupoEntidad grupoTaxista = this.gruposRepositorio.findById(this.idGrupoTaxista).orElse(null);
         taxistaEntidad.getUsuarioByPkCorreoUsuario().setGrupoByIdGrupo(grupoTaxista);
         if (nuevo){
             this.usuarioRepositorio.save(taxistaEntidad.getUsuarioByPkCorreoUsuario());
         }
+        //Se agregan los taxis que conduce
+        Collection<ConduceEntidad> taxisConducidos = new ArrayList<ConduceEntidad>();
+        for(String pkPlacaTaxi: taxistaEntidadTemporal.getSiConduce()){
+            ConduceEntidadPK conduceEntidadPK = new ConduceEntidadPK(taxistaEntidad.getPkCorreoUsuario(), pkPlacaTaxi);
+            TaxistaEntidad taxistaConduce = this.taxistaRepositorio.findById(taxistaEntidad.getPkCorreoUsuario()).orElse(null);
+            TaxiEntidad taxiConducido = this.taxiRepositorio.findById(pkPlacaTaxi).orElse(null);
+            ConduceEntidad conduce = new ConduceEntidad(conduceEntidadPK, taxistaConduce, taxiConducido);
+            taxisConducidos.add(conduce);
+        }
+        taxistaEntidad.setTaxisConducidos(taxisConducidos);
+        //Se guardan los datos.
         TaxistaEntidad retornoSave = taxistaRepositorio.save(taxistaEntidad);
-        return new TaxistaEntidadTemporal(retornoSave);
+        //Sacar los taxis que puede conducir ese taxisa
+        List<String> siConduce = taxisConduce(taxistaEntidad.getTaxisConducidos());
+        //Sacar los taxis que no puede conducir ese taxista
+        List<String> noConduce = taxisNoConduce(siConduce);
+        return new TaxistaEntidadTemporal(retornoSave, siConduce, noConduce);
     }
 
     /**
@@ -120,7 +170,11 @@ public class TaxistasServicioImpl implements  TaxistasServicio {
         if (taxistaEntidad == null){
             taxistaEntidadTemporal = new TaxistaEntidadTemporal();
         }else{
-            taxistaEntidadTemporal = new TaxistaEntidadTemporal(taxistaEntidad);
+            //Sacar los taxis que puede conducir ese taxisa
+            List<String> siConduce = taxisConduce(taxistaEntidad.getTaxisConducidos());
+            //Sacar los taxis que no puede conducir ese taxista
+            List<String> noConduce = taxisNoConduce(siConduce);
+            taxistaEntidadTemporal = new TaxistaEntidadTemporal(taxistaEntidad, siConduce, noConduce);
         }
         return taxistaEntidadTemporal;
     }
