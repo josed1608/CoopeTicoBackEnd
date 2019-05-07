@@ -70,8 +70,12 @@ public interface UsuarioServicio {
     void eliminar(String correo);
 
     /**
-     * Deshabilita un usuario
-     * @param correo Correo del usuario a deshabilitar
+     * Cambia el estado de un usuario
+     *
+     * Habilita o deshabilita un usario dependiendo del [nuevoEstado] proporcionado.
+     *
+     * @param correo Correo de usuario a modificar
+     * @param estadoNuevo Estado que se le dara al usuario
      */
-    void deshabilitarUsuario(String correo);
+    void cambiarEstado(String correo, Boolean estadoNuevo);
 }

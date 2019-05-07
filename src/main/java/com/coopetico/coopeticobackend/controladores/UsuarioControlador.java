@@ -428,13 +428,21 @@ public class UsuarioControlador {
     }
 
 
+    /**
+     * Cambia el estado del usuario
+     * @param correo Correo de usuario
+     * @param valido Nuevo estado del usuario
+     * @return Respuesta con el correo y el nuevo estado del usuario
+     */
     @PutMapping("{correo}/estado")
-    public ResponseEntity  deshabilitarUsuario(@PathVariable @Email String correo){
+    public ResponseEntity  cambiarEstado(@PathVariable @Email String correo, @RequestParam String valido){
         try{
-            usuarioServicio.deshabilitarUsuario(correo);
+            usuarioServicio.cambiarEstado(correo, Boolean.parseBoolean(valido));
         } catch (UsuarioNoEncontradoExcepcion e){
             return new ResponseEntity("{\"error\": \"" + e.getMessage() + "\"}", HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity(HttpStatus.OK);
+        String respuesta = Boolean.parseBoolean(valido)? "habilitado":"deshabilitado";
+        return new ResponseEntity("{\"mensaje\" : \"Se ha " + respuesta +" al usuario.\"," +
+                "\"correo\" : \""+correo+"\"}", HttpStatus.OK);
     }
 }
