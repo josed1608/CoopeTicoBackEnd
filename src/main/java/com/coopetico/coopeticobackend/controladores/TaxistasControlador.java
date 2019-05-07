@@ -107,14 +107,12 @@ public class TaxistasControlador {
      * @param correo Correo del taxista
      * @return Estado y justificacion del taxista
      */
-    @GetMapping("taxistas/{correo}/estado")
+    @GetMapping("{correo}/estado")
     public ResponseEntity obtenerEstado(@PathVariable String correo){
         try{
             return new ResponseEntity(taxistaServicio.obtenerEstado(correo), HttpStatus.OK);
         }catch (UsuarioNoEncontradoExcepcion e){
-            return new ResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity("{\"error\" : \""+e.getMessage()+"\"}", HttpStatus.NOT_FOUND);
         }
-
     }
-
 }
