@@ -119,5 +119,19 @@ public class UsuarioServicioImpl implements UsuarioServicio{
         }
     }
 
-
+    /**
+     * Deshabilita un usuario
+     * @param correo Correo del usuario a deshabilitar
+     * @throws UsuarioNoEncontradoExcepcion Si el usuario no existe
+     */
+    @Override
+    public void deshabilitarUsuario(String correo) throws UsuarioNoEncontradoExcepcion {
+        if(usuariosRepositorio.existsById(correo)) {
+            UsuarioEntidad usuario =  usuariosRepositorio.findById(correo).get();
+            usuario.setValid(false);
+            usuariosRepositorio.save(usuario);
+        }else{
+            throw new UsuarioNoEncontradoExcepcion("El usuario no existe.", HttpStatus.NOT_FOUND, System.currentTimeMillis());
+        }
+    }
 }

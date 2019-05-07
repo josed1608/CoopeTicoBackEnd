@@ -10,6 +10,7 @@ package com.coopetico.coopeticobackend.controladores;
 
 
 import com.coopetico.coopeticobackend.entidades.*;
+import com.coopetico.coopeticobackend.excepciones.UsuarioNoEncontradoExcepcion;
 import com.coopetico.coopeticobackend.mail.EmailServiceImpl;
 import com.coopetico.coopeticobackend.repositorios.UsuariosRepositorio;
 import com.coopetico.coopeticobackend.servicios.TokensRecuperacionContrasenaServicio;
@@ -39,6 +40,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Email;
 
 import java.io.File;
 import java.io.IOException;
@@ -423,5 +425,16 @@ public class UsuarioControlador {
         HttpHeaders cabecera = new HttpHeaders();
         cabecera.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename= \""+recurso.getFilename()+"\"");
         return new ResponseEntity<Resource>(recurso, cabecera, HttpStatus.OK);
+    }
+
+
+    @PutMapping("{correo}/estado")
+    public ResponseEntity  deshabilitarUsuario(@PathVariable @Email String correo){
+        try{
+            usuarioServicio.deshabilitarUsuario(correo);
+        } catch (UsuarioNoEncontradoExcepcion e){
+            return new ResponseEntity("{\"error\": \"" + e.getMessage() + "\"}", HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity(HttpStatus.OK);
     }
 }

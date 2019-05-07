@@ -68,4 +68,10 @@ public interface UsuarioServicio {
      * @param correo Usuario a eliminar
      */
     void eliminar(String correo);
+
+    /**
+     * Deshabilita un usuario
+     * @param correo Correo del usuario a deshabilitar
+     */
+    void deshabilitarUsuario(String correo);
 }
