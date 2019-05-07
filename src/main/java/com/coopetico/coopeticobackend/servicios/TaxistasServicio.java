@@ -4,6 +4,7 @@ import com.coopetico.coopeticobackend.entidades.TaxistaEntidadTemporal;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  Interfaz del servicio de la entidad Taxista.
@@ -40,5 +41,12 @@ public interface TaxistasServicio {
      * @param correoUsuario Id del taxista que se quiere eliminar
      */
     void eliminar(String correoUsuario);
+
+    /**
+     * Devuelve el estado del taxista
+     * @param correo Correo del taxista
+     * @return Mapa con el estado del taxista, y en caso de estar bloqueado, la justificacion
+     */
+    Map<String, Object> obtenerEstado(String correo);
 
 }

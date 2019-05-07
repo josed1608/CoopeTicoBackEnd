@@ -1,17 +1,21 @@
 package com.coopetico.coopeticobackend.servicios;
 
 import com.coopetico.coopeticobackend.entidades.*;
+import com.coopetico.coopeticobackend.excepciones.UsuarioNoEncontradoExcepcion;
 import com.coopetico.coopeticobackend.repositorios.GruposRepositorio;
 import com.coopetico.coopeticobackend.repositorios.TaxisRepositorio;
 import com.coopetico.coopeticobackend.repositorios.TaxistasRepositorio;
 import com.coopetico.coopeticobackend.repositorios.UsuariosRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 import javax.transaction.Transactional;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  Servicio de la entidad Taxista.
@@ -136,4 +140,20 @@ public class TaxistasServicioImpl implements  TaxistasServicio {
         usuarioRepositorio.deleteById(correoUsuario);
     }
 
+    /**
+     * Devuelve el estado del taxista
+     * @param correo Correo del taxista
+     * @return Mapa con el estado del taxista, y en caso de estar bloqueado, la justificacion
+     */
+    @Override
+    public  Map<String, Object> obtenerEstado(String correo) throws UsuarioNoEncontradoExcepcion {
+        if(!taxistaRepositorio.existsById(correo)){
+            throw new UsuarioNoEncontradoExcepcion("El usuario no existe.", HttpStatus.NOT_FOUND, System.currentTimeMillis());
+        }
+        TaxistaEntidad taxista = taxistaRepositorio.findById(correo).get();
+        Map<String, Object> estado = new HashMap<>();
+        estado.put("estado", taxista.isEstado());
+        estado.put("justificacion", taxista.getJustificacion());
+        return estado;
+    }
 }

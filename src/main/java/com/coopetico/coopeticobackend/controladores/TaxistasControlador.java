@@ -7,6 +7,7 @@ import com.coopetico.coopeticobackend.servicios.TokensRecuperacionContrasenaServ
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -98,6 +99,12 @@ public class TaxistasControlador {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void eliminar(@PathVariable String correoUsuario){
         taxistaServicio.eliminar(correoUsuario);
+    }
+
+    @GetMapping("taxistas/{id}/estado")
+    public ResponseEntity obtenerEstado(@PathVariable String correo){
+
+        return new ResponseEntity(HttpStatus.OK);
     }
 
 }
