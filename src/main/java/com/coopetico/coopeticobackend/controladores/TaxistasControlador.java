@@ -1,6 +1,7 @@
 package com.coopetico.coopeticobackend.controladores;
 
 import com.coopetico.coopeticobackend.entidades.TaxistaEntidadTemporal;
+import com.coopetico.coopeticobackend.excepciones.UsuarioNoEncontradoExcepcion;
 import com.coopetico.coopeticobackend.mail.EmailServiceImpl;
 import com.coopetico.coopeticobackend.servicios.TaxistasServicio;
 import com.coopetico.coopeticobackend.servicios.TokensRecuperacionContrasenaServicioImpl;
@@ -101,10 +102,19 @@ public class TaxistasControlador {
         taxistaServicio.eliminar(correoUsuario);
     }
 
-    @GetMapping("taxistas/{id}/estado")
+    /**
+     * Devuelve el estado y justificacion del taxista
+     * @param correo Correo del taxista
+     * @return Estado y justificacion del taxista
+     */
+    @GetMapping("taxistas/{correo}/estado")
     public ResponseEntity obtenerEstado(@PathVariable String correo){
+        try{
+            return new ResponseEntity(taxistaServicio.obtenerEstado(correo), HttpStatus.OK);
+        }catch (UsuarioNoEncontradoExcepcion e){
+            return new ResponseEntity(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
 
-        return new ResponseEntity(HttpStatus.OK);
     }
 
 }
