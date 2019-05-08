@@ -90,6 +90,10 @@ public class TaxistasControladorIntegrationTest {
         Assert.assertTrue(entidadRetornada.getPkCorreoUsuario().equals("taxista1@taxista.com"));
     }
 
+    /**
+     * Prueba la respuesta del endpoint taxistas/{id}/estado cuando el taxista no esta suspendido.
+     * @throws Exception
+     */
     @Test
     public void testObtenerEstadoNoSuspendido() throws Exception{
         final String resultado = mockMvc.perform(get("/taxistas/taxistaNoSuspendido@taxista.com/estado"))
@@ -103,6 +107,10 @@ public class TaxistasControladorIntegrationTest {
         assertTrue(result.get("justificacion").equals(""));
     }
 
+    /**
+     * Prueba la respuesta del endpoint taxistas/{id}/estado cuando el taxista esta suspendido.
+     * @throws Exception
+     */
     @Test
     public void testObtenerEstadoSuspendido() throws Exception{
         final String resultado = mockMvc.perform(get("/taxistas/taxistaSuspendido@taxista.com/estado"))
@@ -116,6 +124,10 @@ public class TaxistasControladorIntegrationTest {
         assertTrue(result.get("justificacion").equals("Cobro de más a un cliente"));
     }
 
+    /**
+     * Prueba la respuesta del endpoint taxistas/{id}/estado cuando el taxista no existe.
+     * @throws Exception
+     */
     @Test
     public void testObtenerEstadoCorreoNoExistente() throws Exception{
         final String resultado = mockMvc.perform(get("/taxistas/noExiste@taxista.com/estado"))
