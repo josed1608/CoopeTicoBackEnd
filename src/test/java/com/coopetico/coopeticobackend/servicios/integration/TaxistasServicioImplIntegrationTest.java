@@ -78,16 +78,10 @@ public class TaxistasServicioImplIntegrationTest {
         Map<String, Object> estado = taxistasServicio.obtenerEstado("taxista1@taxista.com");
         // Verifica que exista el campo justificación
         assertTrue(estado.containsKey("justificacion"));
-        // Verifica que exista el campo correo
-        assertTrue(estado.containsKey("correo"));
         // Verifica que exista el campo estado
         assertTrue(estado.containsKey("estado"));
-        // Verifica que el correo no se nulo
-        assertNotNull(estado.get("correo"));
         // Verifica que el estado no se nulo
         assertNotNull(estado.get("estado"));
-        // Verifica que el correo no se nulo
-        assertTrue(estado.get("correo").equals("taxista1@taxista.com"));
     }
 
     // Kevin Jiménez
