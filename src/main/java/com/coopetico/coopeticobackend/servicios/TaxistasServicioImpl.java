@@ -1,10 +1,7 @@
 package com.coopetico.coopeticobackend.servicios;
 
 import com.coopetico.coopeticobackend.entidades.*;
-import com.coopetico.coopeticobackend.repositorios.GruposRepositorio;
-import com.coopetico.coopeticobackend.repositorios.TaxisRepositorio;
-import com.coopetico.coopeticobackend.repositorios.TaxistasRepositorio;
-import com.coopetico.coopeticobackend.repositorios.UsuariosRepositorio;
+import com.coopetico.coopeticobackend.repositorios.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -47,6 +44,12 @@ public class TaxistasServicioImpl implements  TaxistasServicio {
      */
     @Autowired
     private TaxisRepositorio taxiRepositorio;
+
+    /**
+     * Repositorio de conduce.
+     */
+    @Autowired
+    private ConduceRepositorio conduceRepositorio;
 
     /**
      * Id del grupo de Taxistas.
@@ -138,7 +141,7 @@ public class TaxistasServicioImpl implements  TaxistasServicio {
         if (nuevo){
             this.usuarioRepositorio.save(taxistaEntidad.getUsuarioByPkCorreoUsuario());
         }
-        //Se agregan los taxis que conduce
+        //Se agregan los taxis que conduce a la tabla conduce y se agregan a la entidad a guardar
         Collection<ConduceEntidad> taxisConducidos = new ArrayList<ConduceEntidad>();
         for(String pkPlacaTaxi: taxistaEntidadTemporal.getSiConduce()){
             ConduceEntidadPK conduceEntidadPK = new ConduceEntidadPK(taxistaEntidad.getPkCorreoUsuario(), pkPlacaTaxi);
@@ -146,12 +149,13 @@ public class TaxistasServicioImpl implements  TaxistasServicio {
             TaxiEntidad taxiConducido = this.taxiRepositorio.findById(pkPlacaTaxi).orElse(null);
             ConduceEntidad conduce = new ConduceEntidad(conduceEntidadPK, taxistaConduce, taxiConducido);
             taxisConducidos.add(conduce);
+            this.conduceRepositorio.save(conduce);
         }
         taxistaEntidad.setTaxisConducidos(taxisConducidos);
         //Se guardan los datos.
         TaxistaEntidad retornoSave = taxistaRepositorio.save(taxistaEntidad);
         //Sacar los taxis que puede conducir ese taxisa
-        List<String> siConduce = taxisConduce(taxistaEntidad.getTaxisConducidos());
+        List<String> siConduce = taxisConduce(retornoSave.getTaxisConducidos());
         //Sacar los taxis que no puede conducir ese taxista
         List<String> noConduce = taxisNoConduce(siConduce);
         return new TaxistaEntidadTemporal(retornoSave, siConduce, noConduce);
