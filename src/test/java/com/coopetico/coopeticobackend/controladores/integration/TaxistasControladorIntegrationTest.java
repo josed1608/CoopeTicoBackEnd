@@ -20,10 +20,16 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import javax.transaction.Transactional;
+import java.util.HashMap;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
 /**
@@ -59,7 +65,7 @@ public class TaxistasControladorIntegrationTest {
     @Transactional
     public void testConsultar() throws Exception {
         //Se hace la consulta al controlador
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/taxistas/taxistas").accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
+        MvcResult mvcResult = mockMvc.perform(get("/taxistas/taxistas").accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
         //Verificar que respondio
         int status = mvcResult.getResponse().getStatus();
         assertEquals(200, status);
@@ -82,5 +88,42 @@ public class TaxistasControladorIntegrationTest {
         assertNotNull(entidadRetornada);
         //Se compara que sea el taxista solicitado
         Assert.assertTrue(entidadRetornada.getPkCorreoUsuario().equals("taxista1@taxista.com"));
+    }
+
+    @Test
+    public void testObtenerEstadoNoSuspendido() throws Exception{
+        final String resultado = mockMvc.perform(get("/taxistas/taxistaNoSuspendido@taxista.com/estado"))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+        HashMap<String,Object> result =
+                new ObjectMapper().readValue(resultado, HashMap.class);
+        assertTrue(result.containsKey("estado"));
+        assertTrue(result.containsKey("justificacion"));
+        assertTrue(result.get("estado").equals(true));
+        assertTrue(result.get("justificacion").equals(""));
+    }
+
+    @Test
+    public void testObtenerEstadoSuspendido() throws Exception{
+        final String resultado = mockMvc.perform(get("/taxistas/taxistaSuspendido@taxista.com/estado"))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+        HashMap<String,Object> result =
+                new ObjectMapper().readValue(resultado, HashMap.class);
+        assertTrue(result.containsKey("estado"));
+        assertTrue(result.containsKey("justificacion"));
+        assertTrue(result.get("estado").equals(false));
+        assertTrue(result.get("justificacion").equals("Cobro de más a un cliente"));
+    }
+
+    @Test
+    public void testObtenerEstadoCorreoNoExistente() throws Exception{
+        final String resultado = mockMvc.perform(get("/taxistas/noExiste@taxista.com/estado"))
+                .andExpect(status().isNotFound())
+                .andReturn().getResponse().getContentAsString();
+        HashMap<String,Object> result =
+                new ObjectMapper().readValue(resultado, HashMap.class);
+        assertTrue(result.containsKey("error"));
+        assertTrue(result.get("error").equals("El usuario no existe."));
     }
 }

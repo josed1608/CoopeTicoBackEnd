@@ -75,7 +75,7 @@ public class TaxistasServicioImplIntegrationTest {
     @Test
     public void testObtenerEstadoCorreoValido() {
         // Solicita un mapa con la información sobre el estado
-        Map<String, Object> estado = taxistasServicio.obtenerEstado("taxista1@taxista.com");
+        Map<String, Object> estado = taxistasServicio.obtenerEstado("taxistaNoSuspendido@taxista.com");
         // Verifica que exista el campo justificación
         assertTrue(estado.containsKey("justificacion"));
         // Verifica que exista el campo estado
