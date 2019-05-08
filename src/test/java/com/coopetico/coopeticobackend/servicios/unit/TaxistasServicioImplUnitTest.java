@@ -149,7 +149,7 @@ public class TaxistasServicioImplUnitTest {
         assertTrue(entidadRetornada.getPkCorreoUsuario().equals("taxistaMoka1@coopetico.com"));
     }
 
-
+    // Kevin Jiménez
     /**
      * Prueba que se devuelva el mapa de forma correcta con un usuario no supendido
      */
@@ -182,6 +182,7 @@ public class TaxistasServicioImplUnitTest {
         assertTrue(estado.get("justificacion").equals(""));
     }
 
+    // Kevin Jiménez
     /**
      * Prueba que se devuelva el mapa de forma correcta con un usuario supendido
      */

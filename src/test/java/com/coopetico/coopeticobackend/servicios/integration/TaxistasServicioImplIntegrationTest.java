@@ -73,7 +73,7 @@ public class TaxistasServicioImplIntegrationTest {
      * Verifica que se devuelva un mapa con los datos del estado
      */
     @Test
-    public void testObtenerEstadoCorreoValido() {
+    public void testObtenerEstadoNoSuspendido() {
         // Solicita un mapa con la información sobre el estado
         Map<String, Object> estado = taxistasServicio.obtenerEstado("taxistaNoSuspendido@taxista.com");
         // Verifica que exista el campo justificación
@@ -81,7 +81,27 @@ public class TaxistasServicioImplIntegrationTest {
         // Verifica que exista el campo estado
         assertTrue(estado.containsKey("estado"));
         // Verifica que el estado no se nulo
-        assertNotNull(estado.get("estado"));
+        assertTrue(estado.get("estado").equals(true));
+    }
+
+    // Kevin Jiménez
+    /**
+     * Verifica que se devuelva un mapa con los datos del estado
+     */
+    @Test
+    public void testObtenerEstadoSuspendido() {
+        // Solicita un mapa con la información sobre el estado
+        Map<String, Object> estado = taxistasServicio.obtenerEstado("taxistaSuspendido@taxista.com");
+        // Verifica que exista el campo justificación
+        assertTrue(estado.containsKey("justificacion"));
+        // Verifica que exista el campo estado
+        assertTrue(estado.containsKey("estado"));
+        // Verifica que el estado no se nulo
+        assertTrue(estado.get("estado").equals(false));
+        // Verifica que exista el campo estado
+        assertTrue(estado.containsKey("justificacion"));
+        // Verifica que el estado no se nulo
+        assertTrue(estado.get("justificacion").equals("Cobro de más a un cliente"));
     }
 
     // Kevin Jiménez
