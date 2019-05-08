@@ -140,6 +140,7 @@ public class TaxistasServicioImpl implements  TaxistasServicio {
         usuarioRepositorio.deleteById(correoUsuario);
     }
 
+    // Kevin Jiménez
     /**
      * Devuelve el estado del taxista
      * @param correo Correo del taxista

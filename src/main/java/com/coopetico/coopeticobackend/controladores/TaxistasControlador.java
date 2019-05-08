@@ -102,6 +102,7 @@ public class TaxistasControlador {
         taxistaServicio.eliminar(correoUsuario);
     }
 
+    // Kevin Jiménez
     /**
      * Devuelve el estado y justificacion del taxista
      * @param correo Correo del taxista
