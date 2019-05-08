@@ -154,6 +154,7 @@ public class TaxistasServicioImpl implements  TaxistasServicio {
         Map<String, Object> estado = new HashMap<>();
         estado.put("estado", taxista.isEstado());
         estado.put("justificacion", taxista.getJustificacion());
+        estado.put("correo", correo);
         return estado;
     }
 }
