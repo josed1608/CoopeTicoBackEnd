@@ -3,8 +3,8 @@
 package com.coopetico.coopeticobackend.servicios;
 //-----------------------------------------------------------------------------
 // Imports.
-import com.coopetico.coopeticobackend.entidades.ViajeEntidad;
-import com.coopetico.coopeticobackend.entidades.ViajeEntidadPK;
+import com.coopetico.coopeticobackend.entidades.bd.ViajeEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.ViajeEntidadPK;
 import com.coopetico.coopeticobackend.repositorios.ViajesRepositorio;
 
 import org.springframework.beans.factory.annotation.Autowired;

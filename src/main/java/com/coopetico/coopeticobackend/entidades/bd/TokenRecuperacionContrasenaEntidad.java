@@ -1,4 +1,4 @@
-package com.coopetico.coopeticobackend.entidades;
+package com.coopetico.coopeticobackend.entidades.bd;
 
 import javax.persistence.*;
 import java.sql.Timestamp;

@@ -7,7 +7,7 @@ package com.coopetico.coopeticobackend.servicios;
  @version:    1.0
  */
 
-import com.coopetico.coopeticobackend.entidades.PermisoEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.PermisoEntidad;
 import java.util.List;
 
 public interface PermisosServicio {
