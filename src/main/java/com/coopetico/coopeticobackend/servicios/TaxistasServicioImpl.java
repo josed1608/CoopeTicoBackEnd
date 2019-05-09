@@ -121,6 +121,7 @@ public class TaxistasServicioImpl implements  TaxistasServicio {
         if (taxistaEntidad == null){
             taxistaEntidad = new TaxistaEntidad();
             taxistaEntidad.setUsuarioByPkCorreoUsuario(new UsuarioEntidad());
+            taxistaEntidad.getUsuarioByPkCorreoUsuario().setContrasena("$2a$10$gJ0hUnsEvTp5zyBVo19IHe.GoYKkL3Wy268wGJxG5.k.tUFhSUify");
             nuevo = true;
         }
         taxistaEntidad.setPkCorreoUsuario(taxistaEntidadTemporal.getPkCorreoUsuario());
@@ -134,12 +135,18 @@ public class TaxistasServicioImpl implements  TaxistasServicio {
         taxistaEntidad.getUsuarioByPkCorreoUsuario().setApellido2(taxistaEntidadTemporal.getApellido2());
         taxistaEntidad.getUsuarioByPkCorreoUsuario().setTelefono(taxistaEntidadTemporal.getTelefono());
         taxistaEntidad.getUsuarioByPkCorreoUsuario().setFoto(taxistaEntidadTemporal.getFoto());
-        taxistaEntidad.getUsuarioByPkCorreoUsuario().setContrasena("$2a$10$gJ0hUnsEvTp5zyBVo19IHe.GoYKkL3Wy268wGJxG5.k.tUFhSUify");
         //Se agrega el grupo del taxista
         GrupoEntidad grupoTaxista = this.gruposRepositorio.findById(this.idGrupoTaxista).orElse(null);
         taxistaEntidad.getUsuarioByPkCorreoUsuario().setGrupoByIdGrupo(grupoTaxista);
         if (nuevo){
             this.usuarioRepositorio.save(taxistaEntidad.getUsuarioByPkCorreoUsuario());
+        }
+        //Se eliminan los taxis que no conduce ahora
+        Collection<ConduceEntidad> taxisAntesConducidos = taxistaEntidad.getTaxisConducidos();
+        for(ConduceEntidad conduce: taxisAntesConducidos){
+            if (taxistaEntidadTemporal.getNoConduce().indexOf(conduce.getConduceEntidadPK().getPkPlacaTaxi()) != -1) {
+                this.conduceRepositorio.delete(conduce);
+            }
         }
         //Se agregan los taxis que conduce a la tabla conduce y se agregan a la entidad a guardar
         Collection<ConduceEntidad> taxisConducidos = new ArrayList<ConduceEntidad>();
