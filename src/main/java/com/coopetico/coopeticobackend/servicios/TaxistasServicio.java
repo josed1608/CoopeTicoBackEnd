@@ -1,9 +1,12 @@
 package com.coopetico.coopeticobackend.servicios;
 
+import com.coopetico.coopeticobackend.entidades.TaxistaEntidad;
 import com.coopetico.coopeticobackend.entidades.TaxistaEntidadTemporal;
+import com.coopetico.coopeticobackend.entidades.UsuarioEntidad;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  Interfaz del servicio de la entidad Taxista.
@@ -34,6 +37,13 @@ public interface TaxistasServicio {
      * @return Taxista solicitado.
      */
     TaxistaEntidadTemporal consultarPorId(String correoUsuario);
+
+    /**
+     * Encuentra un usuario por correo     *
+     * @param correo correo del usuario que se va a buscar
+     * @return retorna el usuario en un Optional para poder aplicar lógica en caso de que no lo encuentre
+     */
+    Optional<TaxistaEntidad> taxistaPorCorreo(String correo);
 
     /**
      * Funcion que retorna el taxista que indican en el parametro.
