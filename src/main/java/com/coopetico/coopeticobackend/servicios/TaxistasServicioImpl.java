@@ -148,11 +148,11 @@ public class TaxistasServicioImpl implements  TaxistasServicio {
         usuarioRepositorio.deleteById(correoUsuario);
     }
 
-    // Kevin Jiménez
     /**
      * Devuelve el estado del taxista
      * @param correo Correo del taxista
      * @return Mapa con el estado del taxista, y en caso de estar bloqueado, la justificacion
+     * @author Kevin Jiménez
      */
     @Override
     public  Map<String, Object> obtenerEstado(String correo) throws UsuarioNoEncontradoExcepcion {

@@ -146,10 +146,10 @@ public class TaxistasControladorUnitTest {
         assertTrue(entidadRetornada.getPkCorreoUsuario().equals("taxistaMoka1@coopetico.com"));
     }
 
-    // Kevin Jiménez
     /**
      * Prueba la respuesta del endpoint taxistas/{id}/estado cuando el taxista no esta suspendido.
      * @throws Exception
+     * @author Kevin Jiménez
      */
     @Test
     public void testObtenerEstadoNoSuspendido() throws Exception{
@@ -170,10 +170,10 @@ public class TaxistasControladorUnitTest {
         assertTrue(result.get("justificacion").equals(""));
     }
 
-    // Kevin Jiménez
     /**
      * Prueba la respuesta del endpoint taxistas/{id}/estado cuando el taxista esta suspendido.
      * @throws Exception
+     * @author Kevin Jiménez
      */
     @Test
     public void testObtenerEstadoSuspendido() throws Exception{
@@ -194,10 +194,10 @@ public class TaxistasControladorUnitTest {
         assertTrue(result.get("justificacion").equals("Cobro de más a un cliente"));
     }
 
-    // Kevin Jiménez
     /**
      * Prueba la respuesta del endpoint taxistas/{id}/estado cuando el taxista no existe.
      * @throws Exception
+     * @author Kevin Jiménez
      */
     @Test
     public void testObtenerEstadoCorreoNoExistente() throws Exception{

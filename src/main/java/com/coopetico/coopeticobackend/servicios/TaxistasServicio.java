@@ -56,6 +56,7 @@ public interface TaxistasServicio {
      * Devuelve el estado del taxista
      * @param correo Correo del taxista
      * @return Mapa con el estado del taxista, y en caso de estar bloqueado, la justificacion
+     * @author Kevin Jiménez
      */
     Map<String, Object> obtenerEstado(String correo);
 

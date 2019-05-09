@@ -204,11 +204,11 @@ public class TaxistasControlador {
         return new ResponseEntity<Resource>(recurso, cabecera, HttpStatus.OK);
     }
 
-    // Kevin Jiménez
     /**
      * Devuelve el estado y justificacion del taxista
      * @param correo Correo del taxista
      * @return Estado y justificacion del taxista
+     * @author Kevin Jiménez
      */
     @GetMapping("{correo}/estado")
     public ResponseEntity obtenerEstado(@PathVariable String correo){

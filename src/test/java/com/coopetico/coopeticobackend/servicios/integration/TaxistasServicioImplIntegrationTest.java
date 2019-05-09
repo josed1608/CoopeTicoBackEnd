@@ -68,9 +68,9 @@ public class TaxistasServicioImplIntegrationTest {
         assertTrue(entidadRetornada.getPkCorreoUsuario().equals("taxista1@taxista.com"));
     }
 
-    // Kevin Jiménez
     /**
      * Verifica que se devuelva un mapa con los datos del estado
+     * @author Kevin Jiménez
      */
     @Test
     public void testObtenerEstadoNoSuspendido() {
@@ -84,9 +84,10 @@ public class TaxistasServicioImplIntegrationTest {
         assertTrue(estado.get("estado").equals(true));
     }
 
-    // Kevin Jiménez
+
     /**
      * Verifica que se devuelva un mapa con los datos del estado
+     * @author Kevin Jiménez
      */
     @Test
     public void testObtenerEstadoSuspendido() {
