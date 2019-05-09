@@ -442,7 +442,6 @@ public class UsuarioControlador {
             return new ResponseEntity("{\"error\": \"" + e.getMessage() + "\"}", HttpStatus.NOT_FOUND);
         }
         String respuesta = Boolean.parseBoolean(valido)? "habilitado":"deshabilitado";
-        return new ResponseEntity("{\"mensaje\" : \"Se ha " + respuesta +" al usuario.\"," +
-                "\"correo\" : \""+correo+"\"}", HttpStatus.OK);
+        return new ResponseEntity("{\"mensaje\" : \"Se ha " + respuesta +" al usuario.\"}", HttpStatus.OK);
     }
 }
