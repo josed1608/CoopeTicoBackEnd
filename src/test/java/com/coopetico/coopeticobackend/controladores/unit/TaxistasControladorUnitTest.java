@@ -21,9 +21,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import static org.junit.Assert.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
@@ -138,5 +138,39 @@ public class TaxistasControladorUnitTest {
         assertNotNull(entidadRetornada);
         //Se compara que sea el taxista solicitado
         assertTrue(entidadRetornada.getPkCorreoUsuario().equals("taxistaMoka1@coopetico.com"));
+    }
+
+    /**
+     * Prueba de unidad para consultar los taxis que conduce un taxista.
+     */
+    @Test
+    public void testConsultarTaxisConduceTaxista() throws Exception {
+        // Se crea el taxista
+        TaxistaEntidadTemporal taxistaEntidad1 = new TaxistaEntidadTemporal();
+        taxistaEntidad1.setPkCorreoUsuario("taxistaMoka1@coopetico.com");
+        taxistaEntidad1.setFaltas("0");
+        taxistaEntidad1.setEstado(true);
+        taxistaEntidad1.setHojaDelincuencia(true);
+        taxistaEntidad1.setEstrellas(5);
+        taxistaEntidad1.setNombre("Taxista01");
+        taxistaEntidad1.setApellido1("apellido01");
+        taxistaEntidad1.setApellido2("apellido02");
+        taxistaEntidad1.setTelefono("11111111");
+        taxistaEntidad1.setFoto("foto");
+        // Se pide la lista que tenia antes
+        List<String> siConduce =  new ArrayList<>();
+        // Se agrega que conduce este taxi
+        siConduce.add("AAA111");
+        // Se agrega a la entidad que se va a enviar
+        taxistaEntidad1.setSiConduce(siConduce);
+        //Se le indica que caundo pregunten por ese taxista retorne la entidad anterior
+        when(taxistasServicio.consultarPorId("taxistaMoka1@coopetico.com")).thenReturn(taxistaEntidad1);
+        // Se le pide el taxista al servicio
+        TaxistaEntidadTemporal entidadRetornada = taxistasControlador.consultarPorId("taxistaMoka1@coopetico.com");
+        //Se compara que no sea nulo
+        assertNotNull(entidadRetornada);
+        //Se compara que sea el taxista solicitado
+        assertEquals(entidadRetornada.getSiConduce().size(), 1);
+
     }
 }
