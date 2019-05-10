@@ -20,15 +20,13 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import javax.transaction.Transactional;
 import java.util.HashMap;
+import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
@@ -88,6 +86,49 @@ public class TaxistasControladorIntegrationTest {
         assertNotNull(entidadRetornada);
         //Se compara que sea el taxista solicitado
         Assert.assertTrue(entidadRetornada.getPkCorreoUsuario().equals("taxista1@taxista.com"));
+    }
+
+    /**
+     * Prueba de integracion para consultar los taxis que conduce un taxista.
+     */
+    @Test
+    @Transactional
+    public void testConsultarTaxisConduceTaxista() throws Exception {
+        // Se hace la consulta al controlador
+        TaxistaEntidadTemporal entidadRetornada = taxistasControlador.consultarPorId("taxista1@taxista.com");
+        //Se compara que no sea nulo
+        assertNotNull(entidadRetornada);
+        //Se compara que sea el taxista solicitado
+        Assert.assertTrue(entidadRetornada.getSiConduce().size() == 1);
+    }
+
+    /**
+     * Prueba de integracion para agregar los taxis que conduce un taxista.
+     */
+    @Test
+    @Transactional
+    public void testAgregarTaxisConduceTaxista() throws Exception {
+        // Se hace la consulta al controlador
+        TaxistaEntidadTemporal entidadRetornada = taxistasControlador.consultarPorId("taxista1@taxista.com");
+        //Se compara que no sea nulo
+        assertNotNull(entidadRetornada);
+        //Se compara que sea el taxista solicitado
+        Assert.assertTrue(entidadRetornada.getSiConduce().size() == 1);
+        // Se pide la lista que tenia antes
+        List<String> siConduce =  entidadRetornada.getSiConduce();
+        // Se agrega que conduce este taxi
+        siConduce.add("BBB111");
+        // Se agrega a la entidad que se va a enviar
+        entidadRetornada.setSiConduce(siConduce);
+        //Se envia a guardar la entidad
+        taxistasControlador.modificar(entidadRetornada, entidadRetornada.getPkCorreoUsuario());
+        //Se consulta nuevamente el taxista para ver que conduce los 2 taxis
+        entidadRetornada = taxistasControlador.consultarPorId("taxista1@taxista.com");
+        //Se compara que no sea nulo
+        assertNotNull(entidadRetornada);
+        //Se compara que sea el taxista solicitado
+        int cantidadConduce = entidadRetornada.getSiConduce().size();
+        Assert.assertTrue( cantidadConduce == 2);
     }
 
     /**
