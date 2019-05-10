@@ -216,6 +216,8 @@ public class TaxistasControlador {
             return new ResponseEntity(taxistaServicio.obtenerEstado(correo), HttpStatus.OK);
         }catch (UsuarioNoEncontradoExcepcion e){
             return new ResponseEntity("{\"error\" : \""+e.getMessage()+"\"}", HttpStatus.NOT_FOUND);
+        } catch (Exception general){
+            return new ResponseEntity("{\"error\" : \"Ha ocurrido un error interno.\"}", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
