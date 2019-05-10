@@ -4,6 +4,7 @@ import com.coopetico.coopeticobackend.entidades.TaxistaEntidad;
 import com.coopetico.coopeticobackend.entidades.TaxistaEntidadTemporal;
 import com.coopetico.coopeticobackend.entidades.UsuarioEntidad;
 import com.coopetico.coopeticobackend.entidades.UsuarioTemporal;
+import com.coopetico.coopeticobackend.excepciones.UsuarioNoEncontradoExcepcion;
 import com.coopetico.coopeticobackend.mail.EmailServiceImpl;
 import com.coopetico.coopeticobackend.servicios.TaxistasServicio;
 import com.coopetico.coopeticobackend.servicios.TokensRecuperacionContrasenaServicioImpl;
@@ -203,4 +204,20 @@ public class TaxistasControlador {
         return new ResponseEntity<Resource>(recurso, cabecera, HttpStatus.OK);
     }
 
+    /**
+     * Devuelve el estado y justificacion del taxista
+     * @param correo Correo del taxista
+     * @return Estado y justificacion del taxista
+     * @author Kevin Jiménez
+     */
+    @GetMapping("{correo}/estado")
+    public ResponseEntity obtenerEstado(@PathVariable String correo){
+        try{
+            return new ResponseEntity(taxistaServicio.obtenerEstado(correo), HttpStatus.OK);
+        }catch (UsuarioNoEncontradoExcepcion e){
+            return new ResponseEntity("{\"error\" : \""+e.getMessage()+"\"}", HttpStatus.NOT_FOUND);
+        } catch (Exception general){
+            return new ResponseEntity("{\"error\" : \"Ha ocurrido un error interno.\"}", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

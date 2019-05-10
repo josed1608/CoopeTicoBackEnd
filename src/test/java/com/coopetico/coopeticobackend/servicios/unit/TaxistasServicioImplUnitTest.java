@@ -25,6 +25,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.context.WebApplicationContext;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -148,4 +149,69 @@ public class TaxistasServicioImplUnitTest {
         assertTrue(entidadRetornada.getPkCorreoUsuario().equals("taxistaMoka1@coopetico.com"));
     }
 
+    /**
+     * Prueba que se devuelva el mapa de forma correcta con un usuario no supendido
+     * @author Kevin Jiménez
+     */
+    @Test
+    public void testObtenerEstadoTaxistaNoSuspendido(){
+        //Primer taxista
+        UsuarioEntidad usuario = new UsuarioEntidad();
+        usuario.setNombre("Taxista1");
+        usuario.setApellido1("Apellido1");
+        usuario.setApellido2("Apellido2");
+        usuario.setPkCorreo("taxistaNoSuspendido@taxista.com");
+        usuario.setTelefono("22333322");
+        usuario.setFoto("foto");
+
+        TaxistaEntidad taxista = new TaxistaEntidad();
+        taxista.setPkCorreoUsuario("taxistaNoSuspendido@taxista.com");
+        taxista.setFaltas("0");
+        taxista.setEstado(true);
+        taxista.setHojaDelincuencia(true);
+        taxista.setEstrellas(5);
+        taxista.setJustificacion("");
+        taxista.setUsuarioByPkCorreoUsuario(usuario);
+
+        when(taxistasRepositorio.existsById("taxistaNoSuspendido@taxista.com")).thenReturn(true);
+        when(taxistasRepositorio.findById("taxistaNoSuspendido@taxista.com")).thenReturn(Optional.of(taxista));
+
+        Map<String, Object> estado = taxistasServicio.obtenerEstado("taxistaNoSuspendido@taxista.com");
+
+        assertTrue(estado.get("estado").equals(true));
+        assertTrue(estado.get("justificacion").equals(""));
+    }
+
+    /**
+     * Prueba que se devuelva el mapa de forma correcta con un usuario supendido
+     * @author Kevin Jiménez
+     */
+    @Test
+    public void testObtenerEstadoTaxistaSuspendido(){
+        //Primer taxista
+        UsuarioEntidad usuario = new UsuarioEntidad();
+        usuario.setNombre("Taxista1");
+        usuario.setApellido1("Apellido1");
+        usuario.setApellido2("Apellido2");
+        usuario.setPkCorreo("taxistaSuspendido@taxista.com");
+        usuario.setTelefono("22333322");
+        usuario.setFoto("foto");
+
+        TaxistaEntidad taxista = new TaxistaEntidad();
+        taxista.setPkCorreoUsuario("taxistaSuspendido@taxista.com");
+        taxista.setFaltas("0");
+        taxista.setEstado(false);
+        taxista.setHojaDelincuencia(true);
+        taxista.setEstrellas(5);
+        taxista.setJustificacion("Cobro de más a un cliente");
+        taxista.setUsuarioByPkCorreoUsuario(usuario);
+
+        when(taxistasRepositorio.existsById("taxistaSuspendido@taxista.com")).thenReturn(true);
+        when(taxistasRepositorio.findById("taxistaSuspendido@taxista.com")).thenReturn(Optional.of(taxista));
+
+        Map<String, Object> estado = taxistasServicio.obtenerEstado("taxistaSuspendido@taxista.com");
+
+        assertTrue(estado.get("estado").equals(false));
+        assertTrue(estado.get("justificacion").equals("Cobro de más a un cliente"));
+    }
 }

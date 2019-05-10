@@ -7,6 +7,7 @@ package com.coopetico.coopeticobackend.controladores.unit;
  */
 import com.coopetico.coopeticobackend.controladores.TaxistasControlador;
 import com.coopetico.coopeticobackend.entidades.TaxistaEntidadTemporal;
+import com.coopetico.coopeticobackend.excepciones.UsuarioNoEncontradoExcepcion;
 import com.coopetico.coopeticobackend.servicios.TaxistasServicioImpl;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,6 +16,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -22,11 +24,15 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
 /**
@@ -138,5 +144,79 @@ public class TaxistasControladorUnitTest {
         assertNotNull(entidadRetornada);
         //Se compara que sea el taxista solicitado
         assertTrue(entidadRetornada.getPkCorreoUsuario().equals("taxistaMoka1@coopetico.com"));
+    }
+
+    /**
+     * Prueba la respuesta del endpoint taxistas/{id}/estado cuando el taxista no esta suspendido.
+     * @throws Exception
+     * @author Kevin Jiménez
+     */
+    @Test
+    public void testObtenerEstadoNoSuspendido() throws Exception{
+        Map<String, Object> estado = new HashMap<>();
+        estado.put("estado", true);
+        estado.put("justificacion", "");
+
+        when(taxistasServicio.obtenerEstado("taxistaNoSuspendido@taxista.com")).thenReturn(estado);
+
+        final String resultado = mockMvc.perform(get("/taxistas/taxistaNoSuspendido@taxista.com/estado"))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+        HashMap<String,Object> result =
+                new ObjectMapper().readValue(resultado, HashMap.class);
+        assertTrue(result.containsKey("estado"));
+        assertTrue(result.containsKey("justificacion"));
+        assertTrue(result.get("estado").equals(true));
+        assertTrue(result.get("justificacion").equals(""));
+    }
+
+    /**
+     * Prueba la respuesta del endpoint taxistas/{id}/estado cuando el taxista esta suspendido.
+     * @throws Exception
+     * @author Kevin Jiménez
+     */
+    @Test
+    public void testObtenerEstadoSuspendido() throws Exception{
+        Map<String, Object> estado = new HashMap<>();
+        estado.put("estado", false);
+        estado.put("justificacion", "Cobro de más a un cliente");
+
+        when(taxistasServicio.obtenerEstado("taxistaSuspendido@taxista.com")).thenReturn(estado);
+
+        final String resultado = mockMvc.perform(get("/taxistas/taxistaSuspendido@taxista.com/estado"))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+        HashMap<String,Object> result =
+                new ObjectMapper().readValue(resultado, HashMap.class);
+        assertTrue(result.containsKey("estado"));
+        assertTrue(result.containsKey("justificacion"));
+        assertTrue(result.get("estado").equals(false));
+        assertTrue(result.get("justificacion").equals("Cobro de más a un cliente"));
+    }
+
+    /**
+     * Prueba la respuesta del endpoint taxistas/{id}/estado cuando el taxista no existe.
+     * @throws Exception
+     * @author Kevin Jiménez
+     */
+    @Test
+    public void testObtenerEstadoCorreoNoExistente() throws Exception{
+        when(taxistasServicio.obtenerEstado("noExiste@taxista.com"))
+                .thenThrow(
+                        new UsuarioNoEncontradoExcepcion(
+                                "El usuario no existe.",
+                                HttpStatus.NOT_FOUND,
+                                System.currentTimeMillis()
+                        )
+                );
+
+        final String resultado = mockMvc.perform(get("/taxistas/noExiste@taxista.com/estado"))
+                .andExpect(status().isNotFound())
+                .andReturn().getResponse().getContentAsString();
+        System.out.println(resultado);
+        HashMap<String,Object> result =
+                new ObjectMapper().readValue(resultado, HashMap.class);
+        assertTrue(result.containsKey("error"));
+        assertEquals(result.get("error"), "El usuario no existe.");
     }
 }
