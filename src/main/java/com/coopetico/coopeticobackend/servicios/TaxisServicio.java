@@ -1,6 +1,8 @@
 package com.coopetico.coopeticobackend.servicios;
 
 import com.coopetico.coopeticobackend.entidades.TaxiEntidad;
+import com.coopetico.coopeticobackend.entidades.UsuarioEntidad;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.List;

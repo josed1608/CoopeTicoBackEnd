@@ -1,6 +1,9 @@
 package com.coopetico.coopeticobackend.controladores;
 
 import com.coopetico.coopeticobackend.entidades.TaxiEntidad;
+import com.coopetico.coopeticobackend.entidades.TaxistaEntidad;
+import com.coopetico.coopeticobackend.entidades.UsuarioEntidad;
+import com.coopetico.coopeticobackend.entidades.UsuarioTemporal;
 import com.coopetico.coopeticobackend.entidades.UsuarioEntidad;
 import com.coopetico.coopeticobackend.entidades.UsuarioTemporal;
 import com.coopetico.coopeticobackend.servicios.TaxisServicio;
@@ -15,6 +18,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.net.MalformedURLException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -114,15 +124,13 @@ public class TaxisControlador {
     @PostMapping("/upload")
     public ResponseEntity<?> subirImagen(@RequestParam("archivo") MultipartFile archivo, @RequestParam("id") String id){
         Map<String, Object> response = new HashMap<>();
-//
-//        Optional<UsuarioEntidad> optionalUsuarioEntidad = usuarioServicio.usuarioPorCorreo(id);
-//        UsuarioEntidad usuarioEntidad = null;
-//        usuarioEntidad = optionalUsuarioEntidad.orElse(null);
-//        if( usuarioEntidad == null) {
-//            response.put("mensaje", "Error: no se pudo editar, el usuario ID: ".concat(id.concat(" no existe en la base de datos")));
-//            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
-//        }
-//
+
+        TaxiEntidad taxiEntidad = taxisServicio.consultarPorId(id);
+        if( taxiEntidad == null) {
+            response.put("mensaje", "Error: no se pudo editar, el taxi ID: ".concat(id.concat(" no existe en la base de datos")));
+            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+        }
+
 //        if( !archivo.isEmpty()){
 //            String nombreArchivo = UUID.randomUUID().toString()+"_" + archivo.getOriginalFilename().replace(" ","");
 //            Path rutaArchivo = Paths.get("images").resolve(nombreArchivo).toAbsolutePath();
