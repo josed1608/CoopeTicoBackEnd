@@ -16,6 +16,7 @@ public class UsuarioTemporal {
     //private String taxistaByPkCorreo;
     private String idGrupo;
 
+
     public UsuarioTemporal(){}
 
     public UsuarioTemporal(UsuarioEntidad usuarioEntidad){
