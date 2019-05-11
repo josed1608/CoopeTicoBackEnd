@@ -163,20 +163,25 @@ public class TaxistasServicioImpl implements  TaxistasServicio {
         }
         //Se eliminan los taxis que no conduce ahora
         Collection<ConduceEntidad> taxisAntesConducidos = taxistaEntidad.getTaxisConducidos();
-        for(ConduceEntidad conduce: taxisAntesConducidos){
-            if (taxistaEntidadTemporal.getNoConduce().indexOf(conduce.getConduceEntidadPK().getPkPlacaTaxi()) != -1) {
-                this.conduceRepositorio.delete(conduce);
+        if (taxisAntesConducidos != null) {
+            for (ConduceEntidad conduce : taxisAntesConducidos) {
+                if (taxistaEntidadTemporal.getNoConduce().indexOf(conduce.getConduceEntidadPK().getPkPlacaTaxi()) != -1) {
+                    this.conduceRepositorio.delete(conduce);
+                }
             }
         }
         //Se agregan los taxis que conduce a la tabla conduce y se agregan a la entidad a guardar
         Collection<ConduceEntidad> taxisConducidos = new ArrayList<ConduceEntidad>();
-        for(String pkPlacaTaxi: taxistaEntidadTemporal.getSiConduce()){
-            ConduceEntidadPK conduceEntidadPK = new ConduceEntidadPK(taxistaEntidad.getPkCorreoUsuario(), pkPlacaTaxi);
-            TaxistaEntidad taxistaConduce = this.taxistaRepositorio.findById(taxistaEntidad.getPkCorreoUsuario()).orElse(null);
-            TaxiEntidad taxiConducido = this.taxiRepositorio.findById(pkPlacaTaxi).orElse(null);
-            ConduceEntidad conduce = new ConduceEntidad(conduceEntidadPK, taxistaConduce, taxiConducido);
-            taxisConducidos.add(conduce);
-            this.conduceRepositorio.save(conduce);
+        List<String> temporalSiConduce = taxistaEntidadTemporal.getSiConduce();
+        if (temporalSiConduce != null) {
+            for (String pkPlacaTaxi : temporalSiConduce) {
+                ConduceEntidadPK conduceEntidadPK = new ConduceEntidadPK(taxistaEntidad.getPkCorreoUsuario(), pkPlacaTaxi);
+                TaxistaEntidad taxistaConduce = this.taxistaRepositorio.findById(taxistaEntidad.getPkCorreoUsuario()).orElse(null);
+                TaxiEntidad taxiConducido = this.taxiRepositorio.findById(pkPlacaTaxi).orElse(null);
+                ConduceEntidad conduce = new ConduceEntidad(conduceEntidadPK, taxistaConduce, taxiConducido);
+                taxisConducidos.add(conduce);
+                this.conduceRepositorio.save(conduce);
+            }
         }
         taxistaEntidad.setTaxisConducidos(taxisConducidos);
         //Se guardan los datos.
