@@ -29,6 +29,10 @@ public class UbicacionTaxiControlador {
     }
 
 
+    /**
+     * Metodo que simula las distintas posiciones de un taxi
+     * @return Informacion de los taxis
+     */
     public List<TaxiTemporal> getTaxis(){
         List<TaxiTemporal> taxis = new ArrayList<>();
         if (primero) {
