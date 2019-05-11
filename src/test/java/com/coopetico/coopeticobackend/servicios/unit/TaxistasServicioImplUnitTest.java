@@ -7,13 +7,13 @@ package com.coopetico.coopeticobackend.servicios.unit;
  @version:    1.0
  */
 
-import com.coopetico.coopeticobackend.entidades.TaxiEntidad;
 import com.coopetico.coopeticobackend.entidades.TaxistaEntidad;
 import com.coopetico.coopeticobackend.entidades.TaxistaEntidadTemporal;
 import com.coopetico.coopeticobackend.entidades.UsuarioEntidad;
 import com.coopetico.coopeticobackend.repositorios.TaxisRepositorio;
 import com.coopetico.coopeticobackend.repositorios.TaxistasRepositorio;
 import com.coopetico.coopeticobackend.servicios.TaxistasServicioImpl;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -156,6 +156,37 @@ public class TaxistasServicioImplUnitTest {
         assertNotNull(entidadRetornada);
         //Se compara que sea el taxista solicitado
         assertTrue(entidadRetornada.getPkCorreoUsuario().equals("taxistaMoka1@coopetico.com"));
+    }
+
+    /**
+     * Prueba de unidad para comprobar que los apellidos de un taxista esten separados desde el servicio.
+     */
+    @Test
+    public void testConsultarApellidosSeparados() throws Exception {
+        //Primer taxista
+        UsuarioEntidad usuario = new UsuarioEntidad();
+        usuario.setNombre("Taxista1");
+        usuario.setApellido1("apellido1");
+        usuario.setApellido2("apellido2");
+        usuario.setPkCorreo("taxistaMoka1@coopetico.com");
+        usuario.setTelefono("22333322");
+        usuario.setFoto("foto");
+        TaxistaEntidad taxistaEntidad1 = new TaxistaEntidad();
+        taxistaEntidad1.setPkCorreoUsuario("taxistaMoka1@coopetico.com");
+        taxistaEntidad1.setFaltas("0");
+        taxistaEntidad1.setEstado(true);
+        taxistaEntidad1.setHojaDelincuencia(true);
+        taxistaEntidad1.setEstrellas(5);
+        taxistaEntidad1.setUsuarioByPkCorreoUsuario(usuario);
+        //Se le indica al mock que cuando pregunten al repo por ese taxista que retorne ese taxista.
+        when(taxistasRepositorio.findById("taxistaMoka1@coopetico.com")).thenReturn(Optional.of(taxistaEntidad1));
+        // Se le pide el taxista al servicio
+        TaxistaEntidadTemporal entidadRetornada = taxistasServicio.consultarPorId("taxistaMoka1@coopetico.com");
+        //Se compara que no sea nulo
+        assertNotNull(entidadRetornada);
+        //Se compara ambos apellidos para ver que esten separados
+        Assert.assertEquals(entidadRetornada.getApellido1(), "apellido1");
+        Assert.assertEquals(entidadRetornada.getApellido2(), "apellido2");
     }
 
     /**
