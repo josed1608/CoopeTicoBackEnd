@@ -80,9 +80,14 @@ public class TaxistasServicioImplIntegrationTest {
         //Se compara que no sea nulo
         assertNotNull(entidadRetornada);
         //Se compara que la fecha sea la esperada
-        long respCorrecta = (long)1556679600 * 1000;
+        long respCorrecta1 = (long)1556679600 * 1000;
+        long respCorrecta2 = (long)1556690400 * 1000;
         long fecha = entidadRetornada.getVence_licencia().getTime();
-        Assert.assertEquals( fecha, respCorrecta);
+        boolean resp = false;
+        if ( fecha == respCorrecta1 || fecha == respCorrecta2 ){
+            resp = true;
+        }
+        Assert.assertTrue(resp);
     }
 
     /**
