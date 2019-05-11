@@ -160,8 +160,8 @@ public class TaxistasControladorUnitTest {
         taxistaEntidad1.setHojaDelincuencia(true);
         taxistaEntidad1.setEstrellas(5);
         taxistaEntidad1.setNombre("Taxista01");
-        taxistaEntidad1.setApellido1("apellido01");
-        taxistaEntidad1.setApellido2("apellido02");
+        taxistaEntidad1.setApellido1("apellido1");
+        taxistaEntidad1.setApellido2("apellido2");
         taxistaEntidad1.setTelefono("11111111");
         taxistaEntidad1.setFoto("foto");
         //Se le indica que cuando pregunten por ese taxista retorne la entidad anterior
