@@ -98,7 +98,7 @@ public class TaxistasControladorIntegrationTest {
         TaxistaEntidadTemporal entidadRetornada = taxistasControlador.consultarPorId("taxista1@taxista.com");
         //Se compara que no sea nulo
         assertNotNull(entidadRetornada);
-        //Se compara que sea el taxista solicitado
+        //Se compara que la fecha sea la esperada
         long respCorrecta = (long)1556679600 * 1000;
         long fecha = entidadRetornada.getVence_licencia().getTime();
         Assert.assertEquals( fecha, respCorrecta);

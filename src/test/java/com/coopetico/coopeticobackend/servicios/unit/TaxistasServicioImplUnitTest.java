@@ -175,7 +175,7 @@ public class TaxistasServicioImplUnitTest {
         TaxistaEntidadTemporal entidadRetornada = taxistasServicio.consultarPorId("taxistaMoka1@coopetico.com");
         //Se compara que no sea nulo
         assertNotNull(entidadRetornada);
-        //Se compara que sea el taxista solicitado
+        //Se compara que la fecha sea la esperada
         long respCorrecta = (long)1556679600 * 1000;
         long resp = entidadRetornada.getVence_licencia().getTime();
         assertEquals(resp, respCorrecta);
