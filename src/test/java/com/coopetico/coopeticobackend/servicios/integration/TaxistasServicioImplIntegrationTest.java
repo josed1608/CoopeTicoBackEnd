@@ -66,7 +66,28 @@ public class TaxistasServicioImplIntegrationTest {
         //Se compara que no sea nulo
         assertNotNull(entidadRetornada);
         //Se compara que sea el taxista solicitado
-        assertTrue(entidadRetornada.getPkCorreoUsuario().equals("taxista1@taxista.com"));
+        assertEquals(entidadRetornada.getPkCorreoUsuario(), "taxista1@taxista.com");
+    }
+
+    /**
+     * Prueba de integracion para consultar la fecha de vencimiento de licencia de un taxista en el servicio.
+     */
+    @Test
+    @Transactional
+    public void testConsultarVencLic() throws Exception {
+        // Se le pide el taxista al servicio
+        TaxistaEntidadTemporal entidadRetornada = taxistasServicio.consultarPorId("taxista1@taxista.com");
+        //Se compara que no sea nulo
+        assertNotNull(entidadRetornada);
+        //Se compara que la fecha sea la esperada
+        long respCorrecta1 = (long)1556679600 * 1000;
+        long respCorrecta2 = (long)1556690400 * 1000;
+        long fecha = entidadRetornada.getVence_licencia().getTime();
+        boolean resp = false;
+        if ( fecha == respCorrecta1 || fecha == respCorrecta2 ){
+            resp = true;
+        }
+        Assert.assertTrue(resp);
     }
 
     /**
