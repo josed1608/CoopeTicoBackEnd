@@ -7,7 +7,6 @@ package com.coopetico.coopeticobackend.servicios.unit;
  @version:    1.0
  */
 
-import com.coopetico.coopeticobackend.entidades.TaxiEntidad;
 import com.coopetico.coopeticobackend.entidades.TaxistaEntidad;
 import com.coopetico.coopeticobackend.entidades.TaxistaEntidadTemporal;
 import com.coopetico.coopeticobackend.entidades.UsuarioEntidad;
@@ -24,12 +23,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.context.WebApplicationContext;
+import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 
 /**
@@ -85,15 +84,12 @@ public class TaxistasServicioImplUnitTest {
         usuario1.setPkCorreo("taxistaMoka1@coopetico.com");
         usuario1.setTelefono("22333322");
         usuario1.setFoto("foto");
-        //TaxiEntidad taxi1 = new TaxiEntidad();
-        //taxi1.setPkPlaca("AAA111");
         TaxistaEntidad taxistaEntidad1 = new TaxistaEntidad();
         taxistaEntidad1.setPkCorreoUsuario("taxistaMoka1@coopetico.com");
         taxistaEntidad1.setFaltas("0");
         taxistaEntidad1.setEstado(true);
         taxistaEntidad1.setHojaDelincuencia(true);
         taxistaEntidad1.setEstrellas(5);
-        //taxistaEntidad1.setTaxiByPlacaTaxiManeja(taxi1);
         taxistaEntidad1.setUsuarioByPkCorreoUsuario(usuario1);
         //Segundo taxista
         UsuarioEntidad usuario2 = new UsuarioEntidad();
@@ -103,15 +99,12 @@ public class TaxistasServicioImplUnitTest {
         usuario2.setPkCorreo("taxistaMoka1@coopetico.com");
         usuario2.setTelefono("22333322");
         usuario2.setFoto("foto");
-        //TaxiEntidad taxi2 = new TaxiEntidad();
-        //taxi2.setPkPlaca("AAA111");
         TaxistaEntidad taxistaEntidad2 = new TaxistaEntidad();
         taxistaEntidad2.setPkCorreoUsuario("taxistaMoka1@coopetico.com");
         taxistaEntidad2.setFaltas("0");
         taxistaEntidad2.setEstado(true);
         taxistaEntidad2.setHojaDelincuencia(true);
         taxistaEntidad2.setEstrellas(5);
-        //taxistaEntidad2.setTaxiByPlacaTaxiManeja(taxi2);
         taxistaEntidad2.setUsuarioByPkCorreoUsuario(usuario2);
         // Se le indica al mock que retorne esa lista cuando consultan al repo
         List<TaxistaEntidad> entidades = Arrays.asList(taxistaEntidad1, taxistaEntidad2);
@@ -122,7 +115,7 @@ public class TaxistasServicioImplUnitTest {
         //Se compara que no sea nulo
         assertNotNull(entidadesServicio);
         //Se comprueba que contengan 2 taxistas
-        assertTrue(entidadesServicio.size() == 2);
+        assertEquals(entidadesServicio.size(), 2);
     }
 
     /**
@@ -138,15 +131,12 @@ public class TaxistasServicioImplUnitTest {
         usuario.setPkCorreo("taxistaMoka1@coopetico.com");
         usuario.setTelefono("22333322");
         usuario.setFoto("foto");
-        //TaxiEntidad taxi = new TaxiEntidad();
-        //taxi.setPkPlaca("AAA111");
         TaxistaEntidad taxistaEntidad1 = new TaxistaEntidad();
         taxistaEntidad1.setPkCorreoUsuario("taxistaMoka1@coopetico.com");
         taxistaEntidad1.setFaltas("0");
         taxistaEntidad1.setEstado(true);
         taxistaEntidad1.setHojaDelincuencia(true);
         taxistaEntidad1.setEstrellas(5);
-        //taxistaEntidad1.setTaxiByPlacaTaxiManeja(taxi);
         taxistaEntidad1.setUsuarioByPkCorreoUsuario(usuario);
         //Se le indica al mock que cuando pregunten al repo por ese taxista que retorne ese taxista.
         when(taxistasRepositorio.findById("taxistaMoka1@coopetico.com")).thenReturn(Optional.of(taxistaEntidad1));
@@ -155,7 +145,40 @@ public class TaxistasServicioImplUnitTest {
         //Se compara que no sea nulo
         assertNotNull(entidadRetornada);
         //Se compara que sea el taxista solicitado
-        assertTrue(entidadRetornada.getPkCorreoUsuario().equals("taxistaMoka1@coopetico.com"));
+        assertEquals(entidadRetornada.getPkCorreoUsuario(), "taxistaMoka1@coopetico.com");
+    }
+
+    /**
+     * Prueba de unidad para consultar la fecha de vencimiento de licencia de un taxista en el servicio.
+     */
+    @Test
+    public void testConsultarVencLic() throws Exception {
+        //Primer taxista
+        UsuarioEntidad usuario = new UsuarioEntidad();
+        usuario.setNombre("Taxista1");
+        usuario.setApellido1("Apellido1");
+        usuario.setApellido2("Apellido2");
+        usuario.setPkCorreo("taxistaMoka1@coopetico.com");
+        usuario.setTelefono("22333322");
+        usuario.setFoto("foto");
+        TaxistaEntidad taxistaEntidad1 = new TaxistaEntidad();
+        taxistaEntidad1.setPkCorreoUsuario("taxistaMoka1@coopetico.com");
+        taxistaEntidad1.setFaltas("0");
+        taxistaEntidad1.setEstado(true);
+        taxistaEntidad1.setHojaDelincuencia(true);
+        taxistaEntidad1.setEstrellas(5);
+        taxistaEntidad1.setUsuarioByPkCorreoUsuario(usuario);
+        taxistaEntidad1.setVence_licencia(new Timestamp((long)1556679600 * 1000));
+        //Se le indica al mock que cuando pregunten al repo por ese taxista que retorne ese taxista.
+        when(taxistasRepositorio.findById("taxistaMoka1@coopetico.com")).thenReturn(Optional.of(taxistaEntidad1));
+        // Se le pide el taxista al servicio
+        TaxistaEntidadTemporal entidadRetornada = taxistasServicio.consultarPorId("taxistaMoka1@coopetico.com");
+        //Se compara que no sea nulo
+        assertNotNull(entidadRetornada);
+        //Se compara que sea el taxista solicitado
+        long respCorrecta = (long)1556679600 * 1000;
+        long resp = entidadRetornada.getVence_licencia().getTime();
+        assertEquals(resp, respCorrecta);
     }
 
     /**
