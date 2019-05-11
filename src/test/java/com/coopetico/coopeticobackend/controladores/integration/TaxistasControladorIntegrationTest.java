@@ -85,7 +85,23 @@ public class TaxistasControladorIntegrationTest {
         //Se compara que no sea nulo
         assertNotNull(entidadRetornada);
         //Se compara que sea el taxista solicitado
-        Assert.assertTrue(entidadRetornada.getPkCorreoUsuario().equals("taxista1@taxista.com"));
+        Assert.assertEquals(entidadRetornada.getPkCorreoUsuario(), "taxista1@taxista.com");
+    }
+
+    /**
+     * Prueba de integracion para consultar la fecha de vencimiento de licencia de un taxista desde el controlador.
+     */
+    @Test
+    @Transactional
+    public void testConsultarVencLic() throws Exception {
+        // Se hace la consulta al controlador
+        TaxistaEntidadTemporal entidadRetornada = taxistasControlador.consultarPorId("taxista1@taxista.com");
+        //Se compara que no sea nulo
+        assertNotNull(entidadRetornada);
+        //Se compara que sea el taxista solicitado
+        long respCorrecta = (long)1556679600 * 1000;
+        long fecha = entidadRetornada.getVence_licencia().getTime();
+        Assert.assertEquals( fecha, respCorrecta);
     }
 
     /**
@@ -99,7 +115,7 @@ public class TaxistasControladorIntegrationTest {
         //Se compara que no sea nulo
         assertNotNull(entidadRetornada);
         //Se compara que sea el taxista solicitado
-        Assert.assertTrue(entidadRetornada.getSiConduce().size() == 1);
+        Assert.assertEquals(entidadRetornada.getSiConduce().size(), 1);
     }
 
     /**
@@ -113,7 +129,7 @@ public class TaxistasControladorIntegrationTest {
         //Se compara que no sea nulo
         assertNotNull(entidadRetornada);
         //Se compara que sea el taxista solicitado
-        Assert.assertTrue(entidadRetornada.getSiConduce().size() == 1);
+        Assert.assertEquals(entidadRetornada.getSiConduce().size(), 1);
         // Se pide la lista que tenia antes
         List<String> siConduce =  entidadRetornada.getSiConduce();
         // Se agrega que conduce este taxi
@@ -128,7 +144,7 @@ public class TaxistasControladorIntegrationTest {
         assertNotNull(entidadRetornada);
         //Se compara que sea el taxista solicitado
         int cantidadConduce = entidadRetornada.getSiConduce().size();
-        Assert.assertTrue( cantidadConduce == 2);
+        Assert.assertEquals( cantidadConduce, 2);
     }
 
     /**
