@@ -134,15 +134,18 @@ public class TaxistasServicioImpl implements  TaxistasServicio {
     @Override
     @Transactional
     public TaxistaEntidadTemporal guardar(TaxistaEntidadTemporal taxistaEntidadTemporal, String pkCorreoUsuario){
+        // Se asume que el taxista no es nuevo
         boolean nuevo = false;
         TaxistaEntidad taxistaEntidad = taxistaRepositorio.findById(pkCorreoUsuario)
                 .orElse(null);
+        //Caso de taxista nuevo
         if (taxistaEntidad == null){
             taxistaEntidad = new TaxistaEntidad();
             taxistaEntidad.setUsuarioByPkCorreoUsuario(new UsuarioEntidad());
             taxistaEntidad.getUsuarioByPkCorreoUsuario().setContrasena("$2a$10$gJ0hUnsEvTp5zyBVo19IHe.GoYKkL3Wy268wGJxG5.k.tUFhSUify");
             nuevo = true;
         }
+        // Se cargan los valores que vienen en el taxista del parametro
         taxistaEntidad.setPkCorreoUsuario(taxistaEntidadTemporal.getPkCorreoUsuario());
         taxistaEntidad.setFaltas(taxistaEntidadTemporal.getFaltas());
         taxistaEntidad.setEstado(taxistaEntidadTemporal.isEstado());
@@ -158,12 +161,15 @@ public class TaxistasServicioImpl implements  TaxistasServicio {
         //Se agrega el grupo del taxista
         GrupoEntidad grupoTaxista = this.gruposRepositorio.findById(this.idGrupoTaxista).orElse(null);
         taxistaEntidad.getUsuarioByPkCorreoUsuario().setGrupoByIdGrupo(grupoTaxista);
+        // Se guarda el usuario del taxista
         if (nuevo){
             this.usuarioRepositorio.save(taxistaEntidad.getUsuarioByPkCorreoUsuario());
         }
         //Se eliminan los taxis que no conduce ahora
         Collection<ConduceEntidad> taxisAntesConducidos = taxistaEntidad.getTaxisConducidos();
+        //Condicion para el caso donde el taxista no es nuevo y puede tener taxis que conduce
         if (taxisAntesConducidos != null) {
+            //Se eliminan los taxis que conduce en la tabla Conduce en caso de que se los quitaron
             for (ConduceEntidad conduce : taxisAntesConducidos) {
                 if (taxistaEntidadTemporal.getNoConduce().indexOf(conduce.getConduceEntidadPK().getPkPlacaTaxi()) != -1) {
                     this.conduceRepositorio.delete(conduce);
@@ -173,16 +179,24 @@ public class TaxistasServicioImpl implements  TaxistasServicio {
         //Se agregan los taxis que conduce a la tabla conduce y se agregan a la entidad a guardar
         Collection<ConduceEntidad> taxisConducidos = new ArrayList<ConduceEntidad>();
         List<String> temporalSiConduce = taxistaEntidadTemporal.getSiConduce();
+        //Condicion para el caso donde si se le asiganan taxis que conduce
         if (temporalSiConduce != null) {
             for (String pkPlacaTaxi : temporalSiConduce) {
+                //Se crea el pk de conduce
                 ConduceEntidadPK conduceEntidadPK = new ConduceEntidadPK(taxistaEntidad.getPkCorreoUsuario(), pkPlacaTaxi);
+                //Se busca el taxista
                 TaxistaEntidad taxistaConduce = this.taxistaRepositorio.findById(taxistaEntidad.getPkCorreoUsuario()).orElse(null);
+                //Se busca el taxi
                 TaxiEntidad taxiConducido = this.taxiRepositorio.findById(pkPlacaTaxi).orElse(null);
+                //Se crea la relación
                 ConduceEntidad conduce = new ConduceEntidad(conduceEntidadPK, taxistaConduce, taxiConducido);
+                //Se añade como taxi que conduce
                 taxisConducidos.add(conduce);
+                //Se guarda en la tabla
                 this.conduceRepositorio.save(conduce);
             }
         }
+        //Se le agregan los taxis que conduce al taxista.
         taxistaEntidad.setTaxisConducidos(taxisConducidos);
         //Se guardan los datos.
         TaxistaEntidad retornoSave = taxistaRepositorio.save(taxistaEntidad);
