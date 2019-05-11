@@ -89,6 +89,21 @@ public class TaxistasControladorIntegrationTest {
     }
 
     /**
+     * Prueba de integracion para comprobar que los apellidos de un taxista esten separados desde el controlador.
+     */
+    @Test
+    @Transactional
+    public void testConsultarApellidosSeparados() throws Exception {
+        // Se hace la consulta al controlador
+        TaxistaEntidadTemporal entidadRetornada = taxistasControlador.consultarPorId("taxista1@taxista.com");
+        //Se compara que no sea nulo
+        assertNotNull(entidadRetornada);
+        //Se compara ambos apellidos para ver que esten separados
+        Assert.assertEquals(entidadRetornada.getApellido1(), "apellido1");
+        Assert.assertEquals(entidadRetornada.getApellido2(), "apellido2");
+    }
+
+    /**
      * Prueba de integracion para consultar los taxis que conduce un taxista.
      */
     @Test
