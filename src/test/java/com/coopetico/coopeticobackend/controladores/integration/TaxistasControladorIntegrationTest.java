@@ -71,7 +71,7 @@ public class TaxistasControladorIntegrationTest {
         String contenido = mvcResult.getResponse().getContentAsString();
         ObjectMapper objectMapper = new ObjectMapper();
         TaxistaEntidadTemporal[] taxista = objectMapper.readValue(contenido, TaxistaEntidadTemporal[].class);
-        assertEquals(taxista.length,2);
+        assertEquals(taxista.length,4);
     }
 
     /**

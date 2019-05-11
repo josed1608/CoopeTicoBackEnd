@@ -11,6 +11,7 @@ import com.coopetico.coopeticobackend.entidades.TaxiEntidad;
 import com.coopetico.coopeticobackend.entidades.TaxistaEntidad;
 import com.coopetico.coopeticobackend.entidades.TaxistaEntidadTemporal;
 import com.coopetico.coopeticobackend.entidades.UsuarioEntidad;
+import com.coopetico.coopeticobackend.repositorios.TaxisRepositorio;
 import com.coopetico.coopeticobackend.repositorios.TaxistasRepositorio;
 import com.coopetico.coopeticobackend.servicios.TaxistasServicioImpl;
 import org.junit.Before;
@@ -43,11 +44,18 @@ public class TaxistasServicioImplUnitTest {
      */
     @Autowired
     protected WebApplicationContext wac;
+
     /**
      * Repositorio de taxistas.
      */
     @MockBean
     TaxistasRepositorio taxistasRepositorio;
+
+    /**
+     * Repositorio de taxis.
+     */
+    @MockBean
+    TaxisRepositorio taxisRepositorio;
 
     /**
      * Servicio de taxistas.
@@ -108,6 +116,7 @@ public class TaxistasServicioImplUnitTest {
         // Se le indica al mock que retorne esa lista cuando consultan al repo
         List<TaxistaEntidad> entidades = Arrays.asList(taxistaEntidad1, taxistaEntidad2);
         when(taxistasRepositorio.findAll()).thenReturn(entidades);
+        when(taxisRepositorio.findAll()).thenReturn(null);
         // Se piden los taxistas al servicio
         List<TaxistaEntidadTemporal> entidadesServicio = taxistasServicio.consultar();
         //Se compara que no sea nulo

@@ -73,8 +73,10 @@ public class TaxistasServicioImpl implements  TaxistasServicio {
      */
     public List<String> taxisConduce(Collection<ConduceEntidad> taxisSiConduce){
         List<String> siConduce = new ArrayList();
-        for(ConduceEntidad taxi : taxisSiConduce){
-            siConduce.add(taxi.getTaxiConducido().getPkPlaca());
+        if (taxisSiConduce != null) {
+            for (ConduceEntidad taxi : taxisSiConduce) {
+                siConduce.add(taxi.getTaxiConducido().getPkPlaca());
+            }
         }
         return siConduce;
     }
@@ -87,9 +89,11 @@ public class TaxistasServicioImpl implements  TaxistasServicio {
     public List<String> taxisNoConduce(List<String> siConduce){
         List<TaxiEntidad> taxis = this.taxiRepositorio.findAll();
         List<String> noConduce = new ArrayList();
-        for (TaxiEntidad taxi: taxis){
-            if(siConduce.indexOf(taxi.getPkPlaca()) == -1 ){
-                noConduce.add(taxi.getPkPlaca());
+        if (siConduce != null && taxis != null) {
+            for (TaxiEntidad taxi : taxis) {
+                if (siConduce.indexOf(taxi.getPkPlaca()) == -1) {
+                    noConduce.add(taxi.getPkPlaca());
+                }
             }
         }
         return noConduce;

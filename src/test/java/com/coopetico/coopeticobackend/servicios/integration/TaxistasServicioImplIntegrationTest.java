@@ -51,7 +51,7 @@ public class TaxistasServicioImplIntegrationTest {
         //Se compara que no sea nulo
         assertNotNull(entidadesServicio);
         //Se comprueba que contengan 1 taxistas
-        assertEquals(entidadesServicio.size(), 2);
+        assertEquals(entidadesServicio.size(), 4);
     }
 
     /**
