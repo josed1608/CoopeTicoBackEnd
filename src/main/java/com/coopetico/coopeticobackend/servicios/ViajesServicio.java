@@ -29,4 +29,26 @@ public interface ViajesServicio {
         String origen_destino,
         String correo_taxista
     );
+
+    /**
+     * Este es el método a usar para crear un viaje en el sistema.
+     * Fecha: 11/05/2019
+     *
+     * @author Joseph Rementería (b55824)
+     *
+     * @param placa la placa del taxi asignado
+     * @param fechaInicio la fecha de inicio de un viaje
+     * @param correoUsuario el correo del cliente o la operadora que solicita el viaje
+     * @param origen el punto de origen del viaje
+     * @param correoTaxista el correo del taxista asignado al viaje
+     *
+     * @return una string (TODO: find out why? xd)
+     */
+    String crear(
+        String placa,
+        Timestamp fechaInicio,
+        String correoUsuario,
+        String origen,
+        String correoTaxista
+    );
 }

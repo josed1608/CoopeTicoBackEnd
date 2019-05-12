@@ -19,9 +19,9 @@ public class ViajeDatosIniciales {
     private String placa;
     private String correoCliente;
     private Timestamp fechaInicio;
-    private String costo;
     private String origen;
     private String correoTaxista;
+    private String placaTaxi;
     //-------------------------------------------------------------------------
 
     /**
@@ -31,7 +31,6 @@ public class ViajeDatosIniciales {
      * @param placa id del carro.
      * @param correoCliente correo del pasajero.
      * @param fechaInicio fecha de inicio del viaje.
-     * @param costo monto total del viaje.
      * @param origen punto de origen y destino.
      * @param correoTaxista correo del conductor.
      */
@@ -39,16 +38,16 @@ public class ViajeDatosIniciales {
         String placa,
         String correoCliente,
         Timestamp fechaInicio,
-        String costo,
         String origen,
-        String correoTaxista
+        String correoTaxista,
+        String placaTaxi
     ) {
         this.placa = placa;
         this.correoCliente = correoCliente;
         this.fechaInicio = fechaInicio;
-        this.costo = costo;
         this.origen = origen;
         this.correoTaxista = correoTaxista;
+        this.placaTaxi = placaTaxi;
     }
 
     public ViajeDatosIniciales() {
@@ -95,20 +94,6 @@ public class ViajeDatosIniciales {
      */
     public void setFechaInicio(Timestamp fechaInicio) {
         this.fechaInicio = fechaInicio;
-    }
-
-    /**
-     * @return the costo
-     */
-    public String getCosto() {
-        return costo;
-    }
-
-    /**
-     * @param costo the costo to set
-     */
-    public void setCosto(String costo) {
-        this.costo = costo;
     }
 
     /**
