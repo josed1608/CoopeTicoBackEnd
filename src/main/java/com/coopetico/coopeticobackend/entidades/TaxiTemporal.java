@@ -1,15 +1,24 @@
 package com.coopetico.coopeticobackend.entidades;
 
+/**
+ * Clase que almacena la información de interes de un taxi
+ */
 public class TaxiTemporal {
+    // Placa del taxi
     String placa;
+    // Ubicacion latitud del taxi
     double latitud;
+    // Ubicacion longitud del taxi
     double longitud;
+    // Clase del taxi A,B,C
     String clase;
+    // Disponibilidad del taxi
     boolean disponible;
+    // Si tiene datafono mastercard el taxi
     boolean datafonoMastercard;
 
     /**
-     * Constructo de la clase
+     * Constructor de la clase
      * @param placa Identificador del taxi
      * @param latitud Ubicacion del taxis
      * @param longitud Ubicacion del taxis
