@@ -94,6 +94,4 @@ public class UsuarioServicioUnitTest {
         return usuarioEntidad;
     }
 
-
-
 }
