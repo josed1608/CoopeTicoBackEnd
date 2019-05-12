@@ -85,7 +85,43 @@ public class TaxistasControladorIntegrationTest {
         //Se compara que no sea nulo
         assertNotNull(entidadRetornada);
         //Se compara que sea el taxista solicitado
-        Assert.assertTrue(entidadRetornada.getPkCorreoUsuario().equals("taxista1@taxista.com"));
+        Assert.assertEquals(entidadRetornada.getPkCorreoUsuario(), "taxista1@taxista.com");
+    }
+
+    /**
+     * Prueba de integracion para consultar la fecha de vencimiento de licencia de un taxista desde el controlador.
+     */
+    @Test
+    @Transactional
+    public void testConsultarVencLic() throws Exception {
+        // Se hace la consulta al controlador
+        TaxistaEntidadTemporal entidadRetornada = taxistasControlador.consultarPorId("taxista1@taxista.com");
+        //Se compara que no sea nulo
+        assertNotNull(entidadRetornada);
+        //Se compara que la fecha sea la esperada
+        long respCorrecta1 = (long)1556679600 * 1000;
+        long respCorrecta2 = (long)1556690400 * 1000;
+        long fecha = entidadRetornada.getVence_licencia().getTime();
+        boolean resp = false;
+        if ( fecha == respCorrecta1 || fecha == respCorrecta2 ){
+            resp = true;
+        }
+        Assert.assertTrue(resp);
+    }
+
+    /**
+     * Prueba de integracion para comprobar que los apellidos de un taxista esten separados desde el controlador.
+     */
+    @Test
+    @Transactional
+    public void testConsultarApellidosSeparados() throws Exception {
+        // Se hace la consulta al controlador
+        TaxistaEntidadTemporal entidadRetornada = taxistasControlador.consultarPorId("taxista1@taxista.com");
+        //Se compara que no sea nulo
+        assertNotNull(entidadRetornada);
+        //Se compara ambos apellidos para ver que esten separados
+        Assert.assertEquals(entidadRetornada.getApellido1(), "apellido1");
+        Assert.assertEquals(entidadRetornada.getApellido2(), "apellido2");
     }
 
     /**
@@ -99,7 +135,7 @@ public class TaxistasControladorIntegrationTest {
         //Se compara que no sea nulo
         assertNotNull(entidadRetornada);
         //Se compara que sea el taxista solicitado
-        Assert.assertTrue(entidadRetornada.getSiConduce().size() == 1);
+        Assert.assertEquals(entidadRetornada.getSiConduce().size(), 1);
     }
 
     /**
@@ -113,7 +149,7 @@ public class TaxistasControladorIntegrationTest {
         //Se compara que no sea nulo
         assertNotNull(entidadRetornada);
         //Se compara que sea el taxista solicitado
-        Assert.assertTrue(entidadRetornada.getSiConduce().size() == 1);
+        Assert.assertEquals(entidadRetornada.getSiConduce().size(), 1);
         // Se pide la lista que tenia antes
         List<String> siConduce =  entidadRetornada.getSiConduce();
         // Se agrega que conduce este taxi
@@ -128,7 +164,7 @@ public class TaxistasControladorIntegrationTest {
         assertNotNull(entidadRetornada);
         //Se compara que sea el taxista solicitado
         int cantidadConduce = entidadRetornada.getSiConduce().size();
-        Assert.assertTrue( cantidadConduce == 2);
+        Assert.assertEquals( cantidadConduce, 2);
     }
 
     /**
