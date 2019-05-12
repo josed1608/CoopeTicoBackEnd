@@ -312,6 +312,21 @@ public class TaxistaEntidadTemporal {
         this.noConduce = noConduce;
     }
 
+    public TaxistaEntidadTemporal(TaxistaEntidad taxista){
+        this.pkCorreoUsuario = taxista.getPkCorreoUsuario();
+        this.faltas = taxista.getFaltas();
+        this.estado = taxista.isEstado();
+        this.hojaDelincuencia = taxista.isHojaDelincuencia();
+        this.estrellas = taxista.getEstrellas();
+        this.justificacion = taxista.getPkCorreoUsuario();
+        this.vence_licencia = taxista.getVence_licencia();
+        this.nombre = taxista.getUsuarioByPkCorreoUsuario().getNombre();
+        this.apellido1 = taxista.getUsuarioByPkCorreoUsuario().getApellido1();
+        this.apellido2 = taxista.getUsuarioByPkCorreoUsuario().getApellido2();
+        this.telefono = taxista.getUsuarioByPkCorreoUsuario().getTelefono();
+        this.foto = taxista.getUsuarioByPkCorreoUsuario().getFoto();
+    }
+
     /**
      * Constructor.
      */

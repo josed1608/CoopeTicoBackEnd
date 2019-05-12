@@ -6,8 +6,8 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -27,6 +27,10 @@ import java.util.logging.Logger;
  @version:   1.0
  */
 
+@CrossOrigin( origins = {"http://localhost:4200"})
+@RestController
+@RequestMapping(path="/utilidades")
+@Validated
 public class UtilidadesControlador {
 
      // private final Logger log = (Logger) LoggerFactory.getLogger(UtilidadesControlador.class);
@@ -37,6 +41,7 @@ public class UtilidadesControlador {
      * @param nombreFotoAnterior Nombre de la foto  a eliminar
      */
     public void eliminarFoto(String nombreFotoAnterior){
+        System.out.println("\n\n ELIMINAR " + nombreFotoAnterior + "\n\n");
         if( nombreFotoAnterior != null && nombreFotoAnterior.length()>0){
             Path rutaArchivoAnterior = Paths.get("images").resolve(nombreFotoAnterior).toAbsolutePath();
             File archivoFotoAnterior = rutaArchivoAnterior.toFile();
@@ -63,12 +68,13 @@ public class UtilidadesControlador {
             e.printStackTrace();
         }
 
+        assert recurso != null;
         if(!recurso.exists()&& !recurso.isReadable()){
             throw new RuntimeException("No se pudo cargar la imagen: "+ nombreFoto);
         }
 
         HttpHeaders cabecera = new HttpHeaders();
         cabecera.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename= \""+recurso.getFilename()+"\"");
-        return new ResponseEntity<Resource>(recurso, cabecera, HttpStatus.OK);
+        return new ResponseEntity<>(recurso, cabecera, HttpStatus.OK);
     }
 }
