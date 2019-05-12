@@ -1,11 +1,10 @@
 /**
- * Autor:
- * (1) Joseph Rementería (b55824).
- * <p>
- * Fecha: 06/04/2019.
- * <p>
  * Esta es la interfaz para el servicio que maneja la comunicación
  * hacia/desde la Entidad Viaje.
+ *
+ * @author Joseph Rementería (b55824)
+ * @since 06-04-2019
+ *
  */
 package com.coopetico.coopeticobackend.servicios;
 
@@ -13,11 +12,10 @@ import java.sql.Timestamp;
 
 public interface ViajesServicio {
     /**
-     * Autor: Joseph Rementería (b55824).
-     * Fecha: 06/04/2019.
-     *
      * Guarda una tupla en la base de datos.
      *
+     * @author Joseph Rementería (b55824)
+     * @since 06-04-2019
      */
     String guardar(
         String placa,
@@ -32,9 +30,9 @@ public interface ViajesServicio {
 
     /**
      * Este es el método a usar para crear un viaje en el sistema.
-     * Fecha: 11/05/2019
      *
      * @author Joseph Rementería (b55824)
+     * @since 11-05-2019
      *
      * @param placa la placa del taxi asignado
      * @param fechaInicio la fecha de inicio de un viaje

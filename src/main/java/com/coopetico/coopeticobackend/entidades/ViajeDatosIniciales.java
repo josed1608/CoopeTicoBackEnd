@@ -5,13 +5,15 @@ package com.coopetico.coopeticobackend.entidades;
 // Imports.
 import java.sql.Timestamp;
 //-----------------------------------------------------------------------------
-
 /**
- * Autor: Joseph Rementería (b55824).
- * Fecha: 10/05/2019.
- * 
  * Clase temporal previa a la creación de un viaje en la base de datos
  * viaje en la base de datos.
+ *
+ *
+ * @author Joseph Rementería (b55824)
+ * @since 10-05-2019
+ * @version 1.0
+ *
  */
 public class ViajeDatosIniciales {
     //-------------------------------------------------------------------------
@@ -21,9 +23,8 @@ public class ViajeDatosIniciales {
     private Timestamp fechaInicio;
     private String origen;
     private String correoTaxista;
-    private String placaTaxi;
     //-------------------------------------------------------------------------
-
+    // Constructor
     /**
      *
      * Constructor con todos los parámetros
@@ -39,15 +40,13 @@ public class ViajeDatosIniciales {
         String correoCliente,
         Timestamp fechaInicio,
         String origen,
-        String correoTaxista,
-        String placaTaxi
+        String correoTaxista
     ) {
         this.placa = placa;
         this.correoCliente = correoCliente;
         this.fechaInicio = fechaInicio;
         this.origen = origen;
         this.correoTaxista = correoTaxista;
-        this.placaTaxi = placaTaxi;
     }
 
     public ViajeDatosIniciales() {
@@ -125,3 +124,4 @@ public class ViajeDatosIniciales {
     }
     //-------------------------------------------------------------------------
 }
+//-------------------------------------------------------------------------

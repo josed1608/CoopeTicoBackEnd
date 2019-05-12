@@ -58,10 +58,10 @@ public class ViajesServicioImpl implements ViajesServicio {
     }
 
     /**
-     * Autor: Joseph Rementería (b55824).
-     * Fecha: 08/04/2019.
-     * <p>
      * Guarda una tupla en la base de datos.
+     *
+     * @author Joseph Rementería (b55824)
+     * @since 08-04-2019
      */
     @Override
     @Transactional
@@ -110,9 +110,8 @@ public class ViajesServicioImpl implements ViajesServicio {
      * los datos iniciales disponibles en el momento en que se cominza un
      * viaje por parte del taxista.
      *
-     * Fecha: 11/05/2019
-     *
      * @author Joseph Rementería (b55824)
+     * @since 11-05-2019
      *
      * @param placa la placa del taxi asignado
      * @param fechaInicio la fecha de inicio de un viaje
@@ -149,10 +148,9 @@ public class ViajesServicioImpl implements ViajesServicio {
                         findById(correoTaxista).orElse(null)
         );
         //---------------------------------------------------------------------
+        // Acá se referencia sea el cliente o el operador con el viaje.
         ClienteEntidad clienteCreador = this.clientesServicio
             .consultarUsuarioPorId(correoUsuario)
-            //.consultarUsuarioPorId("this_is_not_an_email@nomail.com")
-            // TODO: test this to see whether the next structure is accurate
             .getClienteByPkCorreo();
         if (clienteCreador != null) {
             viajeEnCreacion.setClienteByPkCorreoCliente(
@@ -166,7 +164,11 @@ public class ViajesServicioImpl implements ViajesServicio {
             }
         }
         //---------------------------------------------------------------------
+        // Actualización de la base de datos y "return"
         viajeEnCreacion = viajesRepositorio.save(viajeEnCreacion);
         return viajeEnCreacion.toString();
+        //---------------------------------------------------------------------
     }
+    //-------------------------------------------------------------------------
 }
+//-----------------------------------------------------------------------------
