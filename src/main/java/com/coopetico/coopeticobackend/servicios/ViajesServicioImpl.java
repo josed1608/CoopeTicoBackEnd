@@ -18,11 +18,10 @@ import java.sql.Timestamp;
 // Definición de la clase.
 @Service
 /**
- * Autor:
- * (1) Joseph Rementería (b55824).
- * Fecha: 06/04/2019.
- * <p>
  * Esta es la implentación de la intefaz ./ViajesServicio.java
+ *
+ * @author Joseph Rementería (b55824)
+ * @since 06-04-2019
  */
 public class ViajesServicioImpl implements ViajesServicio {
     //-------------------------------------------------------------------------
@@ -93,7 +92,8 @@ public class ViajesServicioImpl implements ViajesServicio {
             this.taxisServicio.consultarPorId(placa)
         );
         viajeInsertando.setTaxistaByCorreoTaxi(
-                this.taxistasServicio.taxistaRepositorio.findById(correoTaxista).orElse(null)
+                this.taxistasServicio.taxistaRepositorio.
+                    findById(correoTaxista).orElse(null)
         );
         viajeInsertando.setClienteByPkCorreoCliente(
                 this.clientesServicio
@@ -115,58 +115,67 @@ public class ViajesServicioImpl implements ViajesServicio {
      *
      * @param placa la placa del taxi asignado
      * @param fechaInicio la fecha de inicio de un viaje
-     * @param correoUsuario el correo del cliente o la operadora que solicita el viaje
+     * @param correoUsuario el correo del cliente o la operadora que
+     *                      solicita el viaje
      * @param origen el punto de origen del viaje
      * @param correoTaxista el correo del taxista asignado al viaje
      *
-     * @return una string (TODO: find out why? xd)
+     * @return  0 si no hubo problemas,
+     *          -1 si hubo un problema no manejado.
+     *          -2 si el usuario no es ni cliente ni operador,
      */
     @Override
     @Transactional
-    public String crear (
+    public int crear (
         String placa,
         Timestamp fechaInicio,
         String correoUsuario,
         String origen,
         String correoTaxista
     ) {
-        //---------------------------------------------------------------------
-        // Creación de la llave primaria para la entidad Viaje.
-        ViajeEntidadPK pk = new ViajeEntidadPK();
-        pk.setPkPlacaTaxi(placa);
-        pk.setPkFechaInicio(fechaInicio);
-        //---------------------------------------------------------------------
-        //---------------------------------------------------------------------
-        // Creación de entidad Viaje per sé.
-        ViajeEntidad viajeEnCreacion = new ViajeEntidad();
-        viajeEnCreacion.setViajeEntidadPK(pk);
-        viajeEnCreacion.setTaxiByPkPlacaTaxi(
-                this.taxisServicio.consultarPorId(placa)
-        );
-        viajeEnCreacion.setTaxistaByCorreoTaxi(
-                this.taxistasServicio.taxistaRepositorio.
-                        findById(correoTaxista).orElse(null)
-        );
-        //---------------------------------------------------------------------
-        // Acá se referencia sea el cliente o el operador con el viaje.
-        ClienteEntidad clienteCreador = this.clientesServicio
-            .consultarUsuarioPorId(correoUsuario)
-            .getClienteByPkCorreo();
-        if (clienteCreador != null) {
-            viajeEnCreacion.setClienteByPkCorreoCliente(
-                clienteCreador
+        int result = 0;
+        try {
+            //-----------------------------------------------------------------
+            // Creación de la llave primaria para la entidad Viaje.
+            ViajeEntidadPK pk = new ViajeEntidadPK();
+            pk.setPkPlacaTaxi(placa);
+            pk.setPkFechaInicio(fechaInicio);
+            //-----------------------------------------------------------------
+            //-----------------------------------------------------------------
+            // Creación de entidad Viaje per sé.
+            ViajeEntidad viajeEnCreacion = new ViajeEntidad();
+            viajeEnCreacion.setViajeEntidadPK(pk);
+            viajeEnCreacion.setTaxiByPkPlacaTaxi(
+                    this.taxisServicio.consultarPorId(placa)
             );
-        } else {
-            OperadorEntidad operadorCreador = this.operadorServicio
-                .consultarPorId(correoUsuario);
-            if (operadorCreador != null) {
-                viajeEnCreacion.setAgendaOperador(operadorCreador);
+            viajeEnCreacion.setTaxistaByCorreoTaxi(
+                    this.taxistasServicio.taxistaRepositorio.
+                            findById(correoTaxista).orElse(null)
+            );
+            //-----------------------------------------------------------------
+            // Acá se referencia sea el cliente o el operador con el viaje.
+            ClienteEntidad clienteCreador = this.clientesServicio
+                    .consultarUsuarioPorId(correoUsuario)
+                    .getClienteByPkCorreo();
+            if (clienteCreador != null) {
+                viajeEnCreacion.setClienteByPkCorreoCliente(
+                        clienteCreador
+                );
+            } else {
+                OperadorEntidad operadorCreador = this.operadorServicio
+                        .consultarPorId(correoUsuario);
+                if (operadorCreador != null) {
+                    viajeEnCreacion.setAgendaOperador(operadorCreador);
+                } else {
+                    return -2;
+                }
             }
+            //-----------------------------------------------------------------
+            viajeEnCreacion = viajesRepositorio.save(viajeEnCreacion);;
+        } catch (Exception e) {
+            result = -1;
         }
-        //---------------------------------------------------------------------
-        // Actualización de la base de datos y "return"
-        viajeEnCreacion = viajesRepositorio.save(viajeEnCreacion);
-        return viajeEnCreacion.toString();
+        return result;
         //---------------------------------------------------------------------
     }
     //-------------------------------------------------------------------------

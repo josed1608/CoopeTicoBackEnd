@@ -1,9 +1,11 @@
 //-----------------------------------------------------------------------------
 package com.coopetico.coopeticobackend.controladores;
 //-----------------------------------------------------------------------------
+import com.coopetico.coopeticobackend.entidades.ViajeDatosIniciales;
 import com.coopetico.coopeticobackend.servicios.ViajesServicio;
 import com.coopetico.coopeticobackend.entidades.ViajeTmpEntidad;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,13 +18,11 @@ import static org.springframework.http.ResponseEntity.ok;
 @Controller
 @RequestMapping(path = "/viajes")
 /**
- * Autor:
- * (1) Joseph Rementería (b55824).
- * <p>
- * Fecha: 06/04/2019.
- * <p>
  * Este es el controlador Viajes. Se encarga de la comunicación entre
  * la capa V y el M viajes.
+ *
+ * @autor Joseph Rementería (b55824)
+ * @since 06-04-2019
  **/
 public class ViajeControlador {
     //-------------------------------------------------------------------------
@@ -31,10 +31,10 @@ public class ViajeControlador {
     //-------------------------------------------------------------------------
     // Métodos.
     /**
-     * Autor: Joseph Rementería (b55824).
-     * Fecha: 06/04/2019.
-     *
      * Constructor de la clase.
+     *
+     * @author Joseph Rementería (b55824)
+     * @since 06-04-2019
      *
      * @param vjsRep repositorio de viajes ya creado
      *
@@ -45,16 +45,16 @@ public class ViajeControlador {
     }
 
     /**
-     * Autor: Joseph Rementería (b55824).
-     * Fecha: 06/04/2019.
+     * Guarda una tupla en la base de datos.
      *
-     * Gaurda una tupla en la base de datos.
+     * @author Joseph Rementería (b55824)
+     * @since 06-04-2019
      *
-     * @param viajeTempEntidad entidad dummy crada para recibir los datos 
-     * del viaje del front end
+     * @param viajeTempEntidad  entidad dummy crada para recibir los datos
+     *                          del viaje del front end
      * @return String se inserto, null de otra manera.
      */
-    @PostMapping()
+    @PostMapping("viajeCompleto")
     public ResponseEntity agregarViaje (@RequestBody ViajeTmpEntidad viajeTempEntidad) {
         try  {
             this.viajesRepositorio.guardar(
@@ -71,6 +71,59 @@ public class ViajeControlador {
         } catch (Exception e){
             return ok("error");
         }
-        
     }
+
+    /**
+     * Crea un registro en la base de datos con los datos del viaej disponibles
+     * para cuando se cominza un viaje.
+     *
+     * @author Joseph Rementería (b55824)
+     * @since 11-05-2019
+     *
+     * @param datosDelViaje todos los datos del viaje
+     * @return  Ok si no hubo problema,
+     *          Not found si el usuario que crea el viaje no existe en la DB
+     *          Server error, si el error no ha sido identificado.
+     */
+    @PostMapping()
+    public ResponseEntity crearViaje(@RequestBody ViajeDatosIniciales datosDelViaje) {
+        //---------------------------------------------------------------------
+        ResponseEntity result = null;
+        //---------------------------------------------------------------------
+        // Se intenta insertar la entidad en la base de datos
+        int respuestaRepo = this.viajesRepositorio.crear(
+            datosDelViaje.getPlaca(),
+            datosDelViaje.getFechaInicio(),
+            datosDelViaje.getCorreoCliente(),
+            datosDelViaje.getOrigen(),
+            datosDelViaje.getCorreoTaxista()
+        );
+        //---------------------------------------------------------------------
+        // Se genera la respuesta HTTP correspondiente al código de error/éxito
+        switch (respuestaRepo){
+            case 0:
+                result = new ResponseEntity(
+                        "Se insetó el viaje",
+                        HttpStatus.OK
+                );
+                break;
+            case -1:
+                result = new ResponseEntity(
+                        "Hubo un error no identificado",
+                        HttpStatus.INTERNAL_SERVER_ERROR
+                );
+                break;
+            case -2:
+                result = new ResponseEntity(
+                        "El usuario (cliente ni operador) no existe",
+                        HttpStatus.NOT_FOUND
+                );
+                break;
+        }
+        //---------------------------------------------------------------------
+        return result;
+        //---------------------------------------------------------------------
+    }
+    //-------------------------------------------------------------------------
 }
+//-----------------------------------------------------------------------------

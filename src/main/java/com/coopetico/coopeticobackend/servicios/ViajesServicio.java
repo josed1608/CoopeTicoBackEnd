@@ -42,7 +42,7 @@ public interface ViajesServicio {
      *
      * @return una string (TODO: find out why? xd)
      */
-    String crear(
+    int crear(
         String placa,
         Timestamp fechaInicio,
         String correoUsuario,
