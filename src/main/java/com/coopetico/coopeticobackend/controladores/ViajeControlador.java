@@ -64,7 +64,8 @@ public class ViajeControlador {
                 viajeTempEntidad.getFechaFin(),
                 viajeTempEntidad.getCosto(),
                 viajeTempEntidad.getEstrellas(),
-                viajeTempEntidad.getOrigenDestino(),
+                viajeTempEntidad.getOrigen(),
+                viajeTempEntidad.getDestino(),
                 viajeTempEntidad.getCorreoTaxista()
             );
             return ok("Viaje agregado");
@@ -119,6 +120,11 @@ public class ViajeControlador {
                         HttpStatus.NOT_FOUND
                 );
                 break;
+            case -3:
+                result = new ResponseEntity(
+                  "No se se pudo insertar en la base",
+                  HttpStatus.INTERNAL_SERVER_ERROR
+                );
         }
         //---------------------------------------------------------------------
         return result;

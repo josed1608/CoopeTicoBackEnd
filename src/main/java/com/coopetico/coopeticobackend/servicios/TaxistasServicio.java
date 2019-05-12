@@ -1,5 +1,6 @@
 package com.coopetico.coopeticobackend.servicios;
 
+import com.coopetico.coopeticobackend.entidades.TaxistaEntidad;
 import com.coopetico.coopeticobackend.entidades.TaxistaEntidadTemporal;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
@@ -41,4 +42,14 @@ public interface TaxistasServicio {
      */
     void eliminar(String correoUsuario);
 
+    /**
+     * Trae de la base la entidad taxista identificada al corro dado
+     *
+     * @author Joseph Rementeríá (b55824)
+     * @since 11-05-2019
+     *
+     * @param correo el correo del usuario
+     * @return la entidad si existe, null de otra manera
+     */
+    TaxistaEntidad consultarTaxistaPorId(String correo);
 }

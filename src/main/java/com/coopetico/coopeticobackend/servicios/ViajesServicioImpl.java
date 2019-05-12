@@ -3,10 +3,7 @@
 package com.coopetico.coopeticobackend.servicios;
 //-----------------------------------------------------------------------------
 // Imports.
-import com.coopetico.coopeticobackend.entidades.ClienteEntidad;
-import com.coopetico.coopeticobackend.entidades.OperadorEntidad;
-import com.coopetico.coopeticobackend.entidades.ViajeEntidad;
-import com.coopetico.coopeticobackend.entidades.ViajeEntidadPK;
+import com.coopetico.coopeticobackend.entidades.*;
 import com.coopetico.coopeticobackend.repositorios.ViajesRepositorio;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,7 +68,8 @@ public class ViajesServicioImpl implements ViajesServicio {
         Timestamp fechaFin,
         String costo,
         Integer estrellas,
-        String origenDestino,
+        String origen,
+        String destino,
         String correoTaxista
     ) {
         //---------------------------------------------------------------------
@@ -87,13 +85,13 @@ public class ViajesServicioImpl implements ViajesServicio {
         viajeInsertando.setFechaFin(fechaFin);
         viajeInsertando.setCosto(costo);
         viajeInsertando.setEstrellas(estrellas);
-        viajeInsertando.setOrigenDestino(origenDestino);
+        viajeInsertando.setOrigen(origen);
+        viajeInsertando.setDestino(destino);
         viajeInsertando.setTaxiByPkPlacaTaxi(
             this.taxisServicio.consultarPorId(placa)
         );
         viajeInsertando.setTaxistaByCorreoTaxi(
-                this.taxistasServicio.taxistaRepositorio.
-                    findById(correoTaxista).orElse(null)
+                this.taxistasServicio.consultarTaxistaPorId(correoTaxista)
         );
         viajeInsertando.setClienteByPkCorreoCliente(
                 this.clientesServicio
@@ -123,6 +121,7 @@ public class ViajesServicioImpl implements ViajesServicio {
      * @return  0 si no hubo problemas,
      *          -1 si hubo un problema no manejado.
      *          -2 si el usuario no es ni cliente ni operador,
+     *          -3 si no se pudo insertar el viaje en la base de datos,
      */
     @Override
     @Transactional
@@ -149,14 +148,14 @@ public class ViajesServicioImpl implements ViajesServicio {
                     this.taxisServicio.consultarPorId(placa)
             );
             viajeEnCreacion.setTaxistaByCorreoTaxi(
-                    this.taxistasServicio.taxistaRepositorio.
-                            findById(correoTaxista).orElse(null)
+                this.taxistasServicio.
+                    consultarTaxistaPorId(correoTaxista)
             );
+            viajeEnCreacion.setOrigen(origen);
             //-----------------------------------------------------------------
             // Acá se referencia sea el cliente o el operador con el viaje.
             ClienteEntidad clienteCreador = this.clientesServicio
-                    .consultarUsuarioPorId(correoUsuario)
-                    .getClienteByPkCorreo();
+                    .consultarClientePorId(correoUsuario);
             if (clienteCreador != null) {
                 viajeEnCreacion.setClienteByPkCorreoCliente(
                         clienteCreador
@@ -171,7 +170,11 @@ public class ViajesServicioImpl implements ViajesServicio {
                 }
             }
             //-----------------------------------------------------------------
-            viajeEnCreacion = viajesRepositorio.save(viajeEnCreacion);;
+            try {
+                viajeEnCreacion = viajesRepositorio.save(viajeEnCreacion);
+            } catch (Exception e) {
+                result = -3;
+            }
         } catch (Exception e) {
             result = -1;
         }

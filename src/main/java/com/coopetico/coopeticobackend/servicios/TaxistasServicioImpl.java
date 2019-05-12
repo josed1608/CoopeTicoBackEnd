@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
+import javax.transaction.TransactionScoped;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.ArrayList;
@@ -27,7 +28,7 @@ public class TaxistasServicioImpl implements  TaxistasServicio {
      * Repositorio de taxistas.
      */
     @Autowired
-    public TaxistasRepositorio taxistaRepositorio;
+    private TaxistasRepositorio taxistaRepositorio;
 
     /**
      * Repositorio de grupos.
@@ -136,4 +137,18 @@ public class TaxistasServicioImpl implements  TaxistasServicio {
         usuarioRepositorio.deleteById(correoUsuario);
     }
 
+    /**
+     * Trae de la base la entidad taxista identificada al corro dado
+     *
+     * @author Joseph Rementeríá (b55824)
+     * @since 11-05-2019
+     *
+     * @param correo el correo del usuario
+     * @return la entidad si existe, null de otra manera
+     */
+    @Override
+    @Transactional
+    public TaxistaEntidad consultarTaxistaPorId(String correo) {
+        return this.taxistaRepositorio.findById(correo).orElse(null);
+    }
 }
