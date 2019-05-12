@@ -118,8 +118,8 @@ public class TaxisControlador {
     /**
      * Metodo para subir imagen
      * @param archivo Archivo a subir
-     * @param id Identificador del usuario
-     * @return Respuesta correcto o incorrecto y el usuario con la foto agregada
+     * @param id Identificador del taxi
+     * @return Respuesta correcto o incorrecto y el taxi con la foto agregada
      */
     @PostMapping("/upload")
     public ResponseEntity<?> subirImagen(@RequestParam("archivo") MultipartFile archivo, @RequestParam("id") String id){
@@ -131,19 +131,19 @@ public class TaxisControlador {
             return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
         }
 
-//        if( !archivo.isEmpty()){
-//            String nombreArchivo = UUID.randomUUID().toString()+"_" + archivo.getOriginalFilename().replace(" ","");
-//            Path rutaArchivo = Paths.get("images").resolve(nombreArchivo).toAbsolutePath();
-//            log.info(rutaArchivo.toString());
-//
-//            try {
-//                Files.copy(archivo.getInputStream(), rutaArchivo);
-//            } catch (IOException e) {
-//                response.put("mensaje", "Error al subir la imagen del usuario");
-//                response.put("error", e.getMessage().concat(":").concat(e.getCause().getMessage()));
-//                return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-//            }
-//
+        if( !archivo.isEmpty()){
+            String nombreArchivo = UUID.randomUUID().toString()+"_" + archivo.getOriginalFilename().replace(" ","");
+            Path rutaArchivo = Paths.get("images").resolve(nombreArchivo).toAbsolutePath();
+            log.info(rutaArchivo.toString());
+
+            try {
+                Files.copy(archivo.getInputStream(), rutaArchivo);
+            } catch (IOException e) {
+                response.put("mensaje", "Error al subir la imagen del usuario");
+                response.put("error", e.getMessage().concat(":").concat(e.getCause().getMessage()));
+                return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+
 //            this.eliminarFoto(usuarioEntidad.getFoto());
 //
 //
@@ -151,7 +151,7 @@ public class TaxisControlador {
 //            UsuarioTemporal usuarioTemporal = new UsuarioTemporal(usuarioServicio.crearUsuario(usuarioEntidad));
 //            response.put("usuario",usuarioTemporal);
 //            response.put("mensaje", "Has subido correctamente la imagen "+nombreArchivo);
-//        }
+        }
         return new ResponseEntity<Map<String,Object>>(response, HttpStatus.CREATED);
     }
 
@@ -170,29 +170,29 @@ public class TaxisControlador {
         }
     }
 
-    /**
-     * Metodo para obtener una imagen
-     * @param nombreFoto Nombre de la imagen
-     * @return Imagen
-     */
-    @GetMapping("/uploads/img/{nombreFoto:.+}")
-    public ResponseEntity<Resource> verFoto(@PathVariable String nombreFoto){
-        Path rutaArchivo = Paths.get("images").resolve(nombreFoto).toAbsolutePath();
-        Resource recurso = null;
-
-        log.info(rutaArchivo.toString());
-        try {
-            recurso = new UrlResource(rutaArchivo.toUri());
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-
-        if(!recurso.exists()&& !recurso.isReadable()){
-            throw new RuntimeException("No se pudo cargar la imagen: "+ nombreFoto);
-        }
-
-        HttpHeaders cabecera = new HttpHeaders();
-        cabecera.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename= \""+recurso.getFilename()+"\"");
-        return new ResponseEntity<Resource>(recurso, cabecera, HttpStatus.OK);
-    }
+//    /**
+//     * Metodo para obtener una imagen
+//     * @param nombreFoto Nombre de la imagen
+//     * @return Imagen
+//     */
+//    @GetMapping("/uploads/img/{nombreFoto:.+}")
+//    public ResponseEntity<Resource> verFoto(@PathVariable String nombreFoto){
+//        Path rutaArchivo = Paths.get("images").resolve(nombreFoto).toAbsolutePath();
+//        Resource recurso = null;
+//
+//        log.info(rutaArchivo.toString());
+//        try {
+//            recurso = new UrlResource(rutaArchivo.toUri());
+//        } catch (MalformedURLException e) {
+//            e.printStackTrace();
+//        }
+//
+//        if(!recurso.exists()&& !recurso.isReadable()){
+//            throw new RuntimeException("No se pudo cargar la imagen: "+ nombreFoto);
+//        }
+//
+//        HttpHeaders cabecera = new HttpHeaders();
+//        cabecera.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename= \""+recurso.getFilename()+"\"");
+//        return new ResponseEntity<Resource>(recurso, cabecera, HttpStatus.OK);
+//    }
 }

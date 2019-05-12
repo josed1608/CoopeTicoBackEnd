@@ -59,7 +59,7 @@ public class TaxistasControlador {
     private EmailServiceImpl correoServicio;
 
 
-    private final Logger log = LoggerFactory.getLogger(UsuarioControlador.class);
+    private final Logger log = LoggerFactory.getLogger(TaxistasControlador.class);
 
     /**
      * Funcion que obtiene los taxistas existentes en el sistema.
@@ -188,16 +188,16 @@ public class TaxistasControlador {
         Path rutaArchivo = Paths.get("images").resolve(nombreFoto).toAbsolutePath();
         Resource recurso = null;
 
-        log.info(rutaArchivo.toString());
-        try {
-            recurso = new UrlResource(rutaArchivo.toUri());
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-
-        if(!recurso.exists()&& !recurso.isReadable()){
-            throw new RuntimeException("No se pudo cargar la imagen: "+ nombreFoto);
-        }
+//        log.info(rutaArchivo.toString());
+//        try {
+//            recurso = new UrlResource(rutaArchivo.toUri());
+//        } catch (MalformedURLException e) {
+//            e.printStackTrace();
+//        }
+//
+//        if(!recurso.exists()&& !recurso.isReadable()){
+//            throw new RuntimeException("No se pudo cargar la imagen: "+ nombreFoto);
+//        }
 
         HttpHeaders cabecera = new HttpHeaders();
         cabecera.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename= \""+recurso.getFilename()+"\"");

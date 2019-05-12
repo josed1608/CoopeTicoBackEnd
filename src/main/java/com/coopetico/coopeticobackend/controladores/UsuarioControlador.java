@@ -65,6 +65,7 @@ public class UsuarioControlador {
     private UsuarioTemporal usuarioTemporal;
     private final Integer TAMANIO = 4;
     private final Logger log = LoggerFactory.getLogger(UsuarioControlador.class);
+    private UtilidadesControlador utilidadesControlador;
 
     @Autowired
     public UsuarioControlador(UsuariosRepositorio usuariosRepositorio, PasswordEncoder encoder, TokensRecuperacionContrasenaServicio tokensRecuperacionContrasenaServicio, UsuarioServicio servicio, EmailServiceImpl mail) {
@@ -72,6 +73,7 @@ public class UsuarioControlador {
         this.usuariosRepositorio = usuariosRepositorio;
         this.encoder = encoder;
         this.usuarioTemporal = new UsuarioTemporal();
+        this.utilidadesControlador = new UtilidadesControlador();
         //this.tokensRecuperacionContrasenaServicio = tokensRecuperacionContrasenaServicio;
         //this.mail = mail;
     }
@@ -245,7 +247,7 @@ public class UsuarioControlador {
         Map<String, Object> response = new HashMap<>();
         try {
             UsuarioEntidad usuarioEntidad = usuarioServicio.usuarioPorCorreo(id).get();
-            this.eliminarFoto(usuarioEntidad.getFoto());
+            this.utilidadesControlador.eliminarFoto(usuarioEntidad.getFoto());
             usuarioServicio.eliminar(id);
         }catch (DataAccessException e){
             response.put("mensaje", "Error al eliminar usuario en la base de datos");
@@ -373,7 +375,7 @@ public class UsuarioControlador {
                 return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
             }
 
-            this.eliminarFoto(usuarioEntidad.getFoto());
+            this.utilidadesControlador.eliminarFoto(usuarioEntidad.getFoto());
 
 
             usuarioEntidad.setFoto(nombreArchivo);
@@ -385,43 +387,43 @@ public class UsuarioControlador {
     }
 
 
-    /**
-     * Metodo para eliminar una foto
-     * @param nombreFotoAnterior Nombre de la foto  a eliminar
-     */
-    public void eliminarFoto(String nombreFotoAnterior){
-        if( nombreFotoAnterior != null && nombreFotoAnterior.length()>0){
-            Path rutaArchivoAnterior = Paths.get("images").resolve(nombreFotoAnterior).toAbsolutePath();
-            File archivoFotoAnterior = rutaArchivoAnterior.toFile();
-            if(archivoFotoAnterior.exists() && archivoFotoAnterior.canRead()){
-                archivoFotoAnterior.delete();
-            }
-        }
-    }
-
-    /**
-     * Metodo para obtener una imagen
-     * @param nombreFoto Nombre de la imagen
-     * @return Imagen
-     */
-    @GetMapping("/uploads/img/{nombreFoto:.+}")
-    public ResponseEntity<Resource> verFoto(@PathVariable String nombreFoto){
-        Path rutaArchivo = Paths.get("images").resolve(nombreFoto).toAbsolutePath();
-        Resource recurso = null;
-
-        log.info(rutaArchivo.toString());
-        try {
-            recurso = new UrlResource(rutaArchivo.toUri());
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-
-        if(!recurso.exists()&& !recurso.isReadable()){
-            throw new RuntimeException("No se pudo cargar la imagen: "+ nombreFoto);
-        }
-
-        HttpHeaders cabecera = new HttpHeaders();
-        cabecera.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename= \""+recurso.getFilename()+"\"");
-        return new ResponseEntity<Resource>(recurso, cabecera, HttpStatus.OK);
-    }
+//    /**
+//     * Metodo para eliminar una foto
+//     * @param nombreFotoAnterior Nombre de la foto  a eliminar
+//     */
+//    public void eliminarFoto(String nombreFotoAnterior){
+//        if( nombreFotoAnterior != null && nombreFotoAnterior.length()>0){
+//            Path rutaArchivoAnterior = Paths.get("images").resolve(nombreFotoAnterior).toAbsolutePath();
+//            File archivoFotoAnterior = rutaArchivoAnterior.toFile();
+//            if(archivoFotoAnterior.exists() && archivoFotoAnterior.canRead()){
+//                archivoFotoAnterior.delete();
+//            }
+//        }
+//    }
+//
+//    /**
+//     * Metodo para obtener una imagen
+//     * @param nombreFoto Nombre de la imagen
+//     * @return Imagen
+//     */
+//    @GetMapping("/uploads/img/{nombreFoto:.+}")
+//    public ResponseEntity<Resource> verFoto(@PathVariable String nombreFoto){
+//        Path rutaArchivo = Paths.get("images").resolve(nombreFoto).toAbsolutePath();
+//        Resource recurso = null;
+//
+//        log.info(rutaArchivo.toString());
+//        try {
+//            recurso = new UrlResource(rutaArchivo.toUri());
+//        } catch (MalformedURLException e) {
+//            e.printStackTrace();
+//        }
+//
+//        if(!recurso.exists()&& !recurso.isReadable()){
+//            throw new RuntimeException("No se pudo cargar la imagen: "+ nombreFoto);
+//        }
+//
+//        HttpHeaders cabecera = new HttpHeaders();
+//        cabecera.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename= \""+recurso.getFilename()+"\"");
+//        return new ResponseEntity<Resource>(recurso, cabecera, HttpStatus.OK);
+//    }
 }

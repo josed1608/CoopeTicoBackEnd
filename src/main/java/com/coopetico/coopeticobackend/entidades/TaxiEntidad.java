@@ -19,6 +19,8 @@ public class TaxiEntidad {
     private String clase;
     private String tipo;
     private String foto;
+    private Boolean valido;
+    private String correoTaxista;
     private Timestamp fechaVenRtv;
     private Timestamp fechaVenMarchamo;
     private Timestamp fechaVenSeguro;
@@ -26,13 +28,15 @@ public class TaxiEntidad {
     private Collection<ViajeEntidad> viajesByPkPlaca;
     private Collection<ConduceEntidad> taxistasQueMeConducen;
 
-    public TaxiEntidad(String pkPlaca, Boolean datafono, String telefono, String clase, String tipo, Timestamp fechaVenRtv, Timestamp fechaVenMarchamo, Timestamp fechaVenSeguro, Collection<ViajeEntidad> viajesByPkPlaca, String foto, Collection<ConduceEntidad> taxistasQueMeConducen) {
+    public TaxiEntidad(String pkPlaca, Boolean datafono, String telefono, String clase, String tipo, Timestamp fechaVenRtv, Timestamp fechaVenMarchamo, Timestamp fechaVenSeguro, Collection<ViajeEntidad> viajesByPkPlaca, String foto, Boolean valido, String correoTaxista, Collection<ConduceEntidad> taxistasQueMeConducen) {
         this.pkPlaca = pkPlaca;
         this.datafono = datafono;
         this.telefono = telefono;
         this.clase = clase;
         this.tipo = tipo;
         this.foto = foto;
+        this.valido = valido;
+        this.correoTaxista = correoTaxista;
         this.fechaVenRtv = fechaVenRtv;
         this.fechaVenMarchamo = fechaVenMarchamo;
         this.fechaVenSeguro = fechaVenSeguro;
@@ -99,6 +103,24 @@ public class TaxiEntidad {
 
     public void setFoto(String foto) {
         this.foto = foto;
+    }
+
+    @Basic
+    @Column(name = "valido", nullable = false)
+    public Boolean getValido() { return valido; }
+
+    public void setValido(Boolean valido) {
+        this.valido = valido;
+    }
+
+    @Basic
+    @Column(name = "correo_taxista", nullable = false)
+    public String getCorreoTaxista() {
+        return correoTaxista;
+    }
+
+    public void setCorreoTaxista(String correoTaxista) {
+        this.correoTaxista = correoTaxista;
     }
 
     @Basic
