@@ -15,15 +15,19 @@ import java.util.List;
 @RestController
 @RequestMapping(path="/ubicacion")
 @Validated
+/**
+ * Clase encargada de manejar las ubicaciones de los taxis
+ */
 public class UbicacionTaxiControlador {
+    // Boolena para simular que los taxis se mueven
     boolean primero = true;
 
     /**
-     * Metodo para obtener una lista de usuarios
-     * @return Lista de usuarios
+     * Metodo para obtener una lista de taxis
+     * @return Lista de taxis
      */
     @GetMapping("/taxis")
-    public List<TaxiTemporal> obtenerUsuarios(){
+    public List<TaxiTemporal> obtenerTaxis(){
         List<TaxiTemporal> taxis = getTaxis();
         return taxis;
     }
