@@ -1,10 +1,12 @@
 package com.coopetico.coopeticobackend.controladores;
 
+import com.coopetico.coopeticobackend.entidades.TaxistaEntidadTemporal;
 import com.coopetico.coopeticobackend.entidades.bd.UsuarioEntidad;
 import com.coopetico.coopeticobackend.excepciones.InvalidJwtAuthenticationException;
 import com.coopetico.coopeticobackend.excepciones.MalasCredencialesExcepcion;
 import com.coopetico.coopeticobackend.excepciones.UsuarioNoEncontradoExcepcion;
 import com.coopetico.coopeticobackend.security.jwt.JwtTokenProvider;
+import com.coopetico.coopeticobackend.servicios.TaxistasServicio;
 import com.coopetico.coopeticobackend.servicios.UsuarioServicio;
 import com.coopetico.coopeticobackend.entidades.AuthenticationRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +17,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.springframework.http.ResponseEntity.ok;
 
@@ -36,11 +40,15 @@ public class AuthControlador {
     private final
     UsuarioServicio usuarioServicio;
 
+    private final
+    TaxistasServicio taxistasServicio;
+
     @Autowired
-    public AuthControlador(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, UsuarioServicio users) {
+    public AuthControlador(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, UsuarioServicio users, TaxistasServicio taxistasServicio) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenProvider = jwtTokenProvider;
         this.usuarioServicio = users;
+        this.taxistasServicio = taxistasServicio;
     }
 
     /**
@@ -59,7 +67,14 @@ public class AuthControlador {
             List<String> roles = usuarioServicio.obtenerPermisos(usuarioEntidad);
             String token = jwtTokenProvider.createToken(usuarioEntidad, roles);
 
-            // TODO: enviar justificacion y estado si es taxista
+            if(usuarioServicio.obtenerTipo(usuarioEntidad).equals("taxista")){
+                TaxistaEntidadTemporal taxista = taxistasServicio.consultarPorId(usuarioEntidad.getPkCorreo());
+                Map<String, String> infoTaxista = new HashMap<>();
+                infoTaxista.put("estado", taxista.isEstado() ? "true" : "false");
+                infoTaxista.put("justificacion", taxista.getJustificacion());
+                infoTaxista.put("token", token);
+                return ok(infoTaxista);
+            }
 
             return ok(token);
         } catch (AuthenticationException e) {

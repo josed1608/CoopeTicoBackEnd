@@ -83,6 +83,14 @@ public class TaxistaEntidadTemporal {
      */
     private List<String> noConduce;
 
+    public String getJustificacion() {
+        return justificacion;
+    }
+
+    public void setJustificacion(String justificacion) {
+        this.justificacion = justificacion;
+    }
+
     /**
      * Funcion que retorna el correo del taxista.
      * @return Correo del taxista.

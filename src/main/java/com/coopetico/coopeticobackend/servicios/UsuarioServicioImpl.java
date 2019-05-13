@@ -126,8 +126,14 @@ public class UsuarioServicioImpl implements UsuarioServicio{
 
     @Override
     public String obtenerTipo(UsuarioEntidad usuario) {
-
-        return null;
+        String tipo = "";
+        if (clientesRepositorio.findById(usuario.getPkCorreo()).isPresent())
+            tipo = "cliente";
+        if (taxistasRepositorio.findById(usuario.getPkCorreo()).isPresent())
+            tipo = "taxista";
+        if (operadorRepositorio.findById(usuario.getPkCorreo()).isPresent())
+            tipo = "operador";
+        return tipo;
     }
 
 
