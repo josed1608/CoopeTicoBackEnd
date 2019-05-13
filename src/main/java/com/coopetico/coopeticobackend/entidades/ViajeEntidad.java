@@ -15,8 +15,8 @@ public class ViajeEntidad {
     private Timestamp fechaFin;
     private String costo;
     private float estrellas;
-    private String origen;
-    private String destino;
+        private String origen;
+        private String destino;
     private String agendaTelefono;
     private String agendaNombre;
 
@@ -73,7 +73,7 @@ public class ViajeEntidad {
     }
 
     @Basic
-    @Column(name = "estrellas")
+    @Column(name = "estrellas", nullable = false)
     public float getEstrellas() {
         return estrellas;
     }
@@ -152,7 +152,7 @@ public class ViajeEntidad {
     }
 
     @ManyToOne
-    @JoinColumn(name = "correo_cliente", referencedColumnName = "pk_correo_usuario", nullable = false)
+    @JoinColumn(name = "fk_correo_cliente", referencedColumnName = "pk_correo_usuario", nullable = false)
     public ClienteEntidad getClienteByPkCorreoCliente() {
         return clienteByPkCorreoCliente;
     }
