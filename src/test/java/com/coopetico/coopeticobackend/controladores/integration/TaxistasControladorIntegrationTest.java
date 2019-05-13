@@ -20,15 +20,13 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import javax.transaction.Transactional;
 import java.util.HashMap;
+import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
@@ -73,7 +71,7 @@ public class TaxistasControladorIntegrationTest {
         String contenido = mvcResult.getResponse().getContentAsString();
         ObjectMapper objectMapper = new ObjectMapper();
         TaxistaEntidadTemporal[] taxista = objectMapper.readValue(contenido, TaxistaEntidadTemporal[].class);
-        assertEquals(taxista.length,2);
+        assertEquals(taxista.length,4);
     }
 
     /**
@@ -87,7 +85,86 @@ public class TaxistasControladorIntegrationTest {
         //Se compara que no sea nulo
         assertNotNull(entidadRetornada);
         //Se compara que sea el taxista solicitado
-        Assert.assertTrue(entidadRetornada.getPkCorreoUsuario().equals("taxista1@taxista.com"));
+        Assert.assertEquals(entidadRetornada.getPkCorreoUsuario(), "taxista1@taxista.com");
+    }
+
+    /**
+     * Prueba de integracion para consultar la fecha de vencimiento de licencia de un taxista desde el controlador.
+     */
+    @Test
+    @Transactional
+    public void testConsultarVencLic() throws Exception {
+        // Se hace la consulta al controlador
+        TaxistaEntidadTemporal entidadRetornada = taxistasControlador.consultarPorId("taxista1@taxista.com");
+        //Se compara que no sea nulo
+        assertNotNull(entidadRetornada);
+        //Se compara que la fecha sea la esperada
+        long respCorrecta1 = (long)1556679600 * 1000;
+        long respCorrecta2 = (long)1556690400 * 1000;
+        long fecha = entidadRetornada.getVence_licencia().getTime();
+        boolean resp = false;
+        if ( fecha == respCorrecta1 || fecha == respCorrecta2 ){
+            resp = true;
+        }
+        Assert.assertTrue(resp);
+    }
+
+    /**
+     * Prueba de integracion para comprobar que los apellidos de un taxista esten separados desde el controlador.
+     */
+    @Test
+    @Transactional
+    public void testConsultarApellidosSeparados() throws Exception {
+        // Se hace la consulta al controlador
+        TaxistaEntidadTemporal entidadRetornada = taxistasControlador.consultarPorId("taxista1@taxista.com");
+        //Se compara que no sea nulo
+        assertNotNull(entidadRetornada);
+        //Se compara ambos apellidos para ver que esten separados
+        Assert.assertEquals(entidadRetornada.getApellido1(), "apellido1");
+        Assert.assertEquals(entidadRetornada.getApellido2(), "apellido2");
+    }
+
+    /**
+     * Prueba de integracion para consultar los taxis que conduce un taxista.
+     */
+    @Test
+    @Transactional
+    public void testConsultarTaxisConduceTaxista() throws Exception {
+        // Se hace la consulta al controlador
+        TaxistaEntidadTemporal entidadRetornada = taxistasControlador.consultarPorId("taxista1@taxista.com");
+        //Se compara que no sea nulo
+        assertNotNull(entidadRetornada);
+        //Se compara que sea el taxista solicitado
+        Assert.assertEquals(entidadRetornada.getSiConduce().size(), 1);
+    }
+
+    /**
+     * Prueba de integracion para agregar los taxis que conduce un taxista.
+     */
+    @Test
+    @Transactional
+    public void testAgregarTaxisConduceTaxista() throws Exception {
+        // Se hace la consulta al controlador
+        TaxistaEntidadTemporal entidadRetornada = taxistasControlador.consultarPorId("taxista1@taxista.com");
+        //Se compara que no sea nulo
+        assertNotNull(entidadRetornada);
+        //Se compara que sea el taxista solicitado
+        Assert.assertEquals(entidadRetornada.getSiConduce().size(), 1);
+        // Se pide la lista que tenia antes
+        List<String> siConduce =  entidadRetornada.getSiConduce();
+        // Se agrega que conduce este taxi
+        siConduce.add("BBB111");
+        // Se agrega a la entidad que se va a enviar
+        entidadRetornada.setSiConduce(siConduce);
+        //Se envia a guardar la entidad
+        taxistasControlador.modificar(entidadRetornada, entidadRetornada.getPkCorreoUsuario());
+        //Se consulta nuevamente el taxista para ver que conduce los 2 taxis
+        entidadRetornada = taxistasControlador.consultarPorId("taxista1@taxista.com");
+        //Se compara que no sea nulo
+        assertNotNull(entidadRetornada);
+        //Se compara que sea el taxista solicitado
+        int cantidadConduce = entidadRetornada.getSiConduce().size();
+        Assert.assertEquals( cantidadConduce, 2);
     }
 
     /**
