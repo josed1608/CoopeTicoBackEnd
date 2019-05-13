@@ -68,4 +68,12 @@ public interface UsuarioServicio {
      * @param correo Usuario a eliminar
      */
     void eliminar(String correo);
+
+    /**
+     * Metodo para modificar un usuario en la BD
+     * @param usuarioEntidad Usuario a modificar
+     * @return Usuario modificado
+     * @author Valeria Zamora
+     */
+    UsuarioEntidad modificarUsuario(UsuarioEntidad usuarioEntidad, String correo);
 }
