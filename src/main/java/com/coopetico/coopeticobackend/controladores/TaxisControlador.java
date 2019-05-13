@@ -50,12 +50,20 @@ public class TaxisControlador {
     }
 
     /**
-     * Método para consultar todos los taxis de la base de datos
+     * Método para consultar todos los taxis válidos de la base de datos
      * @return lista de entidades de taxi
      */
     @GetMapping("/taxis")
     public List<TaxiEntidad> consultar(){
-        return taxisServicio.consultar();
+        List<TaxiEntidad> taxisValidos = new ArrayList<>();
+        List<TaxiEntidad> taxis = taxisServicio.consultar();
+
+        for (TaxiEntidad taxi : taxis){
+            if(taxi.getValido() == true){
+                taxisValidos.add(taxi);
+            }
+        }
+        return taxisValidos;
     }
 
     /**
@@ -97,6 +105,8 @@ public class TaxisControlador {
         taxiActual.setFechaVenRtv(taxi.getFechaVenRtv());
         taxiActual.setTelefono(taxi.getTelefono());
         taxiActual.setTipo(taxi.getTipo());
+        taxiActual.setCorreoTaxista(taxi.getCorreoTaxista());
+        taxiActual.setValido(taxi.getValido());
         return taxisServicio.guardar(taxiActual);
     }
 
