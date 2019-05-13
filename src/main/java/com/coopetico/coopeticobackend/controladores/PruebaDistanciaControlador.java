@@ -36,8 +36,8 @@ public class PruebaDistanciaControlador {
         LatLng destino2 = new LatLng(9.957288, -84.039617);
 
         List<Pair<String, LatLng>> taxistas = new LinkedList<>();
-        taxistas.add(new Pair<>("taxi2", destino2));
-        taxistas.add(new Pair<>("taxi1", destino1));
+        taxistas.add(Pair.of("taxi2", destino2));
+        taxistas.add(Pair.of("taxi1", destino1));
 
         try {
             return ok(distanciaServicio.taxistaMasCercano(origen, taxistas));
