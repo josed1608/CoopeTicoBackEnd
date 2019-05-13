@@ -1,6 +1,5 @@
 package com.coopetico.coopeticobackend.controladores;
 
-import com.coopetico.coopeticobackend.entidades.TaxistaEntidadTemporal;
 import com.coopetico.coopeticobackend.entidades.bd.UsuarioEntidad;
 import com.coopetico.coopeticobackend.excepciones.InvalidJwtAuthenticationException;
 import com.coopetico.coopeticobackend.excepciones.MalasCredencialesExcepcion;
@@ -17,7 +16,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -65,16 +63,15 @@ public class AuthControlador {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, data.getPassword()));
             UsuarioEntidad usuarioEntidad = this.usuarioServicio.usuarioPorCorreo(username).orElseThrow(() -> new UsuarioNoEncontradoExcepcion("Usuario " + username + " no encontrado", HttpStatus.NOT_FOUND, System.currentTimeMillis()));
             List<String> roles = usuarioServicio.obtenerPermisos(usuarioEntidad);
-            String token = jwtTokenProvider.createToken(usuarioEntidad, roles);
 
-            if(usuarioServicio.obtenerTipo(usuarioEntidad).equals("taxista")){
-                TaxistaEntidadTemporal taxista = taxistasServicio.consultarPorId(usuarioEntidad.getPkCorreo());
-                Map<String, String> infoTaxista = new HashMap<>();
-                infoTaxista.put("estado", taxista.isEstado() ? "true" : "false");
-                infoTaxista.put("justificacion", taxista.getJustificacion());
-                infoTaxista.put("token", token);
-                return ok(infoTaxista);
+            String token = "";
+            boolean esTaxista = usuarioServicio.obtenerTipo(usuarioEntidad).equals("taxista");
+            if(esTaxista){
+                Map estadoTaxista = taxistasServicio.obtenerEstado(usuarioEntidad.getPkCorreo());
+                token = jwtTokenProvider.createToken(usuarioEntidad, roles, esTaxista, (boolean)estadoTaxista.get("estado"), (String)estadoTaxista.get("justificacion"));
             }
+            else
+                token = jwtTokenProvider.createToken(usuarioEntidad, roles, false, false, null);
 
             return ok(token);
         } catch (AuthenticationException e) {

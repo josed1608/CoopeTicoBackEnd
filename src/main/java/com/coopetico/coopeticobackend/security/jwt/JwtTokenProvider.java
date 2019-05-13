@@ -51,7 +51,7 @@ public class JwtTokenProvider {
      * @param permisos lista de permisos del usuario
      * @return retorna String que representa el JWT
      */
-    public String createToken(UsuarioEntidad usuario, List<String> permisos) {
+    public String createToken(UsuarioEntidad usuario, List<String> permisos, boolean esTaxista, boolean estado, String justificacion) {
 
         Claims claims = Jwts.claims().setSubject(usuario.getPkCorreo());
         claims.put("nombre", usuario.getNombre());
@@ -61,6 +61,11 @@ public class JwtTokenProvider {
         claims.put("fotoUrl", usuario.getFoto());
         claims.put("permisos", permisos);
         claims.put("rol", usuario.getGrupoByIdGrupo().getPkId());
+
+        if(esTaxista) {
+            claims.put("estado", estado);
+            claims.put("justificacion", justificacion);
+        }
 
         Date now = new Date();
         Date validity = new Date(now.getTime() + validityInMilliseconds);

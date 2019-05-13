@@ -61,7 +61,7 @@ public class AuthControladorUnitTest {
         mockUsuario.setGrupoByIdGrupo(new GrupoEntidad("rol", null, null));
         when(usuarioService.usuarioPorCorreo(any(String.class))).thenReturn(Optional.of(mockUsuario));
         when(usuarioService.obtenerPermisos(any(UsuarioEntidad.class))).thenReturn(new LinkedList<>());
-        when(jwtTokenProvider.createToken(any(UsuarioEntidad.class), any(List.class))).thenReturn("");
+        when(jwtTokenProvider.createToken(any(UsuarioEntidad.class), any(List.class), any(boolean.class), any(boolean.class), any(String.class))).thenReturn("");
 
         //Act
         mockMvc.perform(post("/auth/signin")
