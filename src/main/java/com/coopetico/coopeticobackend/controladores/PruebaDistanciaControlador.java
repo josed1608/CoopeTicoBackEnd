@@ -15,12 +15,19 @@ import java.util.List;
 import static org.springframework.http.ResponseEntity.notFound;
 import static org.springframework.http.ResponseEntity.ok;
 
+/**
+ * Controlador para probar que el servicio de distanncia funcione de manera esperada
+ */
 @RestController
 @RequestMapping("/dist")
 public class PruebaDistanciaControlador {
     @Autowired
     private DistanciaServicio distanciaServicio;
 
+    /**
+     * Tiene un destino y un destino quemados, el taxi1 debería reconocerse como el más cercano
+     * @return el id del taxista más cercano
+     */
     @GetMapping("/test")
     public ResponseEntity testDistancia() {
         LatLng origen  = new LatLng(9.963621, -84.067743);
