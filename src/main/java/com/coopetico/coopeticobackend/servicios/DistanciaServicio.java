@@ -2,7 +2,7 @@ package com.coopetico.coopeticobackend.servicios;
 
 import com.google.maps.errors.ApiException;
 import com.google.maps.model.LatLng;
-import javafx.util.Pair;
+import org.springframework.data.util.Pair;
 
 import java.io.IOException;
 import java.util.List;

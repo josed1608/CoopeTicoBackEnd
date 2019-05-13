@@ -5,7 +5,7 @@ import com.google.maps.DistanceMatrixApiRequest;
 import com.google.maps.GeoApiContext;
 import com.google.maps.errors.ApiException;
 import com.google.maps.model.*;
-import javafx.util.Pair;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -38,7 +38,7 @@ public class DistanciaServicioImpl implements DistanciaServicio {
         // Crear una lista solo con los puntos longitudinales para poder pasárselo al API
         List<LatLng> ubicacionesTaxistas = new LinkedList<>();
         for (Pair<String, LatLng> taxista : taxistas) {
-            ubicacionesTaxistas.add(taxista.getValue());
+            ubicacionesTaxistas.add(taxista.getSecond());
         }
 
         // Hacer el request y guardar el resultado
@@ -57,7 +57,7 @@ public class DistanciaServicioImpl implements DistanciaServicio {
             if (element.distance.inMeters < minDistance){
                 minDistance = element.distance.inMeters;
                 // El orden de las entradas es el mismo al orden de la lista de taxistas ya que la lista de puntos se hizo con ese orden
-                taxistaEscogido = taxistas.get(indiceTaxista).getKey();
+                taxistaEscogido = taxistas.get(indiceTaxista).getFirst();
             }
             indiceTaxista++;
         }

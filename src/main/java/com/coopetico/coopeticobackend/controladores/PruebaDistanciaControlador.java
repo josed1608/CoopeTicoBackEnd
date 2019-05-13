@@ -2,8 +2,9 @@ package com.coopetico.coopeticobackend.controladores;
 
 import com.coopetico.coopeticobackend.servicios.DistanciaServicio;
 import com.google.maps.model.LatLng;
-import javafx.util.Pair;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,8 +36,8 @@ public class PruebaDistanciaControlador {
         LatLng destino2 = new LatLng(9.957288, -84.039617);
 
         List<Pair<String, LatLng>> taxistas = new LinkedList<>();
-        taxistas.add(new Pair<>("taxi2", destino2));
-        taxistas.add(new Pair<>("taxi1", destino1));
+        taxistas.add(Pair.of("taxi2", destino2));
+        taxistas.add(Pair.of("taxi1", destino1));
 
         try {
             return ok(distanciaServicio.taxistaMasCercano(origen, taxistas));
