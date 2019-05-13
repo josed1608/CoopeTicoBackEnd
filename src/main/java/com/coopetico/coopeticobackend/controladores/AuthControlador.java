@@ -1,6 +1,6 @@
 package com.coopetico.coopeticobackend.controladores;
 
-import com.coopetico.coopeticobackend.entidades.UsuarioEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.UsuarioEntidad;
 import com.coopetico.coopeticobackend.excepciones.InvalidJwtAuthenticationException;
 import com.coopetico.coopeticobackend.excepciones.MalasCredencialesExcepcion;
 import com.coopetico.coopeticobackend.excepciones.UsuarioNoEncontradoExcepcion;

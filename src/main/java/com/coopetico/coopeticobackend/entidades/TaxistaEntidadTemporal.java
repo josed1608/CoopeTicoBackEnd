@@ -1,5 +1,7 @@
 package com.coopetico.coopeticobackend.entidades;
 
+import com.coopetico.coopeticobackend.entidades.bd.TaxistaEntidad;
+
 import java.sql.Timestamp;
 import java.util.List;
 

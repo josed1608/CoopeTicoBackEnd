@@ -1,6 +1,6 @@
 package com.coopetico.coopeticobackend.security.jwt;
 
-import com.coopetico.coopeticobackend.entidades.UsuarioEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.UsuarioEntidad;
 import com.coopetico.coopeticobackend.excepciones.InvalidJwtAuthenticationException;
 import com.coopetico.coopeticobackend.security.SecretServicio;
 import io.jsonwebtoken.SignatureAlgorithm;

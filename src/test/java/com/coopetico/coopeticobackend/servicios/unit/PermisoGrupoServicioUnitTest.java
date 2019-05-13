@@ -8,10 +8,10 @@ package com.coopetico.coopeticobackend.servicios.unit;
  */
 
 
-import com.coopetico.coopeticobackend.entidades.GrupoEntidad;
-import com.coopetico.coopeticobackend.entidades.PermisoEntidad;
-import com.coopetico.coopeticobackend.entidades.PermisosGrupoEntidad;
-import com.coopetico.coopeticobackend.entidades.PermisosGrupoEntidadPK;
+import com.coopetico.coopeticobackend.entidades.bd.GrupoEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.PermisoEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.PermisosGrupoEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.PermisosGrupoEntidadPK;
 import com.coopetico.coopeticobackend.repositorios.PermisosGruposRepositorio;
 import com.coopetico.coopeticobackend.servicios.GrupoServicio;
 import com.coopetico.coopeticobackend.servicios.PermisoGrupoServicioImpl;

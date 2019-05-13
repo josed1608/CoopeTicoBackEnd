@@ -1,6 +1,6 @@
 package com.coopetico.coopeticobackend.servicios;
 
-import com.coopetico.coopeticobackend.entidades.TaxiEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.TaxiEntidad;
 import com.coopetico.coopeticobackend.repositorios.TaxisRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

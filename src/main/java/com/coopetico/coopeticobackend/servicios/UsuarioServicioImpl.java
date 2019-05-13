@@ -4,9 +4,9 @@
 
 package com.coopetico.coopeticobackend.servicios;
 
-import com.coopetico.coopeticobackend.entidades.GrupoEntidad;
-import com.coopetico.coopeticobackend.entidades.PermisosGrupoEntidad;
-import com.coopetico.coopeticobackend.entidades.UsuarioEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.GrupoEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.PermisosGrupoEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.UsuarioEntidad;
 import com.coopetico.coopeticobackend.excepciones.CorreoTomadoExcepcion;
 import com.coopetico.coopeticobackend.excepciones.GrupoNoExisteExcepcion;
 import com.coopetico.coopeticobackend.excepciones.UsuarioNoEncontradoExcepcion;
@@ -22,7 +22,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 import org.springframework.transaction.annotation.Transactional;
-import java.util.List;
+
 import java.util.Optional;
 import java.util.stream.Collectors;
 
