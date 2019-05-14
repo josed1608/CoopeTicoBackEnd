@@ -1,7 +1,7 @@
 package com.coopetico.coopeticobackend.repositorios;
 
-import com.coopetico.coopeticobackend.entidades.GrupoEntidad;
-import com.coopetico.coopeticobackend.entidades.UsuarioEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.GrupoEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.UsuarioEntidad;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

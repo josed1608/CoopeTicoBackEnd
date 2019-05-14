@@ -7,7 +7,7 @@ package com.coopetico.coopeticobackend.servicios;
  @version:    1.0
  */
 
-import com.coopetico.coopeticobackend.entidades.GrupoEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.GrupoEntidad;
 import com.coopetico.coopeticobackend.excepciones.GrupoNoExisteExcepcion;
 import com.coopetico.coopeticobackend.repositorios.GruposRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;

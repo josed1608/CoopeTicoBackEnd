@@ -7,7 +7,7 @@ package com.coopetico.coopeticobackend.servicios.unit;
  @version:    1.0
  */
 
-import com.coopetico.coopeticobackend.entidades.GrupoEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.GrupoEntidad;
 import com.coopetico.coopeticobackend.repositorios.GruposRepositorio;
 import com.coopetico.coopeticobackend.servicios.GrupoServicioImpl;
 import org.junit.Before;
