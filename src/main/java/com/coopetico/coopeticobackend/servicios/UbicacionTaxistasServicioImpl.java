@@ -40,4 +40,16 @@ public class UbicacionTaxistasServicioImpl implements UbicacionTaxistasServicio 
     public LatLng consultarUbicacion(String taxistaId) {
         return ubicaciones.get(taxistaId);
     }
+
+    @Override
+    public Pair<Double, Double> consultarUbicacionPair(String taxistaId) {
+        LatLng ubicacion = ubicaciones.get(taxistaId);
+        if(ubicacion == null){
+            return null;
+        }
+        String ubicacionHilera = ubicacion.toString();
+        double latitud = Double.parseDouble(ubicacionHilera.split(",")[0]);
+        double longitud = Double.parseDouble(ubicacionHilera.split(",")[1]);
+        return Pair.of(latitud, longitud);
+    }
 }

@@ -29,4 +29,12 @@ public interface UbicacionTaxistasServicio {
      * @param taxistaId Id del taxista que se consultará
      */
     LatLng consultarUbicacion(String taxistaId);
+
+    /**
+     * Método adicional que devuelve la latitud y longitud en un Pair.
+     *
+     * @param taxistaId Id del taxista que se consultará.
+     * @return
+     */
+    Pair<Double, Double> consultarUbicacionPair(String taxistaId);
 }
