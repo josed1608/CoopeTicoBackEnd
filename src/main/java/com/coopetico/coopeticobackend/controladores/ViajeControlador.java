@@ -65,6 +65,7 @@ public class ViajeControlador {
                 viajeTempEntidad.getCosto(),
                 viajeTempEntidad.getEstrellas(),
                 viajeTempEntidad.getOrigenDestino(),
+                viajeTempEntidad.getOrigenDestino(),
                 viajeTempEntidad.getCorreoTaxista()
             );
             return ok("Viaje agregado");

@@ -8,7 +8,7 @@ package com.coopetico.coopeticobackend.servicios;
  */
 
 
-import com.coopetico.coopeticobackend.entidades.PermisoEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.PermisoEntidad;
 import com.coopetico.coopeticobackend.excepciones.PermisoNoExisteExcepcion;
 import com.coopetico.coopeticobackend.repositorios.PermisosRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;

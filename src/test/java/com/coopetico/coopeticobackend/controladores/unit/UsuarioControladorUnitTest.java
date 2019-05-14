@@ -1,8 +1,18 @@
+/**
+ Pruebas de unidad del UsuarioControlador
+ @author      Hannia Aguilar Salas
+ @since       21-04-2019
+ @version:    1.0
+ */
 package com.coopetico.coopeticobackend.controladores.unit;
 
 import com.coopetico.coopeticobackend.controladores.UsuarioControlador;
 import com.coopetico.coopeticobackend.entidades.UsuarioEntidad;
+import com.coopetico.coopeticobackend.servicios.ClienteServicio;
 import com.coopetico.coopeticobackend.servicios.UsuarioServicio;
+
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,6 +27,10 @@ import org.springframework.web.context.WebApplicationContext;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doAnswer;
+
+import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;

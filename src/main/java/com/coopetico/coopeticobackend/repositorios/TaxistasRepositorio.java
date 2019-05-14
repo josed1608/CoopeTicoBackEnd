@@ -1,10 +1,8 @@
 package com.coopetico.coopeticobackend.repositorios;
 
-import com.coopetico.coopeticobackend.entidades.TaxistaEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.TaxistaEntidad;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.web.bind.annotation.CrossOrigin;
-
-import java.util.List;
 
 /**
  Repositorio de la entidad Taxista.

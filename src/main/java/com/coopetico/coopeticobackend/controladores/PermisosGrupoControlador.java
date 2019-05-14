@@ -7,10 +7,10 @@ package com.coopetico.coopeticobackend.controladores;
  @version:    1.0
  */
 
-import com.coopetico.coopeticobackend.entidades.GrupoEntidad;
-import com.coopetico.coopeticobackend.entidades.PermisoEntidad;
-import com.coopetico.coopeticobackend.entidades.PermisosGrupoEntidad;
-import com.coopetico.coopeticobackend.entidades.PermisosGrupoEntidadPK;
+import com.coopetico.coopeticobackend.entidades.bd.GrupoEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.PermisoEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.PermisosGrupoEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.PermisosGrupoEntidadPK;
 import com.coopetico.coopeticobackend.servicios.GrupoServicio;
 import com.coopetico.coopeticobackend.servicios.PermisoGrupoServicio;
 import com.coopetico.coopeticobackend.servicios.PermisosServicio;
@@ -18,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.springframework.http.ResponseEntity.ok;

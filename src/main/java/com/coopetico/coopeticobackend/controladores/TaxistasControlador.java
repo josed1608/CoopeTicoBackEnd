@@ -1,8 +1,8 @@
 package com.coopetico.coopeticobackend.controladores;
 
-import com.coopetico.coopeticobackend.entidades.TaxistaEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.TaxistaEntidad;
 import com.coopetico.coopeticobackend.entidades.TaxistaEntidadTemporal;
-import com.coopetico.coopeticobackend.entidades.UsuarioEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.UsuarioEntidad;
 import com.coopetico.coopeticobackend.entidades.UsuarioTemporal;
 import com.coopetico.coopeticobackend.excepciones.UsuarioNoEncontradoExcepcion;
 import com.coopetico.coopeticobackend.mail.EmailServiceImpl;

@@ -26,7 +26,8 @@ public interface ViajesServicio {
         Timestamp fecha_fin,
         String costo,
         Integer estrellas,
-        String origen_destino,
+        String origen,
+        String destino,
         String correo_taxista
     );
 }
