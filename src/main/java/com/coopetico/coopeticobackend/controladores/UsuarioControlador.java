@@ -1,6 +1,8 @@
 package com.coopetico.coopeticobackend.controladores;
 
 import com.coopetico.coopeticobackend.entidades.*;
+import com.coopetico.coopeticobackend.entidades.bd.GrupoEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.TokenRecuperacionContrasenaEntidad;
 import com.coopetico.coopeticobackend.mail.EmailServiceImpl;
 import com.coopetico.coopeticobackend.repositorios.UsuariosRepositorio;
 import com.coopetico.coopeticobackend.servicios.TokensRecuperacionContrasenaServicioImpl;
@@ -13,6 +15,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import com.coopetico.coopeticobackend.entidades.UsuarioEntidad;
+import org.springframework.http.*;
+import com.coopetico.coopeticobackend.entidades.bd.UsuarioEntidad;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;

@@ -7,7 +7,7 @@ package com.coopetico.coopeticobackend.servicios.integration;
  @version:    1.0
  */
 
-import com.coopetico.coopeticobackend.entidades.PermisoEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.PermisoEntidad;
 import com.coopetico.coopeticobackend.repositorios.PermisosRepositorio;
 import com.coopetico.coopeticobackend.servicios.PermisosServicio;
 import org.junit.Before;

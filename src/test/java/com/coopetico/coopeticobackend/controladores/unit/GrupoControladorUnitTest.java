@@ -8,7 +8,7 @@ package com.coopetico.coopeticobackend.controladores.unit;
  */
 
 import com.coopetico.coopeticobackend.controladores.GrupoControlador;
-import com.coopetico.coopeticobackend.entidades.GrupoEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.GrupoEntidad;
 import com.coopetico.coopeticobackend.servicios.GrupoServicio;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
