@@ -1,10 +1,9 @@
 package com.coopetico.coopeticobackend.security;
 
-import com.coopetico.coopeticobackend.entidades.PermisosGrupoEntidad;
-import com.coopetico.coopeticobackend.entidades.UsuarioEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.PermisosGrupoEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.UsuarioEntidad;
 import com.coopetico.coopeticobackend.excepciones.UsuarioNoEncontradoExcepcion;
 import com.coopetico.coopeticobackend.repositorios.UsuariosRepositorio;
-import com.coopetico.coopeticobackend.servicios.UsuarioServicio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;

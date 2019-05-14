@@ -1,4 +1,4 @@
-package com.coopetico.coopeticobackend.entidades;
+package com.coopetico.coopeticobackend.entidades.bd;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;

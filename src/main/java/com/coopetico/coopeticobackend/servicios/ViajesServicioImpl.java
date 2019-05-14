@@ -3,8 +3,8 @@
 package com.coopetico.coopeticobackend.servicios;
 //-----------------------------------------------------------------------------
 // Imports.
-import com.coopetico.coopeticobackend.entidades.ViajeEntidad;
-import com.coopetico.coopeticobackend.entidades.ViajeEntidadPK;
+import com.coopetico.coopeticobackend.entidades.bd.ViajeEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.ViajeEntidadPK;
 import com.coopetico.coopeticobackend.repositorios.ViajesRepositorio;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,7 +69,8 @@ public class ViajesServicioImpl implements ViajesServicio {
         Timestamp fechaFin,
         String costo,
         Integer estrellas,
-        String origenDestino,
+        String origen,
+        String destino,
         String correoTaxista
     ) {
         //---------------------------------------------------------------------
@@ -85,7 +86,8 @@ public class ViajesServicioImpl implements ViajesServicio {
         viajeInsertando.setFechaFin(fechaFin);
         viajeInsertando.setCosto(costo);
         viajeInsertando.setEstrellas(estrellas);
-        viajeInsertando.setOrigenDestino(origenDestino);
+        viajeInsertando.setOrigen(origen);
+        viajeInsertando.setDestino(destino);
         viajeInsertando.setTaxiByPkPlacaTaxi(
             this.taxisServicio.consultarPorId(placa)
         );

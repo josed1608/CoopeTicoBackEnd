@@ -1,5 +1,6 @@
 package com.coopetico.coopeticobackend.controladores;
-import com.coopetico.coopeticobackend.entidades.TaxiEntidad;
+
+import com.coopetico.coopeticobackend.entidades.bd.TaxiEntidad;
 import com.coopetico.coopeticobackend.servicios.TaxisServicio;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,6 +44,10 @@ public class TaxisControlador {
      */
     private UtilidadesControlador utilidadesControlador;
 
+    /**
+     * Constructor de la TaxisControlador
+     * @param taxisServicio
+     */
     @Autowired
     public TaxisControlador(TaxisServicio taxisServicio){
         this.utilidadesControlador = new UtilidadesControlador();

@@ -1,7 +1,6 @@
 package com.coopetico.coopeticobackend.security;
 
-import com.coopetico.coopeticobackend.entidades.PermisosGrupoEntidad;
-import com.coopetico.coopeticobackend.entidades.UsuarioEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.UsuarioEntidad;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 

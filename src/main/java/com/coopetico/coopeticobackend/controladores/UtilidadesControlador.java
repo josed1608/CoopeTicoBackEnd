@@ -57,24 +57,30 @@ public class UtilidadesControlador {
      * @return Imagen
      */
     @GetMapping("/uploads/img/{nombreFoto:.+}")
-    public ResponseEntity<Resource> verFoto(@PathVariable String nombreFoto){
+    public ResponseEntity<?> verFoto(@PathVariable String nombreFoto) throws MalformedURLException {
         Path rutaArchivo = Paths.get("images").resolve(nombreFoto).toAbsolutePath();
         Resource recurso = null;
-        Logger log = (Logger) LoggerFactory.getLogger(UtilidadesControlador.class);
-        log.info(rutaArchivo.toString());
-        try {
-            recurso = new UrlResource(rutaArchivo.toUri());
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-
-        assert recurso != null;
-        if(!recurso.exists()&& !recurso.isReadable()){
-            throw new RuntimeException("No se pudo cargar la imagen: "+ nombreFoto);
-        }
-
         HttpHeaders cabecera = new HttpHeaders();
-        cabecera.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename= \""+recurso.getFilename()+"\"");
+
+        if(nombreFoto!=null) {
+            try {
+                recurso = new UrlResource(rutaArchivo.toUri());
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+
+            assert recurso != null;
+            if (!recurso.exists() && !recurso.isReadable()) {
+                rutaArchivo = Paths.get("images").resolve("defaultImage.jpg").toAbsolutePath();
+                recurso = new UrlResource(rutaArchivo.toUri());
+            }
+            cabecera.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename= \"" + recurso.getFilename() + "\"");
+
+        } else {
+            rutaArchivo = Paths.get("images").resolve("defaultImage.jpg").toAbsolutePath();
+            recurso = new UrlResource(rutaArchivo.toUri());
+        }
+
         return new ResponseEntity<>(recurso, cabecera, HttpStatus.OK);
     }
 }

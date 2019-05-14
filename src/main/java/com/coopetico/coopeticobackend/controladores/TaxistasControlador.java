@@ -1,5 +1,6 @@
 package com.coopetico.coopeticobackend.controladores;
-import com.coopetico.coopeticobackend.entidades.TaxistaEntidad;
+
+import com.coopetico.coopeticobackend.entidades.bd.TaxistaEntidad;
 import com.coopetico.coopeticobackend.entidades.TaxistaEntidadTemporal;
 import com.coopetico.coopeticobackend.excepciones.UsuarioNoEncontradoExcepcion;
 import com.coopetico.coopeticobackend.mail.EmailServiceImpl;
@@ -155,8 +156,6 @@ public class TaxistasControlador {
                 return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
             }
 
-            // System.out.println("\n\n" + taxistaEntidad.getUsuarioByPkCorreoUsuario() + "\n\n");
-
             this.utilidadesControlador.eliminarFoto(taxistaEntidad.getUsuarioByPkCorreoUsuario().getFoto());
 
             taxistaEntidad.getUsuarioByPkCorreoUsuario().setFoto(nombreArchivo);
@@ -164,13 +163,9 @@ public class TaxistasControlador {
             this.modificar(taxistaEntidadTemporal, taxistaEntidad.getPkCorreoUsuario());
             response.put("taxista",taxistaEntidad);
             response.put("mensaje", "Has subido correctamente la imagen "+nombreArchivo);
-
-            // System.out.println("\n\n DESPUES \n");
-            // System.out.println("\n\n " + taxistaEntidad.getUsuarioByPkCorreoUsuario().getFoto()  + " \n\n");
         }
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
-
 
     /**
      * Devuelve el estado y justificacion del taxista
