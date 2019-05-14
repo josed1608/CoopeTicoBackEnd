@@ -14,8 +14,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import com.coopetico.coopeticobackend.entidades.UsuarioEntidad;
-import org.springframework.http.*;
 import com.coopetico.coopeticobackend.entidades.bd.UsuarioEntidad;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

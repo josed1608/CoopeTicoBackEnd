@@ -1,5 +1,4 @@
 package com.coopetico.coopeticobackend.controladores;
-import com.coopetico.coopeticobackend.entidades.TaxiEntidad;
 
 import com.coopetico.coopeticobackend.entidades.bd.TaxiEntidad;
 import com.coopetico.coopeticobackend.servicios.TaxisServicio;
@@ -10,9 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.File;
-import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
@@ -124,38 +120,6 @@ public class TaxisControlador {
     @PostMapping("/taxis/upload")
     public ResponseEntity<?> subirImagen(@RequestParam("archivo") MultipartFile archivo, @RequestParam("id") String id){
         Map<String, Object> response = new HashMap<>();
-//
-//        Optional<UsuarioEntidad> optionalUsuarioEntidad = usuarioServicio.usuarioPorCorreo(id);
-//        UsuarioEntidad usuarioEntidad = null;
-//        usuarioEntidad = optionalUsuarioEntidad.orElse(null);
-//        if( usuarioEntidad == null) {
-//            response.put("mensaje", "Error: no se pudo editar, el usuario ID: ".concat(id.concat(" no existe en la base de datos")));
-//            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
-//        }
-//
-//        if( !archivo.isEmpty()){
-//            String nombreArchivo = UUID.randomUUID().toString()+"_" + archivo.getOriginalFilename().replace(" ","");
-//            Path rutaArchivo = Paths.get("images").resolve(nombreArchivo).toAbsolutePath();
-//            log.info(rutaArchivo.toString());
-//
-//            try {
-//                Files.copy(archivo.getInputStream(), rutaArchivo);
-//            } catch (IOException e) {
-//                response.put("mensaje", "Error al subir la imagen del usuario");
-//                response.put("error", e.getMessage().concat(":").concat(e.getCause().getMessage()));
-//                return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-//            }
-//
-//            this.eliminarFoto(usuarioEntidad.getFoto());
-//
-//
-//            usuarioEntidad.setFoto(nombreArchivo);
-//            UsuarioTemporal usuarioTemporal = new UsuarioTemporal(usuarioServicio.crearUsuario(usuarioEntidad));
-//            response.put("usuario",usuarioTemporal);
-//            response.put("mensaje", "Has subido correctamente la imagen "+nombreArchivo);
-//        }
-        return new ResponseEntity<Map<String,Object>>(response, HttpStatus.CREATED);
-    }
 
         TaxiEntidad taxiEntidad = taxisServicio.consultarPorId(id);
         if( taxiEntidad == null) {
