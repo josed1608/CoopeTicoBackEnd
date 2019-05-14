@@ -18,7 +18,7 @@ import static org.springframework.http.ResponseEntity.ok;
  Controlador para los requests relacionados con ubicaciones de taxistas.
  @author      Marco Venegas
  @since       13-05-2019
- @version:    1.0
+ @version     1.0
  */
 @RestController
 @RequestMapping(path = "/ubicaciones")

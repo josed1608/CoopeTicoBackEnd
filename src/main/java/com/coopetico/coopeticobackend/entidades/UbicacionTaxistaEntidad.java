@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 /**
  * Clase para representar el request que el correo del taxista y la ubicación que se va a actualizar.
- * @author: Marco Venegas
+ * @author Marco Venegas
  */
 public class UbicacionTaxistaEntidad implements Serializable {
 
