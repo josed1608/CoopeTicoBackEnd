@@ -27,7 +27,7 @@ import static org.springframework.http.ResponseEntity.ok;
 public class ViajeControlador {
     //-------------------------------------------------------------------------
     // Variables globales.
-    private ViajesServicio viajesRepositorio;
+    private ViajesServicio viajesServicio;
     //-------------------------------------------------------------------------
     // Métodos.
     /**
@@ -41,7 +41,7 @@ public class ViajeControlador {
      */
     @Autowired
     public ViajeControlador(ViajesServicio vjsRep) {
-        this.viajesRepositorio = vjsRep;
+        this.viajesServicio = vjsRep;
     }
 
     /**
@@ -57,7 +57,7 @@ public class ViajeControlador {
     @PostMapping("viajeCompleto")
     public ResponseEntity agregarViaje (@RequestBody ViajeTmpEntidad viajeTempEntidad) {
         try  {
-            this.viajesRepositorio.guardar(
+            this.viajesServicio.guardar(
                 viajeTempEntidad.getPlaca(),
                 viajeTempEntidad.getCorreoCliente(),
                 viajeTempEntidad.getFechaInicio(),
@@ -92,7 +92,7 @@ public class ViajeControlador {
         ResponseEntity result = null;
         //---------------------------------------------------------------------
         // Se intenta insertar la entidad en la base de datos
-        int respuestaRepo = this.viajesRepositorio.crear(
+        int respuestaRepo = this.viajesServicio.crear(
             datosDelViaje.getPlaca(),
             datosDelViaje.getFechaInicio(),
             datosDelViaje.getCorreoCliente(),
