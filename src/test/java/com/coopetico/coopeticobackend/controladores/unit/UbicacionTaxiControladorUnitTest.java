@@ -1,8 +1,10 @@
 package com.coopetico.coopeticobackend.controladores.unit;
 
 import com.coopetico.coopeticobackend.controladores.UbicacionTaxiControlador;
+import com.coopetico.coopeticobackend.controladores.UbicacionTaxistasControlador;
 import com.coopetico.coopeticobackend.entidades.TaxiTemporal;
 import com.coopetico.coopeticobackend.entidades.bd.TaxiEntidad;
+import com.coopetico.coopeticobackend.servicios.UbicacionTaxistasServicio;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,9 @@ public class UbicacionTaxiControladorUnitTest {
 
     @Autowired
     UbicacionTaxiControlador ubicacionTaxiControlador;
+
+    @Autowired
+    UbicacionTaxistasServicio ubicacionTaxistasServicio;
 
     /**
      *  Metodo para testear el metodo de obtener taxi
@@ -66,7 +71,7 @@ public class UbicacionTaxiControladorUnitTest {
         // TODO metodo pendiente, esperar estructura de Marco
         String url = "/ubicacion";
         List<TaxiTemporal> entidades = getListaTaxisTemporal();
-        given(ubicacionTaxiControlador.getTaxis()).willReturn(entidades);
+        //given(ubicacionTaxistasServicio.getTaxis()).willReturn(entidades);
         List<TaxiTemporal> taxis = ubicacionTaxiControlador.getTaxis();
         assertEquals(taxis.size() , 3);
     }
