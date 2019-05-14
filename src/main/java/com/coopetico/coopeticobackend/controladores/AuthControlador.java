@@ -1,10 +1,11 @@
 package com.coopetico.coopeticobackend.controladores;
 
-import com.coopetico.coopeticobackend.entidades.UsuarioEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.UsuarioEntidad;
 import com.coopetico.coopeticobackend.excepciones.InvalidJwtAuthenticationException;
 import com.coopetico.coopeticobackend.excepciones.MalasCredencialesExcepcion;
 import com.coopetico.coopeticobackend.excepciones.UsuarioNoEncontradoExcepcion;
 import com.coopetico.coopeticobackend.security.jwt.JwtTokenProvider;
+import com.coopetico.coopeticobackend.servicios.TaxistasServicio;
 import com.coopetico.coopeticobackend.servicios.UsuarioServicio;
 import com.coopetico.coopeticobackend.entidades.AuthenticationRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.springframework.http.ResponseEntity.ok;
 
@@ -36,11 +38,15 @@ public class AuthControlador {
     private final
     UsuarioServicio usuarioServicio;
 
+    private final
+    TaxistasServicio taxistasServicio;
+
     @Autowired
-    public AuthControlador(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, UsuarioServicio users) {
+    public AuthControlador(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, UsuarioServicio users, TaxistasServicio taxistasServicio) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenProvider = jwtTokenProvider;
         this.usuarioServicio = users;
+        this.taxistasServicio = taxistasServicio;
     }
 
     /**
@@ -57,9 +63,15 @@ public class AuthControlador {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, data.getPassword()));
             UsuarioEntidad usuarioEntidad = this.usuarioServicio.usuarioPorCorreo(username).orElseThrow(() -> new UsuarioNoEncontradoExcepcion("Usuario " + username + " no encontrado", HttpStatus.NOT_FOUND, System.currentTimeMillis()));
             List<String> roles = usuarioServicio.obtenerPermisos(usuarioEntidad);
-            String token = jwtTokenProvider.createToken(usuarioEntidad, roles);
 
-            // TODO: enviar justificacion y estado si es taxista
+            String token = "";
+            boolean esTaxista = usuarioServicio.obtenerTipo(usuarioEntidad).equals("taxista");
+            if(esTaxista){
+                Map estadoTaxista = taxistasServicio.obtenerEstado(usuarioEntidad.getPkCorreo());
+                token = jwtTokenProvider.createToken(usuarioEntidad, roles, esTaxista, (boolean)estadoTaxista.get("estado"), (String)estadoTaxista.get("justificacion"));
+            }
+            else
+                token = jwtTokenProvider.createToken(usuarioEntidad, roles, false, false, null);
 
             return ok(token);
         } catch (AuthenticationException e) {
@@ -74,8 +86,17 @@ public class AuthControlador {
      * @return devuelve true si el token es válido o una excepción si el token es inválido
      */
     @CrossOrigin
-    @GetMapping("/validar-token")
-    public boolean validarToken(@RequestBody String token) throws InvalidJwtAuthenticationException {
-        return jwtTokenProvider.validateToken(token);
+    @PostMapping("/validar-token")
+    public boolean validarToken(@RequestBody String token) {
+        try {
+           boolean validToken = jwtTokenProvider.validateToken(token);
+           if (validToken) {
+               return true;
+           } else {
+               return false;
+           }
+        } catch ( InvalidJwtAuthenticationException e){
+            return false;
+        }
     }
 }

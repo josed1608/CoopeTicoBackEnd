@@ -7,9 +7,9 @@ package com.coopetico.coopeticobackend.servicios.unit;
  @version:    1.0
  */
 
-import com.coopetico.coopeticobackend.entidades.TaxistaEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.TaxistaEntidad;
 import com.coopetico.coopeticobackend.entidades.TaxistaEntidadTemporal;
-import com.coopetico.coopeticobackend.entidades.UsuarioEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.UsuarioEntidad;
 import com.coopetico.coopeticobackend.repositorios.TaxisRepositorio;
 import com.coopetico.coopeticobackend.repositorios.TaxistasRepositorio;
 import com.coopetico.coopeticobackend.servicios.TaxistasServicioImpl;
