@@ -83,10 +83,6 @@ public class TaxistaEntidadTemporal {
      */
     private List<String> noConduce;
 
-    public String getJustificacion() {
-        return justificacion;
-    }
-
     public void setJustificacion(String justificacion) {
         this.justificacion = justificacion;
     }
@@ -169,6 +165,14 @@ public class TaxistaEntidadTemporal {
      */
     public String getFoto() {
         return foto;
+    }
+
+    /**
+     * Funcion que retorna la justificacion del taxista.
+     * @return Justificacion del taxista.
+     */
+    public String getJustificacion() {
+        return justificacion;
     }
 
     /**
