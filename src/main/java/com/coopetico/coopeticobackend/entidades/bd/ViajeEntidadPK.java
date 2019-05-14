@@ -1,8 +1,7 @@
-package com.coopetico.coopeticobackend.entidades;
+package com.coopetico.coopeticobackend.entidades.bd;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.Id;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Objects;

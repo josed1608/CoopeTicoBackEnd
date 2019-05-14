@@ -1,5 +1,6 @@
 package com.coopetico.coopeticobackend.servicios;
 
+import com.coopetico.coopeticobackend.entidades.bd.*;
 import com.coopetico.coopeticobackend.entidades.*;
 import com.coopetico.coopeticobackend.excepciones.UsuarioNoEncontradoExcepcion;
 import com.coopetico.coopeticobackend.repositorios.GruposRepositorio;

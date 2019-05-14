@@ -1,7 +1,7 @@
 package com.coopetico.coopeticobackend.servicios;
 
-import com.coopetico.coopeticobackend.entidades.UsuarioEntidad;
-import com.coopetico.coopeticobackend.entidades.ClienteEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.UsuarioEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.ClienteEntidad;
 import com.coopetico.coopeticobackend.excepciones.UsuarioNoEncontradoExcepcion;
 
 public interface ClienteServicio {

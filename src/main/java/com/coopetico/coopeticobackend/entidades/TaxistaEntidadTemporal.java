@@ -1,5 +1,7 @@
 package com.coopetico.coopeticobackend.entidades;
 
+import com.coopetico.coopeticobackend.entidades.bd.TaxistaEntidad;
+
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -80,6 +82,14 @@ public class TaxistaEntidadTemporal {
      * Vector de los placas de los taxis que no puede conducir.
      */
     private List<String> noConduce;
+
+    public String getJustificacion() {
+        return justificacion;
+    }
+
+    public void setJustificacion(String justificacion) {
+        this.justificacion = justificacion;
+    }
 
     /**
      * Funcion que retorna el correo del taxista.
