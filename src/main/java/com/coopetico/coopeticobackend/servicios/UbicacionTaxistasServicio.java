@@ -7,19 +7,50 @@ package com.coopetico.coopeticobackend.servicios;
  @version     1.0
  */
 
+import com.coopetico.coopeticobackend.excepciones.UbicacionNoEncontradaExcepcion;
 import com.google.maps.model.LatLng;
 import org.springframework.data.util.Pair;
 
+import java.util.HashMap;
+
 public interface UbicacionTaxistasServicio {
+
     /**
-     * Inserta un taxista y su ubicación a la estructura de datos.
-     * Si ya existía dentro de la estructura, lo actualiza con la nueva ubicación.
+     * Inserta un taxista, su ubicación y su estado disponibilidad a la estructura de datos.
+     * Si ya existía dentro de la estructura, lo actualiza con la nueva ubicación y estado de disponibilidad.
      *
-     * @param taxista Par con el id del taxista y la latitud,longitud de su ubicación
+     * @param taxistaId Identificador del taxista que se usa como llave del HashMap
+     * @param ubicacion Coordenadas del taxista
+     * @param disponible bit que indica si el taxista está disponible para realizar viajes o no.
      *
      * @author Marco Venegas
      */
-    void upsertTaxista(Pair<String, LatLng> taxista);
+    void upsertUbicacionDisponibleTaxista(String taxistaId, LatLng ubicacion, Boolean disponible);
+
+    /**
+     * Inserta un taxista y su ubicación a la estructura de datos.
+     * Si ya existía dentro de la estructura, lo actualiza con la nueva ubicación.
+     * Si no existía, asume que está disponible para recibir viajes.
+     *
+     * @param taxistaId Identificador del taxista que se usa como llave del HashMap
+     * @param ubicacion Coordenadas del taxista
+     *
+     * @author Marco Venegas
+     */
+    void upsertUbicacionTaxista(String taxistaId, LatLng ubicacion);
+
+    /**
+     * Actualiza el estado de disponibilidad de un taxista en la estructura de datos.
+     *
+     * @param taxistaId Identificador del taxista que se usa como llave del HashMap
+     * @param disponible bit que indica si el taxista está disponible para realizar viajes o no.
+     *
+     * @throws UbicacionNoEncontradaExcepcion si se intenta actualizar el estado de un taxista que no está
+     *                                        en la estructura
+     *
+     * @author Marco Venegas
+     */
+    void updateDisponibleTaxista(String taxistaId, Boolean disponible) throws UbicacionNoEncontradaExcepcion;
 
     /**
      * Elimina un taxista y su ubicación a la estructura de datos.
@@ -44,4 +75,15 @@ public interface UbicacionTaxistasServicio {
      * @return
      */
     Pair<Double, Double> consultarUbicacionPair(String taxistaId);
+
+    /**
+     * Consulta la  disponibilidad actual de un taxista.
+     * @param taxistaId Id del taxista que se consultará
+     *
+     * @author Marco Venegas
+     */
+    Boolean consultarDisponible(String taxistaId);
+
+
+    HashMap<String, Object[]> getUbicaciones();
 }
