@@ -68,6 +68,7 @@ public class TaxisControlador {
                 taxisValidos.add(taxi);
             }
         }
+
         return taxisValidos;
     }
 
