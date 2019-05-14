@@ -1,6 +1,9 @@
 package com.coopetico.coopeticobackend.entidades;
 
+import com.coopetico.coopeticobackend.entidades.bd.TaxistaEntidad;
+
 import java.sql.Timestamp;
+import java.util.List;
 
 /**
  Clase temporal para comunicacion con el frontend de la entidad Taxista.
@@ -69,6 +72,24 @@ public class TaxistaEntidadTemporal {
      * Fecha de vencimiento del taxista.
      */
     private Timestamp vence_licencia;
+
+    /**
+     * Vector de los placas de los taxis que puede conducir.
+     */
+    private List<String> siConduce;
+
+    /**
+     * Vector de los placas de los taxis que no puede conducir.
+     */
+    private List<String> noConduce;
+
+    public String getJustificacion() {
+        return justificacion;
+    }
+
+    public void setJustificacion(String justificacion) {
+        this.justificacion = justificacion;
+    }
 
     /**
      * Funcion que retorna el correo del taxista.
@@ -156,6 +177,22 @@ public class TaxistaEntidadTemporal {
      */
     public Timestamp getVence_licencia() {
         return vence_licencia;
+    }
+
+    /**
+     * Funcion que retorna los taxis que puede conducir un taxista.
+     * @return Vector de placas de los taxis que puede manejar el taxista.
+     */
+    public List<String> getSiConduce() {
+        return siConduce;
+    }
+
+    /**
+     * Funcion que retorna los taxis que no puede conducir un taxista.
+     * @return Vector de placas de los taxis que no puede manejar el taxista.
+     */
+    public List<String> getNoConduce() {
+        return noConduce;
     }
 
     /**
@@ -247,10 +284,27 @@ public class TaxistaEntidadTemporal {
     }
 
     /**
+     * Metodo que modifica los taxis que puede manejar un taxista.
+     * @param siConduce Nueva lista de taxis que puede manejar un taxista.
+     */
+    public void setSiConduce(List<String> siConduce) {
+        this.siConduce = siConduce;
+    }
+
+    /**
+     * Metodo que modifica los taxis que no puede manejar un taxista.
+     * @param noConduce Nueva lista de taxis que no puede manejar un taxista.
+     */
+    public void setNoConduce(List<String> noConduce) {
+        this.noConduce = noConduce;
+    }
+
+    /**
      * Constructor para convertir de TaxistaEntidad a TaxistaEntidadTemporal.
      * @param taxista TaxistaEntidad que contiene los datos que se quiere pasar a esta nueva instancia.
+     * @param noConduce Placas de los taxis que no conduce ese taxista.
      */
-    public TaxistaEntidadTemporal(TaxistaEntidad taxista){
+    public TaxistaEntidadTemporal(TaxistaEntidad taxista, List<String> siConduce, List<String> noConduce){
         this.pkCorreoUsuario = taxista.getPkCorreoUsuario();
         this.faltas = taxista.getFaltas();
         this.estado = taxista.isEstado();
@@ -263,6 +317,9 @@ public class TaxistaEntidadTemporal {
         this.apellido2 = taxista.getUsuarioByPkCorreoUsuario().getApellido2();
         this.telefono = taxista.getUsuarioByPkCorreoUsuario().getTelefono();
         this.foto = taxista.getUsuarioByPkCorreoUsuario().getFoto();
+
+        this.siConduce = siConduce;
+        this.noConduce = noConduce;
     }
 
     /**
