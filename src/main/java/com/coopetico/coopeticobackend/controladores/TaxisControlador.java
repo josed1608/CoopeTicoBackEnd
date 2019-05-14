@@ -44,6 +44,10 @@ public class TaxisControlador {
      */
     private UtilidadesControlador utilidadesControlador;
 
+    /**
+     * Constructor de la TaxisControlador
+     * @param taxisServicio
+     */
     @Autowired
     public TaxisControlador(TaxisServicio taxisServicio){
         this.utilidadesControlador = new UtilidadesControlador();
