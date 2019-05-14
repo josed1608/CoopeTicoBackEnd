@@ -162,6 +162,14 @@ public class TaxistaEntidadTemporal {
     }
 
     /**
+     * Funcion que retorna la justificacion del taxista.
+     * @return Justificacion del taxista.
+     */
+    public String getJustificacion() {
+        return justificacion;
+    }
+
+    /**
      * Funcion que retorna la justificacion de desactivacion del taxista.
      * @return Fecha de vencimiento de la licencia del taxista.
      */

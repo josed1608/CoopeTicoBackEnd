@@ -152,6 +152,7 @@ public class TaxistasServicioImpl implements  TaxistasServicio {
         taxistaEntidad.setHojaDelincuencia(taxistaEntidadTemporal.isHojaDelincuencia());
         taxistaEntidad.setEstrellas(taxistaEntidadTemporal.getEstrellas());
         taxistaEntidad.setVence_licencia(taxistaEntidadTemporal.getVence_licencia());
+        taxistaEntidad.setJustificacion(taxistaEntidadTemporal.getJustificacion());
         taxistaEntidad.getUsuarioByPkCorreoUsuario().setPkCorreo(taxistaEntidadTemporal.getPkCorreoUsuario());
         taxistaEntidad.getUsuarioByPkCorreoUsuario().setNombre(taxistaEntidadTemporal.getNombre());
         taxistaEntidad.getUsuarioByPkCorreoUsuario().setApellido1(taxistaEntidadTemporal.getApellido1());
