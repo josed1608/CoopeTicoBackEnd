@@ -86,8 +86,17 @@ public class AuthControlador {
      * @return devuelve true si el token es válido o una excepción si el token es inválido
      */
     @CrossOrigin
-    @GetMapping("/validar-token")
-    public boolean validarToken(@RequestBody String token) throws InvalidJwtAuthenticationException {
-        return jwtTokenProvider.validateToken(token);
+    @PostMapping("/validar-token")
+    public boolean validarToken(@RequestBody String token) {
+        try {
+           boolean validToken = jwtTokenProvider.validateToken(token);
+           if (validToken) {
+               return true;
+           } else {
+               return false;
+           }
+        } catch ( InvalidJwtAuthenticationException e){
+            return false;
+        }
     }
 }

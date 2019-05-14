@@ -83,10 +83,6 @@ public class TaxistaEntidadTemporal {
      */
     private List<String> noConduce;
 
-    public String getJustificacion() {
-        return justificacion;
-    }
-
     public void setJustificacion(String justificacion) {
         this.justificacion = justificacion;
     }
@@ -169,6 +165,14 @@ public class TaxistaEntidadTemporal {
      */
     public String getFoto() {
         return foto;
+    }
+
+    /**
+     * Funcion que retorna la justificacion del taxista.
+     * @return Justificacion del taxista.
+     */
+    public String getJustificacion() {
+        return justificacion;
     }
 
     /**
@@ -320,6 +324,21 @@ public class TaxistaEntidadTemporal {
 
         this.siConduce = siConduce;
         this.noConduce = noConduce;
+    }
+
+    public TaxistaEntidadTemporal(TaxistaEntidad taxista){
+        this.pkCorreoUsuario = taxista.getPkCorreoUsuario();
+        this.faltas = taxista.getFaltas();
+        this.estado = taxista.isEstado();
+        this.hojaDelincuencia = taxista.isHojaDelincuencia();
+        this.estrellas = taxista.getEstrellas();
+        this.justificacion = taxista.getPkCorreoUsuario();
+        this.vence_licencia = taxista.getVence_licencia();
+        this.nombre = taxista.getUsuarioByPkCorreoUsuario().getNombre();
+        this.apellido1 = taxista.getUsuarioByPkCorreoUsuario().getApellido1();
+        this.apellido2 = taxista.getUsuarioByPkCorreoUsuario().getApellido2();
+        this.telefono = taxista.getUsuarioByPkCorreoUsuario().getTelefono();
+        this.foto = taxista.getUsuarioByPkCorreoUsuario().getFoto();
     }
 
     /**
