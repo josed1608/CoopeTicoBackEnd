@@ -1,7 +1,7 @@
 package com.coopetico.coopeticobackend.controladores;
 
 
-import com.coopetico.coopeticobackend.entidades.TaxiEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.TaxiEntidad;
 import com.coopetico.coopeticobackend.entidades.TaxiTemporal;
 import com.coopetico.coopeticobackend.servicios.TaxisServicio;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,9 +67,8 @@ public class UbicacionTaxiControlador {
      * con una clase de TaxiTemporal.
      * @return Lista TaxiTemporal con sus caracteristicas necesarias para el FE
      */
-    public List<TaxiTemporal> asociarTaxis(){
+    public List<TaxiTemporal> asociarTaxis(HashMap<String, Double> ubicacionTaxis, List<TaxiEntidad> listaTaxis ){
         List<TaxiTemporal> listaUbicacionTaxi = new ArrayList<>();
-        List<TaxiEntidad> listaTaxis = taxisServicio.consultar();
         Set<String> ubicacionesTaxi = ubicacionTaxis.keySet();
         for (String placa : ubicacionesTaxi) {
             // TODO Se necesita realizar una clase para

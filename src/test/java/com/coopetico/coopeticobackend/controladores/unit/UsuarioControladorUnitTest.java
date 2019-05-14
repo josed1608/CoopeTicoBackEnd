@@ -7,7 +7,7 @@
 package com.coopetico.coopeticobackend.controladores.unit;
 
 import com.coopetico.coopeticobackend.controladores.UsuarioControlador;
-import com.coopetico.coopeticobackend.entidades.UsuarioEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.UsuarioEntidad;
 import com.coopetico.coopeticobackend.servicios.ClienteServicio;
 import com.coopetico.coopeticobackend.servicios.UsuarioServicio;
 
@@ -42,6 +42,7 @@ public class UsuarioControladorUnitTest {
 
     @Autowired
     protected WebApplicationContext wac;
+
     @Autowired
     UsuarioControlador usuarioControlador;
 
