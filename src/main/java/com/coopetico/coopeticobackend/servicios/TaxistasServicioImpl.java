@@ -293,7 +293,7 @@ public class TaxistasServicioImpl implements  TaxistasServicio {
             taxistaUsuarioDatos.getNombre()
                 + " "
                 + taxistaUsuarioDatos.getApellido1()
-                + ""
+                + " "
                 + taxistaUsuarioDatos.getApellido2(),
             taxistaUsuarioDatos.getFoto(),
             taxistaPorCorreo.getEstrellas()
