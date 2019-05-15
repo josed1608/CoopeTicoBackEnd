@@ -8,6 +8,7 @@ import com.coopetico.coopeticobackend.servicios.TaxistasServicio;
 import com.coopetico.coopeticobackend.servicios.TokensRecuperacionContrasenaServicioImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,17 +34,20 @@ public class TaxistasControlador {
     /**
      * Servicio de taxistas para consultar datos.
      */
-    private final TaxistasServicio taxistaServicio;
+    @Autowired
+    private TaxistasServicio taxistaServicio;
 
     /**
      * Servicio generador de token para establecer la contrasenna.
      */
-    private final TokensRecuperacionContrasenaServicioImpl tokensServicio;
+    @Autowired
+    private TokensRecuperacionContrasenaServicioImpl tokensServicio;
 
     /**
      * Servicio para enviar correos.
      */
-    private final EmailServiceImpl correoServicio;
+    @Autowired
+    private EmailServiceImpl correoServicio;
 
     /**
      * Logger para subir la imagen
@@ -58,11 +62,9 @@ public class TaxistasControlador {
     /**
      * Constructor
      */
-    private TaxistasControlador(TaxistasServicio taxistaServicio, TokensRecuperacionContrasenaServicioImpl tokensServicio, EmailServiceImpl correoServicio){
+    @Autowired
+    private TaxistasControlador(){
         this.utilidadesControlador = new UtilidadesControlador();
-        this.taxistaServicio = taxistaServicio;
-        this.tokensServicio = tokensServicio;
-        this.correoServicio = correoServicio;
     }
 
     /**

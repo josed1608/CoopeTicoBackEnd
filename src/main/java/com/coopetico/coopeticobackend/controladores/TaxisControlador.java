@@ -31,7 +31,8 @@ public class TaxisControlador {
     /**
      * Servicio de taxis
      */
-    private final TaxisServicio taxisServicio;
+    @Autowired
+    private TaxisServicio taxisServicio;
 
     /**
      * Logger para subir la imagen
@@ -40,18 +41,17 @@ public class TaxisControlador {
 
 
     /**
-     *  Utilidades para subir y eliminar imagenes, para no duplicar tanto código
+     * Utilidades para subir y eliminar imagenes, para no duplicar tanto código
      */
     private UtilidadesControlador utilidadesControlador;
 
     /**
-     * Constructor de la TaxisControlador
+     * Constructor del controlador de taxis
      * @param taxisServicio
      */
     @Autowired
-    public TaxisControlador(TaxisServicio taxisServicio){
+    public TaxisControlador(){
         this.utilidadesControlador = new UtilidadesControlador();
-        this.taxisServicio = taxisServicio;
     }
 
     /**
