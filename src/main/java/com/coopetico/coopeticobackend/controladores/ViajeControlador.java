@@ -96,19 +96,20 @@ public class ViajeControlador {
     public List<ViajeEntidadTemporal> obtenerViajes(){
         ViajeEntidadTemporal viajeEntidadTemporal = new ViajeEntidadTemporal();
         List<ViajeEntidadTemporal> listaTemporal = viajeEntidadTemporal.convertirListaViajes(viajesServicio.consultarViajes());
-        return obtenerNombresUsuariosViaje(listaTemporal);
-    }
-
-    public List<ViajeEntidadTemporal> obtenerNombresUsuariosViaje(List<ViajeEntidadTemporal> viajeEntidad){
-        for (int indice = 0 ; indice < viajeEntidad.size() ; indice++) {
-            viajeEntidad.get(indice).setNombreCliente(this.obtenerNombreUsuario(viajeEntidad.get(indice).getCorreoCliente()));
-            viajeEntidad.get(indice).setNombreTaxista(this.obtenerNombreUsuario(viajeEntidad.get(indice).getCorreoTaxista()));
-            viajeEntidad.get(indice).setNombreOperador(this.obtenerNombreUsuario(viajeEntidad.get(indice).getCorreoOperador()));
+        for (ViajeEntidadTemporal viajeTemporal : listaTemporal) {
+            viajeTemporal.setNombreCliente(this.obtenerNombreUsuario(viajeTemporal.getCorreoCliente()));
+            viajeTemporal.setNombreTaxista(this.obtenerNombreUsuario(viajeTemporal.getCorreoTaxista()));
+            viajeTemporal.setNombreOperador(this.obtenerNombreUsuario(viajeTemporal.getCorreoOperador()));
         }
-        return viajeEntidad;
+        return listaTemporal;
     }
 
-    public String obtenerNombreUsuario(String correo){
+    /**
+     * Método que permite obtener el nombre completo de un usuario.
+     * @param correo Id Usuario
+     * @return Nombre y apellidos
+     */
+    private String obtenerNombreUsuario(String correo){
         UsuarioEntidad usuarioTemporal = usuarioServicio.usuarioPorCorreo(correo).get();
         return usuarioTemporal.getNombre() + ' ' + usuarioTemporal.getApellido1() + ' ' + usuarioTemporal.getApellido2();
     }

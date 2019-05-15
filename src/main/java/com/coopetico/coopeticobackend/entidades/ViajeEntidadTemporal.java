@@ -1,7 +1,6 @@
 package com.coopetico.coopeticobackend.entidades;
 
 import com.coopetico.coopeticobackend.entidades.bd.ViajeEntidad;
-import com.coopetico.coopeticobackend.repositorios.UsuariosRepositorio;
 import com.coopetico.coopeticobackend.servicios.UsuarioServicio;
 
 import java.util.ArrayList;
@@ -17,37 +16,15 @@ public class ViajeEntidadTemporal {
     private String agendaTelefono;
     private String agendaNombre;
     private String correoCliente;
-
-    public String getNombreCliente() {
-        return nombreCliente;
-    }
-
-    public void setNombreCliente(String nombreCliente) {
-        this.nombreCliente = nombreCliente;
-    }
-
-    public String getNombreTaxista() {
-        return nombreTaxista;
-    }
-
-    public void setNombreTaxista(String nombreTaxista) {
-        this.nombreTaxista = nombreTaxista;
-    }
-
-    public String getNombreOperador() {
-        return nombreOperador;
-    }
-
-    public void setNombreOperador(String nombreOperador) {
-        this.nombreOperador = nombreOperador;
-    }
-
     private String nombreCliente;
     private String correoTaxista;
     private String nombreTaxista;
     private String correoOperador;
     private String nombreOperador;
 
+    /**
+     * Constructores
+     */
     public ViajeEntidadTemporal(){}
 
     public ViajeEntidadTemporal(ViajeEntidad viajeEntidad){
@@ -67,6 +44,18 @@ public class ViajeEntidadTemporal {
         this.correoOperador = viajeEntidad.getAgendaOperador().getPkCorreoUsuario();
         this.nombreOperador = "";
     }
+
+    public String getNombreCliente() { return nombreCliente; }
+
+    public void setNombreCliente(String nombreCliente) { this.nombreCliente = nombreCliente; }
+
+    public String getNombreTaxista() { return nombreTaxista; }
+
+    public void setNombreTaxista(String nombreTaxista) { this.nombreTaxista = nombreTaxista; }
+
+    public String getNombreOperador() { return nombreOperador; }
+
+    public void setNombreOperador(String nombreOperador) { this.nombreOperador = nombreOperador; }
 
     public String getPlacaTaxi() {
         return placaTaxi;
@@ -164,6 +153,11 @@ public class ViajeEntidadTemporal {
         this.correoOperador = correoOperador;
     }
 
+    /**
+     * Método que permite convertir una entidad Viaje a una entidad temporal para pasar los datos necesarios al FE.
+     * @param viajeEntidad Entidad a convertir
+     * @return Entidad convertida.
+     */
     public List<ViajeEntidadTemporal> convertirListaViajes(List<ViajeEntidad> viajeEntidad){
         List<ViajeEntidadTemporal> viajeEntidadTemporal = new ArrayList<>();
         for (ViajeEntidad viaje : viajeEntidad) {

@@ -106,6 +106,10 @@ public class ViajesServicioImpl implements ViajesServicio {
     }
 
 
+    /**
+     * Método para consultar todos los viajes a la base
+     * @return Lista de viajes
+     */
     @Override
     @Transactional
     public List<ViajeEntidad> consultarViajes() {
