@@ -230,18 +230,13 @@ public class TaxistasControlador {
      * @since 15-05-2019
      *
      * @param correoTaxista el correo del taxista asignado
-     * @param correoCliente el correo del cliente solicitante
-     * @param origen el punto de origen
-     * @param destino el punto de destino
+     * @param json un JSON con el correo del cliente, el origen y el destino
      * @return los datos a desplegar del taxista
      */
     @GetMapping("{correoTaxista}/datosParaMostrar")
     public DatosTaxistaAsigadoEntidad obtenerDatosTaxistaAsignado(
         @PathVariable String correoTaxista,
-        @RequestBody
-        String correoCliente,
-        String origen,
-        String destino
+        @RequestBody Map<String, String> json
     ){
         //---------------------------------------------------------------------
         // Se llama el servicio que trae los datos de la base
@@ -250,9 +245,9 @@ public class TaxistasControlador {
         //---------------------------------------------------------------------
         // Se le anexan a los datos los que han ido saltando
         // de endpoint en endpoint
-        resultado.setCorreoCliente(correoCliente);
-        resultado.setOrigen(origen);
-        resultado.setDestino(destino);
+        resultado.setCorreoCliente(json.get("correoCliente"));
+        resultado.setOrigen(json.get("origen"));
+        resultado.setDestino(json.get("destino"));
         //---------------------------------------------------------------------
         return resultado;
         //---------------------------------------------------------------------
