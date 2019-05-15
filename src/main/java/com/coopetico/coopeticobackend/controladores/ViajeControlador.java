@@ -1,6 +1,7 @@
 //-----------------------------------------------------------------------------
 package com.coopetico.coopeticobackend.controladores;
 //-----------------------------------------------------------------------------
+import com.coopetico.coopeticobackend.entidades.ViajeEntidadTemporal;
 import com.coopetico.coopeticobackend.entidades.bd.ViajeEntidad;
 import com.coopetico.coopeticobackend.servicios.ViajesServicio;
 import com.coopetico.coopeticobackend.entidades.ViajeTmpEntidad;
@@ -87,7 +88,8 @@ public class ViajeControlador {
      * @return Lista de usuarios
      */
     @GetMapping()
-    public List<ViajeEntidad> obtenerViajes(){
-        return viajesServicio.consultarViajes();
+    public List<ViajeEntidadTemporal> obtenerViajes(){
+        ViajeEntidadTemporal viajeEntidadTemporal = new ViajeEntidadTemporal();
+        return viajeEntidadTemporal.convertirListaViajes(viajesServicio.consultarViajes());
     }
 }
