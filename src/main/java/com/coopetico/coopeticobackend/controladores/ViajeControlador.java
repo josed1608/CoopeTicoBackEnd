@@ -1,8 +1,11 @@
 //-----------------------------------------------------------------------------
 package com.coopetico.coopeticobackend.controladores;
 //-----------------------------------------------------------------------------
+import com.coopetico.coopeticobackend.entidades.UsuarioTemporal;
 import com.coopetico.coopeticobackend.entidades.ViajeEntidadTemporal;
+import com.coopetico.coopeticobackend.entidades.bd.UsuarioEntidad;
 import com.coopetico.coopeticobackend.entidades.bd.ViajeEntidad;
+import com.coopetico.coopeticobackend.servicios.UsuarioServicio;
 import com.coopetico.coopeticobackend.servicios.ViajesServicio;
 import com.coopetico.coopeticobackend.entidades.ViajeTmpEntidad;
 
@@ -36,6 +39,8 @@ public class ViajeControlador {
     //-------------------------------------------------------------------------
     // Variables globales.
     private ViajesServicio viajesServicio;
+    @Autowired
+    private UsuarioServicio usuarioServicio;
     //-------------------------------------------------------------------------
     // Métodos.
     /**
@@ -90,6 +95,22 @@ public class ViajeControlador {
     @GetMapping()
     public List<ViajeEntidadTemporal> obtenerViajes(){
         ViajeEntidadTemporal viajeEntidadTemporal = new ViajeEntidadTemporal();
-        return viajeEntidadTemporal.convertirListaViajes(viajesServicio.consultarViajes());
+        List<ViajeEntidadTemporal> listaTemporal = viajeEntidadTemporal.convertirListaViajes(viajesServicio.consultarViajes());
+        return obtenerNombresUsuariosViaje(listaTemporal);
     }
+
+    public List<ViajeEntidadTemporal> obtenerNombresUsuariosViaje(List<ViajeEntidadTemporal> viajeEntidad){
+        for (int indice = 0 ; indice < viajeEntidad.size() ; indice++) {
+            viajeEntidad.get(indice).setNombreCliente(this.obtenerNombreUsuario(viajeEntidad.get(indice).getCorreoCliente()));
+            viajeEntidad.get(indice).setNombreTaxista(this.obtenerNombreUsuario(viajeEntidad.get(indice).getCorreoTaxista()));
+            viajeEntidad.get(indice).setNombreOperador(this.obtenerNombreUsuario(viajeEntidad.get(indice).getCorreoOperador()));
+        }
+        return viajeEntidad;
+    }
+
+    public String obtenerNombreUsuario(String correo){
+        UsuarioEntidad usuarioTemporal = usuarioServicio.usuarioPorCorreo(correo).get();
+        return usuarioTemporal.getNombre() + ' ' + usuarioTemporal.getApellido1() + ' ' + usuarioTemporal.getApellido2();
+    }
+
 }

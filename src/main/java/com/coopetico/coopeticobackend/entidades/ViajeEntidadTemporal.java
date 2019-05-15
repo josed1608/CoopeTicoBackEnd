@@ -1,9 +1,11 @@
 package com.coopetico.coopeticobackend.entidades;
 
 import com.coopetico.coopeticobackend.entidades.bd.ViajeEntidad;
+import com.coopetico.coopeticobackend.repositorios.UsuariosRepositorio;
+import com.coopetico.coopeticobackend.servicios.UsuarioServicio;
+
 import java.util.ArrayList;
 import java.util.List;
-
 public class ViajeEntidadTemporal {
     private String placaTaxi;
     private String fechaFin;
@@ -15,8 +17,36 @@ public class ViajeEntidadTemporal {
     private String agendaTelefono;
     private String agendaNombre;
     private String correoCliente;
+
+    public String getNombreCliente() {
+        return nombreCliente;
+    }
+
+    public void setNombreCliente(String nombreCliente) {
+        this.nombreCliente = nombreCliente;
+    }
+
+    public String getNombreTaxista() {
+        return nombreTaxista;
+    }
+
+    public void setNombreTaxista(String nombreTaxista) {
+        this.nombreTaxista = nombreTaxista;
+    }
+
+    public String getNombreOperador() {
+        return nombreOperador;
+    }
+
+    public void setNombreOperador(String nombreOperador) {
+        this.nombreOperador = nombreOperador;
+    }
+
+    private String nombreCliente;
     private String correoTaxista;
+    private String nombreTaxista;
     private String correoOperador;
+    private String nombreOperador;
 
     public ViajeEntidadTemporal(){}
 
@@ -31,8 +61,11 @@ public class ViajeEntidadTemporal {
         this.agendaTelefono = viajeEntidad.getOrigen();
         this.agendaNombre = viajeEntidad.getAgendaNombre();
         this.correoCliente = viajeEntidad.getClienteByPkCorreoCliente().getPkCorreoUsuario();
+        this.nombreCliente = "";
         this.correoTaxista = viajeEntidad.getTaxistaByCorreoTaxi().getPkCorreoUsuario();
+        this.nombreTaxista = "";
         this.correoOperador = viajeEntidad.getAgendaOperador().getPkCorreoUsuario();
+        this.nombreOperador = "";
     }
 
     public String getPlacaTaxi() {
@@ -134,6 +167,7 @@ public class ViajeEntidadTemporal {
     public List<ViajeEntidadTemporal> convertirListaViajes(List<ViajeEntidad> viajeEntidad){
         List<ViajeEntidadTemporal> viajeEntidadTemporal = new ArrayList<>();
         for (ViajeEntidad viaje : viajeEntidad) {
+            UsuarioServicio usuarioServicio;
             viajeEntidadTemporal.add(new ViajeEntidadTemporal(viaje));
         }
         return viajeEntidadTemporal;
