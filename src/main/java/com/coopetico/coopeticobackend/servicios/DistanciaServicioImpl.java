@@ -42,7 +42,7 @@ public class DistanciaServicioImpl implements DistanciaServicio {
         }
 
         // Hacer el request y guardar el resultado
-        DistanceMatrixApiRequest req = DistanceMatrixApi.newRequest(apiKey);
+        DistanceMatrixApiRequest req = DistanceMatrixApi.newRequest(apiKey) ;
         DistanceMatrix result = req.origins(origen)
                 .destinations(ubicacionesTaxistas.toArray(new LatLng[0]))
                 .mode(TravelMode.DRIVING)
@@ -53,13 +53,15 @@ public class DistanciaServicioImpl implements DistanciaServicio {
         String taxistaEscogido = "";
         int indiceTaxista = 0;
         // Recorrer la matriz buscando la menor distancia. Como solo hay un origen, solo tendrá una fila
-        for (DistanceMatrixElement element : result.rows[0].elements) {
-            if (element.distance.inMeters < minDistance){
-                minDistance = element.distance.inMeters;
-                // El orden de las entradas es el mismo al orden de la lista de taxistas ya que la lista de puntos se hizo con ese orden
-                taxistaEscogido = taxistas.get(indiceTaxista).getFirst();
+        if(result.rows.length != 0) {
+            for (DistanceMatrixElement element : result.rows[0].elements) {
+                if (element.distance.inMeters < minDistance) {
+                    minDistance = element.distance.inMeters;
+                    // El orden de las entradas es el mismo al orden de la lista de taxistas ya que la lista de puntos se hizo con ese orden
+                    taxistaEscogido = taxistas.get(indiceTaxista).getFirst();
+                }
+                indiceTaxista++;
             }
-            indiceTaxista++;
         }
         return taxistaEscogido;
     }
