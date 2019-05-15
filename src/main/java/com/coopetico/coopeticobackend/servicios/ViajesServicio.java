@@ -9,7 +9,10 @@
  */
 package com.coopetico.coopeticobackend.servicios;
 
+import com.coopetico.coopeticobackend.entidades.bd.ViajeEntidad;
+
 import java.sql.Timestamp;
+import java.util.List;
 
 public interface ViajesServicio {
     /**
@@ -30,4 +33,11 @@ public interface ViajesServicio {
         String destino,
         String correo_taxista
     );
+
+    /**
+     * Permite obtener todos los viajes
+     * @return Retorna una lista de viajes
+     */
+    List<ViajeEntidad> consultarViajes();
+
 }

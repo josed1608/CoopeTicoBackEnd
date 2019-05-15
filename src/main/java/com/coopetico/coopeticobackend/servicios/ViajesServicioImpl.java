@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.sql.Timestamp;
+import java.util.List;
 //-----------------------------------------------------------------------------
 // Definición de la clase.
 @Service
@@ -103,4 +104,12 @@ public class ViajesServicioImpl implements ViajesServicio {
         viajeInsertando = viajesRepositorio.save(viajeInsertando);
         return viajeInsertando.toString();
     }
+
+
+    @Override
+    @Transactional
+    public List<ViajeEntidad> consultarViajes() {
+        return viajesRepositorio.findAll();
+    }
+
 }

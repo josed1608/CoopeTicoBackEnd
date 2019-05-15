@@ -1,18 +1,25 @@
 //-----------------------------------------------------------------------------
 package com.coopetico.coopeticobackend.controladores;
 //-----------------------------------------------------------------------------
+import com.coopetico.coopeticobackend.entidades.bd.ViajeEntidad;
 import com.coopetico.coopeticobackend.servicios.ViajesServicio;
 import com.coopetico.coopeticobackend.entidades.ViajeTmpEntidad;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 import static org.springframework.http.ResponseEntity.ok;
 //-----------------------------------------------------------------------------
+@CrossOrigin( origins = {"http://localhost:4200"})
+@RestController
+@Validated
 @Controller
 @RequestMapping(path = "/viajes")
 /**
@@ -27,7 +34,7 @@ import static org.springframework.http.ResponseEntity.ok;
 public class ViajeControlador {
     //-------------------------------------------------------------------------
     // Variables globales.
-    private ViajesServicio viajesRepositorio;
+    private ViajesServicio viajesServicio;
     //-------------------------------------------------------------------------
     // Métodos.
     /**
@@ -41,7 +48,7 @@ public class ViajeControlador {
      */
     @Autowired
     public ViajeControlador(ViajesServicio vjsRep) {
-        this.viajesRepositorio = vjsRep;
+        this.viajesServicio = vjsRep;
     }
 
     /**
@@ -57,7 +64,7 @@ public class ViajeControlador {
     @PostMapping()
     public ResponseEntity agregarViaje (@RequestBody ViajeTmpEntidad viajeTempEntidad) {
         try  {
-            this.viajesRepositorio.guardar(
+            this.viajesServicio.guardar(
                 viajeTempEntidad.getPlaca(),
                 viajeTempEntidad.getCorreoCliente(),
                 viajeTempEntidad.getFechaInicio(),
@@ -72,6 +79,15 @@ public class ViajeControlador {
         } catch (Exception e){
             return ok("error");
         }
-        
+    }
+
+
+    /**
+     * Metodo para obtener una lista de usuarios
+     * @return Lista de usuarios
+     */
+    @GetMapping()
+    public List<ViajeEntidad> obtenerViajes(){
+        return viajesServicio.consultarViajes();
     }
 }
