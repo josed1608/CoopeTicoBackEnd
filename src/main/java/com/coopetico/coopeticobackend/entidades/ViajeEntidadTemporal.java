@@ -5,6 +5,10 @@ import com.coopetico.coopeticobackend.servicios.UsuarioServicio;
 
 import java.util.ArrayList;
 import java.util.List;
+
+/**
+ * Clase encargada de manejar la información importante de un viaje
+ */
 public class ViajeEntidadTemporal {
     private String placaTaxi;
     private String fechaFin;
@@ -27,6 +31,10 @@ public class ViajeEntidadTemporal {
      */
     public ViajeEntidadTemporal(){}
 
+    /**
+     * Constructor basado en otra clase
+     * @param viajeEntidad Entidad a convertir
+     */
     public ViajeEntidadTemporal(ViajeEntidad viajeEntidad){
         this.placaTaxi = viajeEntidad.getViajeEntidadPK().getPkPlacaTaxi();
         this.fechaInicio = viajeEntidad.getViajeEntidadPK().getPkFechaInicio().toString().replace('T',' ').substring(0,16);
