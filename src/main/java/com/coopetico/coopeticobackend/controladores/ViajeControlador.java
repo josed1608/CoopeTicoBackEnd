@@ -125,6 +125,12 @@ public class ViajeControlador {
                   "No se se pudo insertar en la base",
                   HttpStatus.INTERNAL_SERVER_ERROR
                 );
+            case -4:
+                result = new ResponseEntity(
+                    "El dato ya ha sido insertado previamente",
+                    HttpStatus.CONFLICT
+                );
+                break;
         }
         //---------------------------------------------------------------------
         return result;

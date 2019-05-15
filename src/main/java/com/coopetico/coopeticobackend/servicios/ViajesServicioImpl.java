@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.sql.Timestamp;
+import java.util.Optional;
+
 //-----------------------------------------------------------------------------
 // Definición de la clase.
 @Service
@@ -122,6 +124,7 @@ public class ViajesServicioImpl implements ViajesServicio {
      *          -1 si hubo un problema no manejado.
      *          -2 si el usuario no es ni cliente ni operador,
      *          -3 si no se pudo insertar el viaje en la base de datos,
+     *          -4 si el viaje ya ha sido previamente insertado en la DB
      */
     @Override
     @Transactional
@@ -171,7 +174,12 @@ public class ViajesServicioImpl implements ViajesServicio {
             }
             //-----------------------------------------------------------------
             try {
-                viajeEnCreacion = viajesRepositorio.save(viajeEnCreacion);
+                if (this.viajesRepositorio.existsById(pk)){
+                    result = -4;
+                } else {
+                    viajeEnCreacion = viajesRepositorio.save(viajeEnCreacion);
+                }
+
             } catch (Exception e) {
                 result = -3;
             }
