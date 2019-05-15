@@ -1,5 +1,6 @@
 package com.coopetico.coopeticobackend.controladores;
 
+import com.coopetico.coopeticobackend.entidades.DatosTaxistaAsigadoEntidad;
 import com.coopetico.coopeticobackend.entidades.bd.TaxistaEntidad;
 import com.coopetico.coopeticobackend.entidades.TaxistaEntidadTemporal;
 import com.coopetico.coopeticobackend.entidades.bd.UsuarioEntidad;
@@ -220,4 +221,20 @@ public class TaxistasControlador {
             return new ResponseEntity("{\"error\" : \"Ha ocurrido un error interno.\"}", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @GetMapping("datosParaMostrar")
+    public DatosTaxistaAsigadoEntidad obtenerDatosTaxistaAsignado(
+        @RequestBody
+        String correoCliente,
+        String origen,
+        String destino,
+        String correoTaxista
+    ){
+        DatosTaxistaAsigadoEntidad resultado = this.taxistaServicio.obtenerDatosTaxistaAsignado(correoTaxista);
+        resultado.setCorreoCliente(correoCliente);
+        resultado.setOrigen(origen);
+        resultado.setDestino(destino);
+        return resultado;
+    }
+
 }
