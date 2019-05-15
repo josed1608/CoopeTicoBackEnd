@@ -62,7 +62,6 @@ public class TaxistasControlador {
     /**
      * Constructor
      */
-    @Autowired
     private TaxistasControlador(){
         this.utilidadesControlador = new UtilidadesControlador();
     }

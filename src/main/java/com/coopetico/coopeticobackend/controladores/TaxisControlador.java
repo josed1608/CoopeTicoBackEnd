@@ -49,7 +49,6 @@ public class TaxisControlador {
      * Constructor del controlador de taxis
      * @param taxisServicio
      */
-    @Autowired
     public TaxisControlador(){
         this.utilidadesControlador = new UtilidadesControlador();
     }
