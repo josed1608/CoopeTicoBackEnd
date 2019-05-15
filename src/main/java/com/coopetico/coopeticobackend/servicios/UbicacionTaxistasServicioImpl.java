@@ -9,6 +9,7 @@ package com.coopetico.coopeticobackend.servicios;
 
 import com.coopetico.coopeticobackend.excepciones.UbicacionNoEncontradaExcepcion;
 import com.google.maps.model.LatLng;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -70,25 +71,65 @@ public class UbicacionTaxistasServicioImpl implements UbicacionTaxistasServicio 
     }
 
     @Override
-    public LatLng consultarUbicacion(String taxistaId) {
-        return (LatLng)ubicaciones.get(taxistaId)[0];
-    }
-
-    @Override
-    public Pair<Double, Double> consultarUbicacionPair(String taxistaId) {
-        LatLng ubicacion = (LatLng)ubicaciones.get(taxistaId)[0];
-        if(ubicacion == null){
-            return null;
+    public LatLng consultarUbicacion(String taxistaId) throws UbicacionNoEncontradaExcepcion{
+        if(ubicaciones.containsKey(taxistaId)){ //Verifica que exista para que no intente accesar al índice de un null
+            return (LatLng)ubicaciones.get(taxistaId)[0];
         }
-        String ubicacionHilera = ubicacion.toString();
-        double latitud = Double.parseDouble(ubicacionHilera.split(",")[0]);
-        double longitud = Double.parseDouble(ubicacionHilera.split(",")[1]);
-        return Pair.of(latitud, longitud);
+        else{
+            throw new UbicacionNoEncontradaExcepcion("No se encontró el taxista", HttpStatus.NOT_FOUND, System.currentTimeMillis());
+        }
     }
 
     @Override
-    public Boolean consultarDisponible(String taxistaId) {
-        return (boolean)ubicaciones.get(taxistaId)[1];
+    public Pair<Double, Double> consultarUbicacionPair(String taxistaId) throws UbicacionNoEncontradaExcepcion {
+        if(ubicaciones.containsKey(taxistaId)){
+            LatLng ubicacion = (LatLng)ubicaciones.get(taxistaId)[0];
+            String ubicacionHilera = ubicacion.toString();
+            double latitud = Double.parseDouble(ubicacionHilera.split(",")[0]);
+            double longitud = Double.parseDouble(ubicacionHilera.split(",")[1]);
+            return Pair.of(latitud, longitud);
+        } else{
+            throw new UbicacionNoEncontradaExcepcion("No se encontró el taxista", HttpStatus.NOT_FOUND, System.currentTimeMillis());
+        }
+    }
+
+    @Override
+    public Boolean consultarDisponible(String taxistaId) throws UbicacionNoEncontradaExcepcion {
+        if(ubicaciones.containsKey(taxistaId)){
+            return (boolean)ubicaciones.get(taxistaId)[1];
+        } else{
+            throw new UbicacionNoEncontradaExcepcion("No se encontró el taxista", HttpStatus.NOT_FOUND, System.currentTimeMillis());
+        }
+    }
+
+    @Override
+    public Object[] consultarUbicacionDisponible(String taxistaId) throws UbicacionNoEncontradaExcepcion{
+        if(ubicaciones.containsKey(taxistaId)){
+            return ubicaciones.get(taxistaId);
+        } else{
+            throw new UbicacionNoEncontradaExcepcion("No se encontró el taxista", HttpStatus.NOT_FOUND, System.currentTimeMillis());
+        }
+    }
+
+    @Override
+    public Object[] consultarUbicacionPairDisponible(String taxistaId) throws UbicacionNoEncontradaExcepcion{
+        if(ubicaciones.containsKey(taxistaId)){
+            Object[] datos = new Object[2];
+
+            LatLng ubicacion = (LatLng)ubicaciones.get(taxistaId)[0];
+            boolean disponible = (Boolean)ubicaciones.get(taxistaId)[1];
+
+            String ubicacionHilera = ubicacion.toString();
+            double latitud = Double.parseDouble(ubicacionHilera.split(",")[0]);
+            double longitud = Double.parseDouble(ubicacionHilera.split(",")[1]);
+
+            datos[0] = Pair.of(latitud, longitud);
+            datos[1] = disponible;
+
+            return datos;
+        } else{
+            throw new UbicacionNoEncontradaExcepcion("No se encontró el taxista", HttpStatus.NOT_FOUND, System.currentTimeMillis());
+        }
     }
 
     @Override

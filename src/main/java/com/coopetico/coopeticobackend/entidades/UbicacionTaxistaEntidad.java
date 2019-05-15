@@ -11,6 +11,7 @@ public class UbicacionTaxistaEntidad implements Serializable {
     private String correoTaxista;
     private double latitud;
     private double longitud;
+    private boolean disponible;
 
     public String getCorreoTaxista() {
         return correoTaxista;
@@ -36,11 +37,19 @@ public class UbicacionTaxistaEntidad implements Serializable {
         this.longitud = longitud;
     }
 
+    public boolean getDisponible() {
+        return disponible;
+    }
 
-    public UbicacionTaxistaEntidad(String correoTaxista, double latitud, double longitud) {
+    public void setDisponible(boolean disponible) {
+        this.disponible = disponible;
+    }
+
+    public UbicacionTaxistaEntidad(String correoTaxista, double latitud, double longitud, boolean disponible) {
         this.correoTaxista = correoTaxista;
         this.latitud = latitud;
         this.longitud = longitud;
+        this.disponible = disponible;
     }
 }
 
