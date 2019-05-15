@@ -173,16 +173,22 @@ public class ViajesServicioImpl implements ViajesServicio {
                 }
             }
             //-----------------------------------------------------------------
-            try {
-                if (this.viajesRepositorio.existsById(pk)){
-                    result = -4;
-                } else {
+            // Si el viaje está en la base de datos entonces turra un error.
+            if (this.viajesRepositorio.existsById(pk)){
+                result = -4;
+            } else {
+                //-------------------------------------------------------------
+                try {
+                    //---------------------------------------------------------
+                    // Se inenta insertar enla base de datos.
                     viajeEnCreacion = viajesRepositorio.save(viajeEnCreacion);
+                    //---------------------------------------------------------
+                } catch (Exception e) {
+                    result = -3;
                 }
-
-            } catch (Exception e) {
-                result = -3;
+                //-------------------------------------------------------------
             }
+            //-----------------------------------------------------------------
         } catch (Exception e) {
             result = -1;
         }
