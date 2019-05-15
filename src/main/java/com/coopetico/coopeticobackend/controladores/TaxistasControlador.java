@@ -222,19 +222,40 @@ public class TaxistasControlador {
         }
     }
 
-    @GetMapping("datosParaMostrar")
+    //-------------------------------------------------------------------------
+    /**
+     * Trae los datos a ser desplegados del taxista asignado.
+     *
+     * @author Joseph Rementería (b55824)
+     * @since 15-05-2019
+     *
+     * @param correoTaxista el correo del taxista asignado
+     * @param correoCliente el correo del cliente solicitante
+     * @param origen el punto de origen
+     * @param destino el punto de destino
+     * @return los datos a desplegar del taxista
+     */
+    @GetMapping("{correoTaxista}/datosParaMostrar")
     public DatosTaxistaAsigadoEntidad obtenerDatosTaxistaAsignado(
+        @PathVariable String correoTaxista,
         @RequestBody
         String correoCliente,
         String origen,
-        String destino,
-        String correoTaxista
+        String destino
     ){
-        DatosTaxistaAsigadoEntidad resultado = this.taxistaServicio.obtenerDatosTaxistaAsignado(correoTaxista);
+        //---------------------------------------------------------------------
+        // Se llama el servicio que trae los datos de la base
+        DatosTaxistaAsigadoEntidad resultado =
+            this.taxistaServicio.obtenerDatosTaxistaAsignado(correoTaxista);
+        //---------------------------------------------------------------------
+        // Se le anexan a los datos los que han ido saltando
+        // de endpoint en endpoint
         resultado.setCorreoCliente(correoCliente);
         resultado.setOrigen(origen);
         resultado.setDestino(destino);
+        //---------------------------------------------------------------------
         return resultado;
+        //---------------------------------------------------------------------
     }
-
+    //-------------------------------------------------------------------------
 }

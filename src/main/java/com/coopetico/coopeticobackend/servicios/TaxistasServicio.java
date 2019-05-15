@@ -59,10 +59,10 @@ public interface TaxistasServicio {
      * @author Kevin Jiménez
      */
     Map<String, Object> obtenerEstado(String correo);
-
+    //-------------------------------------------------------------------------
     /**
      * Trae los datos del taxista asociados al correo parametrisado.
-     * Se despiega en flutter cuando el usuario ve los datos del cofer asignado.
+     * Se despiega en flutter cuando el usuario ve los datos del cofer asignado
      *
      * @author Joseph Rementería (b55824)
      * @since 15-05-2019
@@ -70,5 +70,8 @@ public interface TaxistasServicio {
      * @param correoTaxista correo del taxista asignado
      * @return datos a mostrar en flutter.
      */
-    DatosTaxistaAsigadoEntidad obtenerDatosTaxistaAsignado(String correoTaxista);
+    DatosTaxistaAsigadoEntidad obtenerDatosTaxistaAsignado(
+        String correoTaxista
+    );
+    //-------------------------------------------------------------------------
 }
