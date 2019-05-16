@@ -18,5 +18,12 @@ public interface TaxisServicio {
     List<TaxiEntidad> consultar();
     TaxiEntidad consultarPorId(String placa);
     TaxiEntidad guardar(TaxiEntidad taxi);
+
+    /**
+     * Método para guardar una lista de taxis en la base de datos.
+     * @param taxis Lista Entidad taxi que se quiere guardar
+     * @return true si es correcto o false si falla
+     */
+    boolean guardarLista(List<TaxiEntidad> taxis);
     void eliminar(String placa);
 }
