@@ -162,7 +162,6 @@ public class TaxisControlador {
      * @return ok si la insercion fue exitosa
      */
     @PostMapping()
-    @CrossOrigin(origins = "http://localhost:4200")
     public ResponseEntity guardarTaxisArchivo(@RequestBody List<TaxiEntidad> taxis) {
         this.taxisServicio.guardarLista(taxis);
         return ok("");
