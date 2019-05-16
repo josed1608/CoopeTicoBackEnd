@@ -18,5 +18,6 @@ public interface TaxisServicio {
     List<TaxiEntidad> consultar();
     TaxiEntidad consultarPorId(String placa);
     TaxiEntidad guardar(TaxiEntidad taxi);
+    boolean guardarLista(List<TaxiEntidad> taxis);
     void eliminar(String placa);
 }

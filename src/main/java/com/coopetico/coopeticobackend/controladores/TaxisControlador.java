@@ -18,6 +18,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.*;
 
+import static org.springframework.http.ResponseEntity.ok;
+
 /**
  * Controlador de taxis
  * @autor   Jorge Araya González
@@ -152,5 +154,17 @@ public class TaxisControlador {
             response.put("mensaje", "Has subido correctamente la imagen "+nombreArchivo);
         }
         return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    /**
+     * Metodo para guardar una lista de taxis
+     * @param taxis lista de los taxis a guardar
+     * @return ok si la insercion fue exitosa
+     */
+    @PostMapping()
+    @CrossOrigin(origins = "http://localhost:4200")
+    public ResponseEntity guardarTaxisArchivo(@RequestBody List<TaxiEntidad> taxis) {
+        this.taxisServicio.guardarLista(taxis);
+        return ok("");
     }
 }
