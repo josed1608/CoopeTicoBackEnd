@@ -31,7 +31,8 @@ public class TaxisControlador {
     /**
      * Servicio de taxis
      */
-    private final TaxisServicio taxisServicio;
+    @Autowired
+    private TaxisServicio taxisServicio;
 
     /**
      * Logger para subir la imagen
@@ -40,27 +41,34 @@ public class TaxisControlador {
 
 
     /**
-     *  Utilidades para subir y eliminar imagenes, para no duplicar tanto código
+     * Utilidades para subir y eliminar imagenes, para no duplicar tanto código
      */
     private UtilidadesControlador utilidadesControlador;
 
     /**
-     * Constructor de la TaxisControlador
+     * Constructor del controlador de taxis
      * @param taxisServicio
      */
-    @Autowired
-    public TaxisControlador(TaxisServicio taxisServicio){
+    public TaxisControlador(){
         this.utilidadesControlador = new UtilidadesControlador();
-        this.taxisServicio = taxisServicio;
     }
 
     /**
-     * Método para consultar todos los taxis de la base de datos
+     * Método para consultar todos los taxis válidos de la base de datos
      * @return lista de entidades de taxi
      */
     @GetMapping("/taxis")
     public List<TaxiEntidad> consultar(){
-        return taxisServicio.consultar();
+        List<TaxiEntidad> taxisValidos = new ArrayList<>();
+        List<TaxiEntidad> taxis = taxisServicio.consultar();
+
+        for (TaxiEntidad taxi : taxis){
+            if(taxi.getValido() == true){
+                taxisValidos.add(taxi);
+            }
+        }
+
+        return taxisValidos;
     }
 
     /**
@@ -102,6 +110,8 @@ public class TaxisControlador {
         taxiActual.setFechaVenRtv(taxi.getFechaVenRtv());
         taxiActual.setTelefono(taxi.getTelefono());
         taxiActual.setTipo(taxi.getTipo());
+        taxiActual.setCorreoTaxista(taxi.getCorreoTaxista());
+        taxiActual.setValido(taxi.getValido());
         return taxisServicio.guardar(taxiActual);
     }
 
