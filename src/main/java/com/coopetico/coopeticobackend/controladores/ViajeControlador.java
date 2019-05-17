@@ -130,6 +130,11 @@ public class ViajeControlador {
         return usuarioTemporal.getNombre() + ' ' + usuarioTemporal.getApellido1() + ' ' + usuarioTemporal.getApellido2();
     }
 
+    /**
+     * Endpoint para que un cliente solicite un viaje. El cliente envía la información básica de un viaje, se escoge el taxista más cercano y se le avisa al taxista que espere
+     * @param datosViaje Datos del viaje que desea hacer el cliente
+     * @return retorna ok si se pudo escoger al primer taxista y una excepción si no
+     */
     @GetMapping("/solicitar")
     public ResponseEntity solicitarViaje(@RequestBody ViajeComenzandoEntidad datosViaje) {
         List<Pair<String, LatLng>> taxistasDisponibles = ubicacionTaxistasServicio.obtenerTaxistasDisponibles();
