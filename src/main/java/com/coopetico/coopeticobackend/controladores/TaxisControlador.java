@@ -5,19 +5,20 @@ import com.coopetico.coopeticobackend.servicios.TaxisServicio;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.File;
-import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.*;
+
+import static org.springframework.http.ResponseEntity.ok;
 
 /**
  * Controlador de taxis
@@ -36,12 +37,40 @@ public class TaxisControlador {
     private TaxisServicio taxisServicio;
 
     /**
-     * Método para consultar todos los taxis de la base de datos
+     * Logger para subir la imagen
+     */
+    private final Logger log = LoggerFactory.getLogger(UsuarioControlador.class);
+
+
+    /**
+     * Utilidades para subir y eliminar imagenes, para no duplicar tanto código
+     */
+    private UtilidadesControlador utilidadesControlador;
+
+    /**
+     * Constructor del controlador de taxis
+     * @param taxisServicio
+     */
+    public TaxisControlador(){
+        this.utilidadesControlador = new UtilidadesControlador();
+    }
+
+    /**
+     * Método para consultar todos los taxis válidos de la base de datos
      * @return lista de entidades de taxi
      */
     @GetMapping("/taxis")
     public List<TaxiEntidad> consultar(){
-        return taxisServicio.consultar();
+        List<TaxiEntidad> taxisValidos = new ArrayList<>();
+        List<TaxiEntidad> taxis = taxisServicio.consultar();
+
+        for (TaxiEntidad taxi : taxis){
+            if(taxi.getValido() == true){
+                taxisValidos.add(taxi);
+            }
+        }
+
+        return taxisValidos;
     }
 
     /**
@@ -54,8 +83,6 @@ public class TaxisControlador {
         return taxisServicio.consultarPorId(id);
     }
 
-    private final Logger log = LoggerFactory.getLogger(UsuarioControlador.class);
-
     /**
      * Método para guardar un taxi nuevo en la base de datos
      * @param taxi entidad taxi que se quiere agregar
@@ -64,7 +91,6 @@ public class TaxisControlador {
     @PostMapping("/taxis")
     @ResponseStatus(HttpStatus.CREATED)
     public TaxiEntidad agregar(@RequestBody TaxiEntidad taxi){
-
         return taxisServicio.guardar(taxi);
     }
 
@@ -86,7 +112,8 @@ public class TaxisControlador {
         taxiActual.setFechaVenRtv(taxi.getFechaVenRtv());
         taxiActual.setTelefono(taxi.getTelefono());
         taxiActual.setTipo(taxi.getTipo());
-
+        taxiActual.setCorreoTaxista(taxi.getCorreoTaxista());
+        taxiActual.setValido(taxi.getValido());
         return taxisServicio.guardar(taxiActual);
     }
 
@@ -100,87 +127,53 @@ public class TaxisControlador {
         taxisServicio.eliminar(id);
     }
 
-
     /**
      * Metodo para subir imagen
      * @param archivo Archivo a subir
-     * @param id Identificador del usuario
-     * @return Respuesta correcto o incorrecto y el usuario con la foto agregada
+     * @param id Identificador del taxi
+     * @return Respuesta correcto o incorrecto y el taxi con la foto agregada
      */
-    @PostMapping("/upload")
+    @PostMapping("/taxis/upload")
     public ResponseEntity<?> subirImagen(@RequestParam("archivo") MultipartFile archivo, @RequestParam("id") String id){
         Map<String, Object> response = new HashMap<>();
-//
-//        Optional<UsuarioEntidad> optionalUsuarioEntidad = usuarioServicio.usuarioPorCorreo(id);
-//        UsuarioEntidad usuarioEntidad = null;
-//        usuarioEntidad = optionalUsuarioEntidad.orElse(null);
-//        if( usuarioEntidad == null) {
-//            response.put("mensaje", "Error: no se pudo editar, el usuario ID: ".concat(id.concat(" no existe en la base de datos")));
-//            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
-//        }
-//
-//        if( !archivo.isEmpty()){
-//            String nombreArchivo = UUID.randomUUID().toString()+"_" + archivo.getOriginalFilename().replace(" ","");
-//            Path rutaArchivo = Paths.get("images").resolve(nombreArchivo).toAbsolutePath();
-//            log.info(rutaArchivo.toString());
-//
-//            try {
-//                Files.copy(archivo.getInputStream(), rutaArchivo);
-//            } catch (IOException e) {
-//                response.put("mensaje", "Error al subir la imagen del usuario");
-//                response.put("error", e.getMessage().concat(":").concat(e.getCause().getMessage()));
-//                return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-//            }
-//
-//            this.eliminarFoto(usuarioEntidad.getFoto());
-//
-//
-//            usuarioEntidad.setFoto(nombreArchivo);
-//            UsuarioTemporal usuarioTemporal = new UsuarioTemporal(usuarioServicio.crearUsuario(usuarioEntidad));
-//            response.put("usuario",usuarioTemporal);
-//            response.put("mensaje", "Has subido correctamente la imagen "+nombreArchivo);
-//        }
-        return new ResponseEntity<Map<String,Object>>(response, HttpStatus.CREATED);
-    }
 
+        TaxiEntidad taxiEntidad = taxisServicio.consultarPorId(id);
+        if( taxiEntidad == null) {
+            response.put("mensaje", "Error: no se pudo editar, el taxi ID: ".concat(id.concat(" no existe en la base de datos")));
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        }
 
-    /**
-     * Metodo para eliminar una foto
-     * @param nombreFotoAnterior Nombre de la foto  a eliminar
-     */
-    public void eliminarFoto(String nombreFotoAnterior){
-        if( nombreFotoAnterior != null && nombreFotoAnterior.length()>0){
-            Path rutaArchivoAnterior = Paths.get("images").resolve(nombreFotoAnterior).toAbsolutePath();
-            File archivoFotoAnterior = rutaArchivoAnterior.toFile();
-            if(archivoFotoAnterior.exists() && archivoFotoAnterior.canRead()){
-                archivoFotoAnterior.delete();
+        if( !archivo.isEmpty()){
+            String nombreArchivo = UUID.randomUUID().toString()+"_" + Objects.requireNonNull(archivo.getOriginalFilename()).replace(" ","");
+            Path rutaArchivo = Paths.get("images").resolve(nombreArchivo).toAbsolutePath();
+            log.info(rutaArchivo.toString());
+
+            try {
+                Files.copy(archivo.getInputStream(), rutaArchivo);
+            } catch (IOException e) {
+                response.put("mensaje", "Error al subir la imagen del usuario");
+                response.put("error", e.getMessage().concat(":").concat(e.getCause().getMessage()));
+                return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
             }
+
+            this.utilidadesControlador.eliminarFoto(taxiEntidad.getFoto());
+
+            taxiEntidad.setFoto(nombreArchivo);
+            this.modificar(taxiEntidad, taxiEntidad.getPkPlaca());
+            response.put("taxi",taxiEntidad);
+            response.put("mensaje", "Has subido correctamente la imagen "+nombreArchivo);
         }
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     /**
-     * Metodo para obtener una imagen
-     * @param nombreFoto Nombre de la imagen
-     * @return Imagen
+     * Metodo para guardar una lista de taxis
+     * @param taxis lista de los taxis a guardar
+     * @return ok si la insercion fue exitosa
      */
-    @GetMapping("/uploads/img/{nombreFoto:.+}")
-    public ResponseEntity<Resource> verFoto(@PathVariable String nombreFoto){
-        Path rutaArchivo = Paths.get("images").resolve(nombreFoto).toAbsolutePath();
-        Resource recurso = null;
-
-        log.info(rutaArchivo.toString());
-        try {
-            recurso = new UrlResource(rutaArchivo.toUri());
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-
-        if(!recurso.exists()&& !recurso.isReadable()){
-            throw new RuntimeException("No se pudo cargar la imagen: "+ nombreFoto);
-        }
-
-        HttpHeaders cabecera = new HttpHeaders();
-        cabecera.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename= \""+recurso.getFilename()+"\"");
-        return new ResponseEntity<Resource>(recurso, cabecera, HttpStatus.OK);
+    @PostMapping()
+    public ResponseEntity guardarTaxisArchivo(@RequestBody List<TaxiEntidad> taxis) {
+        this.taxisServicio.guardarLista(taxis);
+        return ok("");
     }
 }
