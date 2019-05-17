@@ -1,16 +1,22 @@
 //-----------------------------------------------------------------------------
 package com.coopetico.coopeticobackend.controladores;
 //-----------------------------------------------------------------------------
-import com.coopetico.coopeticobackend.entidades.UsuarioTemporal;
 import com.coopetico.coopeticobackend.entidades.ViajeComenzandoEntidad;
 import com.coopetico.coopeticobackend.entidades.ViajeEntidadTemporal;
 import com.coopetico.coopeticobackend.entidades.bd.UsuarioEntidad;
-import com.coopetico.coopeticobackend.entidades.bd.ViajeEntidad;
+import com.coopetico.coopeticobackend.excepciones.UsuarioNoEncontradoExcepcion;
+import com.coopetico.coopeticobackend.servicios.DistanciaServicio;
+import com.coopetico.coopeticobackend.servicios.UbicacionTaxistasServicio;
 import com.coopetico.coopeticobackend.servicios.UsuarioServicio;
 import com.coopetico.coopeticobackend.servicios.ViajesServicio;
 import com.coopetico.coopeticobackend.entidades.ViajeTmpEntidad;
 
+import com.google.maps.errors.ApiException;
+import com.google.maps.model.LatLng;
+import org.springframework.data.util.Pair;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +24,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.io.IOException;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.springframework.http.ResponseEntity.ok;
 //-----------------------------------------------------------------------------
@@ -40,8 +48,10 @@ public class ViajeControlador {
     //-------------------------------------------------------------------------
     // Variables globales.
     private ViajesServicio viajesServicio;
-    @Autowired
-    private UsuarioServicio usuarioServicio;
+    private final UsuarioServicio usuarioServicio;
+    private final UbicacionTaxistasServicio ubicacionTaxistasServicio;
+    private final DistanciaServicio distanciaServicio;
+    private SimpMessagingTemplate template;
     //-------------------------------------------------------------------------
     // Métodos.
     /**
@@ -49,13 +59,18 @@ public class ViajeControlador {
      * Fecha: 06/04/2019.
      *
      * Constructor de la clase.
-     *
-     * @param vjsRep repositorio de viajes ya creado
+     *  @param vjsRep repositorio de viajes ya creado
+     * @param ubicacionTaxistasServicio
+     * @param distanciaServicio
      *
      */
     @Autowired
-    public ViajeControlador(ViajesServicio vjsRep) {
+    public ViajeControlador(ViajesServicio vjsRep, UsuarioServicio usuarioServicio, UbicacionTaxistasServicio ubicacionTaxistasServicio, DistanciaServicio distanciaServicio, SimpMessagingTemplate template) {
         this.viajesServicio = vjsRep;
+        this.usuarioServicio = usuarioServicio;
+        this.ubicacionTaxistasServicio = ubicacionTaxistasServicio;
+        this.distanciaServicio = distanciaServicio;
+        this.template = template;
     }
 
     /**
@@ -117,6 +132,17 @@ public class ViajeControlador {
 
     @GetMapping("/solicitar")
     public ResponseEntity solicitarViaje(@RequestBody ViajeComenzandoEntidad datosViaje) {
-        //
+        List<Pair<String, LatLng>> taxistasDisponibles = ubicacionTaxistasServicio.obtenerTaxistasDisponibles();
+
+        LatLng origen = new LatLng(Double.parseDouble(datosViaje.getOrigen().split(",")[0]), Double.parseDouble(datosViaje.getOrigen().split(",")[1]));
+        try {
+            String taxistaEscogido = distanciaServicio.taxistaMasCercano(origen, taxistasDisponibles);
+
+            this.template.convertAndSendToUser(taxistaEscogido, "/user/queue/recibir-viaje", datosViaje);
+
+            return ok("Se le avisó al primer taxista");
+        } catch (ApiException | InterruptedException | IOException e) {
+            throw new UsuarioNoEncontradoExcepcion("No se logró encontrar taxista para el viaje", HttpStatus.NOT_FOUND, System.currentTimeMillis());
+        }
     }
 }

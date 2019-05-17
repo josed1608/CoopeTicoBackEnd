@@ -12,6 +12,7 @@ import com.google.maps.model.LatLng;
 import org.springframework.data.util.Pair;
 
 import java.util.HashMap;
+import java.util.List;
 
 public interface UbicacionTaxistasServicio {
 
@@ -129,4 +130,10 @@ public interface UbicacionTaxistasServicio {
      * @author Marco Venegas
      */
     HashMap<String, Object[]> getUbicaciones();
+
+    /**
+     * Busca los taxistas que estén disponibles en el HashMap
+     * @return Devuelve una lista con los taxistas que estén disponibles para un viaje
+     */
+    List<Pair<String, LatLng>> obtenerTaxistasDisponibles();
 }
