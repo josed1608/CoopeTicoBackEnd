@@ -2,6 +2,7 @@
 package com.coopetico.coopeticobackend.controladores;
 //-----------------------------------------------------------------------------
 import com.coopetico.coopeticobackend.entidades.UsuarioTemporal;
+import com.coopetico.coopeticobackend.entidades.ViajeComenzandoEntidad;
 import com.coopetico.coopeticobackend.entidades.ViajeEntidadTemporal;
 import com.coopetico.coopeticobackend.entidades.bd.UsuarioEntidad;
 import com.coopetico.coopeticobackend.entidades.bd.ViajeEntidad;
@@ -114,4 +115,8 @@ public class ViajeControlador {
         return usuarioTemporal.getNombre() + ' ' + usuarioTemporal.getApellido1() + ' ' + usuarioTemporal.getApellido2();
     }
 
+    @GetMapping("/solicitar")
+    public ResponseEntity solicitarViaje(@RequestBody ViajeComenzandoEntidad datosViaje) {
+        //
+    }
 }
