@@ -34,7 +34,6 @@ public class GrupoControlador {
      * @return Lista de permisos con el ID
      */
     @GetMapping()
-    @CrossOrigin(origins = "http://localhost:4200")
     public List<GrupoEntidad> getGrupos(){
         List<GrupoEntidad> listaGrupos = grupoServicio.getGrupos();
         return  listaGrupos;
