@@ -52,6 +52,25 @@ public class TaxisServicioImpl implements TaxisServicio{
     }
 
     /**
+     * Método para guardar una lista de taxis en la base de datos.
+     * @param taxis Lista Entidad taxi que se quiere guardar
+     * @return true si es correcto o false si falla
+     * @Transactional rollbackOn, la transaccion hace rollback si se detecta una excepcion
+     */
+    @Override
+    @Transactional(rollbackOn = Exception.class)
+    public boolean guardarLista(List<TaxiEntidad> taxis){
+        try{
+            for (TaxiEntidad taxi: taxis) {
+                 taxisRepositorio.save(taxi);
+            }
+            return true;
+        }catch (Exception e){
+            return false;
+        }
+    }
+
+    /**
      * Método para eliminar un taxi de la base de datos
      * @param placa placa del taxi a eliminar
      */
