@@ -5,6 +5,7 @@ import com.coopetico.coopeticobackend.entidades.bd.GrupoEntidad;
 import com.coopetico.coopeticobackend.entidades.bd.UsuarioEntidad;
 import com.coopetico.coopeticobackend.entidades.UsuarioTemporal;
 import com.coopetico.coopeticobackend.mail.EmailService;
+import com.coopetico.coopeticobackend.mail.EmailServiceImpl;
 import com.coopetico.coopeticobackend.servicios.ClienteServicio;
 import com.coopetico.coopeticobackend.entidades.bd.UsuarioEntidad;
 import com.coopetico.coopeticobackend.servicios.UsuarioServicio;
@@ -17,11 +18,14 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doAnswer;
@@ -36,12 +40,12 @@ import org.springframework.web.context.WebApplicationContext;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
@@ -60,13 +64,14 @@ public class UsuarioControladorUnitTest {
     @MockBean
     UsuarioServicio usuarioServicio;
 
-    @MockBean
+
     EmailService emailService;
 
 
     @Before
     public void setup() {
         this.mockMvc = standaloneSetup(usuarioControlador).build();
+        this.emailService = new EmailServiceImpl();
     }
 
 
@@ -76,13 +81,12 @@ public class UsuarioControladorUnitTest {
      */
     @Test
     public void testCrearUsuario() throws Exception {
-        doAnswer((i)->{return UsuarioEntidad.class;}).when(usuarioServicio).crearUsuario(any(UsuarioEntidad.class));
-
+        UsuarioEntidad usuarioEntidad = getUsuarioEntidad();
+        given(usuarioServicio.crearUsuario(usuarioEntidad)).willReturn(usuarioEntidad);
         mockMvc.perform(post("/usuarios")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(getUsuarioJSON()))
-                .andExpect(status().isOk());
-
+                .content(getUsuarioTemporalJSON()))
+                .andExpect(status().isCreated());
     }
 
 
@@ -97,7 +101,9 @@ public class UsuarioControladorUnitTest {
         List<UsuarioEntidad> usuarios = obtenerListaUsuarios();
         given(usuarioServicio.obtenerUsuarios()).willReturn(usuarios);
 
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(url).accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(url)
+                            .accept(MediaType.APPLICATION_JSON_VALUE))
+                            .andReturn();
 
         int status = mvcResult.getResponse().getStatus();
         assertEquals(200, status);
@@ -108,12 +114,32 @@ public class UsuarioControladorUnitTest {
         assertTrue(listaGrupos.length == 10);
     }
 
+    /**
+     * Metodo para testear obtener los usuarios por ID
+     */
+    @Test
+    public void testObtenerUsuarioPorId() throws Exception {
+        String id = "gerente11@gerente.com";
+        UsuarioEntidad usuarioEntidad = getUsuarioEntidad();
+        given(usuarioServicio.usuarioPorCorreo(id)).willReturn(Optional.of(usuarioEntidad));
+
+
+        ResponseEntity<UsuarioTemporal> responseEntity = (ResponseEntity<UsuarioTemporal>) usuarioControlador.obtenerUsuarioPorId(id);
+        assertNotNull(responseEntity);
+        assertEquals(responseEntity.getStatusCode(), HttpStatus.OK);
+
+        UsuarioTemporal usuarioTemporal = responseEntity.getBody();
+        assertNotNull(usuarioTemporal);
+        assertEquals(usuarioTemporal.getCorreo(), id);
+    }
+
+
 
     /**
      * Metodo que retorna el JSON de un usuario
      * @return String JSON del usuario
      */
-    public static String getUsuarioJSON(){
+    public static String getUsuarioEntidadJSON(){
         return "{"+
                 "\"pkCorreo\": \"gerente11@gerente.com\","+
                 "\"nombre\": \"Gerente\","+
@@ -127,23 +153,49 @@ public class UsuarioControladorUnitTest {
                 "\"grupoByIdGrupo\": {"+
                 "\"pkId\": \"Gerente\""+
                 "}";
+
+    }
+    /**
+     * Metodo que retorna el JSON de un usuario
+     * @return String JSON del usuario
+     */
+    public static String getUsuarioTemporalJSON(){
+        return "{"+
+                "\"correo\": \"gerente11@gerente.com\","+
+                "\"nombre\": \"Gerente\","+
+                "\"apellido1\": \"Apellido1\","+
+                "\"apellido2\": \"Apellido2\","+
+                "\"telefono\": \"11111111\","+
+                "\"contrasena\": \"$2a$10$gJ0hUnsEvTp5zyBVo19IHe.GoYKkL3Wy268wGJxG5.k.tUFhSUify\","+
+                "\"foto\": \"foto\","+
+                "\"idGrupo\": \"Gerente\""+
+                "}";
     }
 
 
     /**
      * Metodo para obtener un usuario para las pruebas
-     * @return
+     * @return Retorna un objeto de tipo usuarioEntidad
      */
     public static UsuarioTemporal getUsuarioTemporal(){
         UsuarioTemporal usuarioTemporal = new UsuarioTemporal();
         usuarioTemporal.setCorreo("gerente11@gerente.com");
-        usuarioTemporal.setNombre("Nombre");
+        usuarioTemporal.setNombre("Gerente");
         usuarioTemporal.setApellido1("Apellido1");
         usuarioTemporal.setApellido2("Apellido2");
-        usuarioTemporal.setCorreo("a@ad.com");
-        usuarioTemporal.setTelefono("88884444");
+        usuarioTemporal.setTelefono("11111111");
+        usuarioTemporal.setContrasena("$2a$10$gJ0hUnsEvTp5zyBVo19IHe.GoYKkL3Wy268wGJxG5.k.tUFhSUify");
+        usuarioTemporal.setFoto("foto");
         usuarioTemporal.setIdGrupo("Cliente");
         return usuarioTemporal;
+    }
+
+    /**
+     * Metodo para obtener un usuario para las pruebas
+     * @return Retorna un objeto de tipo usuarioTemporal
+     */
+    public static UsuarioEntidad getUsuarioEntidad(){
+        return getUsuarioTemporal().convertirAUsuarioEntidad();
     }
 
     /**
@@ -176,16 +228,10 @@ public class UsuarioControladorUnitTest {
      *     private PasswordEncoder encoder;
      *     private UsuarioServicio usuarioServicio;
      *
-    public UsuarioControlador(UsuariosRepositorio usuariosRepositorio, PasswordEncoder encoder, TokensRecuperacionContrasenaServicio tokensRecuperacionContrasenaServicio, UsuarioServicio servicio, EmailServiceImpl mail)
     public boolean recuperarContrasena(@PathVariable String correo)
     public boolean cambiarContrasena(@RequestBody AuthenticationRequest datosUsuario)
     public boolean validarTokenRecuperarContrasena(@PathVariable String id, @PathVariable String token)
-    public ResponseEntity<?> crearUsuario(@Valid @RequestBody UsuarioTemporal usuario, BindingResult resultado)
-    public List<UsuarioTemporal> obtenerUsuarios()
-    public Page<UsuarioTemporal> obtenerUsuarios(@PathVariable Integer pagina)
-    public ResponseEntity<?> obtenerUsuarioPorId(@PathVariable String id)
-    public ResponseEntity<?> eliminarUsuarioPorId(@PathVariable String id)
-    public List<UsuarioTemporal> obtenerUsuariosPorGrupo(@RequestBody GrupoEntidad grupoEntidad)
+
     public ResponseEntity<?> actualizar(@Valid @RequestBody UsuarioTemporal usuario, @PathVariable String id, BindingResult resultado)
     public boolean validarTokenRecuperarContrasena(String id)
     public ResponseEntity<?> subirImagen(@RequestParam("archivo") MultipartFile archivo, @RequestParam("id") String id)
