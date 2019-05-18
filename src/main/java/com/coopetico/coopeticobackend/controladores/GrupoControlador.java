@@ -7,7 +7,7 @@ package com.coopetico.coopeticobackend.controladores;
  @version:    1.0
  */
 
-import com.coopetico.coopeticobackend.entidades.GrupoEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.GrupoEntidad;
 import com.coopetico.coopeticobackend.servicios.GrupoServicio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;

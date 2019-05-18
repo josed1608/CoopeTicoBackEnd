@@ -7,7 +7,7 @@ package com.coopetico.coopeticobackend.servicios;
  @version:    1.0
  */
 
-import com.coopetico.coopeticobackend.entidades.GrupoEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.GrupoEntidad;
 import java.util.List;
 
 public interface GrupoServicio {

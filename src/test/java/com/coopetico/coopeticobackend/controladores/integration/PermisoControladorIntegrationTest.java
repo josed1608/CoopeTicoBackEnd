@@ -8,7 +8,7 @@ package com.coopetico.coopeticobackend.controladores.integration;
  */
 
 import com.coopetico.coopeticobackend.controladores.PermisoControlador;
-import com.coopetico.coopeticobackend.entidades.PermisoEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.PermisoEntidad;
 import com.coopetico.coopeticobackend.repositorios.PermisosRepositorio;
 import com.coopetico.coopeticobackend.servicios.PermisosServicio;
 import com.fasterxml.jackson.databind.ObjectMapper;

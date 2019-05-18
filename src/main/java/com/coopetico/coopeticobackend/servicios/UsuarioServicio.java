@@ -1,7 +1,7 @@
 package com.coopetico.coopeticobackend.servicios;
 
-import com.coopetico.coopeticobackend.entidades.GrupoEntidad;
-import com.coopetico.coopeticobackend.entidades.UsuarioEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.GrupoEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.UsuarioEntidad;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -69,4 +69,10 @@ public interface UsuarioServicio {
      */
     void eliminar(String correo);
 
+    /**
+     * Devuelve si el usuario es cliente, taxista o operador
+     * @param usuario entidad usuario base
+     * @return String con el tipo, puede ser "cliente", "taxista" o "operador"
+     */
+    String obtenerTipo(UsuarioEntidad usuario);
 }

@@ -1,8 +1,6 @@
 package com.coopetico.coopeticobackend.controladores;
 
-import com.coopetico.coopeticobackend.entidades.TaxiEntidad;
-import com.coopetico.coopeticobackend.entidades.UsuarioEntidad;
-import com.coopetico.coopeticobackend.entidades.UsuarioTemporal;
+import com.coopetico.coopeticobackend.entidades.bd.TaxiEntidad;
 import com.coopetico.coopeticobackend.servicios.TaxisServicio;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,9 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.MalformedURLException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;

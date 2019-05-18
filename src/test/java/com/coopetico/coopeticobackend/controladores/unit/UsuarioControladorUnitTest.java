@@ -5,6 +5,7 @@ import com.coopetico.coopeticobackend.entidades.GrupoEntidad;
 import com.coopetico.coopeticobackend.entidades.UsuarioEntidad;
 import com.coopetico.coopeticobackend.entidades.UsuarioTemporal;
 import com.coopetico.coopeticobackend.servicios.ClienteServicio;
+import com.coopetico.coopeticobackend.entidades.bd.UsuarioEntidad;
 import com.coopetico.coopeticobackend.servicios.UsuarioServicio;
 /**
  Pruebas de unidad del UsuarioControlador
