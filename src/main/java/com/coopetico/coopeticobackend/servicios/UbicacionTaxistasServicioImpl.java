@@ -9,7 +9,7 @@ package com.coopetico.coopeticobackend.servicios;
 
 import com.coopetico.coopeticobackend.excepciones.UbicacionNoEncontradaExcepcion;
 import com.google.maps.model.LatLng;
-import com.sun.org.apache.xpath.internal.operations.Bool;
+// import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
