@@ -105,9 +105,9 @@ public class UbicacionTaxistasControlador {
     /**
      * Endpoint para consultar la ubicacion y el estado de disponibilidad de un taxista.
      *
-     * @param correoTaxista El correo del taxista del cuál se quiere conocer la ubicación.
+     * @param correoTaxista El correo del taxista del cuál se quiere conocer la ubicación y el estado de disponibilidad.
      *
-     * @return Modelo de una ubicación con los atributos correoTaxista, latitud y longitud.
+     * @return Modelo de una ubicación con los atributos correoTaxista, latitud y longitud, y disponible.
      */
     @GetMapping(path = "/consultar/todo/{correoTaxista}")
     public ResponseEntity consultarUbicacionDisponible(@PathVariable String correoTaxista){
@@ -121,51 +121,6 @@ public class UbicacionTaxistasControlador {
         boolean disponible = (boolean)datos[1];
 
         UbicacionTaxistaEntidad ubicacionEntidad = new UbicacionTaxistaEntidad(correoTaxista, latitud, longitud, disponible);
-
-        return ok(ubicacionEntidad);
-    }
-
-    /**
-     * Endpoint para consultar la ubicacion de un taxista.
-     *
-     * Tomar en cuenta que en el json de la respuesta va a ir la llave "disponible".
-     * Esto es por cuestiones de simplicidad, ya que responde con una entidad de ubicacion de taxista.
-     * Para no tener que crear otra entidad sin el atributo "disponible", IGNORARLO EN LA RESPUESTA.
-     *
-     * @param correoTaxista El correo del taxista del cuál se quiere conocer la ubicación.
-     *
-     * @return Modelo de una ubicación con los atributos correoTaxista, latitud y longitud (y disponible, que debe ser ignorado).
-     */
-    @GetMapping(path = "/consultar/ubicacion/{correoTaxista}")
-    public ResponseEntity consultarUbicacion(@PathVariable String correoTaxista){
-
-        Pair<Double, Double> ubicacion = ubicacionTaxistasServicio.consultarUbicacionPair(correoTaxista);
-
-        double latitud = ubicacion.getFirst();
-        double longitud = ubicacion.getSecond();
-
-        UbicacionTaxistaEntidad ubicacionEntidad = new UbicacionTaxistaEntidad(correoTaxista, latitud, longitud, false);
-
-        return ok(ubicacionEntidad);
-    }
-
-    /**
-     * Endpoint para consultar el estado de disponibilidad de un taxista.
-     *
-     * Tomar en cuenta que en el json de la respuesta van a ir las llaves "latitud" y "longitud".
-     * Esto es por cuestiones de simplicidad, ya que responde con una entidad de ubicacion de taxista.
-     * Para no tener que crear otra entidad sin los atributos latitud y longitud, IGNORARLOS EN LA RESPUESTA.
-     *
-     * @param correoTaxista El correo del taxista del cuál se quiere conocer la ubicación.
-     *
-     * @return Modelo de una ubicación con los atributos correoTaxista y disponible (y latitud y longitud que deben ser ignorados).
-     */
-    @GetMapping(path = "/consultar/disponible/{correoTaxista}")
-    public ResponseEntity consultarDisponible(@PathVariable String correoTaxista){
-
-        boolean disponible = ubicacionTaxistasServicio.consultarDisponible(correoTaxista);
-
-        UbicacionTaxistaEntidad ubicacionEntidad = new UbicacionTaxistaEntidad(correoTaxista, 0.0, 0.0, disponible);
 
         return ok(ubicacionEntidad);
     }

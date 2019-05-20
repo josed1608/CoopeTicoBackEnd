@@ -9,7 +9,6 @@ package com.coopetico.coopeticobackend.servicios;
 
 import com.coopetico.coopeticobackend.excepciones.UbicacionNoEncontradaExcepcion;
 import com.google.maps.model.LatLng;
-import org.springframework.data.util.Pair;
 
 import java.util.HashMap;
 
@@ -65,40 +64,6 @@ public interface UbicacionTaxistasServicio {
      * @author Marco Venegas
      */
     void eliminarTaxista(String taxistaId);
-
-    /**
-     * Consulta la  ubicación actual de un taxista.
-     * @param taxistaId Id del taxista que se consultará
-     *
-     * @throws UbicacionNoEncontradaExcepcion pues si no existe en la estructura, intentará
-     *                                        ingresar al índice de un null.
-     *
-     * @return Objeto LatLng con la ubicación del taxista
-     *
-     * @author Marco Venegas
-     */
-    LatLng consultarUbicacion(String taxistaId) throws UbicacionNoEncontradaExcepcion;
-
-    /**
-     * Método adicional que devuelve la latitud y longitud en un Pair.
-     *
-     * @param taxistaId Id del taxista que se consultará.
-     *
-     * @return Un Objeto Pair con la latitud y la longitud del usuario.
-     *
-     * @author Marco Venegas
-     */
-    Pair<Double, Double> consultarUbicacionPair(String taxistaId) throws UbicacionNoEncontradaExcepcion;
-
-    /**
-     * Consulta la  disponibilidad actual de un taxista.
-     * @param taxistaId Id del taxista que se consultará
-     *
-     * @return El estado de disponibilidad de un taxista.
-     *
-     * @author Marco Venegas
-     */
-    Boolean consultarDisponible(String taxistaId) throws UbicacionNoEncontradaExcepcion;
 
     /**
      * Consulta la ubicación y disponibilidad actual de un taxista.

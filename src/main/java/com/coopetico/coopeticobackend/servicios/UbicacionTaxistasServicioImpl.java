@@ -9,7 +9,6 @@ package com.coopetico.coopeticobackend.servicios;
 
 import com.coopetico.coopeticobackend.excepciones.UbicacionNoEncontradaExcepcion;
 import com.google.maps.model.LatLng;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -24,6 +23,10 @@ public class UbicacionTaxistasServicioImpl implements UbicacionTaxistasServicio 
      * y como valores las ubicaciones de dichos taxistas.
      */
     private HashMap<String, Object[]> ubicaciones;
+
+    public UbicacionTaxistasServicioImpl(HashMap<String, Object[]> ubicaciones){ //Constructor para testing
+        this.ubicaciones = ubicaciones;
+    }
 
     public UbicacionTaxistasServicioImpl(){
         this.ubicaciones = new HashMap<>(); //Inicializa la estructura de datos
@@ -68,38 +71,6 @@ public class UbicacionTaxistasServicioImpl implements UbicacionTaxistasServicio 
     @Override
     public void eliminarTaxista(String taxistaId) {
         ubicaciones.remove(taxistaId);
-    }
-
-    @Override
-    public LatLng consultarUbicacion(String taxistaId) throws UbicacionNoEncontradaExcepcion{
-        if(ubicaciones.containsKey(taxistaId)){ //Verifica que exista para que no intente accesar al índice de un null
-            return (LatLng)ubicaciones.get(taxistaId)[0];
-        }
-        else{
-            throw new UbicacionNoEncontradaExcepcion("No se encontró el taxista", HttpStatus.NOT_FOUND, System.currentTimeMillis());
-        }
-    }
-
-    @Override
-    public Pair<Double, Double> consultarUbicacionPair(String taxistaId) throws UbicacionNoEncontradaExcepcion {
-        if(ubicaciones.containsKey(taxistaId)){
-            LatLng ubicacion = (LatLng)ubicaciones.get(taxistaId)[0];
-            String ubicacionHilera = ubicacion.toString();
-            double latitud = Double.parseDouble(ubicacionHilera.split(",")[0]);
-            double longitud = Double.parseDouble(ubicacionHilera.split(",")[1]);
-            return Pair.of(latitud, longitud);
-        } else{
-            throw new UbicacionNoEncontradaExcepcion("No se encontró el taxista", HttpStatus.NOT_FOUND, System.currentTimeMillis());
-        }
-    }
-
-    @Override
-    public Boolean consultarDisponible(String taxistaId) throws UbicacionNoEncontradaExcepcion {
-        if(ubicaciones.containsKey(taxistaId)){
-            return (boolean)ubicaciones.get(taxistaId)[1];
-        } else{
-            throw new UbicacionNoEncontradaExcepcion("No se encontró el taxista", HttpStatus.NOT_FOUND, System.currentTimeMillis());
-        }
     }
 
     @Override
