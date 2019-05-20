@@ -71,8 +71,7 @@ public class TaxistasControlador {
      * @return Lista de taxistas, correo, nombre, apellidos, telefono y estado.
      */
     @GetMapping("/taxistas")
-    public List<TaxistaEntidadTemporal> consultar() {
-        return taxistaServicio.consultar();
+    public List<TaxistaEntidadTemporal> consultar() { return taxistaServicio.consultar();
     }
 
     /**
