@@ -271,6 +271,7 @@ public class TaxistasServicioImpl implements  TaxistasServicio {
      * @return datos a mostrar en flutter.
      */
     @Override
+    @Transactional
     public DatosTaxistaAsigadoEntidad obtenerDatosTaxistaAsignado(String correoTaxista) {
         UsuarioEntidad taxistaUsuarioDatos = this.usuarioRepositorio.findById(correoTaxista).get();
         TaxistaEntidad taxistaPorCorreo = this.taxistaRepositorio.findById(correoTaxista).get();

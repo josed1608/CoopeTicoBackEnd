@@ -145,14 +145,21 @@ public class ViajeControlador {
         try {
             String taxistaEscogido = distanciaServicio.taxistaMasCercano(origen, taxistasDisponibles);
 
-            this.template.convertAndSendToUser(taxistaEscogido, "/user/queue/recibir-viaje", datosViaje);
+            this.template.convertAndSend("/user/" + taxistaEscogido + "/queue/recibir-viaje", datosViaje);
 
-            return ok("Se le avisó al primer taxista");
+            return ok("Se le avisó al primer taxista " + taxistaEscogido);
         } catch (ApiException | InterruptedException | IOException e) {
             throw new UsuarioNoEncontradoExcepcion("No se logró encontrar taxista para el viaje", HttpStatus.NOT_FOUND, System.currentTimeMillis());
         }
     }
 
+    /**
+     * Endpoint para que un taxista acepte o rechace un viaje
+     * @param respuesta respuesta del taxista
+     * @param datosViaje datos del viaje que se acepta o rechaza
+     * @param principal usuario taxista que acepta o rechaza
+     * @return retorna la respuesta de lo que se logró
+     */
     @PostMapping("/aceptar-rechazar")
     public ResponseEntity respuestaTaxista(@RequestParam boolean respuesta, @RequestBody ViajeComenzandoEntidad datosViaje, Principal principal) {
         if(respuesta) {
@@ -161,7 +168,7 @@ public class ViajeControlador {
             taxistaAsignado.setOrigen(datosViaje.getOrigen());
             taxistaAsignado.setDestino(datosViaje.getDestino());
 
-            template.convertAndSendToUser(datosViaje.getCorreoCliente(), "/user/queue/esperar-taxista", taxistaAsignado);
+            template.convertAndSend("/user/" + datosViaje.getCorreoCliente() + "/queue/esperar-taxista", taxistaAsignado);
 
             return ok("Viaje comienza");
         }
@@ -175,11 +182,11 @@ public class ViajeControlador {
             try {
                 String taxistaEscogido = distanciaServicio.taxistaMasCercano(origen, taxistasDisponibles);
 
-                this.template.convertAndSendToUser(taxistaEscogido, "/user/queue/recibir-viaje", datosViaje);
+                this.template.convertAndSend("/user/" + taxistaEscogido + "/queue/recibir-viaje", datosViaje);
 
-                return ok("Se le avisó al siguiente taxista");
+                return ok("Se le avisó al siguiente taxista " + taxistaEscogido);
             } catch (ApiException | InterruptedException | IOException e) {
-                template.convertAndSendToUser(datosViaje.getCorreoCliente(), "/user/queue/esperar-taxista", "No se logró encontrar un taxista");
+                template.convertAndSend("/user/" + datosViaje.getCorreoCliente() + "/queue/esperar-taxista", "No se logró encontrar un taxista");
 
                 throw new UsuarioNoEncontradoExcepcion("No se logró encontrar taxista para el viaje", HttpStatus.NOT_FOUND, System.currentTimeMillis());
             }

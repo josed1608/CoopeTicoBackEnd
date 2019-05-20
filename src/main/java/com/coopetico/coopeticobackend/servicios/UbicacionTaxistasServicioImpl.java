@@ -143,11 +143,10 @@ public class UbicacionTaxistasServicioImpl implements UbicacionTaxistasServicio 
 
     @Override
     public List<Pair<String, LatLng>> obtenerTaxistasDisponibles(List<String> taxistasQueRechazaron) {
-        Map.Entry<String, Object[]>[] ubicacionesArray = (Map.Entry<String, Object[]>[]) ubicaciones.entrySet().toArray();
-        return  Arrays.stream(ubicacionesArray)
+        return ubicaciones.entrySet().stream()
                 .filter(entry -> (boolean)entry.getValue()[1])
                 .filter(taxista -> !taxistasQueRechazaron.contains(taxista.getKey()))
-                .map(entry -> Pair.of(entry.getKey(), new LatLng(Double.parseDouble(((String)entry.getValue()[1]).split(",")[0]), Double.parseDouble(((String)entry.getValue()[1]).split(",")[1]))))
+                .map(entry -> Pair.of(entry.getKey(), (LatLng)entry.getValue()[0]))
                 .collect(Collectors.toList());
     }
 }
