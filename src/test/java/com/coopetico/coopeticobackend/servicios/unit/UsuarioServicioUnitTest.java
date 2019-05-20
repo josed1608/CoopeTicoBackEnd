@@ -80,7 +80,7 @@ public class UsuarioServicioUnitTest {
 
     /**
      * Metodo para obtener un usuario por defecto
-     * @return
+     * @return Un usuario por defecto
      */
     @Ignore
     public static UsuarioEntidad getUsuarioDefecto(){
