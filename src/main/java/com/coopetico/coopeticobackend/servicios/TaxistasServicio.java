@@ -59,4 +59,10 @@ public interface TaxistasServicio {
      */
     Map<String, Object> obtenerEstado(String correo);
 
+    /**
+     * Método para guardar una lista de taxistas en la base de datos.
+     * @param taxistas Lista Entidad taxistas que se quiere guardar
+     * @return true si es correcto o false si falla
+     */
+    boolean guardarLista(List<TaxistaEntidadTemporal> taxistas);
 }
