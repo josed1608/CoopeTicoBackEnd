@@ -26,7 +26,7 @@ public class TaxisServicioImpl implements TaxisServicio{
     @Transactional
     @CrossOrigin(origins = "http://localhost:4200")
     public List<TaxiEntidad> consultar(){
-        return (List<TaxiEntidad>) taxisRepositorio.findAll();
+        return (List<TaxiEntidad>) taxisRepositorio.getTaxisValidos();
     }
 
     /**

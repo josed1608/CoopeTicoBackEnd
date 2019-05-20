@@ -49,7 +49,6 @@ public class TaxisControlador {
 
     /**
      * Constructor del controlador de taxis
-     * @param taxisServicio
      */
     public TaxisControlador(){
         this.utilidadesControlador = new UtilidadesControlador();
@@ -61,6 +60,7 @@ public class TaxisControlador {
      */
     @GetMapping("/taxis")
     public List<TaxiEntidad> consultar(){
+        /*
         List<TaxiEntidad> taxisValidos = new ArrayList<>();
         List<TaxiEntidad> taxis = taxisServicio.consultar();
 
@@ -70,7 +70,9 @@ public class TaxisControlador {
             }
         }
 
-        return taxisValidos;
+         */
+
+        return taxisServicio.consultar();
     }
 
     /**
