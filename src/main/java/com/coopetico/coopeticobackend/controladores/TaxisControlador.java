@@ -61,6 +61,7 @@ public class TaxisControlador {
      */
     @GetMapping("/taxis")
     public List<TaxiEntidad> consultar(){
+        /*
         List<TaxiEntidad> taxisValidos = new ArrayList<>();
         List<TaxiEntidad> taxis = taxisServicio.consultar();
 
@@ -70,7 +71,9 @@ public class TaxisControlador {
             }
         }
 
-        return taxisValidos;
+         */
+
+        return taxisServicio.consultar();
     }
 
     /**
