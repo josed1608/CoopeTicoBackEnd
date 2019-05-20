@@ -1,4 +1,3 @@
-package com.coopetico.coopeticobackend.servicios.unit;
 
 /**
  Pruebas de unidad del UsuarioServicio
@@ -7,6 +6,7 @@ package com.coopetico.coopeticobackend.servicios.unit;
  @version:    1.0
  */
 
+package com.coopetico.coopeticobackend.servicios.unit;
 import com.coopetico.coopeticobackend.entidades.bd.GrupoEntidad;
 import com.coopetico.coopeticobackend.entidades.bd.UsuarioEntidad;
 import com.coopetico.coopeticobackend.servicios.UsuarioServicio;
@@ -21,32 +21,31 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
+import static org.junit.Assert.assertNotNull;
 
+/**
+ * Clase que prueba el servicio del usuario
+ * Usa los datos del import.sql para que estos funcionen
+ */
 @SpringBootTest
 @RunWith(SpringRunner.class)
 public class UsuarioServicioUnitTest {
-    /**
-    UsuarioEntidad agregarUsuario(UsuarioEntidad usuarioSinGrupo, String grupoId);
-    UsuarioEntidad crearUsuario(UsuarioEntidad usuarioEntidad);
-    Optional<UsuarioEntidad> usuarioPorCorreo(String correo);
-    List<String> obtenerPermisos(UsuarioEntidad usuario);
-    List<UsuarioEntidad> obtenerUsuarios();
-    Page<UsuarioEntidad> obtenerUsuarios(Pageable pageable);
-    List<UsuarioEntidad> obtenerUsuariosPorGrupo(GrupoEntidad grupo);
-    void eliminar(String correo);
-     */
 
     @Autowired
     UsuarioServicio servicio;
 
+    /**
+     * Test para obtener usuarios
+     */
     @Test
     public void testListarUsuarios(){
         List<UsuarioEntidad> listaUsuarios = servicio.obtenerUsuarios();
         Assert.assertEquals(7, listaUsuarios.size());
     }
 
+    /**
+     * Test para agregar usuario
+     */
     @Test
     public void testAgregarUsuario(){
         UsuarioEntidad usuarioNuevo = getUsuarioDefecto();
@@ -55,6 +54,9 @@ public class UsuarioServicioUnitTest {
         servicio.eliminar(getUsuarioDefecto().getPkCorreo());
     }
 
+    /**
+     * Test para obtener un usuario por correo
+     */
     @Test
     public void testUsuarioPorCorreo(){
         servicio.crearUsuario(getUsuarioDefecto());
@@ -64,13 +66,22 @@ public class UsuarioServicioUnitTest {
         testListarUsuarios();
     }
 
+    /**
+     * Test eliminar un usuario\
+     */
     @Test
     public void testEliminarUsuario(){
+        // Crear usuario
         servicio.crearUsuario(getUsuarioDefecto());
+        // Elimina al usuario creado
         servicio.eliminar(getUsuarioDefecto().getPkCorreo());
         testListarUsuarios();
     }
 
+    /**
+     * Metodo para obtener un usuario por defecto
+     * @return
+     */
     @Ignore
     public static UsuarioEntidad getUsuarioDefecto(){
         UsuarioEntidad usuarioEntidad = new UsuarioEntidad();
@@ -85,7 +96,5 @@ public class UsuarioServicioUnitTest {
         usuarioEntidad.setTelefono("88887777");
         return usuarioEntidad;
     }
-
-
 
 }

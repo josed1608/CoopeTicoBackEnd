@@ -64,6 +64,11 @@ public class TaxistaEntidadTemporal {
     private String foto;
 
     /**
+     * Bit de borrado logico. Valido
+     */
+    private Boolean valid;
+
+    /**
      * Justificacion para desactivar taxista.
      */
     private String justificacion;
@@ -165,6 +170,14 @@ public class TaxistaEntidadTemporal {
      */
     public String getFoto() {
         return foto;
+    }
+
+    /**
+     * Funcion que retorna el bit de valido del taxista.
+     * @return Valido
+     */
+    public Boolean getValid() {
+        return valid;
     }
 
     /**
@@ -277,6 +290,14 @@ public class TaxistaEntidadTemporal {
      */
     public void setFoto(String foto) {
         this.foto = foto;
+    }
+
+    /**
+     * Metodo que modifica el bit de valido del taxista.
+     * @param valid Nuevo bit de valido
+     */
+    public void setValid(Boolean valid) {
+        this.valid = valid;
     }
 
     /**
