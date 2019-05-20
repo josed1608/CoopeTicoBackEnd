@@ -3,6 +3,7 @@ package com.coopetico.coopeticobackend.repositorios;
 import com.coopetico.coopeticobackend.entidades.bd.GrupoEntidad;
 import com.coopetico.coopeticobackend.entidades.bd.UsuarioEntidad;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
@@ -14,6 +15,5 @@ public interface UsuariosRepositorio extends JpaRepository<UsuarioEntidad, Strin
      * @return Usuarios del grrupo
      */
     List<UsuarioEntidad> findByGrupoByIdGrupo(GrupoEntidad grupo);
-
 
 }

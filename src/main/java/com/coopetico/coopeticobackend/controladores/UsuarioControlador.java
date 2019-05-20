@@ -348,4 +348,5 @@ public class UsuarioControlador {
         }
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
+
 }
