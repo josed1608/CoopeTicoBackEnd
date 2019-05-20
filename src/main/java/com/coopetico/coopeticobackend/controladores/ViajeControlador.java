@@ -164,9 +164,7 @@ public class ViajeControlador {
     public ResponseEntity respuestaTaxista(@RequestParam boolean respuesta, @RequestBody ViajeComenzandoEntidad datosViaje, Principal principal) {
         if(respuesta) {
             DatosTaxistaAsigadoEntidad taxistaAsignado = taxistasServicio.obtenerDatosTaxistaAsignado(principal.getName());
-            taxistaAsignado.setCorreoCliente(datosViaje.getCorreoCliente());
-            taxistaAsignado.setOrigen(datosViaje.getOrigen());
-            taxistaAsignado.setDestino(datosViaje.getDestino());
+            taxistaAsignado.setViaje(datosViaje);
 
             template.convertAndSend("/user/" + datosViaje.getCorreoCliente() + "/queue/esperar-taxista", taxistaAsignado);
 

@@ -276,9 +276,7 @@ public class TaxistasServicioImpl implements  TaxistasServicio {
         UsuarioEntidad taxistaUsuarioDatos = this.usuarioRepositorio.findById(correoTaxista).get();
         TaxistaEntidad taxistaPorCorreo = this.taxistaRepositorio.findById(correoTaxista).get();
         return new DatosTaxistaAsigadoEntidad(
-            null, // El correo del cliente que se asigna una capa arriba.
-            null, // El punto de origen que se asigna una capa arriba.
-            null, // El punto de destino que se asigna una capa arriba.
+            null,  // El viaje se asigna una capa arriba.
             correoTaxista,
             taxistaUsuarioDatos.getNombre()
                 + taxistaUsuarioDatos.getApellido1() + taxistaUsuarioDatos.getApellido2(),

@@ -186,19 +186,4 @@ public class TaxistasControlador {
         }
     }
 
-    @GetMapping("datosParaMostrar")
-    public DatosTaxistaAsigadoEntidad obtenerDatosTaxistaAsignado(
-        @RequestBody
-        String correoCliente,
-        String origen,
-        String destino,
-        String correoTaxista
-    ){
-        DatosTaxistaAsigadoEntidad resultado = this.taxistaServicio.obtenerDatosTaxistaAsignado(correoTaxista);
-        resultado.setCorreoCliente(correoCliente);
-        resultado.setOrigen(origen);
-        resultado.setDestino(destino);
-        return resultado;
-    }
-
 }

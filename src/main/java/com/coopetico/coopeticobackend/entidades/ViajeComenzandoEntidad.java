@@ -19,6 +19,8 @@ public class ViajeComenzandoEntidad {
     private String correoCliente;
     private String origen;
     private String destino;
+    private String tipo;
+    private boolean datafono;
     private List<String> taxistasQueRechazaron;
     //-------------------------------------------------------------------------
 
