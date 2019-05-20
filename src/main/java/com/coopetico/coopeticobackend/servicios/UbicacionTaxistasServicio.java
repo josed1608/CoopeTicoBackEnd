@@ -133,7 +133,8 @@ public interface UbicacionTaxistasServicio {
 
     /**
      * Busca los taxistas que estén disponibles en el HashMap
+     * @param taxistasQueRechzaron lista con los taxistas que ya dijeron que no a este viaje
      * @return Devuelve una lista con los taxistas que estén disponibles para un viaje
      */
-    List<Pair<String, LatLng>> obtenerTaxistasDisponibles();
+    List<Pair<String, LatLng>> obtenerTaxistasDisponibles(List<String> taxistasQueRechzaron);
 }

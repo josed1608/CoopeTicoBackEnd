@@ -187,6 +187,10 @@ public class UbicacionTaxistasControlador {
         return ok("Ubicación eliminada.");
     }
 
+    /**
+     * Inserta datos de prueba en las estructura de datos de taxistas
+     * @return ok indicando que se insertaron
+     */
     @PostMapping("/cargar-datos-test")
     public ResponseEntity cargarTaxistasDePrueba(){
         String[] taxistas = {"taxista1@taxista.com", "taxista2@taxista.com", "taxista3@taxista.com", "taxista4@taxista.com", "taxista5@taxista.com", "taxista6@taxista.com"};
