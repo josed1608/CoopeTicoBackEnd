@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Objects;
 
 @Entity
@@ -44,8 +45,22 @@ public class TaxiEntidad {
         this.taxistasQueMeConducen = taxistasQueMeConducen;
     }
 
-    public TaxiEntidad() {
+    public TaxiEntidad(String pkPlaca, Boolean datafono, String telefono, String clase, String tipo, Date fechaVenRtv,
+                       Date fechaVenMarchamo, Date fechaVenSeguro, Boolean valido, String foto, String correoTaxista) {
+        this.pkPlaca = pkPlaca;
+        this.datafono = datafono;
+        this.telefono = telefono;
+        this.clase = clase;
+        this.tipo = tipo;
+        this.fechaVenRtv =  new Timestamp(fechaVenRtv.getTime());
+        this.fechaVenMarchamo = new Timestamp(fechaVenMarchamo.getTime());
+        this.fechaVenSeguro = new Timestamp(fechaVenSeguro.getTime());
+        this.valido = valido;
+        this.foto = foto;
+        this.correoTaxista = correoTaxista;
     }
+
+    public TaxiEntidad(){}
 
     @Id
     @Column(name = "pk_placa", nullable = false, length = 8)
