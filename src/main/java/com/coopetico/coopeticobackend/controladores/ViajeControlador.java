@@ -165,27 +165,32 @@ public class ViajeControlador {
         if(respuesta) {
             DatosTaxistaAsigadoEntidad taxistaAsignado = taxistasServicio.obtenerDatosTaxistaAsignado(principal.getName());
             taxistaAsignado.setViaje(datosViaje);
+            ubicacionTaxistasServicio.updateDisponibleTaxista(principal.getName(), false);
 
             template.convertAndSend("/user/" + datosViaje.getCorreoCliente() + "/queue/esperar-taxista", taxistaAsignado);
 
             return ok("Viaje comienza");
         }
         else{
+            // Añadir el taxista que rachazó a la lista
             datosViaje.getTaxistasQueRechazaron().add(principal.getName());
+
+            // Si el que lo solicitó era un operador, se le avisa en caso de que rechazara
+            UsuarioEntidad usuarioCliente = new UsuarioEntidad();
+            usuarioCliente.setPkCorreo(datosViaje.getCorreoCliente());
+            if(usuarioServicio.obtenerTipo(usuarioCliente).equals("Operador")){
+                template.convertAndSend("/user/" + datosViaje.getCorreoCliente() + "/queue/esperar-taxista", "Taxista rechazó el viaje");
+            }
 
             // Buscar en el resto de taxistas que quedan
             List<Pair<String, LatLng>> taxistasDisponibles = ubicacionTaxistasServicio.obtenerTaxistasDisponibles(datosViaje.getTaxistasQueRechazaron());
-
             LatLng origen = new LatLng(Double.parseDouble(datosViaje.getOrigen().split(",")[0]), Double.parseDouble(datosViaje.getOrigen().split(",")[1]));
             try {
                 String taxistaEscogido = distanciaServicio.taxistaMasCercano(origen, taxistasDisponibles);
-
                 this.template.convertAndSend("/user/" + taxistaEscogido + "/queue/recibir-viaje", datosViaje);
-
                 return ok("Se le avisó al siguiente taxista " + taxistaEscogido);
             } catch (ApiException | InterruptedException | IOException e) {
                 template.convertAndSend("/user/" + datosViaje.getCorreoCliente() + "/queue/esperar-taxista", "No se logró encontrar un taxista");
-
                 throw new UsuarioNoEncontradoExcepcion("No se logró encontrar taxista para el viaje", HttpStatus.NOT_FOUND, System.currentTimeMillis());
             }
         }
