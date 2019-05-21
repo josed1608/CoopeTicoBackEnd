@@ -10,23 +10,24 @@ package com.coopetico.coopeticobackend.servicios.unit;
 import com.coopetico.coopeticobackend.excepciones.UbicacionNoEncontradaExcepcion;
 import com.coopetico.coopeticobackend.servicios.UbicacionTaxistasServicio;
 import com.coopetico.coopeticobackend.servicios.UbicacionTaxistasServicioImpl;
-import com.coopetico.coopeticobackend.servicios.UsuarioServicio;
 import com.google.maps.model.LatLng;
 import org.junit.Assert;
-import org.junit.Assert.*;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.data.util.Pair;
 
 import java.util.HashMap;
 
+/**
+ * Clase de pruebas del UbicacionTaxistasServicio
+ */
 @SpringBootTest
 @RunWith(SpringRunner.class)
 public class UbicacionTaxistasServicioUnitTest {
     /**
+     * Métodos:
      * void upsertUbicacionDisponibleTaxista(String taxistaId, LatLng ubicacion, Boolean disponible);
      * void upsertUbicacionTaxista(String taxistaId, LatLng ubicacion);
      * void updateDisponibleTaxista(String taxistaId, Boolean disponible) throws UbicacionNoEncontradaExcepcion;
@@ -36,15 +37,23 @@ public class UbicacionTaxistasServicioUnitTest {
      * HashMap<String, Object[]> getUbicaciones();
      */
 
+    /**
+     * Prueba la inserción de un dato a la estructura.
+     */
     @Test
     public void insertarDato(){
         HashMap<String, Object[]> ubicacionesTest = new HashMap<>();
         UbicacionTaxistasServicio ubicacionTaxistasServicio = new UbicacionTaxistasServicioImpl(ubicacionesTest);
 
+        Assert.assertEquals(ubicacionesTest.size(), 0); //No se ha insertado nada aún.
+
         ubicacionTaxistasServicio.upsertUbicacionDisponibleTaxista("taxista@taxista.com", new LatLng(0.0, 0.0), true);
         Assert.assertEquals(ubicacionesTest.size(), 1);
     }
 
+    /**
+     * Prueba la actualización de el valor correspondiente a una llave.
+     */
     @Test
     public void actualizarUbicacionDisponible(){
         HashMap<String, Object[]> ubicacionesTest = new HashMap<>();
@@ -65,6 +74,10 @@ public class UbicacionTaxistasServicioUnitTest {
         Assert.assertNotEquals(ubicacionVieja, ubicacionesTest.get("taxista@taxista.com")[1]);
     }
 
+    /**
+     * Prueba la actualización del campo de ubicación.
+     * Se asegura que solo este campo sea modificado.
+     */
     @Test
     public void actualizarUbicacion(){
         HashMap<String, Object[]> ubicacionesTest = new HashMap<>();
@@ -83,6 +96,9 @@ public class UbicacionTaxistasServicioUnitTest {
         Assert.assertEquals(disponibleViejo, ubicacionesTest.get("taxista@taxista.com")[1]); //Disponible no cambia
     }
 
+    /**
+     * Prueba la actualización del estado de disponibilidad cuando el valor ya existe en la estructura.     *
+     */
     @Test
     public void actualizarDisponibleExiste(){
         HashMap<String, Object[]> ubicacionesTest = new HashMap<>();
@@ -102,6 +118,10 @@ public class UbicacionTaxistasServicioUnitTest {
         Assert.assertNotEquals(disponibleViejo, ubicacionesTest.get("taxista@taxista.com")[1]);
     }
 
+    /**
+     * Prueba que se lance una excepcion cuando se intenta actualizar el estado de disponibilidad
+     * de una llave que no existe.
+     */
     @Test
     public void actualizarDisponibleNoExiste(){
         HashMap<String, Object[]> ubicacionesTest = new HashMap<>();
@@ -117,6 +137,9 @@ public class UbicacionTaxistasServicioUnitTest {
         }
     }
 
+    /**
+     * Prueba la eliminación de un campo de la estructura de datos.
+     */
     @Test
     public void eliminar(){
         HashMap<String, Object[]> ubicacionesTest = new HashMap<>();
@@ -129,6 +152,45 @@ public class UbicacionTaxistasServicioUnitTest {
         ubicacionTaxistasServicio.eliminarTaxista("taxista@taxista.com");
 
         Assert.assertEquals(ubicacionesTest.size(), 0); //Se eliminó
+    }
+
+    /**
+     * Prueba la consulta de una llave cuando devuelve el valor como un arreglo de Objetos.
+     */
+    @Test
+    public void consultar(){
+        HashMap<String, Object[]> ubicacionesTest = new HashMap<>();
+        UbicacionTaxistasServicio ubicacionTaxistasServicio = new UbicacionTaxistasServicioImpl(ubicacionesTest);
+
+        Object[] datos = {new LatLng(0.0, 0.0), true};
+
+        ubicacionTaxistasServicio.upsertUbicacionDisponibleTaxista("taxista@taxista.com", (LatLng)datos[0], (boolean)datos[1]);
+
+        Assert.assertEquals(ubicacionesTest.size(), 1); //Se insertó
+
+        Object[] resultado = ubicacionTaxistasServicio.consultarUbicacionDisponible("taxista@taxista.com");
+
+        Assert.assertEquals(datos[0], resultado[0]);
+        Assert.assertEquals(datos[1], resultado[1]);
+    }
+
+    /**
+     * Prueba la consulta de una llave cuando devuelve el valor como un Pair.
+     */
+    @Test
+    public void consultarPair(){
+        HashMap<String, Object[]> ubicacionesTest = new HashMap<>();
+        UbicacionTaxistasServicio ubicacionTaxistasServicio = new UbicacionTaxistasServicioImpl(ubicacionesTest);
+
+        Pair<Double, Double> ubicacion = Pair.of(0.0, 0.0);
+
+        ubicacionTaxistasServicio.upsertUbicacionDisponibleTaxista("taxista@taxista.com", new LatLng(ubicacion.getFirst(), ubicacion.getSecond()), true);
+
+        Assert.assertEquals(ubicacionesTest.size(), 1); //Se insertó
+
+        Object[] resultado = ubicacionTaxistasServicio.consultarUbicacionPairDisponible("taxista@taxista.com");
+
+        Assert.assertEquals((Pair<Double, Double>)resultado[0], ubicacion);
     }
 }
 
