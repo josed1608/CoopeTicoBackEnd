@@ -75,4 +75,15 @@ public interface UsuarioServicio {
      * @return String con el tipo, puede ser "cliente", "taxista" o "operador"
      */
     String obtenerTipo(UsuarioEntidad usuario);
+
+    /**
+     * Cambia el estado de un usuario
+     *
+     * Habilita o deshabilita un usario dependiendo del [nuevoEstado] proporcionado.
+     *
+     * @param correo Correo de usuario a modificar
+     * @param estadoNuevo Estado que se le dara al usuario
+     * @author Kevin Jimenez
+     */
+    void cambiarEstado(String correo, Boolean estadoNuevo);
 }
