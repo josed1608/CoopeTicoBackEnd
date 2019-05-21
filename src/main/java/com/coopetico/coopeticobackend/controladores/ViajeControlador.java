@@ -15,6 +15,7 @@ import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -161,7 +162,7 @@ public class ViajeControlador {
      * @return retorna la respuesta de lo que se logró
      */
     @PostMapping("/aceptar-rechazar")
-    public ResponseEntity respuestaTaxista(@RequestParam boolean respuesta, @RequestBody ViajeComenzandoEntidad datosViaje, Principal principal) {
+    public ResponseEntity respuestaTaxista(Principal principal, @RequestParam boolean respuesta, @RequestBody ViajeComenzandoEntidad datosViaje) {
         if(respuesta) {
             DatosTaxistaAsigadoEntidad taxistaAsignado = taxistasServicio.obtenerDatosTaxistaAsignado(principal.getName());
             taxistaAsignado.setViaje(datosViaje);
