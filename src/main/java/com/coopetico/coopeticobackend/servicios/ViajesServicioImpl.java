@@ -3,6 +3,8 @@
 package com.coopetico.coopeticobackend.servicios;
 //-----------------------------------------------------------------------------
 // Imports.
+import com.coopetico.coopeticobackend.entidades.bd.ClienteEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.OperadorEntidad;
 import com.coopetico.coopeticobackend.entidades.bd.ViajeEntidad;
 import com.coopetico.coopeticobackend.entidades.bd.ViajeEntidadPK;
 import com.coopetico.coopeticobackend.repositorios.ViajesRepositorio;

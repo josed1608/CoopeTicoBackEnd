@@ -1,7 +1,6 @@
 package com.coopetico.coopeticobackend.servicios;
 
-import com.coopetico.coopeticobackend.entidades.OperadorEntidad;
-import com.coopetico.coopeticobackend.entidades.TaxistaEntidadTemporal;
+import com.coopetico.coopeticobackend.entidades.bd.OperadorEntidad;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.List;

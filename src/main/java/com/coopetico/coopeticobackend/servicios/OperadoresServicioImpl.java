@@ -4,7 +4,7 @@ package com.coopetico.coopeticobackend.servicios;
 //-----------------------------------------------------------------------------
 // Imports
 
-import com.coopetico.coopeticobackend.entidades.OperadorEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.OperadorEntidad;
 import com.coopetico.coopeticobackend.repositorios.OperadorRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
