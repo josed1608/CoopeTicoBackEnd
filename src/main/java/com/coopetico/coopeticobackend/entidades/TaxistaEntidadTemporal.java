@@ -64,6 +64,11 @@ public class TaxistaEntidadTemporal {
     private String foto;
 
     /**
+     * Bit de borrado logico. Valido
+     */
+    private Boolean valid;
+
+    /**
      * Justificacion para desactivar taxista.
      */
     private String justificacion;
@@ -165,6 +170,14 @@ public class TaxistaEntidadTemporal {
      */
     public String getFoto() {
         return foto;
+    }
+
+    /**
+     * Funcion que retorna el bit de valido del taxista.
+     * @return Valido
+     */
+    public Boolean getValid() {
+        return valid;
     }
 
     /**
@@ -280,6 +293,14 @@ public class TaxistaEntidadTemporal {
     }
 
     /**
+     * Metodo que modifica el bit de valido del taxista.
+     * @param valid Nuevo bit de valido
+     */
+    public void setValid(Boolean valid) {
+        this.valid = valid;
+    }
+
+    /**
      * Metodo que modifica la fecha de vencimiento de la licencia del taxista.
      * @param vence_licencia Nueva fecha de vencimiento de licencia que se quiere guardar.
      */
@@ -324,6 +345,21 @@ public class TaxistaEntidadTemporal {
 
         this.siConduce = siConduce;
         this.noConduce = noConduce;
+    }
+
+    public TaxistaEntidadTemporal(TaxistaEntidad taxista){
+        this.pkCorreoUsuario = taxista.getPkCorreoUsuario();
+        this.faltas = taxista.getFaltas();
+        this.estado = taxista.isEstado();
+        this.hojaDelincuencia = taxista.isHojaDelincuencia();
+        this.estrellas = taxista.getEstrellas();
+        this.justificacion = taxista.getPkCorreoUsuario();
+        this.vence_licencia = taxista.getVence_licencia();
+        this.nombre = taxista.getUsuarioByPkCorreoUsuario().getNombre();
+        this.apellido1 = taxista.getUsuarioByPkCorreoUsuario().getApellido1();
+        this.apellido2 = taxista.getUsuarioByPkCorreoUsuario().getApellido2();
+        this.telefono = taxista.getUsuarioByPkCorreoUsuario().getTelefono();
+        this.foto = taxista.getUsuarioByPkCorreoUsuario().getFoto();
     }
 
     /**

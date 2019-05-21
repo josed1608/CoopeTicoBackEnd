@@ -1,18 +1,29 @@
 //-----------------------------------------------------------------------------
 package com.coopetico.coopeticobackend.controladores;
 //-----------------------------------------------------------------------------
+import com.coopetico.coopeticobackend.entidades.UsuarioTemporal;
+import com.coopetico.coopeticobackend.entidades.ViajeEntidadTemporal;
+import com.coopetico.coopeticobackend.entidades.bd.UsuarioEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.ViajeEntidad;
+import com.coopetico.coopeticobackend.servicios.UsuarioServicio;
 import com.coopetico.coopeticobackend.servicios.ViajesServicio;
 import com.coopetico.coopeticobackend.entidades.ViajeTmpEntidad;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 import static org.springframework.http.ResponseEntity.ok;
 //-----------------------------------------------------------------------------
+@CrossOrigin( origins = {"http://localhost:4200"})
+@RestController
+@Validated
 @Controller
 @RequestMapping(path = "/viajes")
 /**
@@ -27,7 +38,9 @@ import static org.springframework.http.ResponseEntity.ok;
 public class ViajeControlador {
     //-------------------------------------------------------------------------
     // Variables globales.
-    private ViajesServicio viajesRepositorio;
+    private ViajesServicio viajesServicio;
+    @Autowired
+    private UsuarioServicio usuarioServicio;
     //-------------------------------------------------------------------------
     // Métodos.
     /**
@@ -41,7 +54,7 @@ public class ViajeControlador {
      */
     @Autowired
     public ViajeControlador(ViajesServicio vjsRep) {
-        this.viajesRepositorio = vjsRep;
+        this.viajesServicio = vjsRep;
     }
 
     /**
@@ -57,7 +70,7 @@ public class ViajeControlador {
     @PostMapping()
     public ResponseEntity agregarViaje (@RequestBody ViajeTmpEntidad viajeTempEntidad) {
         try  {
-            this.viajesRepositorio.guardar(
+            this.viajesServicio.guardar(
                 viajeTempEntidad.getPlaca(),
                 viajeTempEntidad.getCorreoCliente(),
                 viajeTempEntidad.getFechaInicio(),
@@ -72,6 +85,33 @@ public class ViajeControlador {
         } catch (Exception e){
             return ok("error");
         }
-        
     }
+
+
+    /**
+     * Metodo para obtener una lista de usuarios
+     * @return Lista de usuarios
+     */
+    @GetMapping()
+    public List<ViajeEntidadTemporal> obtenerViajes(){
+        ViajeEntidadTemporal viajeEntidadTemporal = new ViajeEntidadTemporal();
+        List<ViajeEntidadTemporal> listaTemporal = viajeEntidadTemporal.convertirListaViajes(viajesServicio.consultarViajes());
+        for (ViajeEntidadTemporal viajeTemporal : listaTemporal) {
+            viajeTemporal.setNombreCliente(this.obtenerNombreUsuario(viajeTemporal.getCorreoCliente()));
+            viajeTemporal.setNombreTaxista(this.obtenerNombreUsuario(viajeTemporal.getCorreoTaxista()));
+            viajeTemporal.setNombreOperador(this.obtenerNombreUsuario(viajeTemporal.getCorreoOperador()));
+        }
+        return listaTemporal;
+    }
+
+    /**
+     * Método que permite obtener el nombre completo de un usuario.
+     * @param correo Id Usuario
+     * @return Nombre y apellidos
+     */
+    private String obtenerNombreUsuario(String correo){
+        UsuarioEntidad usuarioTemporal = usuarioServicio.usuarioPorCorreo(correo).get();
+        return usuarioTemporal.getNombre() + ' ' + usuarioTemporal.getApellido1() + ' ' + usuarioTemporal.getApellido2();
+    }
+
 }

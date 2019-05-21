@@ -114,7 +114,10 @@ public class TaxistasServicioImpl implements  TaxistasServicio {
             List<String> siConduce = taxisConduce(taxista.getTaxisConducidos());
             //Sacar los taxis que no puede conducir ese taxista
             List<String> noConduce = taxisNoConduce(siConduce);
-            listaTaxistaEntidadTemporal.add(new TaxistaEntidadTemporal(taxista, siConduce, noConduce));
+            // Solo se retornan taxistas validos (Bit de valido en true) Controlando el borrado logico
+            if(taxista.getUsuarioByPkCorreoUsuario().getValid()){
+                listaTaxistaEntidadTemporal.add(new TaxistaEntidadTemporal(taxista, siConduce, noConduce));
+            }
         }
         return listaTaxistaEntidadTemporal;
     }
@@ -160,6 +163,7 @@ public class TaxistasServicioImpl implements  TaxistasServicio {
         taxistaEntidad.getUsuarioByPkCorreoUsuario().setApellido2(taxistaEntidadTemporal.getApellido2());
         taxistaEntidad.getUsuarioByPkCorreoUsuario().setTelefono(taxistaEntidadTemporal.getTelefono());
         taxistaEntidad.getUsuarioByPkCorreoUsuario().setFoto(taxistaEntidadTemporal.getFoto());
+        taxistaEntidad.getUsuarioByPkCorreoUsuario().setValid(taxistaEntidadTemporal.getValid());
         //Se agrega el grupo del taxista
         GrupoEntidad grupoTaxista = this.gruposRepositorio.findById(this.idGrupoTaxista).orElse(null);
         taxistaEntidad.getUsuarioByPkCorreoUsuario().setGrupoByIdGrupo(grupoTaxista);
@@ -226,7 +230,11 @@ public class TaxistasServicioImpl implements  TaxistasServicio {
             List<String> siConduce = taxisConduce(taxistaEntidad.getTaxisConducidos());
             //Sacar los taxis que no puede conducir ese taxista
             List<String> noConduce = taxisNoConduce(siConduce);
-            taxistaEntidadTemporal = new TaxistaEntidadTemporal(taxistaEntidad, siConduce, noConduce);
+            if(taxistaEntidad.getUsuarioByPkCorreoUsuario().getValid()) {
+                taxistaEntidadTemporal = new TaxistaEntidadTemporal(taxistaEntidad, siConduce, noConduce);
+            } else {
+                taxistaEntidadTemporal = new TaxistaEntidadTemporal();
+            }
         }
         return taxistaEntidadTemporal;
     }
