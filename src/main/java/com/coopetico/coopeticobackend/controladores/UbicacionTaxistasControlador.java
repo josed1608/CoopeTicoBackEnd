@@ -109,7 +109,7 @@ public class UbicacionTaxistasControlador {
      *
      * @return Modelo de una ubicación con los atributos correoTaxista, latitud y longitud, y disponible.
      */
-    @GetMapping(path = "/consultar/todo/{correoTaxista}")
+    @GetMapping(path = "/consultar/{correoTaxista}")
     public ResponseEntity consultarUbicacionDisponible(@PathVariable String correoTaxista){
 
         Object[] datos = ubicacionTaxistasServicio.consultarUbicacionPairDisponible(correoTaxista);
