@@ -1,4 +1,4 @@
-package com.coopetico.coopeticobackend.entidades;
+package com.coopetico.coopeticobackend.entidades.bd;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -15,8 +15,8 @@ public class ViajeEntidad {
     private Timestamp fechaFin;
     private String costo;
     private float estrellas;
-        private String origen;
-        private String destino;
+    private String origen;
+    private String destino;
     private String agendaTelefono;
     private String agendaNombre;
 
@@ -53,7 +53,7 @@ public class ViajeEntidad {
     }
 
     @Basic
-    @Column(name = "fecha_fin")
+    @Column(name = "fecha_fin", nullable = false)
     public Timestamp getFechaFin() {
         return fechaFin;
     }
@@ -63,7 +63,7 @@ public class ViajeEntidad {
     }
 
     @Basic
-    @Column(name = "costo", length = 8)
+    @Column(name = "costo", nullable = false, length = 8)
     public String getCosto() {
         return costo;
     }
@@ -73,7 +73,7 @@ public class ViajeEntidad {
     }
 
     @Basic
-    @Column(name = "estrellas", nullable = false)
+    @Column(name = "estrellas")
     public float getEstrellas() {
         return estrellas;
     }
@@ -93,8 +93,8 @@ public class ViajeEntidad {
     }
 
     @Basic
-    @Column (name = "destino", length = 64)
-    public String  getDestino() {
+    @Column(name = "destino", nullable = false, length = 64)
+    public String getDestino() {
         return destino;
     }
 
@@ -137,7 +137,7 @@ public class ViajeEntidad {
 
     @Override
     public int hashCode() {
-        return Objects.hash(viajeEntidadPK, fechaFin, costo, estrellas, origen,destino);
+        return Objects.hash(viajeEntidadPK, fechaFin, costo, estrellas, origen, destino);
     }
 
     @ManyToOne

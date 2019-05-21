@@ -1,10 +1,12 @@
 package com.coopetico.coopeticobackend.servicios;
 
-import com.coopetico.coopeticobackend.entidades.TaxistaEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.TaxistaEntidad;
 import com.coopetico.coopeticobackend.entidades.TaxistaEntidadTemporal;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  Interfaz del servicio de la entidad Taxista.
@@ -37,10 +39,25 @@ public interface TaxistasServicio {
     TaxistaEntidadTemporal consultarPorId(String correoUsuario);
 
     /**
+     * Encuentra un usuario por correo     *
+     * @param correo correo del usuario que se va a buscar
+     * @return retorna el usuario en un Optional para poder aplicar lógica en caso de que no lo encuentre
+     */
+    Optional<TaxistaEntidad> taxistaPorCorreo(String correo);
+
+    /**
      * Funcion que retorna el taxista que indican en el parametro.
      * @param correoUsuario Id del taxista que se quiere eliminar
      */
     void eliminar(String correoUsuario);
+
+    /**
+     * Devuelve el estado del taxista
+     * @param correo Correo del taxista
+     * @return Mapa con el estado del taxista, y en caso de estar bloqueado, la justificacion
+     * @author Kevin Jiménez
+     */
+    Map<String, Object> obtenerEstado(String correo);
 
     /**
      * Trae de la base la entidad taxista identificada al corro dado

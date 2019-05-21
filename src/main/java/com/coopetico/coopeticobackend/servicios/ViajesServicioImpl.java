@@ -3,7 +3,8 @@
 package com.coopetico.coopeticobackend.servicios;
 //-----------------------------------------------------------------------------
 // Imports.
-import com.coopetico.coopeticobackend.entidades.*;
+import com.coopetico.coopeticobackend.entidades.bd.ViajeEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.ViajeEntidadPK;
 import com.coopetico.coopeticobackend.repositorios.ViajesRepositorio;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Optional;
 
 //-----------------------------------------------------------------------------
@@ -104,6 +106,18 @@ public class ViajesServicioImpl implements ViajesServicio {
         viajeInsertando = viajesRepositorio.save(viajeInsertando);
         return viajeInsertando.toString();
     }
+
+
+    /**
+     * Método para consultar todos los viajes a la base
+     * @return Lista de viajes
+     */
+    @Override
+    @Transactional
+    public List<ViajeEntidad> consultarViajes() {
+        return viajesRepositorio.findAll();
+    }
+
 
     /**
      * Este es el método a usar para crear un viaje en el sistema, solo con

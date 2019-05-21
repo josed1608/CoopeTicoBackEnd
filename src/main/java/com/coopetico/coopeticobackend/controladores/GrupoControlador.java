@@ -7,7 +7,7 @@ package com.coopetico.coopeticobackend.controladores;
  @version:    1.0
  */
 
-import com.coopetico.coopeticobackend.entidades.GrupoEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.GrupoEntidad;
 import com.coopetico.coopeticobackend.servicios.GrupoServicio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
+@CrossOrigin( origins = {"http://localhost:4200"})
 @RequestMapping(path = "/grupos")
 public class GrupoControlador {
 
@@ -33,7 +34,6 @@ public class GrupoControlador {
      * @return Lista de permisos con el ID
      */
     @GetMapping()
-    @CrossOrigin(origins = "http://localhost:4200")
     public List<GrupoEntidad> getGrupos(){
         List<GrupoEntidad> listaGrupos = grupoServicio.getGrupos();
         return  listaGrupos;
