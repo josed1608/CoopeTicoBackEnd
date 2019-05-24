@@ -13,7 +13,11 @@ import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class UbicacionTaxistasServicioImpl implements UbicacionTaxistasServicio {
@@ -134,5 +138,14 @@ public class UbicacionTaxistasServicioImpl implements UbicacionTaxistasServicio 
     @Override
     public HashMap<String, Object[]> getUbicaciones(){
         return this.ubicaciones;
+    }
+
+    @Override
+    public List<Pair<String, LatLng>> obtenerTaxistasDisponibles(List<String> taxistasQueRechazaron) {
+        return ubicaciones.entrySet().stream()
+                .filter(entry -> (boolean)entry.getValue()[1])
+                .filter(taxista -> !taxistasQueRechazaron.contains(taxista.getKey()))
+                .map(entry -> Pair.of(entry.getKey(), (LatLng)entry.getValue()[0]))
+                .collect(Collectors.toList());
     }
 }

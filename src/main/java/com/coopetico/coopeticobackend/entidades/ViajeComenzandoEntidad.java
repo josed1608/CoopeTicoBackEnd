@@ -4,6 +4,7 @@ package com.coopetico.coopeticobackend.entidades;
 //-----------------------------------------------------------------------------
 // Imports.
 import java.sql.Timestamp;
+import java.util.List;
 //-----------------------------------------------------------------------------
 
 /**
@@ -18,6 +19,9 @@ public class ViajeComenzandoEntidad {
     private String correoCliente;
     private String origen;
     private String destino;
+    private String tipo;
+    private boolean datafono;
+    private List<String> taxistasQueRechazaron;
     //-------------------------------------------------------------------------
 
     /**
@@ -31,11 +35,13 @@ public class ViajeComenzandoEntidad {
     public ViajeComenzandoEntidad(
         String correoCliente,
         String origen,
-        String destino
+        String destino,
+        List<String> taxistasQueRechazaron
     ) {
         this.correoCliente = correoCliente;
         this.origen = origen;
         this.destino = destino;
+        this.taxistasQueRechazaron = taxistasQueRechazaron;
     }
 
     public ViajeComenzandoEntidad() {
@@ -72,5 +78,14 @@ public class ViajeComenzandoEntidad {
     public void setDestino(String destino) {
         this.destino = destino;
     }
-//-------------------------------------------------------------------------
+
+    public List<String> getTaxistasQueRechazaron() {
+        return taxistasQueRechazaron;
+    }
+
+    public void setTaxistasQueRechazaron(List<String> taxistasQueRechazaron) {
+        this.taxistasQueRechazaron = taxistasQueRechazaron;
+    }
+
+    //-------------------------------------------------------------------------
 }

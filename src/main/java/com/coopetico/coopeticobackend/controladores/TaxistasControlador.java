@@ -208,9 +208,9 @@ public class TaxistasControlador {
         //---------------------------------------------------------------------
         // Se le anexan a los datos los que han ido saltando
         // de endpoint en endpoint
-        resultado.setCorreoCliente(json.get("correoCliente"));
-        resultado.setOrigen(json.get("origen"));
-        resultado.setDestino(json.get("destino"));
+        resultado.getViaje().setCorreoCliente(json.get("correoCliente"));
+        resultado.getViaje().setOrigen(json.get("origen"));
+        resultado.getViaje().setDestino(json.get("destino"));
         //---------------------------------------------------------------------
         return resultado;
         //---------------------------------------------------------------------
