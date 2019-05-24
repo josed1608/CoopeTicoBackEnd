@@ -136,5 +136,25 @@ public class UsuarioServicioImpl implements UsuarioServicio{
         return tipo;
     }
 
+    /**
+     * Cambia el estado de un usuario
+     *
+     * Habilita o deshabilita un usario dependiendo del [nuevoEstado] proporcionado.
+     *
+     * @param correo Correo de usuario a modificar
+     * @param estadoNuevo Estado que se le dara al usuario
+     * @author Kevin Jimenez
+     */
+    @Override
+    public void cambiarEstado(String correo, Boolean estadoNuevo) throws UsuarioNoEncontradoExcepcion {
+        if(usuariosRepositorio.existsById(correo)) {
+             UsuarioEntidad usuario =  usuariosRepositorio.findById(correo).get();
+             usuario.setValid(estadoNuevo);
+             usuariosRepositorio.save(usuario);
+        }else{
+            throw new UsuarioNoEncontradoExcepcion("El usuario no existe.", HttpStatus.NOT_FOUND, System.currentTimeMillis());
+        }
+    }
+
 
 }
