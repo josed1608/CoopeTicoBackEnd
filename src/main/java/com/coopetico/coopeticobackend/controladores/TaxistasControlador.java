@@ -1,5 +1,6 @@
 package com.coopetico.coopeticobackend.controladores;
 
+import com.coopetico.coopeticobackend.entidades.DatosTaxistaAsigadoEntidad;
 import com.coopetico.coopeticobackend.entidades.bd.TaxistaEntidad;
 import com.coopetico.coopeticobackend.entidades.TaxistaEntidadTemporal;
 import com.coopetico.coopeticobackend.excepciones.UsuarioNoEncontradoExcepcion;
@@ -183,4 +184,5 @@ public class TaxistasControlador {
             return new ResponseEntity("{\"error\" : \"Ha ocurrido un error interno.\"}", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 }

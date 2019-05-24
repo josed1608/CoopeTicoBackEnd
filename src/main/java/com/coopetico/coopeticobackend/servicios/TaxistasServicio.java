@@ -1,5 +1,6 @@
 package com.coopetico.coopeticobackend.servicios;
 
+import com.coopetico.coopeticobackend.entidades.DatosTaxistaAsigadoEntidad;
 import com.coopetico.coopeticobackend.entidades.bd.TaxistaEntidad;
 import com.coopetico.coopeticobackend.entidades.TaxistaEntidadTemporal;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -69,4 +70,15 @@ public interface TaxistasServicio {
      * @return la entidad si existe, null de otra manera
      */
     TaxistaEntidad consultarTaxistaPorId(String correo);
+    /**
+     * Trae los datos del taxista asociados al correo parametrisado.
+     * Se despiega en flutter cuando el usuario ve los datos del cofer asignado.
+     *
+     * @author Joseph Rementería (b55824)
+     * @since 15-05-2019
+     *
+     * @param correoTaxista correo del taxista asignado
+     * @return datos a mostrar en flutter.
+     */
+    DatosTaxistaAsigadoEntidad obtenerDatosTaxistaAsignado(String correoTaxista);
 }

@@ -32,7 +32,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
-
+import javax.validation.constraints.Email;
+import java.io.File;
+import com.coopetico.coopeticobackend.excepciones.UsuarioNoEncontradoExcepcion;
 /**
  Controlador de usuarios, hice los métodos de actualizarContrasena: Cambiar la contraseña en la base de datos
  y mostrarInterfazCambioContrasena: Validar el token que se envío al mail del usuario para el cambio de contraseña.
@@ -349,4 +351,21 @@ public class UsuarioControlador {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
+    /**
+     * Cambia el estado del usuario
+     * @param correo Correo de usuario
+     * @param valido Nuevo estado del usuario
+     * @return Respuesta con el correo y el nuevo estado del usuario
+     * @author Kevin Jimenez
+     */
+    @PutMapping("{correo}/estado")
+    public ResponseEntity  cambiarEstado(@PathVariable @Email String correo, @RequestParam String valido){
+        try{
+            usuarioServicio.cambiarEstado(correo, Boolean.parseBoolean(valido));
+        } catch (UsuarioNoEncontradoExcepcion e){
+            return new ResponseEntity("{\"error\": \"" + e.getMessage() + "\"}", HttpStatus.NOT_FOUND);
+        }
+        String respuesta = Boolean.parseBoolean(valido)? "habilitado":"deshabilitado";
+        return new ResponseEntity("{\"mensaje\" : \"Se ha " + respuesta +" al usuario.\"}", HttpStatus.OK);
+    }
 }
