@@ -135,10 +135,10 @@ public class UbicacionTaxistasControladorUnitTest {
         //Arrange
         when(ubicacionTaxistasServicio.consultarUbicacionPairDisponible(any(String.class))).thenReturn(arreglo);
         //Act
-        mockMvc.perform(get("/ubicaciones/consultar/taxista@taxista.com")
+        mockMvc.perform(get("/ubicaciones/consultar/taxista@taxista.com/")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().is(406)); //isOk()); TODO Arreglar este test en algun momento
+                .andExpect(status().isOk());
     }
 
     /**
@@ -151,7 +151,7 @@ public class UbicacionTaxistasControladorUnitTest {
         TaxistaEntidad mockTaxista = new TaxistaEntidad();
         when(taxistasServicio.taxistaPorCorreo(any(String.class))).thenReturn(Optional.of(mockTaxista));
         //Assert
-        mockMvc.perform(delete("/ubicaciones/eliminar/taxista@taxista.com")
+        mockMvc.perform(delete("/ubicaciones/eliminar/taxista@taxista.com/")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
