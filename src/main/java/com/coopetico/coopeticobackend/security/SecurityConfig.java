@@ -67,6 +67,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST,"/auth/signin").permitAll()
                 .antMatchers(HttpMethod.POST,"/clientes").permitAll()
                 .antMatchers(HttpMethod.GET, "/ws/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/viajes/aceptar-rechazar").authenticated()
                 // El has authority se usa para definir cuáles permisos permiten acceder a ese endpoint
                 .anyRequest().permitAll()
                 .and()
