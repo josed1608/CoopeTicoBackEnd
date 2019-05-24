@@ -142,4 +142,20 @@ public class UbicacionTaxistasControlador {
         return ok("Ubicación eliminada.");
     }
 
+    /**
+     * Inserta datos de prueba en las estructura de datos de taxistas
+     * @return ok indicando que se insertaron
+     */
+    @PostMapping("/cargar-datos-test")
+    public ResponseEntity cargarTaxistasDePrueba(){
+        String[] taxistas = {"taxista1@taxista.com", "taxista2@taxista.com", "taxista3@taxista.com", "taxista4@taxista.com", "taxista5@taxista.com", "taxista6@taxista.com"};
+        // Lincoln Plaza, Centro Comercial Guadalupe, Facultad de Derecho, Parque Morazán, Gorilla Logic, Parque de la Paz
+        LatLng[] ubicaciones = {new LatLng(9.963111, -84.054929), new LatLng(9.942293, -84.064481), new LatLng(9.936656, -84.054296), new LatLng(9.935459, -84.074635), new LatLng(9.938768, -84.109315), new LatLng(9.914237, -84.071847)};
+        boolean[] disponibles = {true, true, true, true, true, false};
+
+        for(int i = 0; i < 6; i++) {
+            this.ubicacionTaxistasServicio.upsertUbicacionDisponibleTaxista(taxistas[i], ubicaciones[i], disponibles[i]);
+        }
+        return ok("Taxis de test agregados");
+    }
 }

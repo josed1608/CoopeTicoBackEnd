@@ -1,5 +1,6 @@
 package com.coopetico.coopeticobackend.controladores;
 
+import com.coopetico.coopeticobackend.entidades.DatosTaxistaAsigadoEntidad;
 import com.coopetico.coopeticobackend.entidades.bd.TaxistaEntidad;
 import com.coopetico.coopeticobackend.entidades.TaxistaEntidadTemporal;
 import com.coopetico.coopeticobackend.excepciones.UsuarioNoEncontradoExcepcion;
@@ -18,6 +19,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+
+import static org.springframework.http.ResponseEntity.ok;
 
 /**
  Controlador de la entidad Taxista para consultar, insertar, modificar y eliminar taxistas.
@@ -182,5 +185,16 @@ public class TaxistasControlador {
         } catch (Exception general){
             return new ResponseEntity("{\"error\" : \"Ha ocurrido un error interno.\"}", HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    /**
+     * Metodo para guardar una lista de taxistas
+     * @param taxistas lista de los taxistas a guardar
+     * @return ok si la insercion fue exitosa
+     */
+    @PostMapping()
+    public ResponseEntity guardarTaxisArchivo(@RequestBody List<TaxistaEntidadTemporal> taxistas) {
+        this.taxistaServicio.guardarLista(taxistas);
+        return ok("");
     }
 }

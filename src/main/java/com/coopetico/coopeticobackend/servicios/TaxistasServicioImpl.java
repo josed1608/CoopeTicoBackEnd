@@ -267,4 +267,47 @@ public class TaxistasServicioImpl implements  TaxistasServicio {
         estado.put("justificacion", taxista.getJustificacion());
         return estado;
     }
+
+    /**
+     * Trae los datos del taxista asociados al correo parametrisado.
+     * Se despiega en flutter cuando el usuario ve los datos del cofer asignado.
+     *
+     * @author Joseph Rementería (b55824)
+     * @since 15-05-2019
+     *
+     * @param correoTaxista correo del taxista asignado
+     * @return datos a mostrar en flutter.
+     */
+    @Override
+    @Transactional
+    public DatosTaxistaAsigadoEntidad obtenerDatosTaxistaAsignado(String correoTaxista) {
+        UsuarioEntidad taxistaUsuarioDatos = this.usuarioRepositorio.findById(correoTaxista).get();
+        TaxistaEntidad taxistaPorCorreo = this.taxistaRepositorio.findById(correoTaxista).get();
+        return new DatosTaxistaAsigadoEntidad(
+            null,  // El viaje se asigna una capa arriba.
+            correoTaxista,
+            taxistaUsuarioDatos.getNombre()
+                + taxistaUsuarioDatos.getApellido1() + taxistaUsuarioDatos.getApellido2(),
+            taxistaUsuarioDatos.getFoto(),
+            taxistaPorCorreo.getEstrellas()
+        );
+    }
+
+    /**
+     * Método para guardar una lista de taxistas en la base de datos.
+     * @param taxistas Lista Entidad taxistas que se quiere guardar
+     * @return true si es correcto o false si falla
+     */
+    @Override
+    public boolean guardarLista(List<TaxistaEntidadTemporal> taxistas){
+        try{
+            for (TaxistaEntidadTemporal taxista: taxistas) {
+                this.guardar(taxista, taxista.getPkCorreoUsuario());
+            }
+            return true;
+        }catch (Exception e){
+            System.out.println(e);
+            return false;
+        }
+    }
 }
