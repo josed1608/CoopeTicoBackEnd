@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.CrossOrigin;
+
+import javax.transaction.TransactionScoped;
 import javax.transaction.Transactional;
 import java.util.HashMap;
 import java.util.Collection;
@@ -34,7 +36,7 @@ public class TaxistasServicioImpl implements  TaxistasServicio {
      * Repositorio de taxistas.
      */
     @Autowired
-    public TaxistasRepositorio taxistaRepositorio;
+    private TaxistasRepositorio taxistaRepositorio;
 
     /**
      * Repositorio de grupos.
@@ -266,6 +268,20 @@ public class TaxistasServicioImpl implements  TaxistasServicio {
         estado.put("estado", taxista.isEstado());
         estado.put("justificacion", taxista.getJustificacion());
         return estado;
+    }
+    /**
+     * Trae de la base la entidad taxista identificada al corro dado
+     *
+     * @author Joseph Rementeríá (b55824)
+     * @since 11-05-2019
+     *
+     * @param correo el correo del usuario
+     * @return la entidad si existe, null de otra manera
+     */
+    @Override
+    @Transactional
+    public TaxistaEntidad consultarTaxistaPorId(String correo) {
+        return this.taxistaRepositorio.findById(correo).orElse(null);
     }
 
     /**

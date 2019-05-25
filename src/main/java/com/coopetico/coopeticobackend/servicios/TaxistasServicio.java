@@ -61,6 +61,16 @@ public interface TaxistasServicio {
     Map<String, Object> obtenerEstado(String correo);
 
     /**
+     * Trae de la base la entidad taxista identificada al corro dado
+     *
+     * @author Joseph Rementeríá (b55824)
+     * @since 11-05-2019
+     *
+     * @param correo el correo del usuario
+     * @return la entidad si existe, null de otra manera
+     */
+    TaxistaEntidad consultarTaxistaPorId(String correo);
+    /**
      * Trae los datos del taxista asociados al correo parametrisado.
      * Se despiega en flutter cuando el usuario ve los datos del cofer asignado.
      *
