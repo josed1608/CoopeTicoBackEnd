@@ -70,18 +70,8 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standal
 public class ViajeControladorUnitTest {
     //-------------------------------------------------------------------------
     // Variables globales
-    @Autowired
-    ViajeControlador viajeControlador;
-    @MockBean
-    ViajesServicio viajesServicio;
     @MockBean
     ClienteServicio clienteServicio;
-    //-------------------------------------------------------------------------
-    // "Constructores"
-    @Before
-    public void setup() {
-        this.mockMvc = standaloneSetup(this.viajeControlador).build();
-    }
     //-------------------------------------------------------------------------
     // Pruebas
     @Autowired
@@ -101,7 +91,10 @@ public class ViajeControladorUnitTest {
     @MockBean
     ViajesServicio viajeServicio;
 
-
+    @Before
+    public void setup() {
+        this.mockMvc = standaloneSetup(this.viajesControlador).build();
+    }
     /**
      * Metodo que devuelve una lista con tres viajes para realizar las pruebas
      * @return Listas con viajes
