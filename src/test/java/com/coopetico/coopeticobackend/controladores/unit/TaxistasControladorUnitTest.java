@@ -394,22 +394,6 @@ public class TaxistasControladorUnitTest {
      */
     @Test
     public void testObtenerDatosTaxistaAsignado() {
-//        Map
-//        Map<String, Object> estado = new HashMap<>();
-//        estado.put("estado", true);
-//        estado.put("justificacion", "");
-//
-//        when(taxistasServicio.obtenerEstado("taxistaNoSuspendido@taxista.com")).thenReturn(estado);
-//
-//        final String resultado = mockMvc.perform(get("/taxistas/taxistaNoSuspendido@taxista.com/estado"))
-//                .andExpect(status().isOk())
-//                .andReturn().getResponse().getContentAsString();
-//        HashMap<String,Object> result =
-//                new ObjectMapper().readValue(resultado, HashMap.class);
-//        assertTrue(result.containsKey("estado"));
-//        assertTrue(result.containsKey("justificacion"));
-//        assertTrue(result.get("estado").equals(true));
-//        assertTrue(result.get("justificacion").equals(""));
         String body =
             "{" +
                 "\"correoCliente\" : \"cliente@cliente.com\"," +
