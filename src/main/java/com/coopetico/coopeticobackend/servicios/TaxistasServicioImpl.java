@@ -286,7 +286,8 @@ public class TaxistasServicioImpl implements  TaxistasServicio {
 
     /**
      * Trae los datos del taxista asociados al correo parametrisado.
-     * Se despiega en flutter cuando el usuario ve los datos del cofer asignado.
+     * Se despiega en flutter cuando el usuario ve los datos
+     * del cofer asignado.
      *
      * @author Joseph Rementería (b55824)
      * @since 15-05-2019
@@ -295,19 +296,33 @@ public class TaxistasServicioImpl implements  TaxistasServicio {
      * @return datos a mostrar en flutter.
      */
     @Override
-    @Transactional
-    public DatosTaxistaAsigadoEntidad obtenerDatosTaxistaAsignado(String correoTaxista) {
-        UsuarioEntidad taxistaUsuarioDatos = this.usuarioRepositorio.findById(correoTaxista).get();
-        TaxistaEntidad taxistaPorCorreo = this.taxistaRepositorio.findById(correoTaxista).get();
+    public DatosTaxistaAsigadoEntidad obtenerDatosTaxistaAsignado(
+            String correoTaxista
+    ) {
+        //---------------------------------------------------------------------
+        // Se busca en la base de datos la tupla en la tabla usuario
+        UsuarioEntidad taxistaUsuarioDatos =
+            this.usuarioRepositorio.findById(correoTaxista).get();
+        //---------------------------------------------------------------------
+        // Se busca en la base de datos la tupla en la tabla taxista
+        TaxistaEntidad taxistaPorCorreo =
+            this.taxistaRepositorio.findById(correoTaxista).get();
+        //---------------------------------------------------------------------
+        // Se crea una entidad con los datos a returnar
         return new DatosTaxistaAsigadoEntidad(
-            null,  // El viaje se asigna una capa arriba.
+            new ViajeComenzandoEntidad(), // Se asigna un nivel arriba
             correoTaxista,
             taxistaUsuarioDatos.getNombre()
-                + taxistaUsuarioDatos.getApellido1() + taxistaUsuarioDatos.getApellido2(),
+                + " "
+                + taxistaUsuarioDatos.getApellido1()
+                + " "
+                + taxistaUsuarioDatos.getApellido2(),
             taxistaUsuarioDatos.getFoto(),
             taxistaPorCorreo.getEstrellas()
         );
+        //---------------------------------------------------------------------
     }
+    //-------------------------------------------------------------------------
 
     /**
      * Método para guardar una lista de taxistas en la base de datos.

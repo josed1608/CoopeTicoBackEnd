@@ -28,18 +28,18 @@ public class DatosTaxistaAsigadoEntidad {
      *
      * Constructor con todos los parmetros
      *
-     * @param viaje
+     * @param viaje una entidad con los datos principales del viaje
      * @param correoTaxista correo del taxista asignado.
      * @param nombreTaxista nombre y apellidos del taxista concatenados
      * @param fotoTaxista la foto del taxista
      * @param estrellasTaxista el promedio de estrellas de un taxista
      */
     public DatosTaxistaAsigadoEntidad(
-        ViajeComenzandoEntidad viaje,
-        String correoTaxista,
-        String nombreTaxista,
-        String fotoTaxista,
-        float estrellasTaxista
+            ViajeComenzandoEntidad viaje,
+            String correoTaxista,
+            String nombreTaxista,
+            String fotoTaxista,
+            float estrellasTaxista
     ) {
         this.viaje = viaje;
         this.correoTaxista = correoTaxista;

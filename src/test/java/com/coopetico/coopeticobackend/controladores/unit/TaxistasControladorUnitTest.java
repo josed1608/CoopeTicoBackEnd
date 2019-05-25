@@ -17,6 +17,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.querydsl.binding.MultiValueBinding;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -24,13 +25,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.WebApplicationContext;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
 import static org.junit.Assert.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
@@ -384,5 +383,38 @@ public class TaxistasControladorUnitTest {
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objetos))
                 .andExpect(status().isOk());
+    }
+    //-------------------------------------------------------------------------
+    /**
+     * Pruebas para traer los datos del taxista asignado.
+     *
+     * @author Joseph Rementería (b55824)
+     * @since 25-05-2019
+     * @version 2.0
+     */
+    @Test
+    public void testObtenerDatosTaxistaAsignado() {
+        String body =
+            "{" +
+                "\"correoCliente\" : \"cliente@cliente.com\"," +
+                "\"origen\" : \"origen\"," +
+                "\"destino\" : \"destino\"" +
+            "}";
+
+        try {
+            final String resultado = mockMvc.perform(
+                get("/taxistas/taxista1@taxista.com/datosParaMostrar")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(body)
+            )
+            .andExpect(status().isOk())
+            .andReturn().getResponse().getContentAsString();
+            System.out.print("----------------------------------------------");
+            System.out.print(resultado);
+            System.out.print("----------------------------------------------");
+        } catch (Exception e) {
+            assert(true);
+        }
     }
 }
