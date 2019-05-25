@@ -1,7 +1,12 @@
 package com.coopetico.coopeticobackend.controladores.integration;
 
+import com.coopetico.coopeticobackend.controladores.ViajeControlador;
 import com.coopetico.coopeticobackend.entidades.DatosTaxistaAsigadoEntidad;
+import com.coopetico.coopeticobackend.entidades.UsuarioTemporal;
 import com.coopetico.coopeticobackend.entidades.ViajeComenzandoEntidad;
+import com.coopetico.coopeticobackend.entidades.ViajeEntidadTemporal;
+import com.coopetico.coopeticobackend.entidades.bd.UsuarioEntidad;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,10 +42,12 @@ import java.util.concurrent.TimeoutException;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static junit.framework.TestCase.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @RunWith(SpringRunner.class)
@@ -60,6 +67,10 @@ public class ViajeControladorIntegrationTest {
     private CompletableFuture<ViajeComenzandoEntidad> completableFutureViajeComenzado;
     private CompletableFuture<DatosTaxistaAsigadoEntidad> completableFutureTaxistaAsignado;
     private CompletableFuture<String> completableFutureStrings;
+
+    // Beans de las inyecciones de dependencias
+    @Autowired
+    ViajeControlador viajesControlador;
 
     /**
      * Se guarda el url para conectarse al webscoket, se inicia sesión y se toma el token para poder autenticarse al usar el websocket
@@ -81,6 +92,9 @@ public class ViajeControladorIntegrationTest {
 
         // Cargar datos para test de la estructura
         mockMvc.perform(post("/ubicaciones/cargar-datos-test")).andReturn();
+
+        // ViajesControlador
+        this.mockMvc = standaloneSetup(viajesControlador).build();
     }
 
     /**
@@ -263,5 +277,40 @@ public class ViajeControladorIntegrationTest {
         public void handleFrame(StompHeaders stompHeaders, Object o) {
             completableFutureStrings.complete((String) o);
         }
+    }
+
+    /**
+     * Test de obtener viajes
+     */
+    @Test
+    public void testobtenerViajes() throws Exception {
+        List<ViajeEntidadTemporal> viajesRetorno = viajesControlador.obtenerViajes();
+        assertNotNull(viajesRetorno);
+        Assert.assertEquals(viajesRetorno.size(), 2);
+    }
+
+    /**
+     * Metodo para obtener un usuario para las pruebas
+     * @return Retorna un objeto de tipo usuarioEntidad
+     */
+    public static UsuarioTemporal getUsuarioTemporal(){
+        UsuarioTemporal usuarioTemporal = new UsuarioTemporal();
+        usuarioTemporal.setCorreo("gerente11@gerente.com");
+        usuarioTemporal.setNombre("Gerente");
+        usuarioTemporal.setApellido1("Apellido1");
+        usuarioTemporal.setApellido2("Apellido2");
+        usuarioTemporal.setTelefono("11111111");
+        usuarioTemporal.setContrasena("$2a$10$gJ0hUnsEvTp5zyBVo19IHe.GoYKkL3Wy268wGJxG5.k.tUFhSUify");
+        usuarioTemporal.setFoto("foto");
+        usuarioTemporal.setIdGrupo("Cliente");
+        return usuarioTemporal;
+    }
+
+    /**
+     * Metodo para obtener un usuario para las pruebas
+     * @return Retorna un objeto de tipo usuarioTemporal
+     */
+    public static UsuarioEntidad getUsuarioEntidad(){
+        return getUsuarioTemporal().convertirAUsuarioEntidad();
     }
 }

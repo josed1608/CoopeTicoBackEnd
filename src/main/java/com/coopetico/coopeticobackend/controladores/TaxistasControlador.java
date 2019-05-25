@@ -20,6 +20,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
+import static org.springframework.http.ResponseEntity.ok;
+
 /**
  Controlador de la entidad Taxista para consultar, insertar, modificar y eliminar taxistas.
  @author      Christofer Rodriguez Sanchez.
@@ -216,4 +218,14 @@ public class TaxistasControlador {
         //---------------------------------------------------------------------
     }
     //-------------------------------------------------------------------------
+    /**
+     * Metodo para guardar una lista de taxistas
+     * @param taxistas lista de los taxistas a guardar
+     * @return ok si la insercion fue exitosa
+     */
+    @PostMapping()
+    public ResponseEntity guardarTaxisArchivo(@RequestBody List<TaxistaEntidadTemporal> taxistas) {
+        this.taxistaServicio.guardarLista(taxistas);
+        return ok("");
+    }
 }

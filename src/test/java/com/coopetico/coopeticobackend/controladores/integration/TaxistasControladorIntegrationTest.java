@@ -20,13 +20,17 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultActions;
+
 import javax.transaction.Transactional;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
@@ -95,7 +99,7 @@ public class TaxistasControladorIntegrationTest {
     @Transactional
     public void testConsultarVencLic() throws Exception {
         // Se hace la consulta al controlador
-        TaxistaEntidadTemporal entidadRetornada = taxistasControlador.consultarPorId("taxista1@taxista.com");
+        TaxistaEntidadTemporal entidadRetornada = taxistasControlador.consultarPorId("taxista2@taxista.com");
         //Se compara que no sea nulo
         assertNotNull(entidadRetornada);
         //Se compara que la fecha sea la esperada
@@ -120,8 +124,8 @@ public class TaxistasControladorIntegrationTest {
         //Se compara que no sea nulo
         assertNotNull(entidadRetornada);
         //Se compara ambos apellidos para ver que esten separados
-        Assert.assertEquals(entidadRetornada.getApellido1(), "apellido1");
-        Assert.assertEquals(entidadRetornada.getApellido2(), "apellido2");
+        Assert.assertEquals(entidadRetornada.getApellido1(), "apellido");
+        Assert.assertEquals(entidadRetornada.getApellido2(), "apellido");
     }
 
     /**
@@ -156,6 +160,7 @@ public class TaxistasControladorIntegrationTest {
         siConduce.add("BBB111");
         // Se agrega a la entidad que se va a enviar
         entidadRetornada.setSiConduce(siConduce);
+        entidadRetornada.setValid(true);
         //Se envia a guardar la entidad
         taxistasControlador.modificar(entidadRetornada, entidadRetornada.getPkCorreoUsuario());
         //Se consulta nuevamente el taxista para ver que conduce los 2 taxis
@@ -217,5 +222,77 @@ public class TaxistasControladorIntegrationTest {
                 new ObjectMapper().readValue(resultado, HashMap.class);
         assertTrue(result.containsKey("error"));
         assertTrue(result.get("error").equals("El usuario no existe."));
+    }
+
+        /**
+     * Prueba la insercion de un archivo de taxistas que es representado por lista.
+     * @throws Exception
+     * @author Jefferson Alvarez
+     */
+    @Test
+    @Transactional
+    public void testGuardarTaxisArchivo() throws Exception {
+        String url = "/taxistas/";
+
+        // Se crea el taxista 1
+        TaxistaEntidadTemporal taxistaEntidad1 = new TaxistaEntidadTemporal();
+        taxistaEntidad1.setPkCorreoUsuario("taxistaMoka1@coopetico.com");
+        taxistaEntidad1.setFaltas("0");
+        taxistaEntidad1.setEstado(true);
+        taxistaEntidad1.setHojaDelincuencia(true);
+        taxistaEntidad1.setEstrellas(5);
+        taxistaEntidad1.setNombre("Taxista01");
+        taxistaEntidad1.setApellido1("apellido01");
+        taxistaEntidad1.setApellido2("apellido02");
+        taxistaEntidad1.setTelefono("88228821");
+        taxistaEntidad1.setFoto("foto");
+        taxistaEntidad1.setValid(true);
+
+        // Se crea el taxista 2
+        TaxistaEntidadTemporal taxistaEntidad2 = new TaxistaEntidadTemporal();
+        taxistaEntidad2.setPkCorreoUsuario("taxistaMoka2@coopetico.com");
+        taxistaEntidad2.setFaltas("0");
+        taxistaEntidad2.setEstado(true);
+        taxistaEntidad2.setHojaDelincuencia(true);
+        taxistaEntidad2.setEstrellas(5);
+        taxistaEntidad2.setNombre("Taxista02");
+        taxistaEntidad2.setApellido1("apellido02");
+        taxistaEntidad2.setApellido2("apellido02");
+        taxistaEntidad2.setTelefono("88228822");
+        taxistaEntidad2.setFoto("foto");
+        taxistaEntidad2.setValid(true);
+
+        // Se crea el taxista 3
+        TaxistaEntidadTemporal taxistaEntidad3 = new TaxistaEntidadTemporal();
+        taxistaEntidad3.setPkCorreoUsuario("taxistaMoka3@coopetico.com");
+        taxistaEntidad3.setFaltas("0");
+        taxistaEntidad3.setEstado(true);
+        taxistaEntidad3.setHojaDelincuencia(true);
+        taxistaEntidad3.setEstrellas(5);
+        taxistaEntidad3.setNombre("Taxista03");
+        taxistaEntidad3.setApellido1("apellido03");
+        taxistaEntidad3.setApellido2("apellido03");
+        taxistaEntidad3.setTelefono("88228823");
+        taxistaEntidad3.setFoto("foto");
+        taxistaEntidad3.setValid(true);
+
+        // Se crea la lista de taxistas que representa al archivo
+        List<TaxistaEntidadTemporal> taxistas = Arrays.asList(taxistaEntidad1, taxistaEntidad2, taxistaEntidad3);
+
+
+        // Variable que tiene los objetos en formato JSON
+        String objetos;
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        objetos =  objectMapper.writeValueAsString(taxistas);
+
+
+        // Se manda la solicitud de agregar al url
+        ResultActions mvcResult = mockMvc.perform(post(url)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(objetos))
+                .andExpect(status().isOk());
+
+        assertTrue(taxistasControlador.consultar().size() >= 3);
     }
 }

@@ -51,5 +51,9 @@ public class UbicacionTaxistaEntidad implements Serializable {
         this.longitud = longitud;
         this.disponible = disponible;
     }
+
+    public UbicacionTaxistaEntidad(){
+
+    }
 }
 
