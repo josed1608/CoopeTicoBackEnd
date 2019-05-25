@@ -294,7 +294,7 @@ public class TaxistasServicioImpl implements  TaxistasServicio {
         //---------------------------------------------------------------------
         // Se crea una entidad con los datos a returnar
         return new DatosTaxistaAsigadoEntidad(
-            null, // Se asigna un nivel arriba
+            new ViajeComenzandoEntidad(), // Se asigna un nivel arriba
             correoTaxista,
             taxistaUsuarioDatos.getNombre()
                 + " "
