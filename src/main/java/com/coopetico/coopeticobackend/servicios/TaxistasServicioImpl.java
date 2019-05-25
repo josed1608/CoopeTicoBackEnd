@@ -308,4 +308,22 @@ public class TaxistasServicioImpl implements  TaxistasServicio {
             taxistaPorCorreo.getEstrellas()
         );
     }
+
+    /**
+     * Método para guardar una lista de taxistas en la base de datos.
+     * @param taxistas Lista Entidad taxistas que se quiere guardar
+     * @return true si es correcto o false si falla
+     */
+    @Override
+    public boolean guardarLista(List<TaxistaEntidadTemporal> taxistas){
+        try{
+            for (TaxistaEntidadTemporal taxista: taxistas) {
+                this.guardar(taxista, taxista.getPkCorreoUsuario());
+            }
+            return true;
+        }catch (Exception e){
+            System.out.println(e);
+            return false;
+        }
+    }
 }
