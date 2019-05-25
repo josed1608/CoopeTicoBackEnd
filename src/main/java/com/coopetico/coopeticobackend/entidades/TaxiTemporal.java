@@ -18,6 +18,11 @@ public class TaxiTemporal {
     boolean datafonoMastercard;
 
     /**
+     * Constructor por defecto
+     */
+
+    public TaxiTemporal(){}
+    /**
      * Constructor de la clase
      * @param placa Identificador del taxi
      * @param latitud Ubicacion del taxis
