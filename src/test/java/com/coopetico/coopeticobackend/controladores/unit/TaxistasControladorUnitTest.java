@@ -415,7 +415,7 @@ public class TaxistasControladorUnitTest {
                 "\"correoCliente\" : \"cliente@cliente.com\"," +
                 "\"origen\" : \"origen\"," +
                 "\"destino\" : \"destino\"" +
-            "\"}";
+            "}";
 
         try {
             final String resultado = mockMvc.perform(
