@@ -85,6 +85,7 @@ public class TaxistasServicioImplUnitTest {
         usuario1.setPkCorreo("taxistaMoka1@coopetico.com");
         usuario1.setTelefono("22333322");
         usuario1.setFoto("foto");
+        usuario1.setValid(true);
         TaxistaEntidad taxistaEntidad1 = new TaxistaEntidad();
         taxistaEntidad1.setPkCorreoUsuario("taxistaMoka1@coopetico.com");
         taxistaEntidad1.setFaltas("0");
@@ -100,6 +101,7 @@ public class TaxistasServicioImplUnitTest {
         usuario2.setPkCorreo("taxistaMoka1@coopetico.com");
         usuario2.setTelefono("22333322");
         usuario2.setFoto("foto");
+        usuario2.setValid(true);
         TaxistaEntidad taxistaEntidad2 = new TaxistaEntidad();
         taxistaEntidad2.setPkCorreoUsuario("taxistaMoka1@coopetico.com");
         taxistaEntidad2.setFaltas("0");
@@ -131,6 +133,7 @@ public class TaxistasServicioImplUnitTest {
         usuario.setApellido2("Apellido2");
         usuario.setPkCorreo("taxistaMoka1@coopetico.com");
         usuario.setTelefono("22333322");
+        usuario.setValid(true);
         usuario.setFoto("foto");
         TaxistaEntidad taxistaEntidad1 = new TaxistaEntidad();
         taxistaEntidad1.setPkCorreoUsuario("taxistaMoka1@coopetico.com");
@@ -162,6 +165,7 @@ public class TaxistasServicioImplUnitTest {
         usuario.setPkCorreo("taxistaMoka1@coopetico.com");
         usuario.setTelefono("22333322");
         usuario.setFoto("foto");
+        usuario.setValid(true);
         TaxistaEntidad taxistaEntidad1 = new TaxistaEntidad();
         taxistaEntidad1.setPkCorreoUsuario("taxistaMoka1@coopetico.com");
         taxistaEntidad1.setFaltas("0");
@@ -195,6 +199,7 @@ public class TaxistasServicioImplUnitTest {
         usuario.setPkCorreo("taxistaMoka1@coopetico.com");
         usuario.setTelefono("22333322");
         usuario.setFoto("foto");
+        usuario.setValid(true);
         TaxistaEntidad taxistaEntidad1 = new TaxistaEntidad();
         taxistaEntidad1.setPkCorreoUsuario("taxistaMoka1@coopetico.com");
         taxistaEntidad1.setFaltas("0");
