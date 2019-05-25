@@ -76,7 +76,7 @@ public class TaxistasServicioImplIntegrationTest {
     @Transactional
     public void testConsultarVencLic() throws Exception {
         // Se le pide el taxista al servicio
-        TaxistaEntidadTemporal entidadRetornada = taxistasServicio.consultarPorId("taxista1@taxista.com");
+        TaxistaEntidadTemporal entidadRetornada = taxistasServicio.consultarPorId("taxista2@taxista.com");
         //Se compara que no sea nulo
         assertNotNull(entidadRetornada);
         //Se compara que la fecha sea la esperada
@@ -101,8 +101,8 @@ public class TaxistasServicioImplIntegrationTest {
         //Se compara que no sea nulo
         assertNotNull(entidadRetornada);
         //Se compara ambos apellidos para ver que esten separados
-        Assert.assertEquals(entidadRetornada.getApellido1(), "apellido1");
-        Assert.assertEquals(entidadRetornada.getApellido2(), "apellido2");
+        Assert.assertEquals(entidadRetornada.getApellido1(), "apellido");
+        Assert.assertEquals(entidadRetornada.getApellido2(), "apellido");
     }
 
     /**
