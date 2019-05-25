@@ -29,14 +29,6 @@ import static org.springframework.test.web.servlet.result.
 import static org.springframework.test.web.servlet.setup.
     MockMvcBuilders.standaloneSetup;
 //-----------------------------------------------------------------------------
-/**
- * Pruebas unitarias para los métodos de la clase ViajeControlador
- *
- * @author Joseph Rementería (b55824)
- * @since 21-05-2019
- */
-@SpringBootTest
-@RunWith(SpringRunner.class)
 /*
  Pruebas de unidad del ViajesControlador
  @author      Hannia Aguilar Salas
@@ -67,14 +59,17 @@ import static org.junit.Assert.*;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
+/**
+ * Pruebas unitarias para los métodos de la clase ViajeControlador
+ *
+ * @author Joseph Rementería (b55824)
+ * @since 21-05-2019
+ */
 @SpringBootTest
 @RunWith(SpringRunner.class)
 public class ViajeControladorUnitTest {
     //-------------------------------------------------------------------------
     // Variables globales
-    private MockMvc mockMvc;
-    @Autowired
-    protected WebApplicationContext wac;
     @Autowired
     ViajeControlador viajeControlador;
     @MockBean
@@ -89,35 +84,6 @@ public class ViajeControladorUnitTest {
     }
     //-------------------------------------------------------------------------
     // Pruebas
-
-    /**
-     * Método que prueba la creación del viaje en la base de datos.
-     *
-     * @author Joseph Rementería (b55824)
-     * @since 21-05-2019
-     *
-     * @throws Exception cuando hay un error.
-     */
-    @Test
-    public void testCrearUsuario() throws Exception {
-        String time = LocalDate.now().toString();
-        mockMvc.perform(
-            post("/viajes")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(
-                    "{" +
-                    "\"placa\": \"AAA111\"," +
-                    "\"fechaInicio\": \"" + time + "\"," +
-                    "\"correoCliente\": \"cliente@cliente.com\"," +
-                    "\"origen\": \"punto_de_origen\"," +
-                    "\"correoTaxista\": \"taxista1@taxista.com\"" +
-                    "}"
-                )
-        )
-            .andExpect(status().isOk());
-    }
-    //-------------------------------------------------------------------------
-
     @Autowired
     protected WebApplicationContext wac;
 
@@ -135,11 +101,6 @@ public class ViajeControladorUnitTest {
     @MockBean
     ViajesServicio viajeServicio;
 
-
-    @Before
-    public void setup() {
-        this.mockMvc = standaloneSetup(viajesControlador).build();
-    }
 
     /**
      * Metodo que devuelve una lista con tres viajes para realizar las pruebas
@@ -206,5 +167,33 @@ public class ViajeControladorUnitTest {
     public static UsuarioEntidad getUsuarioEntidad(){
         return getUsuarioTemporal().convertirAUsuarioEntidad();
     }
+
+    /**
+     * Método que prueba la creación del viaje en la base de datos.
+     *
+     * @author Joseph Rementería (b55824)
+     * @since 21-05-2019
+     *
+     * @throws Exception cuando hay un error.
+     */
+    @Test
+    public void testCrearUsuario() throws Exception {
+        String time = LocalDate.now().toString();
+        mockMvc.perform(
+            post("/viajes")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(
+                "{" +
+                "\"placa\": \"AAA111\"," +
+                "\"fechaInicio\": \"" + time + "\"," +
+                "\"correoCliente\": \"cliente@cliente.com\"," +
+                "\"origen\": \"punto_de_origen\"," +
+                "\"correoTaxista\": \"taxista1@taxista.com\"" +
+                "}"
+            )
+        )
+            .andExpect(status().isOk());
+    }
+    //-------------------------------------------------------------------------
 }
 //-----------------------------------------------------------------------------
