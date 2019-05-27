@@ -7,11 +7,13 @@ package com.coopetico.coopeticobackend.servicios.unit;
  @version:    1.0
  */
 
+import com.coopetico.coopeticobackend.entidades.DatosTaxistaAsigadoEntidad;
 import com.coopetico.coopeticobackend.entidades.bd.TaxistaEntidad;
 import com.coopetico.coopeticobackend.entidades.TaxistaEntidadTemporal;
 import com.coopetico.coopeticobackend.entidades.bd.UsuarioEntidad;
 import com.coopetico.coopeticobackend.repositorios.TaxisRepositorio;
 import com.coopetico.coopeticobackend.repositorios.TaxistasRepositorio;
+import com.coopetico.coopeticobackend.repositorios.UsuariosRepositorio;
 import com.coopetico.coopeticobackend.servicios.TaxistasServicioImpl;
 import org.junit.Assert;
 import org.junit.Before;
@@ -57,6 +59,9 @@ public class TaxistasServicioImplUnitTest {
     @MockBean
     TaxisRepositorio taxisRepositorio;
 
+    @MockBean
+    UsuariosRepositorio usuariosRepositorio;
+
     /**
      * Servicio de taxistas.
      */
@@ -85,6 +90,7 @@ public class TaxistasServicioImplUnitTest {
         usuario1.setPkCorreo("taxistaMoka1@coopetico.com");
         usuario1.setTelefono("22333322");
         usuario1.setFoto("foto");
+        usuario1.setValid(true);
         TaxistaEntidad taxistaEntidad1 = new TaxistaEntidad();
         taxistaEntidad1.setPkCorreoUsuario("taxistaMoka1@coopetico.com");
         taxistaEntidad1.setFaltas("0");
@@ -100,6 +106,7 @@ public class TaxistasServicioImplUnitTest {
         usuario2.setPkCorreo("taxistaMoka1@coopetico.com");
         usuario2.setTelefono("22333322");
         usuario2.setFoto("foto");
+        usuario2.setValid(true);
         TaxistaEntidad taxistaEntidad2 = new TaxistaEntidad();
         taxistaEntidad2.setPkCorreoUsuario("taxistaMoka1@coopetico.com");
         taxistaEntidad2.setFaltas("0");
@@ -131,6 +138,7 @@ public class TaxistasServicioImplUnitTest {
         usuario.setApellido2("Apellido2");
         usuario.setPkCorreo("taxistaMoka1@coopetico.com");
         usuario.setTelefono("22333322");
+        usuario.setValid(true);
         usuario.setFoto("foto");
         TaxistaEntidad taxistaEntidad1 = new TaxistaEntidad();
         taxistaEntidad1.setPkCorreoUsuario("taxistaMoka1@coopetico.com");
@@ -162,6 +170,7 @@ public class TaxistasServicioImplUnitTest {
         usuario.setPkCorreo("taxistaMoka1@coopetico.com");
         usuario.setTelefono("22333322");
         usuario.setFoto("foto");
+        usuario.setValid(true);
         TaxistaEntidad taxistaEntidad1 = new TaxistaEntidad();
         taxistaEntidad1.setPkCorreoUsuario("taxistaMoka1@coopetico.com");
         taxistaEntidad1.setFaltas("0");
@@ -195,6 +204,7 @@ public class TaxistasServicioImplUnitTest {
         usuario.setPkCorreo("taxistaMoka1@coopetico.com");
         usuario.setTelefono("22333322");
         usuario.setFoto("foto");
+        usuario.setValid(true);
         TaxistaEntidad taxistaEntidad1 = new TaxistaEntidad();
         taxistaEntidad1.setPkCorreoUsuario("taxistaMoka1@coopetico.com");
         taxistaEntidad1.setFaltas("0");
@@ -278,4 +288,43 @@ public class TaxistasServicioImplUnitTest {
         assertTrue(estado.get("estado").equals(false));
         assertTrue(estado.get("justificacion").equals("Cobro de más a un cliente"));
     }
+    //-------------------------------------------------------------------------
+    /**
+     * Se prueba el método en el servicio para obtener los datos a msotrar
+     *
+     * @author Joseph Rementería (b55824)
+     * @since 25-05-2019
+     * @version 2.0
+     */
+    @Test
+    public void testObtenerDatosTaxistaAsignado() {
+        // TODO: help from a profetional.
+//        String CORREO_TAXISTA = "taxista1@taxista.com";
+//        UsuarioEntidad usuario = new UsuarioEntidad();
+//        usuario.setNombre("Taxista1");
+//        usuario.setApellido1("Apellido1");
+//        usuario.setApellido2("Apellido2");
+//        usuario.setPkCorreo(CORREO_TAXISTA);
+//        usuario.setTelefono("22333322");
+//        usuario.setFoto("foto");
+//
+//        TaxistaEntidad taxista = new TaxistaEntidad();
+//        taxista.setPkCorreoUsuario(CORREO_TAXISTA);
+//        taxista.setFaltas("0");
+//        taxista.setEstado(false);
+//        taxista.setHojaDelincuencia(true);
+//        taxista.setEstrellas(5);
+//        taxista.setJustificacion("Cobro de más a un cliente");
+//        taxista.setUsuarioByPkCorreoUsuario(usuario);
+//
+//        when(taxistasServicio.usuariosRepositorio.findById(CORREO_TAXISTA).get()).thenReturn(usuario);
+//        when(taxistasServicio.taxistasRepositorio.findById(CORREO_TAXISTA).get()).thenReturn(taxista);
+//
+//        DatosTaxistaAsigadoEntidad resultado = taxistasServicio.obtenerDatosTaxistaAsignado(
+//            CORREO_TAXISTA
+//        );
+//        boolean assertCondition = resultado.getCorreoTaxista() != CORREO_TAXISTA;
+//        assert(assertCondition);
+    }
+    //-------------------------------------------------------------------------
 }

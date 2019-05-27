@@ -20,6 +20,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
+import static org.springframework.http.ResponseEntity.ok;
+
 /**
  Controlador de la entidad Taxista para consultar, insertar, modificar y eliminar taxistas.
  @author      Christofer Rodriguez Sanchez.
@@ -185,4 +187,45 @@ public class TaxistasControlador {
         }
     }
 
+    //-------------------------------------------------------------------------
+    /**
+     * Trae los datos a ser desplegados del taxista asignado.
+     *
+     * @author Joseph Rementería (b55824)
+     * @since 15-05-2019
+     *
+     * @param correoTaxista el correo del taxista asignado
+     * @param json un JSON con el correo del cliente, el origen y el destino
+     * @return los datos a desplegar del taxista
+     */
+    @GetMapping("{correoTaxista}/datosParaMostrar")
+    public DatosTaxistaAsigadoEntidad obtenerDatosTaxistaAsignado(
+        @PathVariable String correoTaxista,
+        @RequestBody Map<String, String> json
+    ){
+        //---------------------------------------------------------------------
+        // Se llama el servicio que trae los datos de la base
+        DatosTaxistaAsigadoEntidad resultado =
+            this.taxistaServicio.obtenerDatosTaxistaAsignado(correoTaxista);
+        //---------------------------------------------------------------------
+        // Se le anexan a los datos los que han ido saltando
+        // de endpoint en endpoint
+        resultado.getViaje().setCorreoCliente(json.get("correoCliente"));
+        resultado.getViaje().setOrigen(json.get("origen"));
+        resultado.getViaje().setDestino(json.get("destino"));
+        //---------------------------------------------------------------------
+        return resultado;
+        //---------------------------------------------------------------------
+    }
+    //-------------------------------------------------------------------------
+    /**
+     * Metodo para guardar una lista de taxistas
+     * @param taxistas lista de los taxistas a guardar
+     * @return ok si la insercion fue exitosa
+     */
+    @PostMapping()
+    public ResponseEntity guardarTaxisArchivo(@RequestBody List<TaxistaEntidadTemporal> taxistas) {
+        this.taxistaServicio.guardarLista(taxistas);
+        return ok("");
+    }
 }

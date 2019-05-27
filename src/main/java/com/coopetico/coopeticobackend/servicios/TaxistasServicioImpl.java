@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.CrossOrigin;
+
+import javax.transaction.TransactionScoped;
 import javax.transaction.Transactional;
 import java.util.HashMap;
 import java.util.Collection;
@@ -34,7 +36,7 @@ public class TaxistasServicioImpl implements  TaxistasServicio {
      * Repositorio de taxistas.
      */
     @Autowired
-    public TaxistasRepositorio taxistaRepositorio;
+    private TaxistasRepositorio taxistaRepositorio;
 
     /**
      * Repositorio de grupos.
@@ -267,10 +269,25 @@ public class TaxistasServicioImpl implements  TaxistasServicio {
         estado.put("justificacion", taxista.getJustificacion());
         return estado;
     }
+    /**
+     * Trae de la base la entidad taxista identificada al corro dado
+     *
+     * @author Joseph Rementeríá (b55824)
+     * @since 11-05-2019
+     *
+     * @param correo el correo del usuario
+     * @return la entidad si existe, null de otra manera
+     */
+    @Override
+    @Transactional
+    public TaxistaEntidad consultarTaxistaPorId(String correo) {
+        return this.taxistaRepositorio.findById(correo).orElse(null);
+    }
 
     /**
      * Trae los datos del taxista asociados al correo parametrisado.
-     * Se despiega en flutter cuando el usuario ve los datos del cofer asignado.
+     * Se despiega en flutter cuando el usuario ve los datos
+     * del cofer asignado.
      *
      * @author Joseph Rementería (b55824)
      * @since 15-05-2019
@@ -279,17 +296,49 @@ public class TaxistasServicioImpl implements  TaxistasServicio {
      * @return datos a mostrar en flutter.
      */
     @Override
-    @Transactional
-    public DatosTaxistaAsigadoEntidad obtenerDatosTaxistaAsignado(String correoTaxista) {
-        UsuarioEntidad taxistaUsuarioDatos = this.usuarioRepositorio.findById(correoTaxista).get();
-        TaxistaEntidad taxistaPorCorreo = this.taxistaRepositorio.findById(correoTaxista).get();
+    public DatosTaxistaAsigadoEntidad obtenerDatosTaxistaAsignado(
+            String correoTaxista
+    ) {
+        //---------------------------------------------------------------------
+        // Se busca en la base de datos la tupla en la tabla usuario
+        UsuarioEntidad taxistaUsuarioDatos =
+            this.usuarioRepositorio.findById(correoTaxista).get();
+        //---------------------------------------------------------------------
+        // Se busca en la base de datos la tupla en la tabla taxista
+        TaxistaEntidad taxistaPorCorreo =
+            this.taxistaRepositorio.findById(correoTaxista).get();
+        //---------------------------------------------------------------------
+        // Se crea una entidad con los datos a returnar
         return new DatosTaxistaAsigadoEntidad(
-            null,  // El viaje se asigna una capa arriba.
+            new ViajeComenzandoEntidad(), // Se asigna un nivel arriba
             correoTaxista,
             taxistaUsuarioDatos.getNombre()
-                + taxistaUsuarioDatos.getApellido1() + taxistaUsuarioDatos.getApellido2(),
+                + " "
+                + taxistaUsuarioDatos.getApellido1()
+                + " "
+                + taxistaUsuarioDatos.getApellido2(),
             taxistaUsuarioDatos.getFoto(),
             taxistaPorCorreo.getEstrellas()
         );
+        //---------------------------------------------------------------------
+    }
+    //-------------------------------------------------------------------------
+
+    /**
+     * Método para guardar una lista de taxistas en la base de datos.
+     * @param taxistas Lista Entidad taxistas que se quiere guardar
+     * @return true si es correcto o false si falla
+     */
+    @Override
+    public boolean guardarLista(List<TaxistaEntidadTemporal> taxistas){
+        try{
+            for (TaxistaEntidadTemporal taxista: taxistas) {
+                this.guardar(taxista, taxista.getPkCorreoUsuario());
+            }
+            return true;
+        }catch (Exception e){
+            System.out.println(e);
+            return false;
+        }
     }
 }
