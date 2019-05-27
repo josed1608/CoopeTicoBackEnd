@@ -4,7 +4,7 @@
 
 package com.coopetico.coopeticobackend.servicios;
 
-import com.coopetico.coopeticobackend.entidades.TokenRecuperacionContrasenaEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.TokenRecuperacionContrasenaEntidad;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.constraints.Email;
 
