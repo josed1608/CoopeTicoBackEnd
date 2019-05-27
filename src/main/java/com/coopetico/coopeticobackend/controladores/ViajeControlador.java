@@ -266,5 +266,45 @@ public class ViajeControlador {
         //---------------------------------------------------------------------
     }
     //-------------------------------------------------------------------------
+
+    /**
+     * Actualiza el campo de fechaFin de la tupla del viaje proporcionado.
+     *
+     * @author Marco Venegas (B67697)
+     * @since 27-05-2019
+     *
+     * @param   datosDelViaje Placa, fecha de inicio y fecha de finalizacion del viaje.
+     * @return  Ok si no hubo problema,
+     *          Not found si el usuario que crea el viaje no existe en la DB
+     *          Server error, si el error no ha sido identificado.
+     */
+    @PutMapping("/finalizar")
+    public ResponseEntity finalizarViaje(@RequestBody ViajeTmpEntidad datosDelViaje) {
+        ResponseEntity resultado = null;
+        int respuestaServicio = viajesServicio.finalizar(
+                datosDelViaje.getPlaca(),
+                datosDelViaje.getFechaInicio(),
+                datosDelViaje.getFechaFin()
+        );
+
+        switch (respuestaServicio){
+            case 0: {
+                resultado = new ResponseEntity("Se finalizó el viaje.", HttpStatus.OK);
+            }break;
+
+            case -1: {
+                resultado = new ResponseEntity("Hubo un error no identificado", HttpStatus.INTERNAL_SERVER_ERROR);
+            }break;
+
+            case -2: {
+                resultado = new ResponseEntity("No existe este viaje en la base de datos", HttpStatus.NOT_FOUND);
+            }break;
+
+            case -3: {
+                resultado = new ResponseEntity("No se pudo actualizar el estado del viaje", HttpStatus.INTERNAL_SERVER_ERROR);
+            }break;
+        }
+        return resultado;
+    }
 }
 //-----------------------------------------------------------------------------
