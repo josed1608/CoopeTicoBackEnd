@@ -9,6 +9,7 @@ import com.coopetico.coopeticobackend.servicios.TaxistasServicio;
 import com.coopetico.coopeticobackend.servicios.UsuarioServicio;
 import com.coopetico.coopeticobackend.entidades.AuthenticationRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -29,6 +30,8 @@ import static org.springframework.http.ResponseEntity.ok;
 @RequestMapping("/auth")
 public class AuthControlador {
 
+    private Environment environment;
+
     private final
     AuthenticationManager authenticationManager;
 
@@ -42,7 +45,8 @@ public class AuthControlador {
     TaxistasServicio taxistasServicio;
 
     @Autowired
-    public AuthControlador(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, UsuarioServicio users, TaxistasServicio taxistasServicio) {
+    public AuthControlador(Environment environment, AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, UsuarioServicio users, TaxistasServicio taxistasServicio) {
+        this.environment = environment;
         this.authenticationManager = authenticationManager;
         this.jwtTokenProvider = jwtTokenProvider;
         this.usuarioServicio = users;
@@ -98,5 +102,14 @@ public class AuthControlador {
         } catch ( InvalidJwtAuthenticationException e){
             return false;
         }
+    }
+
+    /**
+     * Endpoint para ver el perfl actual con el que corre la aplicacion
+     * @return retorna el perfil (dev, test, prod o ci)
+     */
+    @GetMapping("/perfil")
+    public ResponseEntity perfilActual(){
+        return ok(this.environment.getActiveProfiles());
     }
 }
