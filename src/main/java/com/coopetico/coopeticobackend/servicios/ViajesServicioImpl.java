@@ -211,6 +211,44 @@ public class ViajesServicioImpl implements ViajesServicio {
         return result;
         //---------------------------------------------------------------------
     }
-    //-------------------------------------------------------------------------
+
+    /**
+     * Este es el método a usar para actualizar la fecha de finalización de un viaje.
+     *
+     * @author Marco Venegas (B67697)
+     * @since 27-05-2019
+     *
+     * @param placa la placa del taxi asignado
+     * @param fechaInicio la fecha de inicio de un viaje
+     * @param fechaFin la fecha en la que finalizó el viaje.
+     *
+     * @return Int con el estado  0 si se actualizó correctamente
+     *                           -1 si hubo un problema no manejado.
+     *                           -2 si no existe ese viaje en la bd.
+     *                           -3 si no se pudo guardar el cambio en la bd.
+     */
+    public int finalizar(String placa, Timestamp fechaInicio, Timestamp fechaFin){
+        try{
+            ViajeEntidadPK pk = new ViajeEntidadPK();
+            pk.setPkPlacaTaxi(placa);
+            pk.setPkFechaInicio(fechaInicio);
+
+            ViajeEntidad viajeAFinalizar = viajesRepositorio.findById(pk).orElse(null);
+            if(viajeAFinalizar == null){
+                return -2;
+            }
+
+            viajeAFinalizar.setFechaFin(fechaFin);
+
+            try{
+                viajeAFinalizar = viajesRepositorio.save(viajeAFinalizar);
+            }catch(Exception e){
+                return -3;
+            }
+        }catch (Exception e) {
+            return -1;
+        }
+        return 0;
+    }
 }
 //-----------------------------------------------------------------------------
