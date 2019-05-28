@@ -183,7 +183,7 @@ public class ViajeControlador {
             // Si el que lo solicitó era un operador, se le avisa en caso de que rechazara
             UsuarioEntidad usuarioCliente = new UsuarioEntidad();
             usuarioCliente.setPkCorreo(datosViaje.getCorreoCliente());
-            if(usuarioServicio.obtenerTipo(usuarioCliente).equals("Operador")){
+            if(usuarioServicio.obtenerTipo(usuarioCliente).equals("operador")){
                 template.convertAndSend("/user/" + datosViaje.getCorreoCliente() + "/queue/esperar-taxista", "Taxista rechazó el viaje");
                 return ok("Se le avisó al siguiente taxista");
             }
