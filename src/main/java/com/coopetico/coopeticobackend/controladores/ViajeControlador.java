@@ -301,6 +301,14 @@ public class ViajeControlador {
             }break;
 
             case -3: {
+                resultado = new ResponseEntity("No se pudo finalizar este viaje puesto que ya finalizó", HttpStatus.CONFLICT);
+            }break;
+
+            case -4: {
+                resultado = new ResponseEntity("El viaje no puede finalizar antes de que comenzó.", HttpStatus.FORBIDDEN);
+            }break;
+
+            case -5: {
                 resultado = new ResponseEntity("No se pudo actualizar el estado del viaje", HttpStatus.INTERNAL_SERVER_ERROR);
             }break;
         }

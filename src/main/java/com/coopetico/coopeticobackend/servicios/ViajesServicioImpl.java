@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
@@ -225,7 +226,9 @@ public class ViajesServicioImpl implements ViajesServicio {
      * @return Int con el estado  0 si se actualizó correctamente
      *                           -1 si hubo un problema no manejado.
      *                           -2 si no existe ese viaje en la bd.
-     *                           -3 si no se pudo guardar el cambio en la bd.
+     *                           -3 No se puede finalizar un viaje que ya finalizó.
+     *                           -4 la fecha de finalización no puede ser anterior a la fecha de inicio
+     *                           -5 si no se pudo guardar el cambio en la bd.
      */
     public int finalizar(String placa, String fechaInicio, String fechaFin){
         try{
@@ -236,13 +239,18 @@ public class ViajesServicioImpl implements ViajesServicio {
             if(viajeAFinalizar == null){
                 return -2;
             }
+            if(viajeAFinalizar.getFechaFin() != null){
+                return -3;
+            }
+            if(Timestamp.valueOf(fechaFin).before(Timestamp.valueOf(fechaInicio))){
+                return -4;
+            }
 
             viajeAFinalizar.setFechaFin(Timestamp.valueOf(fechaFin));
-
             try{
                 viajeAFinalizar = viajesRepositorio.save(viajeAFinalizar);
             }catch(Exception e){
-                return -3;
+                return -5;
             }
         }catch (Exception e) {
             return -1;
