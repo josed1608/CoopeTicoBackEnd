@@ -29,7 +29,7 @@ public class ViajeEntidadPK implements Serializable {
         this.pkFechaInicio = pkFechaInicio;
     }
 
-    public ViajeEntidadPK(String pkPlacaTaxi, String pkCorreoCliente, String pkFechaInicio) {
+    public ViajeEntidadPK(String pkPlacaTaxi, String pkFechaInicio) {
         this.pkPlacaTaxi = pkPlacaTaxi;
         this.pkFechaInicio = pkFechaInicio;
     }

@@ -232,9 +232,11 @@ public class ViajesServicioImpl implements ViajesServicio {
      */
     public int finalizar(String placa, String fechaInicio, String fechaFin){
         try{
-            ViajeEntidadPK pk = new ViajeEntidadPK();
-            pk.setPkPlacaTaxi(placa);
-            pk.setPkFechaInicio(fechaInicio);//Timestamp.valueOf(fechaInicio));
+            ViajeEntidadPK pk = new ViajeEntidadPK(placa, fechaInicio);
+//            pk.setPkPlacaTaxi(placa);
+//            pk.setPkFechaInicio(fechaInicio);//Timestamp.valueOf(fechaInicio));
+            //ViajeEntidad viajeAFinalizar = viajesRepositorio.getOne(pk);
+            List<ViajeEntidad> viajes = viajesRepositorio.findAll();
             ViajeEntidad viajeAFinalizar = viajesRepositorio.findById(pk).orElse(null);
             if(viajeAFinalizar == null){
                 return -2;
