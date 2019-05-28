@@ -17,8 +17,8 @@ public class ViajeTmpEntidad {
     // Variables globales
     private String placa;
     private String correoCliente;
-    private Timestamp fechaInicio;
-    private Timestamp fechaFin;
+    private String fechaInicio;
+    private String fechaFin;
     private String costo;
     private Integer estrellas;
     private String origen;
@@ -43,8 +43,8 @@ public class ViajeTmpEntidad {
     public ViajeTmpEntidad(
         String placa,
         String correoCliente,
-        Timestamp fechaInicio,
-        Timestamp fechaFin,
+        String fechaInicio,
+        String fechaFin,
         String costo,
         Integer estrellas,
         String origen,
@@ -97,28 +97,28 @@ public class ViajeTmpEntidad {
     /**
      * @return the fechaInicio
      */
-    public Timestamp getFechaInicio() {
+    public String getFechaInicio() {
         return fechaInicio;
     }
 
     /**
      * @param fechaInicio the fechaInicio to set
      */
-    public void setFechaInicio(Timestamp fechaInicio) {
+    public void setFechaInicio(String fechaInicio) {
         this.fechaInicio = fechaInicio;
     }
 
     /**
      * @return the fechaFin
      */
-    public Timestamp getFechaFin() {
+    public String getFechaFin() {
         return fechaFin;
     }
 
     /**
      * @param fechaFin the fechaFin to set
      */
-    public void setFechaFin(Timestamp fechaFin) {
+    public void setFechaFin(String fechaFin) {
         this.fechaFin = fechaFin;
     }
 

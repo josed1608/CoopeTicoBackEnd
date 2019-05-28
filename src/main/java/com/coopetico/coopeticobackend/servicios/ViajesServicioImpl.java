@@ -70,8 +70,8 @@ public class ViajesServicioImpl implements ViajesServicio {
     public String guardar(
         String placa,
         String correoCliente,
-        Timestamp fechaInicio,
-        Timestamp fechaFin,
+        String fechaInicio,
+        String fechaFin,
         String costo,
         Integer estrellas,
         String origen,
@@ -83,12 +83,12 @@ public class ViajesServicioImpl implements ViajesServicio {
         ViajeEntidadPK pk = new ViajeEntidadPK();
         //pk.setPkCorreoCliente(correoCliente);
         pk.setPkPlacaTaxi(placa);
-        pk.setPkFechaInicio(fechaInicio);
+        pk.setPkFechaInicio(Timestamp.valueOf(fechaInicio));
         //---------------------------------------------------------------------
         // Creación de entidad Viaje per sé.
         ViajeEntidad viajeInsertando = new ViajeEntidad();
         viajeInsertando.setViajeEntidadPK(pk);
-        viajeInsertando.setFechaFin(fechaFin);
+        viajeInsertando.setFechaFin(Timestamp.valueOf(fechaFin));
         viajeInsertando.setCosto(costo);
         viajeInsertando.setEstrellas(estrellas);
         viajeInsertando.setOrigen(origen);
@@ -130,7 +130,7 @@ public class ViajesServicioImpl implements ViajesServicio {
      * @since 11-05-2019
      *
      * @param placa la placa del taxi asignado
-     * @param fechaInicio la fecha de inicio de un viaje
+     * @param fechaInicio la fecha de inicio de un viaje en el formato "yyyy-mm-dd hh:mm:ss"
      * @param correoUsuario el correo del cliente o la operadora que
      *                      solicita el viaje
      * @param origen el punto de origen del viaje
@@ -146,7 +146,7 @@ public class ViajesServicioImpl implements ViajesServicio {
     @Transactional
     public int crear (
         String placa,
-        Timestamp fechaInicio,
+        String fechaInicio,
         String correoUsuario,
         String origen,
         String correoTaxista
@@ -157,7 +157,7 @@ public class ViajesServicioImpl implements ViajesServicio {
             // Creación de la llave primaria para la entidad Viaje.
             ViajeEntidadPK pk = new ViajeEntidadPK();
             pk.setPkPlacaTaxi(placa);
-            pk.setPkFechaInicio(fechaInicio);
+            pk.setPkFechaInicio(Timestamp.valueOf(fechaInicio));
             //-----------------------------------------------------------------
             //-----------------------------------------------------------------
             // Creación de entidad Viaje per sé.
@@ -219,26 +219,25 @@ public class ViajesServicioImpl implements ViajesServicio {
      * @since 27-05-2019
      *
      * @param placa la placa del taxi asignado
-     * @param fechaInicio la fecha de inicio de un viaje
-     * @param fechaFin la fecha en la que finalizó el viaje.
+     * @param fechaInicio la fecha de inicio de un viaje en el formato "yyyy-mm-dd hh:mm:ss"
+     * @param fechaFin la fecha en la que finalizó el viaje en el formato "yyyy-mm-dd hh:mm:ss"
      *
      * @return Int con el estado  0 si se actualizó correctamente
      *                           -1 si hubo un problema no manejado.
      *                           -2 si no existe ese viaje en la bd.
      *                           -3 si no se pudo guardar el cambio en la bd.
      */
-    public int finalizar(String placa, Timestamp fechaInicio, Timestamp fechaFin){
+    public int finalizar(String placa, String fechaInicio, String fechaFin){
         try{
             ViajeEntidadPK pk = new ViajeEntidadPK();
             pk.setPkPlacaTaxi(placa);
-            pk.setPkFechaInicio(fechaInicio);
-
+            pk.setPkFechaInicio(Timestamp.valueOf(fechaInicio));
             ViajeEntidad viajeAFinalizar = viajesRepositorio.findById(pk).orElse(null);
             if(viajeAFinalizar == null){
                 return -2;
             }
 
-            viajeAFinalizar.setFechaFin(fechaFin);
+            viajeAFinalizar.setFechaFin(Timestamp.valueOf(fechaFin));
 
             try{
                 viajeAFinalizar = viajesRepositorio.save(viajeAFinalizar);

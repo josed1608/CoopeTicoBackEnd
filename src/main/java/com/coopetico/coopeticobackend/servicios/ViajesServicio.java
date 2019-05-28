@@ -23,8 +23,8 @@ public interface ViajesServicio {
     String guardar(
         String placa,
         String correo_cliente,
-        Timestamp fecha_inicio,
-        Timestamp fecha_fin,
+        String fecha_inicio,
+        String fecha_fin,
         String costo,
         Integer estrellas,
         String origen,
@@ -55,7 +55,7 @@ public interface ViajesServicio {
      */
     int crear(
         String placa,
-        Timestamp fechaInicio,
+        String fechaInicio,
         String correoUsuario,
         String origen,
         String correoTaxista
@@ -73,5 +73,5 @@ public interface ViajesServicio {
      *
      * @return Int con el estado
      */
-    int finalizar(String placa, Timestamp fechaInicio, Timestamp fechaFin);
+    int finalizar(String placa, String fechaInicio, String fechaFin);
 }

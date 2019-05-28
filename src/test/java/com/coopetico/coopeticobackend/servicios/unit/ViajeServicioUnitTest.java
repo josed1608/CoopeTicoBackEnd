@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.sql.Date;
+import java.sql.Time;
 import java.sql.Timestamp;
 //-----------------------------------------------------------------------------
 /**
@@ -40,7 +41,8 @@ public class ViajeServicioUnitTest {
         // Crear usuario
         viajeServicio.crear(
             "AAA111",
-            new Timestamp(System.currentTimeMillis()),
+            //new Timestamp(System.currentTimeMillis()),
+            "2019-05-11 20:08:27",
             "correo@cliente.com",
             "origen",
             "taxista1@taxista.com"
