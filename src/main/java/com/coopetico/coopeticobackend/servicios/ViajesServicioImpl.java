@@ -84,12 +84,12 @@ public class ViajesServicioImpl implements ViajesServicio {
         ViajeEntidadPK pk = new ViajeEntidadPK();
         //pk.setPkCorreoCliente(correoCliente);
         pk.setPkPlacaTaxi(placa);
-        pk.setPkFechaInicio(Timestamp.valueOf(fechaInicio));
+        pk.setPkFechaInicio(fechaInicio);//Timestamp.valueOf(fechaInicio));
         //---------------------------------------------------------------------
         // Creación de entidad Viaje per sé.
         ViajeEntidad viajeInsertando = new ViajeEntidad();
         viajeInsertando.setViajeEntidadPK(pk);
-        viajeInsertando.setFechaFin(Timestamp.valueOf(fechaFin));
+        viajeInsertando.setFechaFin(fechaFin);//Timestamp.valueOf(fechaFin));
         viajeInsertando.setCosto(costo);
         viajeInsertando.setEstrellas(estrellas);
         viajeInsertando.setOrigen(origen);
@@ -158,7 +158,7 @@ public class ViajesServicioImpl implements ViajesServicio {
             // Creación de la llave primaria para la entidad Viaje.
             ViajeEntidadPK pk = new ViajeEntidadPK();
             pk.setPkPlacaTaxi(placa);
-            pk.setPkFechaInicio(Timestamp.valueOf(fechaInicio));
+            pk.setPkFechaInicio(fechaInicio);//Timestamp.valueOf(fechaInicio));
             //-----------------------------------------------------------------
             //-----------------------------------------------------------------
             // Creación de entidad Viaje per sé.
@@ -234,7 +234,7 @@ public class ViajesServicioImpl implements ViajesServicio {
         try{
             ViajeEntidadPK pk = new ViajeEntidadPK();
             pk.setPkPlacaTaxi(placa);
-            pk.setPkFechaInicio(Timestamp.valueOf(fechaInicio));
+            pk.setPkFechaInicio(fechaInicio);//Timestamp.valueOf(fechaInicio));
             ViajeEntidad viajeAFinalizar = viajesRepositorio.findById(pk).orElse(null);
             if(viajeAFinalizar == null){
                 return -2;
@@ -246,7 +246,7 @@ public class ViajesServicioImpl implements ViajesServicio {
                 return -4;
             }
 
-            viajeAFinalizar.setFechaFin(Timestamp.valueOf(fechaFin));
+            viajeAFinalizar.setFechaFin(fechaFin);//Timestamp.valueOf(fechaFin));
             try{
                 viajeAFinalizar = viajesRepositorio.save(viajeAFinalizar);
             }catch(Exception e){

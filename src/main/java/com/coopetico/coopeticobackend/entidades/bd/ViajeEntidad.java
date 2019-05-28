@@ -12,7 +12,7 @@ import java.util.Objects;
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "viajeEntidadPK")
 public class ViajeEntidad {
     private ViajeEntidadPK viajeEntidadPK;
-    private Timestamp fechaFin;
+    private String fechaFin;
     private String costo;
     private float estrellas;
     private String origen;
@@ -25,7 +25,7 @@ public class ViajeEntidad {
     private TaxistaEntidad taxistaByCorreoTaxi;
     private OperadorEntidad agendaOperador;
 
-    public ViajeEntidad(ViajeEntidadPK viajeEntidadPK, Timestamp fechaFin, String costo, float estrellas, String origen, String destino, String agendaTelefono, String agendaNombre, TaxiEntidad taxiByPkPlacaTaxi, ClienteEntidad clienteByPkCorreoCliente, TaxistaEntidad taxistaByCorreoTaxi, OperadorEntidad agendaOperador) {
+    public ViajeEntidad(ViajeEntidadPK viajeEntidadPK, String fechaFin, String costo, float estrellas, String origen, String destino, String agendaTelefono, String agendaNombre, TaxiEntidad taxiByPkPlacaTaxi, ClienteEntidad clienteByPkCorreoCliente, TaxistaEntidad taxistaByCorreoTaxi, OperadorEntidad agendaOperador) {
         this.viajeEntidadPK = viajeEntidadPK;
         this.fechaFin = fechaFin;
         this.costo = costo;
@@ -54,11 +54,11 @@ public class ViajeEntidad {
 
     @Basic
     @Column(name = "fecha_fin", nullable = false)
-    public Timestamp getFechaFin() {
+    public String getFechaFin() {
         return fechaFin;
     }
 
-    public void setFechaFin(Timestamp fechaFin) {
+    public void setFechaFin(String fechaFin) {
         this.fechaFin = fechaFin;
     }
 
