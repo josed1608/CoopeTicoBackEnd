@@ -14,7 +14,7 @@ public class ViajeEntidad {
     private ViajeEntidadPK viajeEntidadPK;
     private String fechaFin;
     private String costo;
-    private float estrellas;
+    private Integer estrellas;
     private String origen;
     private String destino;
     private String agendaTelefono;
@@ -25,7 +25,7 @@ public class ViajeEntidad {
     private TaxistaEntidad taxistaByCorreoTaxi;
     private OperadorEntidad agendaOperador;
 
-    public ViajeEntidad(ViajeEntidadPK viajeEntidadPK, String fechaFin, String costo, float estrellas, String origen, String destino, String agendaTelefono, String agendaNombre, TaxiEntidad taxiByPkPlacaTaxi, ClienteEntidad clienteByPkCorreoCliente, TaxistaEntidad taxistaByCorreoTaxi, OperadorEntidad agendaOperador) {
+    public ViajeEntidad(ViajeEntidadPK viajeEntidadPK, String fechaFin, String costo, Integer estrellas, String origen, String destino, String agendaTelefono, String agendaNombre, TaxiEntidad taxiByPkPlacaTaxi, ClienteEntidad clienteByPkCorreoCliente, TaxistaEntidad taxistaByCorreoTaxi, OperadorEntidad agendaOperador) {
         this.viajeEntidadPK = viajeEntidadPK;
         this.fechaFin = fechaFin;
         this.costo = costo;
@@ -74,11 +74,11 @@ public class ViajeEntidad {
 
     @Basic
     @Column(name = "estrellas")
-    public float getEstrellas() {
+    public Integer getEstrellas() {
         return estrellas;
     }
 
-    public void setEstrellas(float estrellas) {
+    public void setEstrellas(Integer estrellas) {
         this.estrellas = estrellas;
     }
 
