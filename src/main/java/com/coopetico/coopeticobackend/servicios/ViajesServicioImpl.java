@@ -227,8 +227,9 @@ public class ViajesServicioImpl implements ViajesServicio {
      *                           -1 si hubo un problema no manejado.
      *                           -2 si no existe ese viaje en la bd.
      *                           -3 No se puede finalizar un viaje que ya finalizó.
-     *                           -4 la fecha de finalización no puede ser anterior a la fecha de inicio
-     *                           -5 si no se pudo guardar el cambio en la bd.
+     *                           -4 Formato de fecha inválido
+     *                           -5 la fecha de finalización no puede ser anterior a la fecha de inicio
+     *                           -6 si no se pudo guardar el cambio en la bd.
      */
     public int finalizar(String placa, String fechaInicio, String fechaFin){
         try{
@@ -239,15 +240,18 @@ public class ViajesServicioImpl implements ViajesServicio {
             if(viajeAFinalizar.getFechaFin() != null){
                 return -3;
             }
-            if(Timestamp.valueOf(fechaFin).before(Timestamp.valueOf(fechaInicio))){
+            if (fechaFin.length() != 19) {
                 return -4;
+            }
+            if(Timestamp.valueOf(fechaFin).before(Timestamp.valueOf(fechaInicio))){
+                return -5;
             }
 
             viajeAFinalizar.setFechaFin(fechaFin);//Timestamp.valueOf(fechaFin));
             try{
                 viajeAFinalizar = viajesRepositorio.save(viajeAFinalizar);
             }catch(Exception e){
-                return -5;
+                return -6;
             }
         }catch (Exception e) {
             return -1;

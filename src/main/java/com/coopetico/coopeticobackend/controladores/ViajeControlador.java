@@ -305,10 +305,14 @@ public class ViajeControlador {
             }break;
 
             case -4: {
-                resultado = new ResponseEntity("El viaje no puede finalizar antes de que comenzó.", HttpStatus.FORBIDDEN);
+                resultado = new ResponseEntity("El formato de fecha de finalización es inválido.", HttpStatus.FORBIDDEN);
             }break;
 
             case -5: {
+                resultado = new ResponseEntity("El viaje no puede finalizar antes de que comenzó.", HttpStatus.FORBIDDEN);
+            }break;
+
+            case -6: {
                 resultado = new ResponseEntity("No se pudo actualizar el estado del viaje", HttpStatus.INTERNAL_SERVER_ERROR);
             }break;
         }
