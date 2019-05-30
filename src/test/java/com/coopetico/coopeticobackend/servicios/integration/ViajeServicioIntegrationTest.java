@@ -36,7 +36,7 @@ public class ViajeServicioIntegrationTest {
      * Prueba para el método finalizar viaje
      *
      * @author Marco Venegas (B67697)
-     * @since 29-05-2019
+     * @since 30-05-2019
      */
     @Test
     @Transactional
