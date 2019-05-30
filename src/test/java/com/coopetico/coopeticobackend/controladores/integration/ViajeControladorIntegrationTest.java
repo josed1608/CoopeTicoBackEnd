@@ -6,6 +6,12 @@ import com.coopetico.coopeticobackend.entidades.UsuarioTemporal;
 import com.coopetico.coopeticobackend.entidades.ViajeComenzandoEntidad;
 import com.coopetico.coopeticobackend.entidades.ViajeEntidadTemporal;
 import com.coopetico.coopeticobackend.entidades.bd.UsuarioEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.ViajeEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.ViajeEntidadPK;
+import com.coopetico.coopeticobackend.repositorios.ViajesRepositorio;
+import com.coopetico.coopeticobackend.servicios.ClienteServicio;
+import com.coopetico.coopeticobackend.servicios.UsuarioServicio;
+import com.coopetico.coopeticobackend.servicios.ViajesServicio;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -43,6 +49,7 @@ import java.util.concurrent.TimeoutException;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -71,6 +78,18 @@ public class ViajeControladorIntegrationTest {
     // Beans de las inyecciones de dependencias
     @Autowired
     ViajeControlador viajesControlador;
+
+    @Autowired
+    ClienteServicio clienteServicio;
+
+    @Autowired
+    UsuarioServicio usuarioServicio;
+
+    @Autowired
+    ViajesServicio viajeServicio;
+
+    @Autowired
+    ViajesRepositorio viajesRepositorio;
 
     /**
      * Se guarda el url para conectarse al webscoket, se inicia sesión y se toma el token para poder autenticarse al usar el websocket
@@ -313,4 +332,43 @@ public class ViajeControladorIntegrationTest {
     public static UsuarioEntidad getUsuarioEntidad(){
         return getUsuarioTemporal().convertirAUsuarioEntidad();
     }
+
+    /**
+     * Prueba para el endpoint finalizar viaje
+     *
+     * @author Marco Venegas (B67697)
+     * @since 30-05-2019
+     */
+    @Test
+    public void finalizarViaje(){
+        ViajeEntidadPK pk = new ViajeEntidadPK("AAA111", "2019-05-30 14:28:00");
+        try{
+            viajesRepositorio.deleteById(pk);
+        }catch(Exception e){}
+        finally{
+            viajeServicio.crear(pk.getPkPlacaTaxi(), pk.getPkFechaInicio(), "cliente@cliente.com", "origen", "taxista1@taxista.com");
+
+            try{
+                mockMvc.perform(
+                        put("/viajes/finalizar")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(
+                                        "{" +
+                                                "\"placa\": \"AAA111\"," +
+                                                "\"fechaInicio\": \"2019-05-30 14:28:00\"," +
+                                                "\"fechaFin\": \"2019-05-30 15:30:00\"" +
+                                                "}"
+                                )
+                )
+                        .andExpect(status().isOk());
+            }catch(Exception e){
+                fail();
+            }
+
+            ViajeEntidad insertado = viajesRepositorio.encontrarViaje(pk.getPkPlacaTaxi(), pk.getPkFechaInicio());
+
+            Assert.assertEquals(insertado.getFechaFin(), "2019-05-30 15:30:00");
+        }
+    }
+
 }

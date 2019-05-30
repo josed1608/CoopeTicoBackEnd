@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
@@ -70,8 +71,8 @@ public class ViajesServicioImpl implements ViajesServicio {
     public String guardar(
         String placa,
         String correoCliente,
-        Timestamp fechaInicio,
-        Timestamp fechaFin,
+        String fechaInicio,
+        String fechaFin,
         String costo,
         Integer estrellas,
         String origen,
@@ -83,12 +84,12 @@ public class ViajesServicioImpl implements ViajesServicio {
         ViajeEntidadPK pk = new ViajeEntidadPK();
         //pk.setPkCorreoCliente(correoCliente);
         pk.setPkPlacaTaxi(placa);
-        pk.setPkFechaInicio(fechaInicio);
+        pk.setPkFechaInicio(fechaInicio);//Timestamp.valueOf(fechaInicio));
         //---------------------------------------------------------------------
         // Creación de entidad Viaje per sé.
         ViajeEntidad viajeInsertando = new ViajeEntidad();
         viajeInsertando.setViajeEntidadPK(pk);
-        viajeInsertando.setFechaFin(fechaFin);
+        viajeInsertando.setFechaFin(fechaFin);//Timestamp.valueOf(fechaFin));
         viajeInsertando.setCosto(costo);
         viajeInsertando.setEstrellas(estrellas);
         viajeInsertando.setOrigen(origen);
@@ -130,7 +131,7 @@ public class ViajesServicioImpl implements ViajesServicio {
      * @since 11-05-2019
      *
      * @param placa la placa del taxi asignado
-     * @param fechaInicio la fecha de inicio de un viaje
+     * @param fechaInicio la fecha de inicio de un viaje en el formato "yyyy-mm-dd hh:mm:ss"
      * @param correoUsuario el correo del cliente o la operadora que
      *                      solicita el viaje
      * @param origen el punto de origen del viaje
@@ -146,7 +147,7 @@ public class ViajesServicioImpl implements ViajesServicio {
     @Transactional
     public int crear (
         String placa,
-        Timestamp fechaInicio,
+        String fechaInicio,
         String correoUsuario,
         String origen,
         String correoTaxista
@@ -157,7 +158,7 @@ public class ViajesServicioImpl implements ViajesServicio {
             // Creación de la llave primaria para la entidad Viaje.
             ViajeEntidadPK pk = new ViajeEntidadPK();
             pk.setPkPlacaTaxi(placa);
-            pk.setPkFechaInicio(fechaInicio);
+            pk.setPkFechaInicio(fechaInicio);//Timestamp.valueOf(fechaInicio));
             //-----------------------------------------------------------------
             //-----------------------------------------------------------------
             // Creación de entidad Viaje per sé.
@@ -211,6 +212,51 @@ public class ViajesServicioImpl implements ViajesServicio {
         return result;
         //---------------------------------------------------------------------
     }
-    //-------------------------------------------------------------------------
+
+    /**
+     * Este es el método a usar para actualizar la fecha de finalización de un viaje.
+     *
+     * @author Marco Venegas (B67697)
+     * @since 27-05-2019
+     *
+     * @param placa la placa del taxi asignado
+     * @param fechaInicio la fecha de inicio de un viaje en el formato "yyyy-mm-dd hh:mm:ss"
+     * @param fechaFin la fecha en la que finalizó el viaje en el formato "yyyy-mm-dd hh:mm:ss"
+     *
+     * @return Int con el estado  0 si se actualizó correctamente
+     *                           -1 si hubo un problema no manejado.
+     *                           -2 si no existe ese viaje en la bd.
+     *                           -3 No se puede finalizar un viaje que ya finalizó.
+     *                           -4 Formato de fecha inválido
+     *                           -5 la fecha de finalización no puede ser anterior a la fecha de inicio
+     *                           -6 si no se pudo guardar el cambio en la bd.
+     */
+    public int finalizar(String placa, String fechaInicio, String fechaFin){
+        try{
+            ViajeEntidad viajeAFinalizar = viajesRepositorio.encontrarViaje(placa, fechaInicio);
+            if(viajeAFinalizar == null){
+                return -2;
+            }
+            if(viajeAFinalizar.getFechaFin() != null){
+                return -3;
+            }
+            if (fechaFin.length() != 19) {
+                return -4;
+            }
+            if(Timestamp.valueOf(fechaFin).before(Timestamp.valueOf(fechaInicio))){
+                return -5;
+            }
+
+            viajeAFinalizar.setFechaFin(fechaFin);//Timestamp.valueOf(fechaFin));
+            try{
+                viajesRepositorio.save(viajeAFinalizar);
+            }catch(Exception e){
+                return -6;
+            }
+        }catch (Exception e) {
+            return -1;
+        }
+        return 0;
+    }
 }
 //-----------------------------------------------------------------------------
