@@ -111,14 +111,14 @@ public class ViajeControladorUnitTest {
         OperadorEntidad agendaOperador = new OperadorEntidad();
         agendaOperador.setPkCorreoUsuario("gerente11@gerente.com");
 
-        /*viajePK.setPkPlacaTaxi("CCC11");
-        viajePK.setPkFechaInicio(new Timestamp(date.getTime()));
-        viajes.add(new ViajeEntidad(viajePK, new Timestamp(date.getTime()),"5000", 2, "origen","destino", "agenda", "agenda2", taxiByPkPlacaTaxi, clienteByPkCorreoCliente, taxistaByCorreoTaxi, agendaOperador));
+        viajePK.setPkPlacaTaxi("CCC11");
+        viajePK.setPkFechaInicio("2019-01-01 01:01:01");
+        viajes.add(new ViajeEntidad(viajePK, "2019-01-01 02:01:01","5000", 2, "origen","destino", "agenda", "agenda2", taxiByPkPlacaTaxi, clienteByPkCorreoCliente, taxistaByCorreoTaxi, agendaOperador));
         viajePK.setPkPlacaTaxi("DDD11");
-        viajes.add(new ViajeEntidad(viajePK, new Timestamp(date.getTime()),"5000", 2, "origen","destino", "agenda", "agenda2", taxiByPkPlacaTaxi, clienteByPkCorreoCliente, taxistaByCorreoTaxi, agendaOperador));
+        viajes.add(new ViajeEntidad(viajePK, "2019-01-01 02:01:01","5000", 2, "origen","destino", "agenda", "agenda2", taxiByPkPlacaTaxi, clienteByPkCorreoCliente, taxistaByCorreoTaxi, agendaOperador));
         viajePK.setPkPlacaTaxi("EEE11");
-        viajes.add(new ViajeEntidad(viajePK, new Timestamp(date.getTime()),"5000", 2, "origen","destino", "agenda", "agenda2", taxiByPkPlacaTaxi, clienteByPkCorreoCliente, taxistaByCorreoTaxi, agendaOperador));
-*/
+        viajes.add(new ViajeEntidad(viajePK, "2019-01-01 02:01:01","5000", 2, "origen","destino", "agenda", "agenda2", taxiByPkPlacaTaxi, clienteByPkCorreoCliente, taxistaByCorreoTaxi, agendaOperador));
+
         return viajes;
     }
 
