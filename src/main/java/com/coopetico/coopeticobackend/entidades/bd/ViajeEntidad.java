@@ -53,7 +53,7 @@ public class ViajeEntidad {
     }
 
     @Basic
-    @Column(name = "fecha_fin", nullable = false)
+    @Column(name = "fecha_fin")
     public String getFechaFin() {
         return fechaFin;
     }
@@ -63,7 +63,7 @@ public class ViajeEntidad {
     }
 
     @Basic
-    @Column(name = "costo", nullable = false, length = 8)
+    @Column(name = "costo", length = 8)
     public String getCosto() {
         return costo;
     }
@@ -93,7 +93,7 @@ public class ViajeEntidad {
     }
 
     @Basic
-    @Column(name = "destino", nullable = false, length = 64)
+    @Column(name = "destino", length = 64)
     public String getDestino() {
         return destino;
     }
