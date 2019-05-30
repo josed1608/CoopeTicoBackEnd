@@ -249,7 +249,7 @@ public class ViajesServicioImpl implements ViajesServicio {
 
             viajeAFinalizar.setFechaFin(fechaFin);//Timestamp.valueOf(fechaFin));
             try{
-                viajeAFinalizar = viajesRepositorio.save(viajeAFinalizar);
+                viajesRepositorio.save(viajeAFinalizar);
             }catch(Exception e){
                 return -6;
             }
