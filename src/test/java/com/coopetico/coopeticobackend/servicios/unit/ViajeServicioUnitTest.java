@@ -72,6 +72,12 @@ public class ViajeServicioUnitTest {
     //-------------------------------------------------------------------------
 
 
+    /**
+     * Prueba para el método finalizar viaje
+     *
+     * @author Marco Venegas (B67697)
+     * @since 29-05-2019
+     */
     @Test
     public void finalizarViaje(){
         String placa = "AAA111";
