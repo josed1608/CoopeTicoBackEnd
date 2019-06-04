@@ -1,6 +1,6 @@
 package com.coopetico.coopeticobackend.controladores;
 
-import com.coopetico.coopeticobackend.entidades.UsuarioEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.UsuarioEntidad;
 import com.coopetico.coopeticobackend.excepciones.CorreoTomadoExcepcion;
 import com.coopetico.coopeticobackend.excepciones.GrupoNoExisteExcepcion;
 import com.coopetico.coopeticobackend.servicios.ClienteServicio;

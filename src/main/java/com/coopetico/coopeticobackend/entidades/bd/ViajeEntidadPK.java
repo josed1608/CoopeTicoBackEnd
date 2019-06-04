@@ -1,8 +1,7 @@
-package com.coopetico.coopeticobackend.entidades;
+package com.coopetico.coopeticobackend.entidades.bd;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.Id;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Objects;
@@ -10,7 +9,7 @@ import java.util.Objects;
 @Embeddable
 public class ViajeEntidadPK implements Serializable {
     private String pkPlacaTaxi;
-    private Timestamp pkFechaInicio;
+    private String pkFechaInicio;
 
     @Column(name = "pk_placa_taxi", nullable = false, length = 8)
     public String getPkPlacaTaxi() {
@@ -22,15 +21,15 @@ public class ViajeEntidadPK implements Serializable {
     }
 
     @Column(name = "pk_fecha_inicio", nullable = false)
-    public Timestamp getPkFechaInicio() {
+    public String getPkFechaInicio() {
         return pkFechaInicio;
     }
 
-    public void setPkFechaInicio(Timestamp pkFechaInicio) {
+    public void setPkFechaInicio(String pkFechaInicio) {
         this.pkFechaInicio = pkFechaInicio;
     }
 
-    public ViajeEntidadPK(String pkPlacaTaxi, String pkCorreoCliente, Timestamp pkFechaInicio) {
+    public ViajeEntidadPK(String pkPlacaTaxi, String pkFechaInicio) {
         this.pkPlacaTaxi = pkPlacaTaxi;
         this.pkFechaInicio = pkFechaInicio;
     }

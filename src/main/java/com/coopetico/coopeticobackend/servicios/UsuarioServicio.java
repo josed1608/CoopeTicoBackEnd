@@ -1,7 +1,7 @@
 package com.coopetico.coopeticobackend.servicios;
 
-import com.coopetico.coopeticobackend.entidades.GrupoEntidad;
-import com.coopetico.coopeticobackend.entidades.UsuarioEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.GrupoEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.UsuarioEntidad;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -68,6 +68,24 @@ public interface UsuarioServicio {
      * @param correo Usuario a eliminar
      */
     void eliminar(String correo);
+
+    /**
+     * Devuelve si el usuario es cliente, taxista o operador
+     * @param usuario entidad usuario base
+     * @return String con el tipo, puede ser "cliente", "taxista" o "operador"
+     */
+    String obtenerTipo(UsuarioEntidad usuario);
+
+    /**
+     * Cambia el estado de un usuario
+     *
+     * Habilita o deshabilita un usario dependiendo del [nuevoEstado] proporcionado.
+     *
+     * @param correo Correo de usuario a modificar
+     * @param estadoNuevo Estado que se le dara al usuario
+     * @author Kevin Jimenez
+     */
+    void cambiarEstado(String correo, Boolean estadoNuevo);
 
     /**
      * Metodo para modificar un usuario en la BD

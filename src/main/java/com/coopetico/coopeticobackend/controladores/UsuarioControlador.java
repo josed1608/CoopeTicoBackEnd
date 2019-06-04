@@ -1,32 +1,20 @@
 package com.coopetico.coopeticobackend.controladores;
 
-/**
- Controlador de usuarios, hice los métodos de actualizarContrasena: Cambiar la contraseña en la base de datos
- y mostrarInterfazCambioContrasena: Validar el token que se envío al mail del usuario para el cambio de contraseña.
- @author      Hannia Aguilar Salas
- @since       19-04-2019
- @version:   3.0
- */
-
-
 import com.coopetico.coopeticobackend.entidades.*;
+import com.coopetico.coopeticobackend.entidades.bd.GrupoEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.TokenRecuperacionContrasenaEntidad;
 import com.coopetico.coopeticobackend.mail.EmailServiceImpl;
 import com.coopetico.coopeticobackend.repositorios.UsuariosRepositorio;
-import com.coopetico.coopeticobackend.servicios.TokensRecuperacionContrasenaServicio;
 import com.coopetico.coopeticobackend.servicios.TokensRecuperacionContrasenaServicioImpl;
 import com.coopetico.coopeticobackend.servicios.UsuarioServicio;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.*;
-import com.coopetico.coopeticobackend.entidades.UsuarioEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.UsuarioEntidad;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -37,17 +25,23 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.validation.Valid;
-
-import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
+import javax.validation.constraints.Email;
+import java.io.File;
+import com.coopetico.coopeticobackend.excepciones.UsuarioNoEncontradoExcepcion;
+/**
+ Controlador de usuarios, hice los métodos de actualizarContrasena: Cambiar la contraseña en la base de datos
+ y mostrarInterfazCambioContrasena: Validar el token que se envío al mail del usuario para el cambio de contraseña.
+ @author      Hannia Aguilar Salas
+ @since       19-04-2019
+ @version:   3.0
+ */
 
 @CrossOrigin( origins = {"http://localhost:4200"})
 @RestController
@@ -55,25 +49,24 @@ import java.util.stream.Collectors;
 @Validated
 public class UsuarioControlador {
 
-    @Autowired
-    private TokensRecuperacionContrasenaServicioImpl tokensServicio;
-    @Autowired
-    private EmailServiceImpl mail;
+    private final TokensRecuperacionContrasenaServicioImpl tokensServicio;
+    private final EmailServiceImpl mail;
     private UsuariosRepositorio usuariosRepositorio;
     private PasswordEncoder encoder;
     private UsuarioServicio usuarioServicio;
     private UsuarioTemporal usuarioTemporal;
-    private final Integer TAMANIO = 4;
     private final Logger log = LoggerFactory.getLogger(UsuarioControlador.class);
+    private UtilidadesControlador utilidadesControlador;
 
-    @Autowired
-    public UsuarioControlador(UsuariosRepositorio usuariosRepositorio, PasswordEncoder encoder, TokensRecuperacionContrasenaServicio tokensRecuperacionContrasenaServicio, UsuarioServicio servicio, EmailServiceImpl mail) {
+
+    public UsuarioControlador(UsuariosRepositorio usuariosRepositorio, PasswordEncoder encoder,UsuarioServicio servicio, TokensRecuperacionContrasenaServicioImpl tokensServicio, EmailServiceImpl mail) {
         this.usuarioServicio = servicio;
         this.usuariosRepositorio = usuariosRepositorio;
         this.encoder = encoder;
         this.usuarioTemporal = new UsuarioTemporal();
-        //this.tokensRecuperacionContrasenaServicio = tokensRecuperacionContrasenaServicio;
-        //this.mail = mail;
+        this.utilidadesControlador = new UtilidadesControlador();
+        this.tokensServicio = tokensServicio;
+        this.mail = mail;
     }
 
     /**
@@ -112,10 +105,8 @@ public class UsuarioControlador {
                 tokensServicio.eliminarToken(datosUsuario.getUsername());
                 return true;
             }
-
             return false;
         }
-
         return false;
     }
 
@@ -136,12 +127,9 @@ public class UsuarioControlador {
 
         //Revisa la fecha del link
         Calendar calendario = Calendar.getInstance();
-        if ((tokenContrasena.getFechaExpiracion()
+        return (tokenContrasena.getFechaExpiracion()
                 .getTime() - calendario.getTime()
-                .getTime()) <= 0) {
-            return false;
-        }
-        return true;
+                .getTime()) > 0;
     }
 
     /**
@@ -154,7 +142,7 @@ public class UsuarioControlador {
     public ResponseEntity<?> crearUsuario(@Valid @RequestBody UsuarioTemporal usuario, BindingResult resultado){
 
         Map<String, Object> response = new HashMap<>();
-        UsuarioEntidad usuarioEntidad = null;
+        UsuarioEntidad usuarioEntidad;
 
         if (resultado.hasErrors()) {
             List<String> errores = resultado.getFieldErrors()
@@ -163,22 +151,22 @@ public class UsuarioControlador {
                     .collect(Collectors.toList());
 
             response.put("errores", errores);
-            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
 
         try {
             usuarioEntidad =  usuarioServicio.crearUsuario(usuario.convertirAUsuarioEntidad());
         }catch (DataAccessException e){
             response.put("mensaje", "Error al insertar en la base de datos");
-            response.put("error", e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
-            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            response.put("error", Objects.requireNonNull(e.getMessage()).concat(":").concat(e.getMostSpecificCause().getMessage()));
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         UsuarioTemporal usuarioTemporal = new UsuarioTemporal(usuarioEntidad);
         response.put("mensaje", "Usuario creado con éxito");
         response.put("usuario", usuarioTemporal);
 
-        return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     /**
@@ -198,12 +186,12 @@ public class UsuarioControlador {
      */
     @GetMapping("/page/{pagina}")
     public Page<UsuarioTemporal> obtenerUsuarios(@PathVariable Integer pagina){
+        int TAMANIO = 4;
         Pageable pageable = PageRequest.of(pagina, TAMANIO);
         Page<UsuarioEntidad> pageUsuario = usuarioServicio.obtenerUsuarios(pageable);
         List<UsuarioEntidad> listaUsuarios = pageUsuario.getContent();
         List<UsuarioTemporal> listaUsuarioTemp = usuarioTemporal.getListaUsuarioTemporal(listaUsuarios);
-        Page<UsuarioTemporal> pageUsuarioTemp = new PageImpl<>(listaUsuarioTemp, pageable, pageUsuario.getTotalElements());
-        return pageUsuarioTemp;
+        return new PageImpl<>(listaUsuarioTemp, pageable, pageUsuario.getTotalElements());
     }
 
 
@@ -214,25 +202,25 @@ public class UsuarioControlador {
      */
     @GetMapping("/{id}")
     public ResponseEntity<?> obtenerUsuarioPorId(@PathVariable String id){
-        UsuarioEntidad usuarioEntidad = null;
+        UsuarioEntidad usuarioEntidad;
         Map<String, Object> response = new HashMap<>();
         try {
             Optional<UsuarioEntidad> optionalUsuarioEntidad = usuarioServicio.usuarioPorCorreo(id);
             usuarioEntidad = optionalUsuarioEntidad.orElse(null);
         }catch (DataAccessException e){
             response.put("mensaje", "Error al realizar consulta en la base de datos");
-            response.put("error", e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
-            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            response.put("error", Objects.requireNonNull(e.getMessage()).concat(":").concat(e.getMostSpecificCause().getMessage()));
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         if( usuarioEntidad == null){
             response.put("mensaje", "El usuario ID: ".concat(id.concat(" no existe en la base de datos")));
-            response.put("usuario", usuarioEntidad);
-            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+            response.put("usuario", null);
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
 
         UsuarioTemporal usuario = new UsuarioTemporal(usuarioEntidad);
-        return new ResponseEntity<UsuarioTemporal>(usuario, HttpStatus.OK);
+        return new ResponseEntity<>(usuario, HttpStatus.OK);
     }
 
     /**
@@ -244,16 +232,20 @@ public class UsuarioControlador {
     public ResponseEntity<?> eliminarUsuarioPorId(@PathVariable String id){
         Map<String, Object> response = new HashMap<>();
         try {
-            UsuarioEntidad usuarioEntidad = usuarioServicio.usuarioPorCorreo(id).get();
-            this.eliminarFoto(usuarioEntidad.getFoto());
+            UsuarioEntidad usuarioEntidad = null;
+            if(usuarioServicio.usuarioPorCorreo(id).isPresent()) {
+                usuarioEntidad = usuarioServicio.usuarioPorCorreo(id).get();
+            }
+            assert usuarioEntidad != null;
+            this.utilidadesControlador.eliminarFoto(usuarioEntidad.getFoto());
             usuarioServicio.eliminar(id);
         }catch (DataAccessException e){
             response.put("mensaje", "Error al eliminar usuario en la base de datos");
-            response.put("error", e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
-            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            response.put("error", Objects.requireNonNull(e.getMessage()).concat(":").concat(e.getMostSpecificCause().getMessage()));
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
         response.put("mensaje", "Usuario eliminado con éxito");
-        return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 
@@ -277,8 +269,8 @@ public class UsuarioControlador {
      */
     @PutMapping("/{id}")
     public ResponseEntity<?> actualizar(@Valid @RequestBody UsuarioTemporal usuario, @PathVariable String id, BindingResult resultado){
-        UsuarioEntidad usuarioEntidad = null;
-        UsuarioEntidad temporal = null;
+        UsuarioEntidad usuarioEntidad;
+        UsuarioEntidad temporal;
         Map<String, Object> response = new HashMap<>();
 
         if (resultado.hasErrors()) {
@@ -288,7 +280,7 @@ public class UsuarioControlador {
                     .collect(Collectors.toList());
 
             response.put("errores", errores);
-            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
 
         Optional<UsuarioEntidad> optionalUsuarioEntidad= this.usuarioServicio.usuarioPorCorreo(id);
@@ -296,7 +288,7 @@ public class UsuarioControlador {
 
         if( usuarioEntidad == null){
             response.put("mensaje", "Error: no se pudo editar, el usuario ID: ".concat(id.concat(" no existe en la base de datos")));
-            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
         try {
             usuarioEntidad.setApellido1(usuario.getApellido1());
@@ -308,39 +300,15 @@ public class UsuarioControlador {
             temporal = usuarioServicio.crearUsuario(usuarioEntidad);
         }catch (DataAccessException e){
             response.put("mensaje", "Error al actualizar usuario en la base de datos");
-            response.put("error", e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
-            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            response.put("error", Objects.requireNonNull(e.getMessage()).concat(":").concat(e.getMostSpecificCause().getMessage()));
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         response.put("mensaje", "Usuario actualizado con éxito");
         response.put("usuario", new UsuarioTemporal(temporal));
 
-        return new ResponseEntity<Map<String,Object>>(response, HttpStatus.CREATED);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
-
-    /**
-     * Método para validar el token, revisa que exista un token para ese usuario (correo) y que la fecha del link no haya expirado.
-     * @param id Correo del usuario
-     * @return Boolean que indica si es válido o no.
-     */
-    public boolean validarTokenRecuperarContrasena(String id) {
-        TokenRecuperacionContrasenaEntidad tokenContrasena  = tokensServicio.getToken(id);
-        //Validación con el usuario
-        if (tokenContrasena == null || !tokenContrasena.getFkCorreoUsuario().equals(id)) {
-            return false;
-        }
-
-        //Revisa la fecha del link
-        Calendar calendario = Calendar.getInstance();
-        if ((tokenContrasena.getFechaExpiracion()
-                .getTime() - calendario.getTime()
-                .getTime()) <= 0) {
-            return false;
-        }
-
-        return true;
-    }
-
 
     /**
      * Metodo para subir imagen
@@ -353,15 +321,15 @@ public class UsuarioControlador {
         Map<String, Object> response = new HashMap<>();
 
         Optional<UsuarioEntidad> optionalUsuarioEntidad = usuarioServicio.usuarioPorCorreo(id);
-        UsuarioEntidad usuarioEntidad = null;
+        UsuarioEntidad usuarioEntidad;
         usuarioEntidad = optionalUsuarioEntidad.orElse(null);
         if( usuarioEntidad == null) {
             response.put("mensaje", "Error: no se pudo editar, el usuario ID: ".concat(id.concat(" no existe en la base de datos")));
-            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
 
         if( !archivo.isEmpty()){
-            String nombreArchivo = UUID.randomUUID().toString()+"_" + archivo.getOriginalFilename().replace(" ","");
+            String nombreArchivo = UUID.randomUUID().toString()+"_" + Objects.requireNonNull(archivo.getOriginalFilename()).replace(" ","");
             Path rutaArchivo = Paths.get("images").resolve(nombreArchivo).toAbsolutePath();
             log.info(rutaArchivo.toString());
 
@@ -370,58 +338,34 @@ public class UsuarioControlador {
             } catch (IOException e) {
                 response.put("mensaje", "Error al subir la imagen del usuario");
                 response.put("error", e.getMessage().concat(":").concat(e.getCause().getMessage()));
-                return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+                return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
             }
 
-            this.eliminarFoto(usuarioEntidad.getFoto());
-
+            this.utilidadesControlador.eliminarFoto(usuarioEntidad.getFoto());
 
             usuarioEntidad.setFoto(nombreArchivo);
             UsuarioTemporal usuarioTemporal = new UsuarioTemporal(usuarioServicio.crearUsuario(usuarioEntidad));
             response.put("usuario",usuarioTemporal);
             response.put("mensaje", "Has subido correctamente la imagen "+nombreArchivo);
         }
-        return new ResponseEntity<Map<String,Object>>(response, HttpStatus.CREATED);
-    }
-
-
-    /**
-     * Metodo para eliminar una foto
-     * @param nombreFotoAnterior Nombre de la foto  a eliminar
-     */
-    public void eliminarFoto(String nombreFotoAnterior){
-        if( nombreFotoAnterior != null && nombreFotoAnterior.length()>0){
-            Path rutaArchivoAnterior = Paths.get("images").resolve(nombreFotoAnterior).toAbsolutePath();
-            File archivoFotoAnterior = rutaArchivoAnterior.toFile();
-            if(archivoFotoAnterior.exists() && archivoFotoAnterior.canRead()){
-                archivoFotoAnterior.delete();
-            }
-        }
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     /**
-     * Metodo para obtener una imagen
-     * @param nombreFoto Nombre de la imagen
-     * @return Imagen
+     * Cambia el estado del usuario
+     * @param correo Correo de usuario
+     * @param valido Nuevo estado del usuario
+     * @return Respuesta con el correo y el nuevo estado del usuario
+     * @author Kevin Jimenez
      */
-    @GetMapping("/uploads/img/{nombreFoto:.+}")
-    public ResponseEntity<Resource> verFoto(@PathVariable String nombreFoto){
-        Path rutaArchivo = Paths.get("images").resolve(nombreFoto).toAbsolutePath();
-        Resource recurso = null;
-
-        log.info(rutaArchivo.toString());
-        try {
-            recurso = new UrlResource(rutaArchivo.toUri());
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
+    @PutMapping("{correo}/estado")
+    public ResponseEntity  cambiarEstado(@PathVariable @Email String correo, @RequestParam String valido){
+        try{
+            usuarioServicio.cambiarEstado(correo, Boolean.parseBoolean(valido));
+        } catch (UsuarioNoEncontradoExcepcion e){
+            return new ResponseEntity("{\"error\": \"" + e.getMessage() + "\"}", HttpStatus.NOT_FOUND);
         }
-
-        if(!recurso.exists()&& !recurso.isReadable()){
-            throw new RuntimeException("No se pudo cargar la imagen: "+ nombreFoto);
-        }
-
-        HttpHeaders cabecera = new HttpHeaders();
-        cabecera.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename= \""+recurso.getFilename()+"\"");
-        return new ResponseEntity<Resource>(recurso, cabecera, HttpStatus.OK);
+        String respuesta = Boolean.parseBoolean(valido)? "habilitado":"deshabilitado";
+        return new ResponseEntity("{\"mensaje\" : \"Se ha " + respuesta +" al usuario.\"}", HttpStatus.OK);
     }
 }

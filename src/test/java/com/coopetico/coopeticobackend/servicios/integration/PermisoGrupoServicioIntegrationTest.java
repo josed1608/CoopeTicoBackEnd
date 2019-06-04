@@ -7,17 +7,16 @@ package com.coopetico.coopeticobackend.servicios.integration;
  @version:    1.0
  */
 
-import com.coopetico.coopeticobackend.entidades.GrupoEntidad;
-import com.coopetico.coopeticobackend.entidades.PermisoEntidad;
-import com.coopetico.coopeticobackend.entidades.PermisosGrupoEntidad;
-import com.coopetico.coopeticobackend.entidades.PermisosGrupoEntidadPK;
+import com.coopetico.coopeticobackend.entidades.bd.GrupoEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.PermisoEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.PermisosGrupoEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.PermisosGrupoEntidadPK;
 import com.coopetico.coopeticobackend.repositorios.GruposRepositorio;
 import com.coopetico.coopeticobackend.repositorios.PermisosGruposRepositorio;
 import com.coopetico.coopeticobackend.repositorios.PermisosRepositorio;
 import com.coopetico.coopeticobackend.servicios.GrupoServicio;
 import com.coopetico.coopeticobackend.servicios.PermisoGrupoServicio;
 import com.coopetico.coopeticobackend.servicios.PermisosServicio;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +29,6 @@ import java.util.List;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertNotNull;
-import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)

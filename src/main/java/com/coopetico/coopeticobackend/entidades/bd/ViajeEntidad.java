@@ -1,4 +1,4 @@
-package com.coopetico.coopeticobackend.entidades;
+package com.coopetico.coopeticobackend.entidades.bd;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -12,10 +12,11 @@ import java.util.Objects;
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "viajeEntidadPK")
 public class ViajeEntidad {
     private ViajeEntidadPK viajeEntidadPK;
-    private Timestamp fechaFin;
+    private String fechaFin;
     private String costo;
-    private float estrellas;
-    private String origenDestino;
+    private Integer estrellas;
+    private String origen;
+    private String destino;
     private String agendaTelefono;
     private String agendaNombre;
 
@@ -24,12 +25,13 @@ public class ViajeEntidad {
     private TaxistaEntidad taxistaByCorreoTaxi;
     private OperadorEntidad agendaOperador;
 
-    public ViajeEntidad(ViajeEntidadPK viajeEntidadPK, Timestamp fechaFin, String costo, float estrellas, String origenDestino, String agendaTelefono, String agendaNombre, TaxiEntidad taxiByPkPlacaTaxi, ClienteEntidad clienteByPkCorreoCliente, TaxistaEntidad taxistaByCorreoTaxi, OperadorEntidad agendaOperador) {
+    public ViajeEntidad(ViajeEntidadPK viajeEntidadPK, String fechaFin, String costo, Integer estrellas, String origen, String destino, String agendaTelefono, String agendaNombre, TaxiEntidad taxiByPkPlacaTaxi, ClienteEntidad clienteByPkCorreoCliente, TaxistaEntidad taxistaByCorreoTaxi, OperadorEntidad agendaOperador) {
         this.viajeEntidadPK = viajeEntidadPK;
         this.fechaFin = fechaFin;
         this.costo = costo;
         this.estrellas = estrellas;
-        this.origenDestino = origenDestino;
+        this.origen = origen;
+        this.destino = destino;
         this.agendaTelefono = agendaTelefono;
         this.agendaNombre = agendaNombre;
         this.taxiByPkPlacaTaxi = taxiByPkPlacaTaxi;
@@ -51,17 +53,17 @@ public class ViajeEntidad {
     }
 
     @Basic
-    @Column(name = "fecha_fin", nullable = false)
-    public Timestamp getFechaFin() {
+    @Column(name = "fecha_fin")
+    public String getFechaFin() {
         return fechaFin;
     }
 
-    public void setFechaFin(Timestamp fechaFin) {
+    public void setFechaFin(String fechaFin) {
         this.fechaFin = fechaFin;
     }
 
     @Basic
-    @Column(name = "costo", nullable = false, length = 8)
+    @Column(name = "costo", length = 8)
     public String getCosto() {
         return costo;
     }
@@ -72,22 +74,32 @@ public class ViajeEntidad {
 
     @Basic
     @Column(name = "estrellas")
-    public float getEstrellas() {
+    public Integer getEstrellas() {
         return estrellas;
     }
 
-    public void setEstrellas(float estrellas) {
+    public void setEstrellas(Integer estrellas) {
         this.estrellas = estrellas;
     }
 
     @Basic
-    @Column(name = "origen_destino", nullable = false, length = 64)
-    public String getOrigenDestino() {
-        return origenDestino;
+    @Column(name = "origen", nullable = false, length = 64)
+    public String getOrigen() {
+        return origen;
     }
 
-    public void setOrigenDestino(String origenDestino) {
-        this.origenDestino = origenDestino;
+    public void setOrigen(String origen) {
+        this.origen = origen;
+    }
+
+    @Basic
+    @Column(name = "destino", length = 64)
+    public String getDestino() {
+        return destino;
+    }
+
+    public void setDestino(String destino) {
+        this.destino = destino;
     }
 
     @Basic
@@ -119,12 +131,13 @@ public class ViajeEntidad {
                 Objects.equals(fechaFin, that.fechaFin) &&
                 Objects.equals(costo, that.costo) &&
                 Objects.equals(estrellas, that.estrellas) &&
-                Objects.equals(origenDestino, that.origenDestino);
+                Objects.equals(origen, that.origen) &&
+                Objects.equals(destino, that.destino);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(viajeEntidadPK, fechaFin, costo, estrellas, origenDestino);
+        return Objects.hash(viajeEntidadPK, fechaFin, costo, estrellas, origen, destino);
     }
 
     @ManyToOne
@@ -139,7 +152,7 @@ public class ViajeEntidad {
     }
 
     @ManyToOne
-    @JoinColumn(name = "correo_cliente", referencedColumnName = "pk_correo_usuario", nullable = false)
+    @JoinColumn(name = "fk_correo_cliente", referencedColumnName = "pk_correo_usuario", nullable = false)
     public ClienteEntidad getClienteByPkCorreoCliente() {
         return clienteByPkCorreoCliente;
     }

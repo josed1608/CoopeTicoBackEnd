@@ -17,11 +17,12 @@ public class ViajeTmpEntidad {
     // Variables globales
     private String placa;
     private String correoCliente;
-    private Timestamp fechaInicio;
-    private Timestamp fechaFin;
+    private String fechaInicio;
+    private String fechaFin;
     private String costo;
     private Integer estrellas;
-    private String origenDestino;
+    private String origen;
+    private String destino;
     private String correoTaxista;
     //-------------------------------------------------------------------------
 
@@ -35,17 +36,19 @@ public class ViajeTmpEntidad {
      * @param fechaFin fecha de fin del viaje.
      * @param costo monto total del viaje.
      * @param estrellas calificación del pasajero al taxista
-     * @param origenDestino punto de origen y destino.
+     * @param origen punto de origen.
+     * @param destino punto de destino.
      * @param correoTaxista correo del conductor.
      */
     public ViajeTmpEntidad(
         String placa,
         String correoCliente,
-        Timestamp fechaInicio,
-        Timestamp fechaFin,
+        String fechaInicio,
+        String fechaFin,
         String costo,
         Integer estrellas,
-        String origenDestino,
+        String origen,
+        String destino,
         String correoTaxista
     ) {
         this.placa = placa;
@@ -54,7 +57,8 @@ public class ViajeTmpEntidad {
         this.fechaFin = fechaFin;
         this.costo = costo;
         this.estrellas = estrellas;
-        this.origenDestino = origenDestino;
+        this.origen = origen;
+        this.destino = destino;
         this.correoTaxista = correoTaxista;
     }
 
@@ -93,28 +97,28 @@ public class ViajeTmpEntidad {
     /**
      * @return the fechaInicio
      */
-    public Timestamp getFechaInicio() {
+    public String getFechaInicio() {
         return fechaInicio;
     }
 
     /**
      * @param fechaInicio the fechaInicio to set
      */
-    public void setFechaInicio(Timestamp fechaInicio) {
+    public void setFechaInicio(String fechaInicio) {
         this.fechaInicio = fechaInicio;
     }
 
     /**
      * @return the fechaFin
      */
-    public Timestamp getFechaFin() {
+    public String getFechaFin() {
         return fechaFin;
     }
 
     /**
      * @param fechaFin the fechaFin to set
      */
-    public void setFechaFin(Timestamp fechaFin) {
+    public void setFechaFin(String fechaFin) {
         this.fechaFin = fechaFin;
     }
 
@@ -147,17 +151,31 @@ public class ViajeTmpEntidad {
     }
 
     /**
-     * @return the origenDestino
+     * @return the origen
      */
-    public String getOrigenDestino() {
-        return origenDestino;
+    public String getOrigen() {
+        return origen;
     }
 
     /**
-     * @param origenDestino the origenDestino to set
+     * @param origen the origenDestino to set
      */
-    public void setOrigenDestino(String origenDestino) {
-        this.origenDestino = origenDestino;
+    public void setOrigen(String origen) {
+        this.origen = origen;
+    }
+
+    /**
+     * @return the destino
+     */
+    public String getDestino() {
+        return destino;
+    }
+
+    /**
+     * @param destino the destino to set
+     */
+    public void setDestino(String destino) {
+        this.destino = destino;
     }
 
     /**

@@ -6,10 +6,10 @@ package com.coopetico.coopeticobackend.servicios;
  @version:    1.0
  */
 
-import com.coopetico.coopeticobackend.entidades.GrupoEntidad;
-import com.coopetico.coopeticobackend.entidades.PermisoEntidad;
-import com.coopetico.coopeticobackend.entidades.PermisosGrupoEntidad;
-import com.coopetico.coopeticobackend.entidades.PermisosGrupoEntidadPK;
+import com.coopetico.coopeticobackend.entidades.bd.GrupoEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.PermisoEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.PermisosGrupoEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.PermisosGrupoEntidadPK;
 import com.coopetico.coopeticobackend.excepciones.PermisoGrupoNoExisteExcepcion;
 import com.coopetico.coopeticobackend.repositorios.PermisosGruposRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;

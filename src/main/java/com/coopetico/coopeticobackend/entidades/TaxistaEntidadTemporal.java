@@ -1,6 +1,9 @@
 package com.coopetico.coopeticobackend.entidades;
 
+import com.coopetico.coopeticobackend.entidades.bd.TaxistaEntidad;
+
 import java.sql.Timestamp;
+import java.util.List;
 
 /**
  Clase temporal para comunicacion con el frontend de la entidad Taxista.
@@ -61,6 +64,11 @@ public class TaxistaEntidadTemporal {
     private String foto;
 
     /**
+     * Bit de borrado logico. Valido
+     */
+    private Boolean valid;
+
+    /**
      * Justificacion para desactivar taxista.
      */
     private String justificacion;
@@ -69,6 +77,20 @@ public class TaxistaEntidadTemporal {
      * Fecha de vencimiento del taxista.
      */
     private Timestamp vence_licencia;
+
+    /**
+     * Vector de los placas de los taxis que puede conducir.
+     */
+    private List<String> siConduce;
+
+    /**
+     * Vector de los placas de los taxis que no puede conducir.
+     */
+    private List<String> noConduce;
+
+    public void setJustificacion(String justificacion) {
+        this.justificacion = justificacion;
+    }
 
     /**
      * Funcion que retorna el correo del taxista.
@@ -151,11 +173,43 @@ public class TaxistaEntidadTemporal {
     }
 
     /**
+     * Funcion que retorna el bit de valido del taxista.
+     * @return Valido
+     */
+    public Boolean getValid() {
+        return valid;
+    }
+
+    /**
+     * Funcion que retorna la justificacion del taxista.
+     * @return Justificacion del taxista.
+     */
+    public String getJustificacion() {
+        return justificacion;
+    }
+
+    /**
      * Funcion que retorna la justificacion de desactivacion del taxista.
      * @return Fecha de vencimiento de la licencia del taxista.
      */
     public Timestamp getVence_licencia() {
         return vence_licencia;
+    }
+
+    /**
+     * Funcion que retorna los taxis que puede conducir un taxista.
+     * @return Vector de placas de los taxis que puede manejar el taxista.
+     */
+    public List<String> getSiConduce() {
+        return siConduce;
+    }
+
+    /**
+     * Funcion que retorna los taxis que no puede conducir un taxista.
+     * @return Vector de placas de los taxis que no puede manejar el taxista.
+     */
+    public List<String> getNoConduce() {
+        return noConduce;
     }
 
     /**
@@ -239,6 +293,14 @@ public class TaxistaEntidadTemporal {
     }
 
     /**
+     * Metodo que modifica el bit de valido del taxista.
+     * @param valid Nuevo bit de valido
+     */
+    public void setValid(Boolean valid) {
+        this.valid = valid;
+    }
+
+    /**
      * Metodo que modifica la fecha de vencimiento de la licencia del taxista.
      * @param vence_licencia Nueva fecha de vencimiento de licencia que se quiere guardar.
      */
@@ -247,9 +309,45 @@ public class TaxistaEntidadTemporal {
     }
 
     /**
+     * Metodo que modifica los taxis que puede manejar un taxista.
+     * @param siConduce Nueva lista de taxis que puede manejar un taxista.
+     */
+    public void setSiConduce(List<String> siConduce) {
+        this.siConduce = siConduce;
+    }
+
+    /**
+     * Metodo que modifica los taxis que no puede manejar un taxista.
+     * @param noConduce Nueva lista de taxis que no puede manejar un taxista.
+     */
+    public void setNoConduce(List<String> noConduce) {
+        this.noConduce = noConduce;
+    }
+
+    /**
      * Constructor para convertir de TaxistaEntidad a TaxistaEntidadTemporal.
      * @param taxista TaxistaEntidad que contiene los datos que se quiere pasar a esta nueva instancia.
+     * @param noConduce Placas de los taxis que no conduce ese taxista.
      */
+    public TaxistaEntidadTemporal(TaxistaEntidad taxista, List<String> siConduce, List<String> noConduce){
+        this.pkCorreoUsuario = taxista.getPkCorreoUsuario();
+        this.faltas = taxista.getFaltas();
+        this.estado = taxista.isEstado();
+        this.hojaDelincuencia = taxista.isHojaDelincuencia();
+        this.estrellas = taxista.getEstrellas();
+        this.justificacion = taxista.getPkCorreoUsuario();
+        this.vence_licencia = taxista.getVence_licencia();
+        this.nombre = taxista.getUsuarioByPkCorreoUsuario().getNombre();
+        this.apellido1 = taxista.getUsuarioByPkCorreoUsuario().getApellido1();
+        this.apellido2 = taxista.getUsuarioByPkCorreoUsuario().getApellido2();
+        this.telefono = taxista.getUsuarioByPkCorreoUsuario().getTelefono();
+        this.foto = taxista.getUsuarioByPkCorreoUsuario().getFoto();
+        this.valid = taxista.getUsuarioByPkCorreoUsuario().getValid();
+
+        this.siConduce = siConduce;
+        this.noConduce = noConduce;
+    }
+
     public TaxistaEntidadTemporal(TaxistaEntidad taxista){
         this.pkCorreoUsuario = taxista.getPkCorreoUsuario();
         this.faltas = taxista.getFaltas();
@@ -263,6 +361,7 @@ public class TaxistaEntidadTemporal {
         this.apellido2 = taxista.getUsuarioByPkCorreoUsuario().getApellido2();
         this.telefono = taxista.getUsuarioByPkCorreoUsuario().getTelefono();
         this.foto = taxista.getUsuarioByPkCorreoUsuario().getFoto();
+        this.valid = taxista.getUsuarioByPkCorreoUsuario().getValid();
     }
 
     /**
