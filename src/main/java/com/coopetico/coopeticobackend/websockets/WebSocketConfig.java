@@ -21,7 +21,8 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         /// Se agrega el path /ws como un punto para concetarse y crear un websocket con el server
-        registry.addEndpoint("/ws").setAllowedOrigins("*").withSockJS();;
+        registry.addEndpoint("/ws").setAllowedOrigins("*").withSockJS();
+        registry.addEndpoint("/ws-flutter").setAllowedOrigins("*");
     }
 
     /**
