@@ -22,8 +22,10 @@ import java.time.LocalDate;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.
     MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.
     MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.
@@ -112,12 +114,12 @@ public class ViajeControladorUnitTest {
         agendaOperador.setPkCorreoUsuario("gerente11@gerente.com");
 
         viajePK.setPkPlacaTaxi("CCC11");
-        viajePK.setPkFechaInicio(new Timestamp(date.getTime()));
-        viajes.add(new ViajeEntidad(viajePK, new Timestamp(date.getTime()),"5000", 2, "origen","destino", "agenda", "agenda2", taxiByPkPlacaTaxi, clienteByPkCorreoCliente, taxistaByCorreoTaxi, agendaOperador));
+        viajePK.setPkFechaInicio("2019-01-01 01:01:01");
+        viajes.add(new ViajeEntidad(viajePK, "2019-01-01 02:01:01","5000", 2, "origen","destino", "agenda", "agenda2", taxiByPkPlacaTaxi, clienteByPkCorreoCliente, taxistaByCorreoTaxi, agendaOperador));
         viajePK.setPkPlacaTaxi("DDD11");
-        viajes.add(new ViajeEntidad(viajePK, new Timestamp(date.getTime()),"5000", 2, "origen","destino", "agenda", "agenda2", taxiByPkPlacaTaxi, clienteByPkCorreoCliente, taxistaByCorreoTaxi, agendaOperador));
+        viajes.add(new ViajeEntidad(viajePK, "2019-01-01 02:01:01","5000", 2, "origen","destino", "agenda", "agenda2", taxiByPkPlacaTaxi, clienteByPkCorreoCliente, taxistaByCorreoTaxi, agendaOperador));
         viajePK.setPkPlacaTaxi("EEE11");
-        viajes.add(new ViajeEntidad(viajePK, new Timestamp(date.getTime()),"5000", 2, "origen","destino", "agenda", "agenda2", taxiByPkPlacaTaxi, clienteByPkCorreoCliente, taxistaByCorreoTaxi, agendaOperador));
+        viajes.add(new ViajeEntidad(viajePK, "2019-01-01 02:01:01","5000", 2, "origen","destino", "agenda", "agenda2", taxiByPkPlacaTaxi, clienteByPkCorreoCliente, taxistaByCorreoTaxi, agendaOperador));
 
         return viajes;
     }
@@ -188,5 +190,33 @@ public class ViajeControladorUnitTest {
             .andExpect(status().isOk());
     }
     //-------------------------------------------------------------------------
+
+    /**
+     * Prueba para el endpoint finalizar viaje
+     *
+     * @author Marco Venegas (B67697)
+     * @since 30-05-2019
+     */
+    @Test
+    public void finalizarViaje() {
+        when(viajeServicio.finalizar(any(String.class), any(String.class), any(String.class))).thenReturn(0);
+
+        try{
+        mockMvc.perform(
+                put("/viajes/finalizar")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(
+                                "{" +
+                                        "\"placa\": \"AAA111\"," +
+                                        "\"fechaInicio\": \"2019-05-30 14:30:00\"," +
+                                        "\"fechaFin\": \"2019-05-30 15:30:00\"" +
+                                "}"
+                        )
+        )
+                .andExpect(status().isOk());
+        }catch(Exception e){
+            fail();
+        }
+    }
 }
 //-----------------------------------------------------------------------------

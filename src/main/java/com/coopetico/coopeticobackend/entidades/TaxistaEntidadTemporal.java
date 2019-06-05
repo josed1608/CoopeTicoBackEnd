@@ -361,6 +361,7 @@ public class TaxistaEntidadTemporal {
         this.apellido2 = taxista.getUsuarioByPkCorreoUsuario().getApellido2();
         this.telefono = taxista.getUsuarioByPkCorreoUsuario().getTelefono();
         this.foto = taxista.getUsuarioByPkCorreoUsuario().getFoto();
+        this.valid = taxista.getUsuarioByPkCorreoUsuario().getValid();
     }
 
     /**

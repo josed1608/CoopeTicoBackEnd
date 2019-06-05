@@ -14,7 +14,7 @@ public class ViajeEntidadTemporal {
     private String fechaFin;
     private String fechaInicio;
     private String costo;
-    private float estrellas;
+    private Integer estrellas;
     private String origen;
     private String destino;
     private String agendaTelefono;
@@ -97,11 +97,11 @@ public class ViajeEntidadTemporal {
         this.costo = costo;
     }
 
-    public float getEstrellas() {
+    public Integer getEstrellas() {
         return estrellas;
     }
 
-    public void setEstrellas(float estrellas) {
+    public void setEstrellas(Integer estrellas) {
         this.estrellas = estrellas;
     }
 
