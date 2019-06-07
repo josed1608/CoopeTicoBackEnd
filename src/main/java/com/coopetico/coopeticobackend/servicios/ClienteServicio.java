@@ -39,4 +39,13 @@ public interface ClienteServicio {
      * @return UsuarioEntidad del correo en la base, null de otra manera.
      */
     ClienteEntidad consultarClientePorId(String correo);
+
+    /**
+     * Modificar un cliente en la base de datos con referencia al usuario que se le da como parámetro
+     *
+     * @param usuarioEntidad usuario al que se linkea el cliente
+     * @throws UsuarioNoEncontradoExcepcion cuando el usuario que se da para asociar el cliente no existe
+     * @author Valeria Zamora
+     */
+    void modificarCliente(UsuarioEntidad usuarioEntidad, String correo) throws UsuarioNoEncontradoExcepcion;
 }

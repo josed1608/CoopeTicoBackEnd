@@ -58,4 +58,25 @@ public class ClienteControladorIntegrationTest {
                     .andExpect(status().isCreated());
         }
     }
+
+    @Test
+    @Transactional
+    public void testModificarUsuarioSuccesfull() throws Exception {
+        try {
+            this.testCrearUsuarioSuccesfull();
+        }
+        catch (UsuarioNoEncontradoExcepcion ignored) {}
+        finally {
+            mockMvc.perform(post("/clientes/modificarUsuario")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content("{" +
+                            "\"pkCorreo\": \"prueba@prueba.com\"," +
+                            "\"nombre\": \"Andres\"," +
+                            "\"apellidos\": \"Morera Soto\"," +
+                            "\"telefono\": \"75842654\"," +
+                            "\"contrasena\": \"contrasenna\"" +
+                            "}"))
+                    .andExpect(status().isCreated());
+        }
+    }
 }
