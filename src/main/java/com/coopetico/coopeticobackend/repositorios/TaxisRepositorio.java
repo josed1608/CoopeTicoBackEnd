@@ -16,7 +16,7 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:4200")
 public interface TaxisRepositorio extends JpaRepository<TaxiEntidad, String> {
     @Query("select new TaxiEntidad (t.pkPlaca as pkPlaca, t.datafono as datafono, t.telefono as telefono, t.clase as clase, t.tipo as tipo, t.fechaVenRtv as fechaVenRtv, " +
-            "t.fechaVenMarchamo as fechaVenMarchamo, t.fechaVenSeguro as fechaVenSeguro, t.valido as valido, t.foto as foto, t.correoTaxista as correoTaxista) from TaxiEntidad t" +
-            " where t.valido = true")
+            "t.fechaVenMarchamo as fechaVenMarchamo, t.fechaVenSeguro as fechaVenSeguro, t.estado as estado, t.justificacion as justificacion, t.valido as valido, " +
+            "t.foto as foto, t.correoTaxista as correoTaxista) from TaxiEntidad t where t.valido = true")
     List<TaxiEntidad> getTaxisValidos();
 }

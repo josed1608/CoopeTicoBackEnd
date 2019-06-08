@@ -116,6 +116,8 @@ public class TaxisControlador {
         taxiActual.setTipo(taxi.getTipo());
         taxiActual.setCorreoTaxista(taxi.getCorreoTaxista());
         taxiActual.setValido(taxi.getValido());
+        taxiActual.setEstado(taxi.isEstado());
+        taxiActual.setJustificacion(taxi.getJustificacion());
         return taxisServicio.guardar(taxiActual);
     }
 
