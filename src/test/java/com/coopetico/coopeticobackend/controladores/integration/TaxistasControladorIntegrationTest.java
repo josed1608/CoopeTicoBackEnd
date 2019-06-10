@@ -229,7 +229,7 @@ public class TaxistasControladorIntegrationTest {
      * @throws Exception
      * @author Jefferson Alvarez
      */
-    @Test
+    /*@Test
     @Transactional
     public void testGuardarTaxisArchivo() throws Exception {
         String url = "/taxistas/";
@@ -294,5 +294,5 @@ public class TaxistasControladorIntegrationTest {
                 .andExpect(status().isOk());
 
         assertTrue(taxistasControlador.consultar().size() >= 3);
-    }
+    }*/
 }

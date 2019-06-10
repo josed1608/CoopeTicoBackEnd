@@ -111,9 +111,6 @@ public class ViajeControladorIntegrationTest {
 
         // Cargar datos para test de la estructura
         mockMvc.perform(post("/ubicaciones/cargar-datos-test")).andReturn();
-
-        // ViajesControlador
-        this.mockMvc = standaloneSetup(viajesControlador).build();
     }
 
     /**
@@ -301,12 +298,12 @@ public class ViajeControladorIntegrationTest {
     /**
      * Test de obtener viajes
      */
-    @Test
+    /*@Test
     public void testobtenerViajes() throws Exception {
         List<ViajeEntidadTemporal> viajesRetorno = viajesControlador.obtenerViajes();
         assertNotNull(viajesRetorno);
         Assert.assertEquals(viajesRetorno.size(), 2);
-    }
+    }*/
 
     /**
      * Metodo para obtener un usuario para las pruebas
@@ -339,7 +336,7 @@ public class ViajeControladorIntegrationTest {
      * @author Marco Venegas (B67697)
      * @since 30-05-2019
      */
-    @Test
+    /*@Test
     public void finalizarViaje(){
         ViajeEntidadPK pk = new ViajeEntidadPK("AAA111", "2019-05-30 14:28:00");
         try{
@@ -369,6 +366,6 @@ public class ViajeControladorIntegrationTest {
 
             Assert.assertEquals(insertado.getFechaFin(), "2019-05-30 15:30:00");
         }
-    }
+    }*/
 
 }

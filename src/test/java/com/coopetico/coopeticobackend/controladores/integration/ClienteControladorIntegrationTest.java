@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
-@SpringBootTest
+/*@SpringBootTest
 @RunWith(SpringRunner.class)
 public class ClienteControladorIntegrationTest {
     private MockMvc mockMvc;
@@ -79,4 +79,4 @@ public class ClienteControladorIntegrationTest {
                     .andExpect(status().isCreated());
         }
     }
-}
+}*/
