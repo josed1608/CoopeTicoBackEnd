@@ -23,7 +23,9 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 
 import javax.transaction.Transactional;
+import java.sql.Timestamp;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import static org.junit.Assert.assertEquals;
@@ -106,6 +108,12 @@ public class TaxistasControladorIntegrationTest {
         long respCorrecta1 = (long)1556679600 * 1000;
         long respCorrecta2 = (long)1556690400 * 1000;
         long fecha = entidadRetornada.getVence_licencia().getTime();
+        Date date = new Date(respCorrecta1);
+        Date date2 = new Date(respCorrecta2);
+        Date date3 = new Date(fecha);
+        System.out.println(date);
+        System.out.println(date2);
+        System.out.println(fecha);
         boolean resp = false;
         if ( fecha == respCorrecta1 || fecha == respCorrecta2 ){
             resp = true;
