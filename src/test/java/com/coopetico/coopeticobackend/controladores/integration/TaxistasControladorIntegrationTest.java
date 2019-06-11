@@ -105,17 +105,10 @@ public class TaxistasControladorIntegrationTest {
         //Se compara que no sea nulo
         assertNotNull(entidadRetornada);
         //Se compara que la fecha sea la esperada
-        long respCorrecta1 = (long)1556679600 * 1000;
-        long respCorrecta2 = (long)1556690400 * 1000;
+        long respCorrecta = (long)1556668800 * 1000;
         long fecha = entidadRetornada.getVence_licencia().getTime();
-        Date date = new Date(respCorrecta1);
-        Date date2 = new Date(respCorrecta2);
-        Date date3 = new Date(fecha);
-        System.out.println(date);
-        System.out.println(date2);
-        System.out.println(date3);
         boolean resp = false;
-        if ( fecha == respCorrecta1 || fecha == respCorrecta2 ){
+        if ( fecha == respCorrecta ){
             resp = true;
         }
         Assert.assertTrue(resp);
