@@ -113,7 +113,7 @@ public class TaxistasControladorIntegrationTest {
         Date date3 = new Date(fecha);
         System.out.println(date);
         System.out.println(date2);
-        System.out.println(fecha);
+        System.out.println(date3);
         boolean resp = false;
         if ( fecha == respCorrecta1 || fecha == respCorrecta2 ){
             resp = true;
