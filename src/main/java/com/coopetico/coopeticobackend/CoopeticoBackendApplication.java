@@ -8,11 +8,19 @@ import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
+import javax.annotation.PostConstruct;
+import java.util.Date;
+import java.util.TimeZone;
 import java.util.concurrent.Executor;
 
 @SpringBootApplication
 @EnableAsync(proxyTargetClass=true)
 public class CoopeticoBackendApplication {
+	@PostConstruct
+	public void init(){
+		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));   // It will set UTC timezone
+		System.out.println("Spring boot application running in UTC timezone :"+new Date());   // It will print UTC timezone
+	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(CoopeticoBackendApplication.class, args);
