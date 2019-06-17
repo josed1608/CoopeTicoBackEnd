@@ -94,6 +94,7 @@ public class UsuarioControladorUnitTest {
      * Test de obtener usuarios
      * @throws Exception Lanza exepcion en caso de algún error
      */
+    /*
     @Test
     public void testObtenerUsuarios() throws Exception {
         String url = "/usuarios";
@@ -113,7 +114,7 @@ public class UsuarioControladorUnitTest {
         UsuarioTemporal[] listaGrupos = objectMapper.readValue(content, UsuarioTemporal[].class);
         assertTrue(listaGrupos.length == 10);
     }
-
+    */
     /**
      * Metodo para testear obtener los usuarios por ID
      */
