@@ -160,7 +160,7 @@ public class ViajeControladorIntegrationTest {
         stompSession.subscribe("/user/queue/recibir-viaje", new ViajeControladorIntegrationTest.CreateStringStompFrameHandlerViajeSolicitado());
 
         // Act: que el cliente solicite un viaje
-        mockMvc.perform(get("/viajes/solicitar")
+        mockMvc.perform(post("/viajes/solicitar")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\n" +
                                     "\t\"correoCliente\": \"cliente@cliente.com\",\n" +
