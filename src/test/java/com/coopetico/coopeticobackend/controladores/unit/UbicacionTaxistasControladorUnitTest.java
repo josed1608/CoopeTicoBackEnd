@@ -17,6 +17,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -27,6 +28,8 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.data.util.Pair;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
@@ -56,6 +59,10 @@ public class UbicacionTaxistasControladorUnitTest {
     @Before
     public void setup() {
         this.mockMvc = MockMvcUtilidades.getMockMvc();// Standalone context
+        Map<String, Object> estadoTaxista = new HashMap<>();
+        estadoTaxista.put("estado", true);
+        estadoTaxista.put("justificacion", "");
+        when(taxistasServicio.obtenerEstado(any(String.class))).thenReturn(estadoTaxista);
     }
 
     /**
@@ -158,7 +165,6 @@ public class UbicacionTaxistasControladorUnitTest {
         when(taxistasServicio.taxistaPorCorreo(any(String.class))).thenReturn(Optional.of(mockTaxista));
         //Assert
         mockMvc.perform(delete("/ubicaciones/eliminar/taxista@taxista.com/")
-
                 .headers(tokenUtilidades.obtenerTokenGerente())
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());

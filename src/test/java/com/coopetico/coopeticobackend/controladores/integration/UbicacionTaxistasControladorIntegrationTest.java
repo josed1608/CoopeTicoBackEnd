@@ -91,7 +91,7 @@ public class UbicacionTaxistasControladorIntegrationTest {
         ubicacionTaxistasServicio.upsertUbicacionDisponibleTaxista("taxista1@taxista.com", new LatLng(0.0, 0.0), true);
 
         mockMvc.perform(post("/ubicaciones/actualizar/ubicacion")
-                .headers(tokenUtilidades.obtenerTokenGerente())
+                .headers(tokenUtilidades.obtenerTokenTaxista(1))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{" +
                         "\"correoTaxista\": \"taxista1@taxista.com\"," +

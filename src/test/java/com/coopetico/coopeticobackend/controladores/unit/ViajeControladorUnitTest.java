@@ -1,3 +1,4 @@
+/*
 //-----------------------------------------------------------------------------
 // Package
 package com.coopetico.coopeticobackend.controladores.unit;
@@ -33,12 +34,14 @@ import static org.springframework.test.web.servlet.result.
 import static org.springframework.test.web.servlet.setup.
     MockMvcBuilders.standaloneSetup;
 //-----------------------------------------------------------------------------
+*/
 /*
  Pruebas de unidad del ViajesControlador
  @author      Hannia Aguilar Salas
  @since       19-05-2019
  @version:    1.0
- */
+ *//*
+
 
 import com.coopetico.coopeticobackend.controladores.ViajeControlador;
 import com.coopetico.coopeticobackend.entidades.UsuarioTemporal;
@@ -63,12 +66,14 @@ import static org.junit.Assert.*;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
+*/
 /**
  * Pruebas unitarias para los métodos de la clase ViajeControlador
  *
  * @author Joseph Rementería (b55824)
  * @since 21-05-2019
- */
+ *//*
+
 @SpringBootTest
 @RunWith(SpringRunner.class)
 public class ViajeControladorUnitTest {
@@ -99,10 +104,12 @@ public class ViajeControladorUnitTest {
     public void setup() {
         this.mockMvc = MockMvcUtilidades.getMockMvc();
     }
-    /**
+    */
+/**
      * Metodo que devuelve una lista con tres viajes para realizar las pruebas
      * @return Listas con viajes
-     */
+     *//*
+
     public static List<ViajeEntidad> getListaViajesEntidad(){
         List<ViajeEntidad> viajes = new ArrayList<>();
         Date date = new Date();
@@ -126,10 +133,12 @@ public class ViajeControladorUnitTest {
         return viajes;
     }
 
-    /**
+    */
+/**
      * Metodo para obtener un usuario para las pruebas
      * @return Retorna un objeto de tipo usuarioEntidad
-     */
+     *//*
+
     public static UsuarioTemporal getUsuarioTemporal(){
         UsuarioTemporal usuarioTemporal = new UsuarioTemporal();
         usuarioTemporal.setCorreo("gerente11@gerente.com");
@@ -143,23 +152,28 @@ public class ViajeControladorUnitTest {
         return usuarioTemporal;
     }
 
-    /**
+    */
+/**
      * Metodo para obtener un usuario para las pruebas
      * @return Retorna un objeto de tipo usuarioTemporal
-     */
+     *//*
+
     public static UsuarioEntidad getUsuarioEntidad(){
         return getUsuarioTemporal().convertirAUsuarioEntidad();
     }
 
-    /**
+    */
+/**
      * Método que prueba la creación del viaje en la base de datos.
      *
      * @author Joseph Rementería (b55824)
      * @since 21-05-2019
      *
      * @throws Exception cuando hay un error.
-     */
-    @Test
+     *//*
+
+    */
+/*@Test
     public void testCrearUsuario() throws Exception {
         String time = LocalDate.now().toString();
         mockMvc.perform(
@@ -177,16 +191,20 @@ public class ViajeControladorUnitTest {
             )
         )
             .andExpect(status().isOk());
-    }
+    }*//*
+
     //-------------------------------------------------------------------------
 
-    /**
+    */
+/**
      * Prueba para el endpoint finalizar viaje
      *
      * @author Marco Venegas (B67697)
      * @since 30-05-2019
-     */
-    @Test
+     *//*
+
+    */
+/*@Test
     public void finalizarViaje() {
         when(viajeServicio.finalizar(any(String.class), any(String.class), any(String.class))).thenReturn(0);
 
@@ -207,6 +225,7 @@ public class ViajeControladorUnitTest {
         }catch(Exception e){
             fail();
         }
-    }
+    }*//*
+
 }
-//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------*/

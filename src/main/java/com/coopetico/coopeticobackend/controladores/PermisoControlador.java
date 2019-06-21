@@ -35,7 +35,7 @@ public class PermisoControlador {
      */
     @GetMapping()
     @CrossOrigin(origins = "http://localhost:4200")
-    @PreAuthorize("hasAuthority('404')")
+    @PreAuthorize("hasAuthority('400')")
     public List<PermisoEntidad> getPermisos(){
         List<PermisoEntidad> lista = permisos.getPermisos();
         return lista;

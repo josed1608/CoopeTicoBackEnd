@@ -54,7 +54,6 @@ public class PermisoControladorIntegrationTest {
     @Before
     public void setup() {
         this.mockMvc = MockMvcUtilidades.getMockMvc();
-        permisosRepositorio.deleteAll();
     }
 
     @Test
@@ -89,6 +88,5 @@ public class PermisoControladorIntegrationTest {
         ObjectMapper objectMapper = new ObjectMapper();
         PermisoEntidad[] listaPermisos = objectMapper.readValue(contenido, PermisoEntidad[].class);
         assertTrue(listaPermisos.length > 0);
-        //assertTrue(listaPermisos[0].getPkId() == 100);
     }
 }

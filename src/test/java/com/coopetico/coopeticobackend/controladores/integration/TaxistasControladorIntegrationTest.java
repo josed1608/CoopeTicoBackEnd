@@ -74,7 +74,7 @@ public class TaxistasControladorIntegrationTest {
     @Transactional
     public void testConsultar() throws Exception {
         //Se hace la consulta al controlador
-        MvcResult mvcResult = mockMvc.perform(get("/taxistas/taxistas")
+        MvcResult mvcResult = mockMvc.perform(get("/taxistas")
                 .headers(tokenUtilidades.obtenerTokenGerente())
                 .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andReturn();
@@ -160,43 +160,14 @@ public class TaxistasControladorIntegrationTest {
     }
 
     /**
-     * Prueba de integracion para agregar los taxis que conduce un taxista.
-     */
-    @Test
-    @Transactional
-    public void testAgregarTaxisConduceTaxista() throws Exception {
-        // Se hace la consulta al controlador
-        TaxistaEntidadTemporal entidadRetornada = consultarPorId("taxista1@taxista.com");
-        //Se compara que no sea nulo
-        assertNotNull(entidadRetornada);
-        //Se compara que sea el taxista solicitado
-        Assert.assertEquals(entidadRetornada.getSiConduce().size(), 1);
-        // Se pide la lista que tenia antes
-        List<String> siConduce =  entidadRetornada.getSiConduce();
-        // Se agrega que conduce este taxi
-        siConduce.add("BBB111");
-        // Se agrega a la entidad que se va a enviar
-        entidadRetornada.setSiConduce(siConduce);
-        entidadRetornada.setValid(true);
-        //Se envia a guardar la entidad
-        taxistasControlador.modificar(entidadRetornada, entidadRetornada.getPkCorreoUsuario());
-        //Se consulta nuevamente el taxista para ver que conduce los 2 taxis
-        entidadRetornada = consultarPorId("taxista1@taxista.com");
-        //Se compara que no sea nulo
-        assertNotNull(entidadRetornada);
-        //Se compara que sea el taxista solicitado
-        int cantidadConduce = entidadRetornada.getSiConduce().size();
-        Assert.assertEquals( cantidadConduce, 2);
-    }
-
-    /**
      * Prueba la respuesta del endpoint taxistas/{id}/estado cuando el taxista no esta suspendido.
      * @throws Exception
      * @author Kevin Jiménez
      */
     @Test
     public void testObtenerEstadoNoSuspendido() throws Exception{
-        final String resultado = mockMvc.perform(get("/taxistas/taxistaNoSuspendido@taxista.com/estado"))
+        final String resultado = mockMvc.perform(get("/taxistas/taxistaNoSuspendido@taxista.com/estado")
+        .headers(tokenUtilidades.obtenerTokenGerente()))
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
         HashMap<String,Object> result =

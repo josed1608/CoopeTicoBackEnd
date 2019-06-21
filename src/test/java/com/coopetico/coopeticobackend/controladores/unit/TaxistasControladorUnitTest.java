@@ -112,7 +112,7 @@ public class TaxistasControladorUnitTest {
         // Se le indica al servicio que devuelta la lista de taxistas cuando consulten por ella
         given(this.taxistasServicio.consultar()).willReturn(entidades);
         //Perdir los datos al controlador
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/taxistas/taxistas").headers(tokenUtilidades.obtenerTokenGerente()).accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/taxistas").headers(tokenUtilidades.obtenerTokenGerente()).accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
         //Verificar que respondio
         int status = mvcResult.getResponse().getStatus();
         assertEquals(200, status);
@@ -143,7 +143,7 @@ public class TaxistasControladorUnitTest {
         //Se le indica que caundo pregunten por ese taxista retorne la entidad anterior
         when(taxistasServicio.consultarPorId("taxistaMoka1@coopetico.com")).thenReturn(taxistaEntidad1);
         // Se le pide el taxista al servicio
-        TaxistaEntidadTemporal entidadRetornada = taxistasControlador.consultarPorId("taxistaMoka1@coopetico.com");
+        TaxistaEntidadTemporal entidadRetornada = consultarPorId("taxistaMoka1@coopetico.com");
         //Se compara que no sea nulo
         assertNotNull(entidadRetornada);
         //Se compara que sea el taxista solicitado
@@ -171,7 +171,7 @@ public class TaxistasControladorUnitTest {
         //Se le indica que caundo pregunten por ese taxista retorne la entidad anterior
         when(taxistasServicio.consultarPorId("taxistaMoka1@coopetico.com")).thenReturn(taxistaEntidad1);
         // Se le pide el taxista al servicio
-        TaxistaEntidadTemporal entidadRetornada = taxistasControlador.consultarPorId("taxistaMoka1@coopetico.com");
+        TaxistaEntidadTemporal entidadRetornada = consultarPorId("taxistaMoka1@coopetico.com");
         //Se compara que no sea nulo
         assertNotNull(entidadRetornada);
         //Se compara que la fecha sea la esperada
@@ -200,7 +200,7 @@ public class TaxistasControladorUnitTest {
         //Se le indica que cuando pregunten por ese taxista retorne la entidad anterior
         when(taxistasServicio.consultarPorId("taxistaMoka1@coopetico.com")).thenReturn(taxistaEntidad1);
         // Se le pide el taxista al servicio
-        TaxistaEntidadTemporal entidadRetornada = taxistasControlador.consultarPorId("taxistaMoka1@coopetico.com");
+        TaxistaEntidadTemporal entidadRetornada = consultarPorId("taxistaMoka1@coopetico.com");
         //Se compara que no sea nulo
         assertNotNull(entidadRetornada);
         //Se compara ambos apellidos para ver que esten separados
@@ -334,7 +334,7 @@ public class TaxistasControladorUnitTest {
      */
     @Test
     public void testGuardarTaxisArchivo() throws Exception {
-        String url = "/taxistas/";
+        String url = "/taxistas/lista";
 
         // Se crea el taxista 1
         TaxistaEntidadTemporal taxistaEntidad1 = new TaxistaEntidadTemporal();
