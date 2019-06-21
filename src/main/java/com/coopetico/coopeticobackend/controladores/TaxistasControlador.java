@@ -198,7 +198,7 @@ public class TaxistasControlador {
      * @param json un JSON con el correo del cliente, el origen y el destino
      * @return los datos a desplegar del taxista
      */
-    @GetMapping("{correoTaxista}/datosParaMostrar")
+    @PostMapping("{correoTaxista}/datosParaMostrar")
     public DatosTaxistaAsigadoEntidad obtenerDatosTaxistaAsignado(
         @PathVariable String correoTaxista,
         @RequestBody Map<String, String> json

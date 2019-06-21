@@ -25,6 +25,8 @@ public class DatosTaxistaAsigadoEntidad {
     private String telefono;
     private String foto;
     private String placa;
+    private String modeloAuto;      //TODO:
+    private String fotoAuto;        //TODO:
     //-------------------------------------------------------------------------
 
     /**
@@ -39,7 +41,7 @@ public class DatosTaxistaAsigadoEntidad {
      * @param telefono el telefono del usuario
      * @param foto el url a la foto del usuario
      * @param placa la placa del taxi que el taxista asignado está conduciendo
-     */
+     */ 
     public DatosTaxistaAsigadoEntidad(
         ViajeComenzandoEntidad viaje,
         String correoTaxista,
