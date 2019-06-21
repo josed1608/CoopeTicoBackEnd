@@ -7,7 +7,6 @@ import com.coopetico.coopeticobackend.entidades.ViajeEntidadTemporal;
 import com.coopetico.coopeticobackend.entidades.bd.UsuarioEntidad;
 import com.coopetico.coopeticobackend.excepciones.UsuarioNoEncontradoExcepcion;
 import com.coopetico.coopeticobackend.servicios.*;
-import com.coopetico.coopeticobackend.entidades.bd.ViajeEntidad;
 import com.coopetico.coopeticobackend.servicios.UsuarioServicio;
 import com.coopetico.coopeticobackend.entidades.ViajeDatosIniciales;
 import com.coopetico.coopeticobackend.servicios.ViajesServicio;
@@ -16,7 +15,6 @@ import com.coopetico.coopeticobackend.entidades.ViajeTmpEntidad;
 import com.google.maps.errors.ApiException;
 import com.google.maps.model.LatLng;
 import org.springframework.data.util.Pair;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -91,6 +89,7 @@ public class ViajeControlador {
      * @return String se inserto, null de otra manera.
      */
     @PostMapping("viajeCompleto")
+    @PreAuthorize("hasAuthority('100')")
     public ResponseEntity agregarViaje (@RequestBody ViajeTmpEntidad viajeTempEntidad) {
         try  {
             this.viajesServicio.guardar(
@@ -116,6 +115,7 @@ public class ViajeControlador {
      * @return Lista de usuarios
      */
     @GetMapping()
+    @PreAuthorize("hasAuthority('500')")
     public List<ViajeEntidadTemporal> obtenerViajes(){
         ViajeEntidadTemporal viajeEntidadTemporal = new ViajeEntidadTemporal();
         List<ViajeEntidadTemporal> listaTemporal = viajeEntidadTemporal.convertirListaViajes(viajesServicio.consultarViajes());
@@ -143,6 +143,7 @@ public class ViajeControlador {
      * @return retorna ok si se pudo escoger al primer taxista y una excepción si no
      */
     @PostMapping("/solicitar")
+    @PreAuthorize("hasAuthority('100')")
     public ResponseEntity solicitarViaje(@RequestBody ViajeComenzandoEntidad datosViaje) {
         List<Pair<String, LatLng>> taxistasDisponibles = ubicacionTaxistasServicio.obtenerTaxistasDisponibles(new LinkedList<>());
 
@@ -166,6 +167,7 @@ public class ViajeControlador {
      * @return retorna la respuesta de lo que se logró
      */
     @PostMapping("/aceptar-rechazar")
+    @PreAuthorize("hasAuthority('200')")
     public ResponseEntity respuestaTaxista(Principal principal, @RequestParam boolean respuesta, @RequestBody ViajeComenzandoEntidad datosViaje) {
         if(respuesta) {
             DatosTaxistaAsigadoEntidad taxistaAsignado = taxistasServicio.obtenerDatosTaxistaAsignado(principal.getName());
@@ -216,6 +218,7 @@ public class ViajeControlador {
      *          Server error, si el error no ha sido identificado.
      */
     @PostMapping()
+    @PreAuthorize("hasAuthority('100')")
     public ResponseEntity crearViaje(@RequestBody ViajeDatosIniciales datosDelViaje) {
         //---------------------------------------------------------------------
         ResponseEntity result = null;
@@ -279,6 +282,7 @@ public class ViajeControlador {
      *          Server error, si el error no ha sido identificado.
      */
     @PutMapping("/finalizar")
+    @PreAuthorize("hasAuthority('200')")
     public ResponseEntity finalizarViaje(@RequestBody ViajeTmpEntidad datosDelViaje) {
         ResponseEntity resultado = null;
         int respuestaServicio = viajesServicio.finalizar(

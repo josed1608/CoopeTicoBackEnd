@@ -16,6 +16,7 @@ import com.coopetico.coopeticobackend.servicios.PermisoGrupoServicio;
 import com.coopetico.coopeticobackend.servicios.PermisosServicio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -46,6 +47,7 @@ public class PermisosGrupoControlador {
      */
     @GetMapping("/{id}")
     @CrossOrigin(origins = "http://localhost:4200")
+    @PreAuthorize("hasAuthority('404')")
     public List<PermisoEntidad> getPermisosGrupo(@PathVariable String id){
         GrupoEntidad grupoEntidad = grupoServicio.getGrupoPorPK(id);
         List<PermisoEntidad> listaPermisosGrupo = permisosGrupoServicio.getPermisosGrupo(grupoEntidad);
@@ -59,6 +61,7 @@ public class PermisosGrupoControlador {
      */
     @GetMapping("/-{id}")
     @CrossOrigin(origins = "http://localhost:4200")
+    @PreAuthorize("hasAuthority('404')")
     public List<PermisoEntidad> getNoPermisosGrupo(@PathVariable String id){
         GrupoEntidad grupoEntidad = grupoServicio.getGrupoPorPK(id);
         List<PermisoEntidad> listaPermisos = permisosServicio.getPermisos();
@@ -77,6 +80,7 @@ public class PermisosGrupoControlador {
      */
     @PostMapping()
     @CrossOrigin(origins = "http://localhost:4200")
+    @PreAuthorize("hasAuthority('402')")
     public ResponseEntity guardarPermisoGrupo(@RequestBody List<PermisosGrupoEntidadPK> pG) {
 
         for(PermisosGrupoEntidadPK pgEntrante: pG) {
@@ -110,6 +114,7 @@ public class PermisosGrupoControlador {
      */
     @DeleteMapping("/{idPermiso}/{idGrupo}")
     @CrossOrigin(origins = "http://localhost:4200")
+    @PreAuthorize("hasAuthority('402')")
     public ResponseEntity eliminarPermisoGrupo(@PathVariable("idPermiso")int idPermiso, @PathVariable("idGrupo") String idGrupo) {
 
         PermisosGrupoEntidadPK entidad = new PermisosGrupoEntidadPK(idPermiso, idGrupo);

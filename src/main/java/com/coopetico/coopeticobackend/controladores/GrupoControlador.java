@@ -10,6 +10,7 @@ package com.coopetico.coopeticobackend.controladores;
 import com.coopetico.coopeticobackend.entidades.bd.GrupoEntidad;
 import com.coopetico.coopeticobackend.servicios.GrupoServicio;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,6 +35,7 @@ public class GrupoControlador {
      * @return Lista de permisos con el ID
      */
     @GetMapping()
+    @PreAuthorize("hasAuthority('404')")
     public List<GrupoEntidad> getGrupos(){
         List<GrupoEntidad> listaGrupos = grupoServicio.getGrupos();
         return  listaGrupos;

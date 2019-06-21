@@ -17,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import com.coopetico.coopeticobackend.entidades.bd.UsuarioEntidad;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -91,6 +92,7 @@ public class UsuarioControlador {
      */
     @PutMapping(path = "/cambiarContrasena")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("isAuthenticated()")
     public boolean cambiarContrasena(@RequestBody AuthenticationRequest datosUsuario){
         //Obtener el usuario con ese nombre o correo
         if(datosUsuario.getUsername() != null & datosUsuario.getPassword() != null) {
@@ -174,6 +176,7 @@ public class UsuarioControlador {
      * @return Lista de usuarios
      */
     @GetMapping()
+    @PreAuthorize("hasAuthority('300')")
     public List<UsuarioTemporal> obtenerUsuarios(){
         List<UsuarioEntidad> usuarios = usuarioServicio.obtenerUsuarios();
         return usuarioTemporal.getListaUsuarioTemporal(usuarios);
@@ -185,6 +188,7 @@ public class UsuarioControlador {
      * @return Retorna los usuarios que contiene la pagina
      */
     @GetMapping("/page/{pagina}")
+    @PreAuthorize("hasAuthority('300')")
     public Page<UsuarioTemporal> obtenerUsuarios(@PathVariable Integer pagina){
         int TAMANIO = 4;
         Pageable pageable = PageRequest.of(pagina, TAMANIO);
@@ -201,6 +205,7 @@ public class UsuarioControlador {
      * @return Usuario identificado por el id
      */
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('300')")
     public ResponseEntity<?> obtenerUsuarioPorId(@PathVariable String id){
         UsuarioEntidad usuarioEntidad;
         Map<String, Object> response = new HashMap<>();
@@ -229,6 +234,7 @@ public class UsuarioControlador {
      * @return Mensaje de exito o error
      */
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('300')")
     public ResponseEntity<?> eliminarUsuarioPorId(@PathVariable String id){
         Map<String, Object> response = new HashMap<>();
         try {
@@ -255,6 +261,7 @@ public class UsuarioControlador {
      * @return Lista de usuarios del grupo
      */
     @GetMapping("/grupo")
+    @PreAuthorize("hasAuthority('300')")
     public List<UsuarioTemporal> obtenerUsuariosPorGrupo(@RequestBody GrupoEntidad grupoEntidad){
         List<UsuarioEntidad> usuarios = usuarioServicio.obtenerUsuariosPorGrupo(grupoEntidad);
         return usuarioTemporal.getListaUsuarioTemporal(usuarios);
@@ -268,6 +275,7 @@ public class UsuarioControlador {
      * @return Usuario modificado
      */
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('300')")
     public ResponseEntity<?> actualizar(@Valid @RequestBody UsuarioTemporal usuario, @PathVariable String id, BindingResult resultado){
         UsuarioEntidad usuarioEntidad;
         UsuarioEntidad temporal;
@@ -317,6 +325,7 @@ public class UsuarioControlador {
      * @return Respuesta correcto o incorrecto y el usuario con la foto agregada
      */
     @PostMapping("/upload")
+    @PreAuthorize("hasAuthority('300')")
     public ResponseEntity<?> subirImagen(@RequestParam("archivo") MultipartFile archivo, @RequestParam("id") String id){
         Map<String, Object> response = new HashMap<>();
 
@@ -359,6 +368,7 @@ public class UsuarioControlador {
      * @author Kevin Jimenez
      */
     @PutMapping("{correo}/estado")
+    @PreAuthorize("hasAuthority('300')")
     public ResponseEntity  cambiarEstado(@PathVariable @Email String correo, @RequestParam String valido){
         try{
             usuarioServicio.cambiarEstado(correo, Boolean.parseBoolean(valido));

@@ -9,6 +9,7 @@ import org.springframework.data.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.http.ResponseEntity.ok;
@@ -44,6 +45,7 @@ public class UbicacionTaxistasControlador {
      * @return Mensaje de confirmación
      */
     @PostMapping("/actualizar/todo")
+    @PreAuthorize("hasAuthority('200')")
     public ResponseEntity actualizarUbicacionDisponible(@RequestBody UbicacionTaxistaEntidad ubicacionBody) {
 
         String correoTaxista = ubicacionBody.getCorreoTaxista();
@@ -67,6 +69,7 @@ public class UbicacionTaxistasControlador {
      * @return Mensaje de confirmación
      */
     @PostMapping("/actualizar/ubicacion")
+    @PreAuthorize("hasAuthority('200')")
     public ResponseEntity actualizarUbicacion(@RequestBody UbicacionTaxistaEntidad ubicacionBody) {
 
         String correoTaxista = ubicacionBody.getCorreoTaxista();
@@ -89,6 +92,7 @@ public class UbicacionTaxistasControlador {
      * @return Mensaje de confirmación
      */
     @PostMapping("/actualizar/disponible")
+    @PreAuthorize("hasAuthority('305')")
     public ResponseEntity actualizarDisponible(@RequestBody UbicacionTaxistaEntidad ubicacionBody) {
 
         String correoTaxista = ubicacionBody.getCorreoTaxista();
@@ -110,6 +114,7 @@ public class UbicacionTaxistasControlador {
      * @return Modelo de una ubicación con los atributos correoTaxista, latitud y longitud, y disponible.
      */
     @GetMapping(path = "/consultar/{correoTaxista}")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity consultarUbicacionDisponible(@PathVariable String correoTaxista){
 
         Object[] datos = ubicacionTaxistasServicio.consultarUbicacionPairDisponible(correoTaxista);
@@ -133,6 +138,7 @@ public class UbicacionTaxistasControlador {
      * @return Mensaje de confirmación
      */
     @DeleteMapping(path = "/eliminar/{correoTaxista}")
+    @PreAuthorize("hasAuthority('305')")
     public ResponseEntity eliminar(@PathVariable String correoTaxista){
         //Reviso que me pidan un taxista existente.
         taxistasServicio.taxistaPorCorreo(correoTaxista).orElseThrow(() -> new UsuarioNoEncontradoExcepcion("Taxista " + correoTaxista + " no encontrado", HttpStatus.NOT_FOUND, System.currentTimeMillis()));

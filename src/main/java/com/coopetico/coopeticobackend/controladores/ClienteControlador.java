@@ -7,6 +7,7 @@ import com.coopetico.coopeticobackend.servicios.ClienteServicio;
 import com.coopetico.coopeticobackend.servicios.UsuarioServicio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.http.ResponseEntity.ok;
@@ -55,6 +56,7 @@ public class ClienteControlador {
      * null de otra manera.
      */
     @GetMapping(path = "/obtenerUsuario/{correo}")
+    @PreAuthorize("isAuthenticated()")
     public String obtenerUsuario(@PathVariable String correo) {
         try {
             return this.clienteServicio.consultarUsuarioPorId(correo).toString();
@@ -70,7 +72,8 @@ public class ClienteControlador {
      * @return ok si se actualiza el usuario correctamente
      * @author Valeria Zamora
      */
-    @PostMapping("/modificarUsuario}")
+    @PostMapping("/modificarUsuario")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity modificarCliente(@RequestBody UsuarioEntidad usuarioNuevo, Principal principal) {
         this.usuarioServicio.modificarUsuario(usuarioNuevo, principal.getName());
         this.clienteServicio.modificarCliente(usuarioNuevo, principal.getName());

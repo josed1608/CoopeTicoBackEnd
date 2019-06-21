@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.nio.file.Path;
@@ -59,6 +60,7 @@ public class TaxisControlador {
      * @return lista de entidades de taxi
      */
     @GetMapping("/taxis")
+    @PreAuthorize("hasAuthority('310')")
     public List<TaxiEntidad> consultar(){
         /*
         List<TaxiEntidad> taxisValidos = new ArrayList<>();
@@ -81,6 +83,7 @@ public class TaxisControlador {
      * @return Entidad taxi que coincide con el id pasado por parámetro
      */
     @GetMapping("/taxis/{id}")
+    @PreAuthorize("hasAuthority('310')")
     public TaxiEntidad consultarPorId(@PathVariable String id){
         return taxisServicio.consultarPorId(id);
     }
@@ -92,6 +95,7 @@ public class TaxisControlador {
      */
     @PostMapping("/taxis")
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAuthority('300')")
     public TaxiEntidad agregar(@RequestBody TaxiEntidad taxi){
         return taxisServicio.guardar(taxi);
     }
@@ -104,6 +108,7 @@ public class TaxisControlador {
      */
     @PutMapping("/taxis/{id}")
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAuthority('304')")
     public TaxiEntidad modificar(@RequestBody TaxiEntidad taxi, @PathVariable String id){
         TaxiEntidad taxiActual = taxisServicio.consultarPorId(id);
         taxiActual.setPkPlaca(taxi.getPkPlaca());
@@ -127,6 +132,7 @@ public class TaxisControlador {
      */
     @DeleteMapping("/taxis/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAuthority('302')")
     public void eliminar(@PathVariable String id){
         taxisServicio.eliminar(id);
     }
@@ -138,6 +144,7 @@ public class TaxisControlador {
      * @return Respuesta correcto o incorrecto y el taxi con la foto agregada
      */
     @PostMapping("/taxis/upload")
+    @PreAuthorize("hasAuthority('304')")
     public ResponseEntity<?> subirImagen(@RequestParam("archivo") MultipartFile archivo, @RequestParam("id") String id){
         Map<String, Object> response = new HashMap<>();
 
@@ -176,6 +183,7 @@ public class TaxisControlador {
      * @return ok si la insercion fue exitosa
      */
     @PostMapping()
+    @PreAuthorize("hasAuthority('300')")
     public ResponseEntity guardarTaxisArchivo(@RequestBody List<TaxiEntidad> taxis) {
         this.taxisServicio.guardarLista(taxis);
         return ok("");

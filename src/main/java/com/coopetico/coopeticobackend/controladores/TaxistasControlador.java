@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
@@ -74,6 +75,7 @@ public class TaxistasControlador {
      * @return Lista de taxistas, correo, nombre, apellidos, telefono y estado.
      */
     @GetMapping("/taxistas")
+    @PreAuthorize("hasAuthority('311')")
     public List<TaxistaEntidadTemporal> consultar() { return taxistaServicio.consultar();
     }
 
@@ -83,6 +85,7 @@ public class TaxistasControlador {
      * @return Lista de taxistas, correo, nombre, apellidos, telefono y estado.
      */
     @GetMapping("/taxistas/{correoUsuario}")
+    @PreAuthorize("hasAuthority('311')")
     public TaxistaEntidadTemporal consultarPorId(@PathVariable String correoUsuario) {
         return taxistaServicio.consultarPorId(correoUsuario);
     }
@@ -94,6 +97,7 @@ public class TaxistasControlador {
      */
     @PostMapping("/taxistas")
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAuthority('301')")
     public TaxistaEntidadTemporal agregar(@RequestBody TaxistaEntidadTemporal taxista){
         TaxistaEntidadTemporal taxistaCreado = taxistaServicio.guardar(taxista, taxista.getPkCorreoUsuario());
         if (taxistaCreado != null) {
@@ -113,6 +117,7 @@ public class TaxistasControlador {
      */
     @PutMapping("/taxistas/{pkCorreoUsuario}")
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAuthority('305')")
     public TaxistaEntidadTemporal modificar(@RequestBody TaxistaEntidadTemporal taxista, @PathVariable("pkCorreoUsuario") String pkCorreoUsuario){
         return taxistaServicio.guardar(taxista, pkCorreoUsuario);
     }
@@ -123,6 +128,7 @@ public class TaxistasControlador {
      */
     @DeleteMapping("/taxistas/{correoUsuario}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @PreAuthorize("hasAuthority('303')")
     public void eliminar(@PathVariable String correoUsuario){
         taxistaServicio.eliminar(correoUsuario);
     }
@@ -135,6 +141,7 @@ public class TaxistasControlador {
      * @return Respuesta correcto o incorrecto y el taxista con la foto agregada
      */
     @PostMapping("/taxistas/upload")
+    @PreAuthorize("hasAuthority('305')")
     public ResponseEntity<?> subirImagen( @RequestParam("archivo") MultipartFile archivo, @RequestParam("id") String id){
         Map<String, Object> response = new HashMap<>();
 
@@ -177,6 +184,7 @@ public class TaxistasControlador {
      * @author Kevin Jiménez
      */
     @GetMapping("{correo}/estado")
+    @PreAuthorize("hasAuthority('311')")
     public ResponseEntity obtenerEstado(@PathVariable String correo){
         try{
             return new ResponseEntity(taxistaServicio.obtenerEstado(correo), HttpStatus.OK);
@@ -199,6 +207,7 @@ public class TaxistasControlador {
      * @return los datos a desplegar del taxista
      */
     @GetMapping("{correoTaxista}/datosParaMostrar")
+    @PreAuthorize("hasAuthority('100')")
     public DatosTaxistaAsigadoEntidad obtenerDatosTaxistaAsignado(
         @PathVariable String correoTaxista,
         @RequestBody Map<String, String> json
@@ -224,6 +233,7 @@ public class TaxistasControlador {
      * @return ok si la insercion fue exitosa
      */
     @PostMapping()
+    @PreAuthorize("hasAuthority('301')")
     public ResponseEntity guardarTaxisArchivo(@RequestBody List<TaxistaEntidadTemporal> taxistas) {
         this.taxistaServicio.guardarLista(taxistas);
         return ok("");

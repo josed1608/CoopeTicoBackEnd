@@ -6,6 +6,7 @@ import com.google.maps.model.LatLng;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +32,7 @@ public class PruebaDistanciaControlador {
      * @return el id del taxista más cercano
      */
     @GetMapping("/test")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity testDistancia() {
         LatLng origen  = new LatLng(9.963621, -84.067743);
         LatLng destino1 = new LatLng(9.963144, -84.054909);
