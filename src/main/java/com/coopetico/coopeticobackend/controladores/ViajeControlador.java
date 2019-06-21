@@ -353,7 +353,7 @@ public class ViajeControlador {
             case -1:
                 //-------------------------------------------------------------
                 resultado = new ResponseEntity(
-                    "hubo un error no manejado",
+                    "Hubo un error no manejado",
                     HttpStatus.INTERNAL_SERVER_ERROR
                 );
                 //-------------------------------------------------------------
