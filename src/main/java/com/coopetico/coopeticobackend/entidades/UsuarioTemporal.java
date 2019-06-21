@@ -26,6 +26,8 @@ public class UsuarioTemporal {
     private String foto;
     // Grupo al que pertenece el usuario
     private String idGrupo;
+    // Indica si está activo
+    private boolean valid;
 
 
     /**
@@ -46,6 +48,7 @@ public class UsuarioTemporal {
         this.foto = usuarioEntidad.getFoto();
         this.contrasena = usuarioEntidad.getContrasena();
         this.idGrupo = usuarioEntidad.getGrupoByIdGrupo().getPkId();
+        this.valid = usuarioEntidad.getValid();
     }
 
     /**
@@ -178,6 +181,18 @@ public class UsuarioTemporal {
     }
 
     /**
+     * Metodo que permite obtener si es válido
+     * @return verdadero si es válido
+     */
+    public boolean getValid() {return valid;}
+
+    /**
+     * Permite modificar el valor valid
+     * @param valid Indica si es válido o no
+     */
+    public void setValid(boolean valid){ this.valid = valid; }
+
+    /**
      * Metodo que convierte una lista de UsuariosEntidad a una lista de UsuariosTemporal
      * @param usuarios Lista con los usuarios de la clase UsuarioEntidad
      * @return Lista con los usuarios de la clase UsuarioTemporal
@@ -203,6 +218,7 @@ public class UsuarioTemporal {
         usuarioEntidad.setContrasena(this.contrasena);
         usuarioEntidad.setPkCorreo(this.correo);
         usuarioEntidad.setFoto(this.foto);
+        usuarioEntidad.setValid(this.valid);
 
         GrupoEntidad grupo = new GrupoEntidad();
         grupo.setPkId(this.getIdGrupo());
