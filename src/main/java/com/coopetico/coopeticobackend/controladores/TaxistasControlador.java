@@ -66,7 +66,7 @@ public class TaxistasControlador {
     /**
      * Constructor
      */
-    private TaxistasControlador(){
+    public TaxistasControlador(){
         this.utilidadesControlador = new UtilidadesControlador();
     }
 
