@@ -25,11 +25,16 @@ public class TaxiEntidad {
     private Timestamp fechaVenRtv;
     private Timestamp fechaVenMarchamo;
     private Timestamp fechaVenSeguro;
+    private boolean estado;
+    private String justificacion;
     @JsonIgnore
     private Collection<ViajeEntidad> viajesByPkPlaca;
     private Collection<ConduceEntidad> taxistasQueMeConducen;
 
-    public TaxiEntidad(String pkPlaca, Boolean datafono, String telefono, String clase, String tipo, Timestamp fechaVenRtv, Timestamp fechaVenMarchamo, Timestamp fechaVenSeguro, Collection<ViajeEntidad> viajesByPkPlaca, String foto, Boolean valido, String correoTaxista, Collection<ConduceEntidad> taxistasQueMeConducen) {
+    public TaxiEntidad(String pkPlaca, Boolean datafono, String telefono, String clase, String tipo,
+                       Timestamp fechaVenRtv, Timestamp fechaVenMarchamo, Timestamp fechaVenSeguro,
+                       Collection<ViajeEntidad> viajesByPkPlaca, String foto, Boolean valido, String correoTaxista,
+                       boolean estado, String justificacion, Collection<ConduceEntidad> taxistasQueMeConducen) {
         this.pkPlaca = pkPlaca;
         this.datafono = datafono;
         this.telefono = telefono;
@@ -41,12 +46,14 @@ public class TaxiEntidad {
         this.fechaVenRtv = fechaVenRtv;
         this.fechaVenMarchamo = fechaVenMarchamo;
         this.fechaVenSeguro = fechaVenSeguro;
+        this.estado = estado;
+        this.justificacion = justificacion;
         this.viajesByPkPlaca = viajesByPkPlaca;
         this.taxistasQueMeConducen = taxistasQueMeConducen;
     }
 
     public TaxiEntidad(String pkPlaca, Boolean datafono, String telefono, String clase, String tipo, Date fechaVenRtv,
-                       Date fechaVenMarchamo, Date fechaVenSeguro, Boolean valido, String foto, String correoTaxista) {
+                       Date fechaVenMarchamo, Date fechaVenSeguro, boolean estado, String justificacion, Boolean valido, String foto, String correoTaxista) {
         this.pkPlaca = pkPlaca;
         this.datafono = datafono;
         this.telefono = telefono;
@@ -58,6 +65,8 @@ public class TaxiEntidad {
         this.valido = valido;
         this.foto = foto;
         this.correoTaxista = correoTaxista;
+        this.estado = estado;
+        this.justificacion = justificacion;
     }
 
     public TaxiEntidad(){}
@@ -129,6 +138,26 @@ public class TaxiEntidad {
     }
 
     @Basic
+    @Column(name = "estado", nullable = false)
+    public boolean isEstado() {
+        return estado;
+    }
+
+    public void setEstado(boolean estado) {
+        this.estado = estado;
+    }
+
+    @Basic
+    @Column(name = "justificacion", nullable = false)
+    public String getJustificacion() {
+        return justificacion;
+    }
+
+    public void setJustificacion(String justificacion) {
+        this.justificacion = justificacion;
+    }
+
+    @Basic
     @Column(name = "correo_taxista", nullable = false)
     public String getCorreoTaxista() {
         return correoTaxista;
@@ -180,12 +209,14 @@ public class TaxiEntidad {
                 Objects.equals(tipo, that.tipo) &&
                 Objects.equals(fechaVenRtv, that.fechaVenRtv) &&
                 Objects.equals(fechaVenMarchamo, that.fechaVenMarchamo) &&
-                Objects.equals(fechaVenSeguro, that.fechaVenSeguro);
+                Objects.equals(fechaVenSeguro, that.fechaVenSeguro) &&
+                Objects.equals(estado, that.estado) &&
+                Objects.equals(justificacion, that.justificacion);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(pkPlaca, datafono, telefono, clase, tipo, foto, fechaVenRtv, fechaVenMarchamo, fechaVenSeguro);
+        return Objects.hash(pkPlaca, datafono, telefono, clase, tipo, foto, fechaVenRtv, fechaVenMarchamo, fechaVenSeguro, estado, justificacion);
     }
 
     @OneToMany(mappedBy = "taxiByPkPlacaTaxi")

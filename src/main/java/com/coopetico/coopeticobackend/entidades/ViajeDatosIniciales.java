@@ -20,7 +20,7 @@ public class ViajeDatosIniciales {
     // Variables globales
     private String placa;
     private String correoCliente;
-    private Timestamp fechaInicio;
+    private String fechaInicio;
     private String origen;
     private String correoTaxista;
     //-------------------------------------------------------------------------
@@ -38,7 +38,7 @@ public class ViajeDatosIniciales {
     public ViajeDatosIniciales(
         String placa,
         String correoCliente,
-        Timestamp fechaInicio,
+        String fechaInicio,
         String origen,
         String correoTaxista
     ) {
@@ -84,14 +84,14 @@ public class ViajeDatosIniciales {
     /**
      * @return the fechaInicio
      */
-    public Timestamp getFechaInicio() {
+    public String getFechaInicio() {
         return fechaInicio;
     }
 
     /**
      * @param fechaInicio the fechaInicio to set
      */
-    public void setFechaInicio(Timestamp fechaInicio) {
+    public void setFechaInicio(String fechaInicio) {
         this.fechaInicio = fechaInicio;
     }
 

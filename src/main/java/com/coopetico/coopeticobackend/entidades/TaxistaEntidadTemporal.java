@@ -335,7 +335,7 @@ public class TaxistaEntidadTemporal {
         this.estado = taxista.isEstado();
         this.hojaDelincuencia = taxista.isHojaDelincuencia();
         this.estrellas = taxista.getEstrellas();
-        this.justificacion = taxista.getPkCorreoUsuario();
+        this.justificacion = taxista.getJustificacion();
         this.vence_licencia = taxista.getVence_licencia();
         this.nombre = taxista.getUsuarioByPkCorreoUsuario().getNombre();
         this.apellido1 = taxista.getUsuarioByPkCorreoUsuario().getApellido1();

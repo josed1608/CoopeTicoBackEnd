@@ -77,4 +77,11 @@ public class ClienteServicioImpl implements ClienteServicio {
     public ClienteEntidad consultarClientePorId(String correo){
         return clientesRepositorio.findById(correo).orElse(null);
     }
+
+    @Override
+    public void modificarCliente(UsuarioEntidad usuarioEntidad, String correo) throws UsuarioNoEncontradoExcepcion{
+        if(!usuariosRepositorio.findById(usuarioEntidad.getPkCorreo()).isPresent())
+            throw new UsuarioNoEncontradoExcepcion("No existe el usuario al que se desea asociar el cliente", HttpStatus.NOT_FOUND, System.currentTimeMillis());
+        // update el cliente
+    }
 }

@@ -7,6 +7,7 @@ import com.coopetico.coopeticobackend.servicios.UsuarioServicio;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -15,6 +16,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.security.Principal;
+
+import static org.mockito.Mockito.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doAnswer;
@@ -26,6 +30,7 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standal
 @RunWith(SpringRunner.class)
 public class ClienteControladorUnitTest {
     private MockMvc mockMvc;
+    private Mockito mockito;
 
     @Autowired
     protected WebApplicationContext wac;
@@ -57,4 +62,19 @@ public class ClienteControladorUnitTest {
                 //Assert
                 .andExpect(status().isOk());
     }
+
+    /*@Test
+    public void testModificarUsuario() throws Exception {
+        doAnswer((i)->{return null;}).when(clienteServicio).modificarCliente(any(UsuarioEntidad.class), Mockito.mock(Principal.class).getName());
+
+        //Act
+        mockMvc.perform(post("/clientes")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{" +
+                        "\"pkCorreo\": \"prueba\"," +
+                        "\"nombre\": \"Nombre\"" +
+                        "}"))
+                //Assert
+                .andExpect(status().isOk());
+    }*/
 }

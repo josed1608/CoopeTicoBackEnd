@@ -23,8 +23,8 @@ public interface ViajesServicio {
     String guardar(
         String placa,
         String correo_cliente,
-        Timestamp fecha_inicio,
-        Timestamp fecha_fin,
+        String fecha_inicio,
+        String fecha_fin,
         String costo,
         Integer estrellas,
         String origen,
@@ -55,9 +55,23 @@ public interface ViajesServicio {
      */
     int crear(
         String placa,
-        Timestamp fechaInicio,
+        String fechaInicio,
         String correoUsuario,
         String origen,
         String correoTaxista
     );
+
+    /**
+     * Este es el método a usar para actualizar la fecha de finalización de un viaje.
+     *
+     * @author Marco Venegas (B67697)
+     * @since 27-05-2019
+     *
+     * @param placa la placa del taxi asignado
+     * @param fechaInicio la fecha de inicio de un viaje
+     * @param fechaFin la fecha en la que finalizó el viaje.
+     *
+     * @return Int con el estado
+     */
+    int finalizar(String placa, String fechaInicio, String fechaFin);
 }
