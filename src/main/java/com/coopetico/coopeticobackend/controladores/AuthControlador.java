@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
@@ -109,6 +110,7 @@ public class AuthControlador {
      * @return retorna el perfil (dev, test, prod o ci)
      */
     @GetMapping("/perfil")
+    @PreAuthorize("hasAuthority('400')")
     public ResponseEntity perfilActual(){
         return ok(this.environment.getActiveProfiles());
     }
