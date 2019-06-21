@@ -7,6 +7,8 @@ package com.coopetico.coopeticobackend.controladores.unit;
  @version:    1.0
  */
 
+import com.coopetico.coopeticobackend.Utilidades.MockMvcUtilidades;
+import com.coopetico.coopeticobackend.Utilidades.TokenUtilidades;
 import com.coopetico.coopeticobackend.controladores.UbicacionTaxistasControlador;
 import com.coopetico.coopeticobackend.entidades.bd.TaxistaEntidad;
 import com.coopetico.coopeticobackend.servicios.TaxistasServicioImpl;
@@ -42,7 +44,7 @@ public class UbicacionTaxistasControladorUnitTest {
     private MockMvc mockMvc;
 
     @Autowired
-    protected WebApplicationContext wac;
+    TokenUtilidades tokenUtilidades;
     @Autowired
     UbicacionTaxistasControlador ubicacionTaxistasControlador;
 
@@ -53,7 +55,7 @@ public class UbicacionTaxistasControladorUnitTest {
 
     @Before
     public void setup() {
-        this.mockMvc = standaloneSetup(this.ubicacionTaxistasControlador).build();// Standalone context
+        this.mockMvc = MockMvcUtilidades.getMockMvc();// Standalone context
     }
 
     /**
@@ -68,6 +70,7 @@ public class UbicacionTaxistasControladorUnitTest {
 
         //Act
         mockMvc.perform(post("/ubicaciones/actualizar/todo")
+                .headers(tokenUtilidades.obtenerTokenTaxista(1))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{" +
                         "\"correoTaxista\": \"taxista@taxista.com\"," +
@@ -91,6 +94,7 @@ public class UbicacionTaxistasControladorUnitTest {
 
         //Act
         mockMvc.perform(post("/ubicaciones/actualizar/ubicacion")
+                .headers(tokenUtilidades.obtenerTokenTaxista(1))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{" +
                         "\"correoTaxista\": \"taxista@taxista.com\"," +
@@ -113,6 +117,7 @@ public class UbicacionTaxistasControladorUnitTest {
 
         //Act
         mockMvc.perform(post("/ubicaciones/actualizar/ubicacion")
+                .headers(tokenUtilidades.obtenerTokenTaxista(1))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{" +
                         "\"correoTaxista\": \"taxista@taxista.com\"," +
@@ -136,6 +141,7 @@ public class UbicacionTaxistasControladorUnitTest {
         when(ubicacionTaxistasServicio.consultarUbicacionPairDisponible(any(String.class))).thenReturn(arreglo);
         //Act
         mockMvc.perform(get("/ubicaciones/consultar/taxista@taxista.com/")
+                .headers(tokenUtilidades.obtenerTokenCliente())
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
@@ -152,6 +158,8 @@ public class UbicacionTaxistasControladorUnitTest {
         when(taxistasServicio.taxistaPorCorreo(any(String.class))).thenReturn(Optional.of(mockTaxista));
         //Assert
         mockMvc.perform(delete("/ubicaciones/eliminar/taxista@taxista.com/")
+
+                .headers(tokenUtilidades.obtenerTokenGerente())
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }

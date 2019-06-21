@@ -10,6 +10,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 @Service
 public class TokenUtilidades {
+    private HttpHeaders tokenCliente;
+    private HttpHeaders tokenGerente;
+    private HttpHeaders tokenAdministrativo;
+    private HttpHeaders[] tokensTaxistas = new HttpHeaders[2];
+
     /**
      * Método para generar el token correspondiente al usuario y contraseña dados, devuelve el header de autenticación ya armado
      *
@@ -17,8 +22,8 @@ public class TokenUtilidades {
      * @param contrasenna contraseña
      * @return retorna el header para autorizarse
      */
-    private HttpHeaders obtenerToken(MockMvc mockMvc, String usuario, String contrasenna) throws Exception {
-        MvcResult result = mockMvc.perform(post("/auth/signin")
+    private HttpHeaders obtenerToken(String usuario, String contrasenna) throws Exception {
+        MvcResult result = MockMvcUtilidades.getMockMvc().perform(post("/auth/signin")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{" +
                         "\"username\": \"" + usuario + "\"," +
@@ -31,19 +36,27 @@ public class TokenUtilidades {
         return headerAuthorization;
     }
 
-    public HttpHeaders obtenerTokenCliente(MockMvc mockMvc) throws Exception {
-        return obtenerToken(mockMvc, "cliente@cliente.com", "contrasenna");
+    public HttpHeaders obtenerTokenCliente() throws Exception {
+        if(tokenCliente == null)
+            tokenCliente =  obtenerToken("cliente@cliente.com", "contrasenna");
+        return tokenCliente;
     }
 
-    public HttpHeaders obtenerTokenTaxista(MockMvc mockMvc) throws Exception {
-        return obtenerToken(mockMvc, "taxista@taxista.com", "contrasenna");
+    public HttpHeaders obtenerTokenTaxista(int numero) throws Exception {
+        if(tokensTaxistas[numero-1] == null)
+            tokensTaxistas[numero-1] = obtenerToken("taxista" + numero + "@taxista.com", "contrasenna");
+        return tokensTaxistas[numero-1];
     }
 
-    public HttpHeaders obtenerTokenAdministrativo(MockMvc mockMvc) throws Exception {
-        return obtenerToken(mockMvc, "administrativo@administrativo.com", "contrasenna");
+    public HttpHeaders obtenerTokenAdministrativo() throws Exception {
+        if (tokenAdministrativo == null)
+            return obtenerToken("administrativo@administrativo.com", "contrasenna");
+        return tokenAdministrativo;
     }
 
-    public HttpHeaders obtenerTokenGerente(MockMvc mockMvc) throws Exception {
-        return obtenerToken(mockMvc, "gerente@gerente.com", "contrasenna");
+    public HttpHeaders obtenerTokenGerente() throws Exception {
+        if (tokenGerente == null)
+            return obtenerToken("gerente@gerente.com", "contrasenna");
+        return tokenGerente;
     }
 }

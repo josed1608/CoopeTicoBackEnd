@@ -7,6 +7,8 @@ package com.coopetico.coopeticobackend.controladores.integration;
  @version:    1.0
  */
 
+import com.coopetico.coopeticobackend.Utilidades.MockMvcUtilidades;
+import com.coopetico.coopeticobackend.Utilidades.TokenUtilidades;
 import com.coopetico.coopeticobackend.controladores.UbicacionTaxistasControlador;
 import com.coopetico.coopeticobackend.servicios.UbicacionTaxistasServicio;
 import com.google.maps.model.LatLng;
@@ -30,7 +32,8 @@ public class UbicacionTaxistasControladorIntegrationTest {
     private MockMvc mockMvc;
 
     @Autowired
-    protected WebApplicationContext wac;
+    TokenUtilidades tokenUtilidades;
+
     @Autowired
     UbicacionTaxistasControlador ubicacionTaxistasControlador;
 
@@ -39,7 +42,7 @@ public class UbicacionTaxistasControladorIntegrationTest {
 
     @Before
     public void setup() {
-        this.mockMvc = standaloneSetup(this.ubicacionTaxistasControlador).build();// Standalone context
+        this.mockMvc = MockMvcUtilidades.getMockMvc();// Standalone context
     }
 
     /**
@@ -50,6 +53,7 @@ public class UbicacionTaxistasControladorIntegrationTest {
     public void testActualizarUbicacionDisponible() throws Exception {
         mockMvc.perform(post("/ubicaciones/actualizar/todo")
                 .contentType(MediaType.APPLICATION_JSON)
+                .headers(tokenUtilidades.obtenerTokenTaxista(1))
                 .content("{" +
                         "\"correoTaxista\": \"taxista1@taxista.com\"," +
                         "\"latitud\": 0.0," +
@@ -67,6 +71,7 @@ public class UbicacionTaxistasControladorIntegrationTest {
     @Test
     public void testActualizarUbicacion() throws Exception {
         mockMvc.perform(post("/ubicaciones/actualizar/ubicacion")
+                .headers(tokenUtilidades.obtenerTokenTaxista(1))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{" +
                         "\"correoTaxista\": \"taxista1@taxista.com\"," +
@@ -86,6 +91,7 @@ public class UbicacionTaxistasControladorIntegrationTest {
         ubicacionTaxistasServicio.upsertUbicacionDisponibleTaxista("taxista1@taxista.com", new LatLng(0.0, 0.0), true);
 
         mockMvc.perform(post("/ubicaciones/actualizar/ubicacion")
+                .headers(tokenUtilidades.obtenerTokenGerente())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{" +
                         "\"correoTaxista\": \"taxista1@taxista.com\"," +
@@ -104,6 +110,7 @@ public class UbicacionTaxistasControladorIntegrationTest {
         ubicacionTaxistasServicio.upsertUbicacionDisponibleTaxista("taxista1@taxista.com", new LatLng(0.0, 0.0), true);
 
         mockMvc.perform(get("/ubicaciones/consultar/taxista1@taxista.com/")
+                .headers(tokenUtilidades.obtenerTokenCliente())
                 .accept(MediaType.ALL)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()); //TODO Arreglar este test en algun momento
@@ -116,6 +123,7 @@ public class UbicacionTaxistasControladorIntegrationTest {
     @Test
     public void testEliminar() throws Exception {
         mockMvc.perform(delete("/ubicaciones/eliminar/taxista1@taxista.com/")
+                .headers(tokenUtilidades.obtenerTokenGerente())
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }

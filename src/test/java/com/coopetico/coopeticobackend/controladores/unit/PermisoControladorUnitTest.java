@@ -7,6 +7,8 @@ package com.coopetico.coopeticobackend.controladores.unit;
  @version:    1.0
  */
 
+import com.coopetico.coopeticobackend.Utilidades.MockMvcUtilidades;
+import com.coopetico.coopeticobackend.Utilidades.TokenUtilidades;
 import com.coopetico.coopeticobackend.controladores.PermisoControlador;
 import com.coopetico.coopeticobackend.entidades.bd.PermisoEntidad;
 import com.coopetico.coopeticobackend.servicios.PermisosServicio;
@@ -39,7 +41,7 @@ public class PermisoControladorUnitTest {
     private MockMvc mockMvc;
 
     @Autowired
-    protected WebApplicationContext wac;
+    TokenUtilidades tokenUtilidades;
 
     @Autowired
     PermisoControlador permisoControlador;
@@ -49,7 +51,7 @@ public class PermisoControladorUnitTest {
 
     @Before
     public void setup() {
-        this.mockMvc = standaloneSetup(this.permisoControlador).build();
+        this.mockMvc = MockMvcUtilidades.getMockMvc();
     }
 
     //ObjectMapper objectMapper = new ObjectMapper();
@@ -71,7 +73,7 @@ public class PermisoControladorUnitTest {
         given(permisosServicio.getPermisos()).willReturn(entidades);
 
 
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(url).accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(url).headers(tokenUtilidades.obtenerTokenGerente()).accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
 
         int status = mvcResult.getResponse().getStatus();
         assertEquals(200, status);

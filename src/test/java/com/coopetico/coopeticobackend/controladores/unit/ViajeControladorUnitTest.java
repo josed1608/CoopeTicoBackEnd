@@ -3,6 +3,8 @@
 package com.coopetico.coopeticobackend.controladores.unit;
 //-----------------------------------------------------------------------------
 // Imports
+import com.coopetico.coopeticobackend.Utilidades.MockMvcUtilidades;
+import com.coopetico.coopeticobackend.Utilidades.TokenUtilidades;
 import com.coopetico.coopeticobackend.controladores.ViajeControlador;
 import com.coopetico.coopeticobackend.servicios.ClienteServicio;
 import com.coopetico.coopeticobackend.servicios.ViajesServicio;
@@ -77,7 +79,7 @@ public class ViajeControladorUnitTest {
     //-------------------------------------------------------------------------
     // Pruebas
     @Autowired
-    protected WebApplicationContext wac;
+    TokenUtilidades tokenUtilidades;
 
     // Mock del mvc
     private MockMvc mockMvc;
@@ -95,7 +97,7 @@ public class ViajeControladorUnitTest {
 
     @Before
     public void setup() {
-        this.mockMvc = standaloneSetup(this.viajesControlador).build();
+        this.mockMvc = MockMvcUtilidades.getMockMvc();
     }
     /**
      * Metodo que devuelve una lista con tres viajes para realizar las pruebas
@@ -122,20 +124,6 @@ public class ViajeControladorUnitTest {
         viajes.add(new ViajeEntidad(viajePK, "2019-01-01 02:01:01","5000", 2, "origen","destino", "agenda", "agenda2", taxiByPkPlacaTaxi, clienteByPkCorreoCliente, taxistaByCorreoTaxi, agendaOperador));
 
         return viajes;
-    }
-
-    /**
-     * Test de obtener viajes
-     */
-    @Test
-    public void testobtenerViajes() throws Exception {
-        List<ViajeEntidad> viajes = getListaViajesEntidad();
-        given(viajeServicio.consultarViajes()).willReturn(viajes);
-        given(usuarioServicio.usuarioPorCorreo(getUsuarioEntidad().getPkCorreo())).willReturn(Optional.of(getUsuarioEntidad()));
-
-        List<ViajeEntidadTemporal> viajesRetorno = viajesControlador.obtenerViajes();
-        assertNotNull(viajesRetorno);
-        assertEquals(viajesRetorno.size(), 3);
     }
 
     /**
@@ -176,6 +164,7 @@ public class ViajeControladorUnitTest {
         String time = LocalDate.now().toString();
         mockMvc.perform(
             post("/viajes")
+                    .headers(tokenUtilidades.obtenerTokenCliente())
             .contentType(MediaType.APPLICATION_JSON)
             .content(
                 "{" +
@@ -204,6 +193,7 @@ public class ViajeControladorUnitTest {
         try{
         mockMvc.perform(
                 put("/viajes/finalizar")
+                        .headers(tokenUtilidades.obtenerTokenTaxista(1))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(
                                 "{" +

@@ -5,6 +5,8 @@ package com.coopetico.coopeticobackend.controladores.unit;
  @since       19-04-2019
  @version:    1.0
  */
+import com.coopetico.coopeticobackend.Utilidades.MockMvcUtilidades;
+import com.coopetico.coopeticobackend.Utilidades.TokenUtilidades;
 import com.coopetico.coopeticobackend.controladores.TaxistasControlador;
 import com.coopetico.coopeticobackend.entidades.TaxistaEntidadTemporal;
 import com.coopetico.coopeticobackend.excepciones.UsuarioNoEncontradoExcepcion;
@@ -54,7 +56,7 @@ public class TaxistasControladorUnitTest {
      * Contexto.
      */
     @Autowired
-    protected WebApplicationContext wac;
+    TokenUtilidades tokenUtilidades;
 
     /**
      * Controlador de taxistas.
@@ -73,7 +75,7 @@ public class TaxistasControladorUnitTest {
      */
     @Before
     public void setup() {
-        this.mockMvc = standaloneSetup(this.taxistasControlador).build();
+        this.mockMvc = MockMvcUtilidades.getMockMvc();
     }
 
     /**
@@ -110,7 +112,7 @@ public class TaxistasControladorUnitTest {
         // Se le indica al servicio que devuelta la lista de taxistas cuando consulten por ella
         given(this.taxistasServicio.consultar()).willReturn(entidades);
         //Perdir los datos al controlador
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/taxistas/taxistas").accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/taxistas/taxistas").headers(tokenUtilidades.obtenerTokenGerente()).accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
         //Verificar que respondio
         int status = mvcResult.getResponse().getStatus();
         assertEquals(200, status);
@@ -206,6 +208,14 @@ public class TaxistasControladorUnitTest {
         Assert.assertEquals(entidadRetornada.getApellido2(), "apellido2");
     }
 
+    private TaxistaEntidadTemporal consultarPorId(String taxista) throws Exception{
+        MvcResult mvcResult = mockMvc.perform(get("/taxistas/" + taxista)
+                .headers(tokenUtilidades.obtenerTokenGerente())
+                .accept(MediaType.APPLICATION_JSON_VALUE))
+                .andReturn();
+        return new ObjectMapper().readValue(mvcResult.getResponse().getContentAsString(), TaxistaEntidadTemporal.class);
+    }
+
     /**
      * Prueba de unidad para consultar los taxis que conduce un taxista.
      */
@@ -232,7 +242,7 @@ public class TaxistasControladorUnitTest {
         //Se le indica que caundo pregunten por ese taxista retorne la entidad anterior
         when(taxistasServicio.consultarPorId("taxistaMoka1@coopetico.com")).thenReturn(taxistaEntidad1);
         // Se le pide el taxista al servicio
-        TaxistaEntidadTemporal entidadRetornada = taxistasControlador.consultarPorId("taxistaMoka1@coopetico.com");
+        TaxistaEntidadTemporal entidadRetornada = consultarPorId("taxistaMoka1@coopetico.com");
         //Se compara que no sea nulo
         assertNotNull(entidadRetornada);
         //Se compara que sea el taxista solicitado
@@ -253,7 +263,8 @@ public class TaxistasControladorUnitTest {
 
         when(taxistasServicio.obtenerEstado("taxistaNoSuspendido@taxista.com")).thenReturn(estado);
 
-        final String resultado = mockMvc.perform(get("/taxistas/taxistaNoSuspendido@taxista.com/estado"))
+        final String resultado = mockMvc.perform(get("/taxistas/taxistaNoSuspendido@taxista.com/estado")
+        .headers(tokenUtilidades.obtenerTokenGerente()))
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
         HashMap<String,Object> result =
@@ -277,7 +288,8 @@ public class TaxistasControladorUnitTest {
 
         when(taxistasServicio.obtenerEstado("taxistaSuspendido@taxista.com")).thenReturn(estado);
 
-        final String resultado = mockMvc.perform(get("/taxistas/taxistaSuspendido@taxista.com/estado"))
+        final String resultado = mockMvc.perform(get("/taxistas/taxistaSuspendido@taxista.com/estado")
+        .headers(tokenUtilidades.obtenerTokenGerente()))
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
         HashMap<String,Object> result =
@@ -304,7 +316,8 @@ public class TaxistasControladorUnitTest {
                         )
                 );
 
-        final String resultado = mockMvc.perform(get("/taxistas/noExiste@taxista.com/estado"))
+        final String resultado = mockMvc.perform(get("/taxistas/noExiste@taxista.com/estado")
+        .headers(tokenUtilidades.obtenerTokenGerente()))
                 .andExpect(status().isNotFound())
                 .andReturn().getResponse().getContentAsString();
         System.out.println(resultado);
@@ -380,6 +393,7 @@ public class TaxistasControladorUnitTest {
 
         // Se manda la solicitud de agregar al url
         ResultActions mvcResult = mockMvc.perform(post(url)
+                .headers(tokenUtilidades.obtenerTokenGerente())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objetos))
                 .andExpect(status().isOk());
@@ -404,6 +418,7 @@ public class TaxistasControladorUnitTest {
         try {
             final String resultado = mockMvc.perform(
                 get("/taxistas/taxista1@taxista.com/datosParaMostrar")
+                        .headers(tokenUtilidades.obtenerTokenCliente())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(body)

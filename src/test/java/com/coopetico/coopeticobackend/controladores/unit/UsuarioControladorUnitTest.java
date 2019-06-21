@@ -1,5 +1,7 @@
 package com.coopetico.coopeticobackend.controladores.unit;
 
+import com.coopetico.coopeticobackend.Utilidades.MockMvcUtilidades;
+import com.coopetico.coopeticobackend.Utilidades.TokenUtilidades;
 import com.coopetico.coopeticobackend.controladores.UsuarioControlador;
 import com.coopetico.coopeticobackend.entidades.bd.GrupoEntidad;
 import com.coopetico.coopeticobackend.entidades.bd.UsuarioEntidad;
@@ -56,7 +58,7 @@ public class UsuarioControladorUnitTest {
     private MockMvc mockMvc;
 
     @Autowired
-    protected WebApplicationContext wac;
+    TokenUtilidades tokenUtilidades;
 
     @Autowired
     UsuarioControlador usuarioControlador;
@@ -70,7 +72,7 @@ public class UsuarioControladorUnitTest {
 
     @Before
     public void setup() {
-        this.mockMvc = standaloneSetup(usuarioControlador).build();
+        this.mockMvc = MockMvcUtilidades.getMockMvc();
         this.emailService = new EmailServiceImpl();
     }
 
@@ -102,6 +104,7 @@ public class UsuarioControladorUnitTest {
         given(usuarioServicio.obtenerUsuarios()).willReturn(usuarios);
 
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(url)
+                .headers(tokenUtilidades.obtenerTokenGerente())
                             .accept(MediaType.APPLICATION_JSON_VALUE))
                             .andReturn();
 
@@ -113,27 +116,6 @@ public class UsuarioControladorUnitTest {
         UsuarioTemporal[] listaGrupos = objectMapper.readValue(content, UsuarioTemporal[].class);
         assertTrue(listaGrupos.length == 10);
     }
-
-    /**
-     * Metodo para testear obtener los usuarios por ID
-     */
-    @Test
-    public void testObtenerUsuarioPorId() throws Exception {
-        String id = "gerente11@gerente.com";
-        UsuarioEntidad usuarioEntidad = getUsuarioEntidad();
-        given(usuarioServicio.usuarioPorCorreo(id)).willReturn(Optional.of(usuarioEntidad));
-
-
-        ResponseEntity<UsuarioTemporal> responseEntity = (ResponseEntity<UsuarioTemporal>) usuarioControlador.obtenerUsuarioPorId(id);
-        assertNotNull(responseEntity);
-        assertEquals(responseEntity.getStatusCode(), HttpStatus.OK);
-
-        UsuarioTemporal usuarioTemporal = responseEntity.getBody();
-        assertNotNull(usuarioTemporal);
-        assertEquals(usuarioTemporal.getCorreo(), id);
-    }
-
-
 
     /**
      * Metodo que retorna el JSON de un usuario

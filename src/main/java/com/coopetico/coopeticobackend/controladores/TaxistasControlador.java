@@ -74,7 +74,7 @@ public class TaxistasControlador {
      * Funcion que obtiene los taxistas existentes en el sistema.
      * @return Lista de taxistas, correo, nombre, apellidos, telefono y estado.
      */
-    @GetMapping("/taxistas")
+    @GetMapping()
     @PreAuthorize("hasAuthority('311')")
     public List<TaxistaEntidadTemporal> consultar() { return taxistaServicio.consultar();
     }
@@ -84,7 +84,7 @@ public class TaxistasControlador {
      * @param correoUsuario correo del taxista.
      * @return Lista de taxistas, correo, nombre, apellidos, telefono y estado.
      */
-    @GetMapping("/taxistas/{correoUsuario}")
+    @GetMapping("{correoUsuario}")
     @PreAuthorize("hasAuthority('311')")
     public TaxistaEntidadTemporal consultarPorId(@PathVariable String correoUsuario) {
         return taxistaServicio.consultarPorId(correoUsuario);
@@ -95,7 +95,7 @@ public class TaxistasControlador {
      * @param taxista Taxista que se desea agregar.
      * @return Taxista agregado.
      */
-    @PostMapping("/taxistas")
+    @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAuthority('301')")
     public TaxistaEntidadTemporal agregar(@RequestBody TaxistaEntidadTemporal taxista){
@@ -115,7 +115,7 @@ public class TaxistasControlador {
      * @param pkCorreoUsuario Correo del taxista que se desea modificar.
      * @return Taxista modificado.
      */
-    @PutMapping("/taxistas/{pkCorreoUsuario}")
+    @PutMapping("{pkCorreoUsuario}")
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAuthority('305')")
     public TaxistaEntidadTemporal modificar(@RequestBody TaxistaEntidadTemporal taxista, @PathVariable("pkCorreoUsuario") String pkCorreoUsuario){
@@ -126,7 +126,7 @@ public class TaxistasControlador {
      * Metodo que elimina un taxista.
      * @param correoUsuario Correo del taxista que se desea eliminar.
      */
-    @DeleteMapping("/taxistas/{correoUsuario}")
+    @DeleteMapping("{correoUsuario}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasAuthority('303')")
     public void eliminar(@PathVariable String correoUsuario){
@@ -140,7 +140,7 @@ public class TaxistasControlador {
      * @param id Identificador del taxista
      * @return Respuesta correcto o incorrecto y el taxista con la foto agregada
      */
-    @PostMapping("/taxistas/upload")
+    @PostMapping("upload")
     @PreAuthorize("hasAuthority('305')")
     public ResponseEntity<?> subirImagen( @RequestParam("archivo") MultipartFile archivo, @RequestParam("id") String id){
         Map<String, Object> response = new HashMap<>();
@@ -232,7 +232,7 @@ public class TaxistasControlador {
      * @param taxistas lista de los taxistas a guardar
      * @return ok si la insercion fue exitosa
      */
-    @PostMapping()
+    @PostMapping("/lista")
     @PreAuthorize("hasAuthority('301')")
     public ResponseEntity guardarTaxisArchivo(@RequestBody List<TaxistaEntidadTemporal> taxistas) {
         this.taxistaServicio.guardarLista(taxistas);

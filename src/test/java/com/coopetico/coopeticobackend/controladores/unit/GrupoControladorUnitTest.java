@@ -7,6 +7,8 @@ package com.coopetico.coopeticobackend.controladores.unit;
  @version:    1.0
  */
 
+import com.coopetico.coopeticobackend.Utilidades.MockMvcUtilidades;
+import com.coopetico.coopeticobackend.Utilidades.TokenUtilidades;
 import com.coopetico.coopeticobackend.controladores.GrupoControlador;
 import com.coopetico.coopeticobackend.entidades.bd.GrupoEntidad;
 import com.coopetico.coopeticobackend.servicios.GrupoServicio;
@@ -39,7 +41,7 @@ public class GrupoControladorUnitTest {
     private MockMvc mockMvc;
 
     @Autowired
-    protected WebApplicationContext wac;
+    TokenUtilidades tokenUtilidades;
 
     @Autowired
     GrupoControlador grupoControlador;
@@ -49,7 +51,7 @@ public class GrupoControladorUnitTest {
 
     @Before
     public void setup() {
-        this.mockMvc = standaloneSetup(this.grupoControlador).build();
+        this.mockMvc = MockMvcUtilidades.getMockMvc();
     }
 
     @Test
@@ -66,7 +68,7 @@ public class GrupoControladorUnitTest {
         given(grupoServicio.getGrupos()).willReturn(enitdades);
 
 
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(url).accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(url).headers(tokenUtilidades.obtenerTokenGerente()).accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
 
         int status = mvcResult.getResponse().getStatus();
         assertEquals(200, status);

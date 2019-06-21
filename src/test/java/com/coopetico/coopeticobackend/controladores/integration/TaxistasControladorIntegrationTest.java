@@ -7,6 +7,8 @@ package com.coopetico.coopeticobackend.controladores.integration;
  @version:    1.0
  */
 
+import com.coopetico.coopeticobackend.Utilidades.MockMvcUtilidades;
+import com.coopetico.coopeticobackend.Utilidades.TokenUtilidades;
 import com.coopetico.coopeticobackend.controladores.TaxistasControlador;
 import com.coopetico.coopeticobackend.entidades.TaxistaEntidadTemporal;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -48,6 +50,9 @@ public class TaxistasControladorIntegrationTest {
      */
     private MockMvc mockMvc;
 
+    @Autowired
+    TokenUtilidades tokenUtilidades;
+
     /**
      * Controlador del taxista.
      */
@@ -59,7 +64,7 @@ public class TaxistasControladorIntegrationTest {
      */
     @Before
     public void setup() {
-        this.mockMvc = standaloneSetup(this.taxistasControlador).build();
+        this.mockMvc = MockMvcUtilidades.getMockMvc();
     }
 
     /**
@@ -69,7 +74,10 @@ public class TaxistasControladorIntegrationTest {
     @Transactional
     public void testConsultar() throws Exception {
         //Se hace la consulta al controlador
-        MvcResult mvcResult = mockMvc.perform(get("/taxistas/taxistas").accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
+        MvcResult mvcResult = mockMvc.perform(get("/taxistas/taxistas")
+                .headers(tokenUtilidades.obtenerTokenGerente())
+                .accept(MediaType.APPLICATION_JSON_VALUE))
+                .andReturn();
         //Verificar que respondio
         int status = mvcResult.getResponse().getStatus();
         assertEquals(200, status);
@@ -80,6 +88,14 @@ public class TaxistasControladorIntegrationTest {
         assertEquals(taxista.length,4);
     }
 
+    private TaxistaEntidadTemporal consultarPorId(String taxista) throws Exception{
+        MvcResult mvcResult = mockMvc.perform(get("/taxistas/" + taxista)
+                .headers(tokenUtilidades.obtenerTokenGerente())
+                .accept(MediaType.APPLICATION_JSON_VALUE))
+                .andReturn();
+        return new ObjectMapper().readValue(mvcResult.getResponse().getContentAsString(), TaxistaEntidadTemporal.class);
+    }
+
     /**
      * Prueba de integracion para consultar un taxista desde el controlador.
      */
@@ -87,7 +103,7 @@ public class TaxistasControladorIntegrationTest {
     @Transactional
     public void testConsultarPorId() throws Exception {
         // Se hace la consulta al controlador
-        TaxistaEntidadTemporal entidadRetornada = taxistasControlador.consultarPorId("taxista1@taxista.com");
+        TaxistaEntidadTemporal entidadRetornada = consultarPorId("taxista1@taxista.com");
         //Se compara que no sea nulo
         assertNotNull(entidadRetornada);
         //Se compara que sea el taxista solicitado
@@ -101,7 +117,7 @@ public class TaxistasControladorIntegrationTest {
     @Transactional
     public void testConsultarVencLic() throws Exception {
         // Se hace la consulta al controlador
-        TaxistaEntidadTemporal entidadRetornada = taxistasControlador.consultarPorId("taxista2@taxista.com");
+        TaxistaEntidadTemporal entidadRetornada = consultarPorId("taxista2@taxista.com");
         //Se compara que no sea nulo
         assertNotNull(entidadRetornada);
         //Se compara que la fecha sea la esperada
@@ -121,7 +137,7 @@ public class TaxistasControladorIntegrationTest {
     @Transactional
     public void testConsultarApellidosSeparados() throws Exception {
         // Se hace la consulta al controlador
-        TaxistaEntidadTemporal entidadRetornada = taxistasControlador.consultarPorId("taxista1@taxista.com");
+        TaxistaEntidadTemporal entidadRetornada = consultarPorId("taxista1@taxista.com");
         //Se compara que no sea nulo
         assertNotNull(entidadRetornada);
         //Se compara ambos apellidos para ver que esten separados
@@ -136,7 +152,7 @@ public class TaxistasControladorIntegrationTest {
     @Transactional
     public void testConsultarTaxisConduceTaxista() throws Exception {
         // Se hace la consulta al controlador
-        TaxistaEntidadTemporal entidadRetornada = taxistasControlador.consultarPorId("taxista1@taxista.com");
+        TaxistaEntidadTemporal entidadRetornada = consultarPorId("taxista1@taxista.com");
         //Se compara que no sea nulo
         assertNotNull(entidadRetornada);
         //Se compara que sea el taxista solicitado
@@ -150,7 +166,7 @@ public class TaxistasControladorIntegrationTest {
     @Transactional
     public void testAgregarTaxisConduceTaxista() throws Exception {
         // Se hace la consulta al controlador
-        TaxistaEntidadTemporal entidadRetornada = taxistasControlador.consultarPorId("taxista1@taxista.com");
+        TaxistaEntidadTemporal entidadRetornada = consultarPorId("taxista1@taxista.com");
         //Se compara que no sea nulo
         assertNotNull(entidadRetornada);
         //Se compara que sea el taxista solicitado
@@ -165,7 +181,7 @@ public class TaxistasControladorIntegrationTest {
         //Se envia a guardar la entidad
         taxistasControlador.modificar(entidadRetornada, entidadRetornada.getPkCorreoUsuario());
         //Se consulta nuevamente el taxista para ver que conduce los 2 taxis
-        entidadRetornada = taxistasControlador.consultarPorId("taxista1@taxista.com");
+        entidadRetornada = consultarPorId("taxista1@taxista.com");
         //Se compara que no sea nulo
         assertNotNull(entidadRetornada);
         //Se compara que sea el taxista solicitado
@@ -198,7 +214,8 @@ public class TaxistasControladorIntegrationTest {
      */
     @Test
     public void testObtenerEstadoSuspendido() throws Exception{
-        final String resultado = mockMvc.perform(get("/taxistas/taxistaSuspendido@taxista.com/estado"))
+        final String resultado = mockMvc.perform(get("/taxistas/taxistaSuspendido@taxista.com/estado")
+                .headers(tokenUtilidades.obtenerTokenGerente()))
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
         HashMap<String,Object> result =
@@ -216,7 +233,7 @@ public class TaxistasControladorIntegrationTest {
      */
     @Test
     public void testObtenerEstadoCorreoNoExistente() throws Exception{
-        final String resultado = mockMvc.perform(get("/taxistas/noExiste@taxista.com/estado"))
+        final String resultado = mockMvc.perform(get("/taxistas/noExiste@taxista.com/estado").headers(tokenUtilidades.obtenerTokenGerente()))
                 .andExpect(status().isNotFound())
                 .andReturn().getResponse().getContentAsString();
         HashMap<String,Object> result =

@@ -8,6 +8,8 @@ package com.coopetico.coopeticobackend.controladores.integration;
  */
 
 
+import com.coopetico.coopeticobackend.Utilidades.MockMvcUtilidades;
+import com.coopetico.coopeticobackend.Utilidades.TokenUtilidades;
 import com.coopetico.coopeticobackend.controladores.TaxistasControlador;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.coopetico.coopeticobackend.controladores.ClienteControlador;
@@ -51,17 +53,21 @@ public class UsuarioControladorIntegrationTest {
     @Autowired
     UsuarioControlador usuarioControlador;
 
+    @Autowired
+    TokenUtilidades tokenUtilidades;
+
     /**
      * Inicializador del mock para hacer las consultas.
      */
     @Before
     public void setup() {
-        this.mockMvc = standaloneSetup(this.usuarioControlador).build();
+        this.mockMvc = MockMvcUtilidades.getMockMvc();
     }
 
     @Test
     public void testActivarCuenta()throws Exception {
-        final String resultado = mockMvc.perform(put("/usuarios/gerente@gerente.com/estado?valido=true"))
+        final String resultado = mockMvc.perform(put("/usuarios/gerente@gerente.com/estado?valido=true")
+        .headers(tokenUtilidades.obtenerTokenGerente()))
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
         System.out.println(resultado);
@@ -70,7 +76,8 @@ public class UsuarioControladorIntegrationTest {
 
     @Test
     public void testDesactivarCuenta()throws Exception {
-        final String resultado = mockMvc.perform(put("/usuarios/gerente@gerente.com/estado?valido=false"))
+        final String resultado = mockMvc.perform(put("/usuarios/gerente@gerente.com/estado?valido=false")
+        .headers(tokenUtilidades.obtenerTokenGerente()))
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
         System.out.println(resultado);
@@ -79,7 +86,8 @@ public class UsuarioControladorIntegrationTest {
 
     @Test
     public void testDesactivarCuentaUsuarioNoExistente()throws Exception {
-        final String resultado = mockMvc.perform(put("/usuarios/noExiste@gerente.com/estado?valido=false"))
+        final String resultado = mockMvc.perform(put("/usuarios/noExiste@gerente.com/estado?valido=false")
+        .headers(tokenUtilidades.obtenerTokenGerente()))
                 .andExpect(status().isNotFound())
                 .andReturn().getResponse().getContentAsString();
         System.out.println(resultado);

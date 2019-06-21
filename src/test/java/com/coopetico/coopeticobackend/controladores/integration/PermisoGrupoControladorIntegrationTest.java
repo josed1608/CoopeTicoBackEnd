@@ -7,6 +7,8 @@ package com.coopetico.coopeticobackend.controladores.integration;
  @version:    1.0
  */
 
+import com.coopetico.coopeticobackend.Utilidades.MockMvcUtilidades;
+import com.coopetico.coopeticobackend.Utilidades.TokenUtilidades;
 import com.coopetico.coopeticobackend.controladores.PermisosGrupoControlador;
 import com.coopetico.coopeticobackend.entidades.bd.GrupoEntidad;
 import com.coopetico.coopeticobackend.entidades.bd.PermisoEntidad;
@@ -51,7 +53,7 @@ public class PermisoGrupoControladorIntegrationTest {
     private MockMvc mockMvc;
 
     @Autowired
-    protected WebApplicationContext wac;
+    protected TokenUtilidades tokenUtilidades;
 
     @Autowired
     PermisosGrupoControlador permisosGrupoControlador;
@@ -75,7 +77,7 @@ public class PermisoGrupoControladorIntegrationTest {
     PermisosRepositorio permisosRepositorio;
 
     @Before
-    public void setup() { this.mockMvc = standaloneSetup(this.permisosGrupoControlador).build(); }
+    public void setup() { this.mockMvc = MockMvcUtilidades.getMockMvc(); }
 
     @Test
     @Transactional
@@ -92,7 +94,11 @@ public class PermisoGrupoControladorIntegrationTest {
         PermisosGrupoEntidad permisosGrupoEntidad = new PermisosGrupoEntidad(permisosGrupoEntidadPK, permisoEntidad, grupoEntidad);
         permisosGruposRepositorio.save(permisosGrupoEntidad);
 
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(url+"/Cliente").accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders
+                .get(url+"/Cliente")
+                .headers(tokenUtilidades.obtenerTokenGerente())
+                .accept(MediaType.APPLICATION_JSON_VALUE))
+                .andReturn();
 
         int status = mvcResult.getResponse().getStatus();
         assertEquals(200, status);
@@ -129,7 +135,11 @@ public class PermisoGrupoControladorIntegrationTest {
         permisosGruposRepositorio.save(permisosGrupoEntidad);
 
 
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(url+"-Cliente").accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.
+                get(url+"-Cliente")
+                .headers(tokenUtilidades.obtenerTokenGerente())
+                .accept(MediaType.APPLICATION_JSON_VALUE))
+                .andReturn();
 
         int status = mvcResult.getResponse().getStatus();
         assertEquals(200, status);
@@ -165,6 +175,7 @@ public class PermisoGrupoControladorIntegrationTest {
 
 
         ResultActions mvcResult = mockMvc.perform(post(url)
+                .headers(tokenUtilidades.obtenerTokenGerente())
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objetos))
                 .andExpect(status().isOk());
@@ -187,6 +198,7 @@ public class PermisoGrupoControladorIntegrationTest {
         permisosGruposRepositorio.save(permisosGrupoEntidad);
 
         ResultActions mvcResult = mockMvc.perform(delete(url+"/100/Cliente/")
+                .headers(tokenUtilidades.obtenerTokenGerente())
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk());
 

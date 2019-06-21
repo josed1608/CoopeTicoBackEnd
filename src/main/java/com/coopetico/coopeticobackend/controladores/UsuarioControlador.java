@@ -275,7 +275,7 @@ public class UsuarioControlador {
      * @return Usuario modificado
      */
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('300')")
+    @PreAuthorize("hasAnyAuthority('300', '200')")
     public ResponseEntity<?> actualizar(@Valid @RequestBody UsuarioTemporal usuario, @PathVariable String id, BindingResult resultado){
         UsuarioEntidad usuarioEntidad;
         UsuarioEntidad temporal;
@@ -325,7 +325,7 @@ public class UsuarioControlador {
      * @return Respuesta correcto o incorrecto y el usuario con la foto agregada
      */
     @PostMapping("/upload")
-    @PreAuthorize("hasAuthority('300')")
+    @PreAuthorize("hasAnyAuthority('300', '100')")
     public ResponseEntity<?> subirImagen(@RequestParam("archivo") MultipartFile archivo, @RequestParam("id") String id){
         Map<String, Object> response = new HashMap<>();
 

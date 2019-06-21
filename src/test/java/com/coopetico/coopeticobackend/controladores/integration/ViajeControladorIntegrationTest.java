@@ -1,5 +1,7 @@
 package com.coopetico.coopeticobackend.controladores.integration;
 
+import com.coopetico.coopeticobackend.Utilidades.MockMvcUtilidades;
+import com.coopetico.coopeticobackend.Utilidades.TokenUtilidades;
 import com.coopetico.coopeticobackend.controladores.ViajeControlador;
 import com.coopetico.coopeticobackend.entidades.DatosTaxistaAsigadoEntidad;
 import com.coopetico.coopeticobackend.entidades.UsuarioTemporal;
@@ -61,9 +63,6 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standal
 public class ViajeControladorIntegrationTest {
     private MockMvc mockMvc;
 
-    @Autowired
-    private WebApplicationContext context;
-
     @LocalServerPort
     private int port;
     private String URL;
@@ -78,6 +77,9 @@ public class ViajeControladorIntegrationTest {
     // Beans de las inyecciones de dependencias
     @Autowired
     ViajeControlador viajesControlador;
+
+    @Autowired
+    TokenUtilidades tokenUtilidades;
 
     @Autowired
     ClienteServicio clienteServicio;
@@ -96,7 +98,7 @@ public class ViajeControladorIntegrationTest {
      */
     @Before
     public void setup() throws Exception {
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
+        this.mockMvc = MockMvcUtilidades.getMockMvc();
 
         // URL del websocket
         completableFutureViajeComenzado = new CompletableFuture<>();
@@ -105,33 +107,12 @@ public class ViajeControladorIntegrationTest {
         URL = "ws://localhost:" + port + "/ws";
 
         // Obtener token de cliente
-        authHeaderCliente = obtenerToken("cliente@cliente.com", "contrasenna");
-        authHeaderTaxista = obtenerToken("taxista1@taxista.com", "contrasenna");
-        authHeaderTaxista2 = obtenerToken("taxista2@taxista.com", "contrasenna");
+        authHeaderCliente = tokenUtilidades.obtenerTokenCliente();
+        authHeaderTaxista = tokenUtilidades.obtenerTokenTaxista(1);
+        authHeaderTaxista2 = tokenUtilidades.obtenerTokenTaxista(2);
 
         // Cargar datos para test de la estructura
         mockMvc.perform(post("/ubicaciones/cargar-datos-test")).andReturn();
-    }
-
-    /**
-     * Método para generar el token correspondiente al usuario y contraseña dados, devuelve el header de autenticación ya armado
-     *
-     * @param usuario correo del usuario
-     * @param contrasenna contraseña
-     * @return retorna el header para autorizarse
-     */
-    private HttpHeaders obtenerToken(String usuario, String contrasenna) throws Exception {
-        MvcResult result = mockMvc.perform(post("/auth/signin")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{" +
-                        "\"username\": \"" + usuario + "\"," +
-                        "\"password\": \"" + contrasenna + "\"" +
-                        "}"))
-                .andReturn();
-        String token = result.getResponse().getContentAsString();
-        HttpHeaders headerAuthorization = new HttpHeaders();
-        headerAuthorization.add("Authorization", "Bearer " + token);
-        return headerAuthorization;
     }
 
     /**
@@ -161,6 +142,7 @@ public class ViajeControladorIntegrationTest {
 
         // Act: que el cliente solicite un viaje
         mockMvc.perform(post("/viajes/solicitar")
+                .headers(authHeaderCliente)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\n" +
                                     "\t\"correoCliente\": \"cliente@cliente.com\",\n" +
