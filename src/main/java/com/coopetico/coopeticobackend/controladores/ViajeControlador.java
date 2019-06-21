@@ -143,7 +143,7 @@ public class ViajeControlador {
      * @param datosViaje Datos del viaje que desea hacer el cliente
      * @return retorna ok si se pudo escoger al primer taxista y una excepción si no
      */
-    @GetMapping("/solicitar")
+    @PostMapping("/solicitar")
     public ResponseEntity solicitarViaje(@RequestBody ViajeComenzandoEntidad datosViaje) {
         List<Pair<String, LatLng>> taxistasDisponibles = ubicacionTaxistasServicio.obtenerTaxistasDisponibles(new LinkedList<>());
 
