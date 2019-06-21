@@ -123,4 +123,58 @@ public class ViajeServicioUnitTest {
         Assert.assertEquals(viajeServicio.finalizar(placa, fechaInicio, fechaFin), -1);
 
     }
+
+    //-------------------------------------------------------------------------
+    /**
+     * Prueba para el método finalizar viaje
+     *
+     * @author Joseph Rementería (b55824)
+     * @since 21-06-2019
+     */
+    @Test
+    public void testGuardarMonto(){
+        String placa = "AAA111";
+        String fechaInicio = "2019-04-20 04:20:00";
+        String fechaFin = "2019-04-20 04:21:00";
+
+        ViajeEntidadPK pk = new ViajeEntidadPK(placa, fechaInicio);
+        ViajeEntidad viajeMock = new ViajeEntidad();
+        viajeMock.setViajeEntidadPK(pk);
+        viajeMock.setFechaFin("");
+
+        //Si no hay viaje, devuelve -2
+        ViajeEntidad viajeTest = null;
+        when(viajesRepositorio.encontrarViaje(any(String.class), any(String.class))).thenReturn(viajeTest);
+        Assert.assertEquals(viajeServicio.finalizar(placa, fechaInicio, fechaFin), -2);
+
+        //Si ya tiene fecha de finalización, devuelve -3
+        viajeTest = viajeMock;
+        when(viajesRepositorio.encontrarViaje(any(String.class), any(String.class))).thenReturn(viajeTest);
+        Assert.assertEquals(viajeServicio.finalizar(placa, fechaInicio, fechaFin), -3);
+
+        //Si tiene el formato de fecha invalido, devuelve -4
+        viajeTest.setFechaFin(null);
+        when(viajesRepositorio.encontrarViaje(any(String.class), any(String.class))).thenReturn(viajeTest);
+        Assert.assertEquals(viajeServicio.finalizar(placa, fechaInicio, ""), -4);
+
+        //Si se intenta finalizar con una fecha anterior a la de inicio, devuelve -5
+        when(viajesRepositorio.encontrarViaje(any(String.class), any(String.class))).thenReturn(viajeTest);
+        Assert.assertEquals(viajeServicio.finalizar(placa, fechaInicio, "2019-04-20 04:19:00"), -5);
+
+        //Si es exitoso, devuelve 0
+        when(viajesRepositorio.encontrarViaje(any(String.class), any(String.class))).thenReturn(viajeTest);
+        Assert.assertEquals(viajeServicio.finalizar(placa, fechaInicio, fechaFin), -0);
+
+        //Si no se puede guardar en la base, devuelve -6
+        //viajeTest.setFechaFin(null);
+        //when(viajesRepositorio.encontrarViaje(any(String.class), any(String.class))).thenReturn(viajeTest);
+        //when(viajesRepositorio.save(any(ViajeEntidad.class))).thenThrow();
+        //Assert.assertEquals(viajeServicio.finalizar(placa, fechaInicio, fechaFin), -6);
+
+        //Si algo pasa en el try, devuelve -1
+        when(viajesRepositorio.encontrarViaje(any(String.class), any(String.class))).thenThrow();
+        Assert.assertEquals(viajeServicio.finalizar(placa, fechaInicio, fechaFin), -1);
+
+    }
+    //-------------------------------------------------------------------------
 }
