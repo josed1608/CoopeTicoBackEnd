@@ -7,7 +7,9 @@ package com.coopetico.coopeticobackend.controladores.integration;
  @version:    1.0
  */
 
+import com.coopetico.coopeticobackend.Utilidades.TokenUtilidades;
 import com.coopetico.coopeticobackend.controladores.GrupoControlador;
+import com.coopetico.coopeticobackend.controladores.UtilidadesControlador;
 import com.coopetico.coopeticobackend.entidades.bd.GrupoEntidad;
 import com.coopetico.coopeticobackend.repositorios.GruposRepositorio;
 import com.coopetico.coopeticobackend.servicios.GrupoServicio;
@@ -22,6 +24,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import javax.transaction.Transactional;
@@ -29,6 +32,7 @@ import javax.transaction.Transactional;
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
 @SpringBootTest
@@ -36,6 +40,9 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standal
 @Transactional
 public class GrupoControladorIntegrationTest {
     private MockMvc mockMvc;
+
+    @Autowired
+    TokenUtilidades tokenUtilidades;
 
     @Autowired
     protected WebApplicationContext wac;
@@ -51,7 +58,7 @@ public class GrupoControladorIntegrationTest {
 
     @Before
     public void setup() {
-        this.mockMvc = standaloneSetup(this.grupoControlador).build();
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(wac).apply(springSecurity()).build();
     }
 
     @Test
@@ -76,7 +83,7 @@ public class GrupoControladorIntegrationTest {
         gruposRepositorio.save(grupoEntidad3);
 
 
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(url).accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get(url).headers(tokenUtilidades.obtenerTokenGerente(mockMvc)).accept(MediaType.APPLICATION_JSON_VALUE)).andReturn();
 
         int status = mvcResult.getResponse().getStatus();
         assertEquals(200, status);
