@@ -188,6 +188,7 @@ public class UsuarioControladorUnitTest {
         usuarioTemporal.setContrasena("$2a$10$gJ0hUnsEvTp5zyBVo19IHe.GoYKkL3Wy268wGJxG5.k.tUFhSUify");
         usuarioTemporal.setFoto("foto");
         usuarioTemporal.setIdGrupo("Cliente");
+        usuarioTemporal.setValid(true);
         return usuarioTemporal;
     }
 
