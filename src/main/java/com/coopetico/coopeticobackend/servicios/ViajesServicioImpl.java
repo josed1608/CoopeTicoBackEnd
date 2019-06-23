@@ -272,7 +272,7 @@ public class ViajesServicioImpl implements ViajesServicio {
      * @return Int con el estado  0 si se actualizó correctamente
      *                           -1 si hubo un problema no manejado.
      *                           -2 si no existe ese viaje en la bd.
-     *                           -3 No se puede finalizar un viaje que no ha finalizado.
+     *                           -3 No se pueden asignar estrellas a un viaje que no ha finalizado.
      *                           -4 No se pueden asignar menos de 1 ni más de 5 estrellas.
      *                           -5 si no se pudo guardar el cambio en la bd.
      */
