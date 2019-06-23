@@ -218,5 +218,33 @@ public class ViajeControladorUnitTest {
             fail();
         }
     }
+
+    /**
+     * Prueba para el endpoint asignar estrellas
+     *
+     * @author Marco Venegas (B67697)
+     * @since 22-06-2019
+     */
+    @Test
+    public void asignarEstrellasViaje() {
+        when(viajeServicio.asignarEstrellas(any(String.class), any(String.class), any(Integer.class))).thenReturn(0);
+
+        try{
+            mockMvc.perform(
+                    put("/viajes/asignarEstrellas")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(
+                                    "{" +
+                                            "\"placa\": \"AAA111\"," +
+                                            "\"fechaInicio\": \"2019-05-30 14:30:00\"," +
+                                            "\"estrellas\": 5" +
+                                            "}"
+                            )
+            )
+                    .andExpect(status().isOk());
+        }catch(Exception e){
+            fail();
+        }
+    }
 }
 //-----------------------------------------------------------------------------
