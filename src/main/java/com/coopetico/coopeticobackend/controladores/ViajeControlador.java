@@ -334,7 +334,7 @@ public class ViajeControlador {
      *          Forbidden si la cantidad de estrellas es inválida.
      *          Server error, si el error no ha sido identificado o si no se pudo almacenar en la BD.
      */
-    @PutMapping("/finalizar")
+    @PutMapping("/asignarEstrellas")
     public ResponseEntity asignarEstrellasViaje(@RequestBody ViajeTmpEntidad datosDelViaje) {
         ResponseEntity resultado = null;
         int respuestaServicio = viajesServicio.asignarEstrellas(
