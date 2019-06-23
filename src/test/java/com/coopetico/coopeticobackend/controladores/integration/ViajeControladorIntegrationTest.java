@@ -369,5 +369,39 @@ public class ViajeControladorIntegrationTest {
             Assert.assertEquals(insertado.getFechaFin(), "2019-05-30 15:30:00");
         }
     }*/
-
+    //-------------------------------------------------------------------------
+    /**
+     * Prueba para el endpoint guardar monto
+     *
+     * @author Joseph Rementería (b55824)
+     * @since 23.-06-2019
+     */
+    @Test
+    public void guardarMonto() {
+        //---------------------------------------------------------------------
+        /*when(
+                viajeServicio.guardarMonto(
+                        any(ViajeEntidadPK.class),
+                        any(String.class)
+                )
+        ).thenReturn(0);*/
+        //---------------------------------------------------------------------
+        try{
+            mockMvc.perform(
+                put("/viajes/costoViaje/5000")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(
+                    "{" +
+                        "\"placa\": \"AAA111\"," +
+                        "\"fechaInicio\": \"2019-05-29 15:48:00\"" +
+                    "}"
+                )
+            )
+            .andExpect(status().isOk());
+        } catch (Exception e) {
+            fail();
+        }
+        //---------------------------------------------------------------------
+    }
+    //-------------------------------------------------------------------------
 }

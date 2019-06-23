@@ -239,13 +239,13 @@ public class ViajeControladorUnitTest {
         try{
             mockMvc.perform(
                 put("/viajes/costoViaje/5000")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(
-                        "{" +
-                            "\"placa\": \"AAA111\"," +
-                            "\"fechaInicio\": \"2019-05-29 15:48:00\"" +
-                        "}"
-                    )
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(
+                    "{" +
+                        "\"placa\": \"AAA111\"," +
+                        "\"fechaInicio\": \"2019-05-29 15:48:00\"" +
+                    "}"
+                )
             )
             .andExpect(status().isOk());
         } catch (Exception e) {
