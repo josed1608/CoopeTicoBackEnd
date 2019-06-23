@@ -4,6 +4,7 @@
 
 package com.coopetico.coopeticobackend.servicios;
 
+import com.coopetico.coopeticobackend.entidades.UsuarioTemporal;
 import com.coopetico.coopeticobackend.entidades.bd.GrupoEntidad;
 import com.coopetico.coopeticobackend.entidades.bd.PermisosGrupoEntidad;
 import com.coopetico.coopeticobackend.entidades.bd.UsuarioEntidad;
