@@ -345,27 +345,27 @@ public class ViajeControlador {
 
         switch (respuestaServicio){
             case 0: {
-                resultado = new ResponseEntity("Se asignaron las estrellas para el viaje.", HttpStatus.OK);
+                resultado = new ResponseEntity("Se asignaron las estrellas para el viaje exitosamente.", HttpStatus.OK); //
             }break;
 
             case -1: {
-                resultado = new ResponseEntity("Hubo un error no identificado", HttpStatus.INTERNAL_SERVER_ERROR);
+                resultado = new ResponseEntity("Hubo un error no identificado.", HttpStatus.INTERNAL_SERVER_ERROR);
             }break;
 
             case -2: {
-                resultado = new ResponseEntity("No existe este viaje en la base de datos", HttpStatus.NOT_FOUND);
+                resultado = new ResponseEntity("No existe este viaje en la base de datos.", HttpStatus.NOT_FOUND);//
             }break;
 
             case -3: {
-                resultado = new ResponseEntity("No se pudo asignar estrellas a este viaje puesto que no ha finalizado", HttpStatus.CONFLICT);
+                resultado = new ResponseEntity("No se pudo asignar estrellas a este viaje puesto que no ha finalizado.", HttpStatus.CONFLICT);//
             }break;
 
             case -4: {
-                resultado = new ResponseEntity("No se pueden asignar menos de 1 ni más de 5 estrellas", HttpStatus.FORBIDDEN);
+                resultado = new ResponseEntity("No se pueden asignar menos de 1 ni más de 5 estrellas.", HttpStatus.FORBIDDEN);
             }break;
 
             case -5: {
-                resultado = new ResponseEntity("No se pudo asignar estrellas al viaje por un problema con la BD", HttpStatus.INTERNAL_SERVER_ERROR);
+                resultado = new ResponseEntity("No se pudo asignar estrellas al viaje por un problema con la base de datos.", HttpStatus.INTERNAL_SERVER_ERROR);
             }break;
         }
         return resultado;
