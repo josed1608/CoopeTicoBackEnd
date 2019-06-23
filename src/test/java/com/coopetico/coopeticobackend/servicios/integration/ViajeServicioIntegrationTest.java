@@ -13,7 +13,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.transaction.Transactional;
 
-/*@SpringBootTest
+@SpringBootTest
 @RunWith(SpringRunner.class)
 public class ViajeServicioIntegrationTest {
     @Autowired
@@ -53,5 +53,7 @@ public class ViajeServicioIntegrationTest {
 
             Assert.assertEquals(insertado.getFechaFin(), "2019-05-30 15:28:00");
         }
-    }
-}*/
+    }*/
+    //-------------------------------------------------------------------------
+    //-------------------------------------------------------------------------
+}

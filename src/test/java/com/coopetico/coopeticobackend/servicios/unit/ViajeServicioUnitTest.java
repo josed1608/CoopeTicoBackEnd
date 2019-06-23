@@ -126,7 +126,7 @@ public class ViajeServicioUnitTest {
 
     //-------------------------------------------------------------------------
     /**
-     * Prueba para el método finalizar viaje
+     * Prueba para el método guardar el monto del viaje
      *
      * @author Joseph Rementería (b55824)
      * @since 21-06-2019
