@@ -270,8 +270,8 @@ public class ViajeControladorUnitTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
                     "{" +
-                        "\"placa\": \"AAA111\"," +
-                        "\"fechaInicio\": \"2019-05-29 15:48:00\"" +
+                        "\"pkPlacaTaxi\": \"AAA111\"," +
+                        "\"pkFechaInicio\": \"2019-05-29 15:48:00\"" +
                     "}"
                 )
             )

@@ -415,6 +415,16 @@ public class ViajeControladorIntegrationTest {
      */
     @Test
     public void guardarMonto() {
+        String placa = "AAA111";
+        String fechaInicio = "2019-05-30 14:28:00";
+        String fechaFin = "2019-05-30 15:30:00";
+
+        viajesRepositorio.eliminarViaje(placa, fechaInicio);
+
+        viajeServicio.crear(placa, fechaInicio, "cliente@cliente.com", "origen", "taxista1@taxista.com");
+        viajeServicio.finalizar(placa, fechaInicio, fechaFin);
+        viajeServicio.asignarEstrellas(placa, fechaInicio, 5);
+
         //---------------------------------------------------------------------
         try{
             mockMvc.perform(
@@ -422,8 +432,8 @@ public class ViajeControladorIntegrationTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
                     "{" +
-                        "\"placa\": \"AAA111\"," +
-                        "\"fechaInicio\": \"2019-05-29 15:48:00\"" +
+                            "\"pkPlacaTaxi\": \"" + placa + "\"," +
+                            "\"pkFechaInicio\": \"" + fechaInicio + "\"" +
                     "}"
                 )
             )
