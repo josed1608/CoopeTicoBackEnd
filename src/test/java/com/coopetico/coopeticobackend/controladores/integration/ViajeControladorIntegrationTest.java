@@ -406,4 +406,42 @@ public class ViajeControladorIntegrationTest {
     }
 
 
+    //-------------------------------------------------------------------------
+    /**
+     * Prueba para el endpoint guardar monto
+     *
+     * @author Joseph Rementería (b55824)
+     * @since 23.-06-2019
+     */
+    @Test
+    public void guardarMonto() {
+        String placa = "AAA111";
+        String fechaInicio = "2019-05-30 14:28:00";
+        String fechaFin = "2019-05-30 15:30:00";
+
+        viajesRepositorio.eliminarViaje(placa, fechaInicio);
+
+        viajeServicio.crear(placa, fechaInicio, "cliente@cliente.com", "origen", "taxista1@taxista.com");
+        viajeServicio.finalizar(placa, fechaInicio, fechaFin);
+        viajeServicio.asignarEstrellas(placa, fechaInicio, 5);
+
+        //---------------------------------------------------------------------
+        try{
+            mockMvc.perform(
+                put("/viajes/costoViaje/5000")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(
+                    "{" +
+                            "\"pkPlacaTaxi\": \"" + placa + "\"," +
+                            "\"pkFechaInicio\": \"" + fechaInicio + "\"" +
+                    "}"
+                )
+            )
+            .andExpect(status().isOk());
+        } catch (Exception e) {
+            fail();
+        }
+        //---------------------------------------------------------------------
+    }
+    //-------------------------------------------------------------------------
 }

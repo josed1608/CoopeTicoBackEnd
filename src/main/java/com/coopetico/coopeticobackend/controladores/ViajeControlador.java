@@ -5,6 +5,7 @@ import com.coopetico.coopeticobackend.entidades.DatosTaxistaAsigadoEntidad;
 import com.coopetico.coopeticobackend.entidades.ViajeComenzandoEntidad;
 import com.coopetico.coopeticobackend.entidades.ViajeEntidadTemporal;
 import com.coopetico.coopeticobackend.entidades.bd.UsuarioEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.ViajeEntidadPK;
 import com.coopetico.coopeticobackend.excepciones.UsuarioNoEncontradoExcepcion;
 import com.coopetico.coopeticobackend.servicios.*;
 import com.coopetico.coopeticobackend.entidades.bd.ViajeEntidad;
@@ -370,5 +371,58 @@ public class ViajeControlador {
         }
         return resultado;
     }
+
+    //-------------------------------------------------------------------------
+    /**
+     * Guarda el monto final en la tupla del viaje
+     *
+     * @author Joseph Rementería (b55824)
+     * @since 11-06-2019
+     *
+     * @param   llave llave primaria del viaje
+     * @param   costo final
+     * @return  TODO:
+     */
+    @PutMapping("/costoViaje/{costo}")
+    public ResponseEntity guardarCosto(@PathVariable String costo,@RequestBody ViajeEntidadPK llave) {
+        //---------------------------------------------------------------------
+        ResponseEntity resultado = null;
+        //---------------------------------------------------------------------
+        int respuestaServicio = viajesServicio.guardarMonto(
+            llave,
+            costo
+        );
+        //---------------------------------------------------------------------
+        switch (respuestaServicio){
+            case 0:
+                //-------------------------------------------------------------
+                resultado = new ResponseEntity(
+                    "Se actualizó el campo monto para el viaje",
+                    HttpStatus.OK
+                );
+                //-------------------------------------------------------------
+                break;
+            case -1:
+                //-------------------------------------------------------------
+                resultado = new ResponseEntity(
+                    "Hubo un error no manejado",
+                    HttpStatus.INTERNAL_SERVER_ERROR
+                );
+                //-------------------------------------------------------------
+                break;
+            case -2:
+                //-------------------------------------------------------------
+                resultado = new ResponseEntity(
+                    "No se encontró el viaje",
+                    HttpStatus.NOT_FOUND
+                );
+                //-------------------------------------------------------------
+                break;
+        }
+        //---------------------------------------------------------------------
+        return resultado;
+        //---------------------------------------------------------------------
+    }
+    //-------------------------------------------------------------------------
 }
 //-----------------------------------------------------------------------------

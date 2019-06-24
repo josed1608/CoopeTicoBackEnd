@@ -9,6 +9,7 @@
 package com.coopetico.coopeticobackend.servicios;
 
 import com.coopetico.coopeticobackend.entidades.bd.ViajeEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.ViajeEntidadPK;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -93,4 +94,20 @@ public interface ViajesServicio {
      *                           -5 si no se pudo guardar el cambio en la bd.
      */
      int asignarEstrellas(String placa, String fechaInicio, int estrellas);
+
+    //-------------------------------------------------------------------------
+    /**
+     * Actualliza el monto final del viaje
+     *
+     * @author Joseph Rementería (b55824)
+     * @since 11-06-2019
+     *
+     * @param llave llave primaria del viaje
+     * @param costo monto final
+     * @return   0 no hubo errores
+     *          -1 hubo un error no manejado
+     *          -2 no se lograron salvar los cambios
+     */
+    public int guardarMonto(ViajeEntidadPK llave, String costo);
+    //-------------------------------------------------------------------------
 }
