@@ -259,6 +259,48 @@ public class ViajesServicioImpl implements ViajesServicio {
         return 0;
     }
 
+    /**
+     * Este es el método a usar para actualizar la estrellas de un viaje.
+     *
+     * @author Marco Venegas (B67697)
+     * @since 22-06-2019
+     *
+     * @param placa la placa del taxi asignado
+     * @param fechaInicio la fecha de inicio de un viaje en el formato "yyyy-mm-dd hh:mm:ss"
+     * @param estrellas la cantidad de estrellas con las que se calificó el viaje.
+     *
+     * @return Int con el estado  0 si se actualizó correctamente
+     *                           -1 si hubo un problema no manejado.
+     *                           -2 si no existe ese viaje en la bd.
+     *                           -3 No se pueden asignar estrellas a un viaje que no ha finalizado.
+     *                           -4 No se pueden asignar menos de 1 ni más de 5 estrellas.
+     *                           -5 si no se pudo guardar el cambio en la bd.
+     */
+    public int asignarEstrellas(String placa, String fechaInicio, int estrellas){
+        try{
+            ViajeEntidad viajeACalificar = viajesRepositorio.encontrarViaje(placa, fechaInicio);
+            if(viajeACalificar == null){
+                return -2;
+            }
+            if(viajeACalificar.getFechaFin() == null){
+                return -3;
+            }
+            if (estrellas < 1 || estrellas > 5) {
+                return -4;
+            }
+
+            viajeACalificar.setEstrellas(estrellas);
+            try{
+                viajesRepositorio.save(viajeACalificar);
+            }catch(Exception e){
+                return -5;
+            }
+        }catch (Exception e) {
+            return -1;
+        }
+        return 0;
+    }
+
     //-------------------------------------------------------------------------
     /**
      * Actualliza el monto final del viaje

@@ -76,6 +76,7 @@ public class ViajeControladorIntegrationTest {
     private CompletableFuture<String> completableFutureStrings;
 
     // Beans de las inyecciones de dependencias
+
     @Autowired
     ViajeControlador viajesControlador;
 
@@ -338,37 +339,73 @@ public class ViajeControladorIntegrationTest {
      * @author Marco Venegas (B67697)
      * @since 30-05-2019
      */
-    /*@Test
-    public void finalizarViaje(){
-        ViajeEntidadPK pk = new ViajeEntidadPK("AAA111", "2019-05-30 14:28:00");
-        try{
-            viajesRepositorio.deleteById(pk);
-        }catch(Exception e){}
-        finally{
-            viajeServicio.crear(pk.getPkPlacaTaxi(), pk.getPkFechaInicio(), "cliente@cliente.com", "origen", "taxista1@taxista.com");
+    @Test
+    @Transactional
+    public void finalizarViaje() throws Exception{
+        String placa = "AAA111";
+        String fechaInicio = "2019-05-30 14:28:00";
 
-            try{
-                mockMvc.perform(
-                        put("/viajes/finalizar")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(
-                                        "{" +
-                                                "\"placa\": \"AAA111\"," +
-                                                "\"fechaInicio\": \"2019-05-30 14:28:00\"," +
-                                                "\"fechaFin\": \"2019-05-30 15:30:00\"" +
-                                                "}"
-                                )
-                )
-                        .andExpect(status().isOk());
-            }catch(Exception e){
-                fail();
-            }
+        viajesRepositorio.eliminarViaje(placa, fechaInicio);
 
-            ViajeEntidad insertado = viajesRepositorio.encontrarViaje(pk.getPkPlacaTaxi(), pk.getPkFechaInicio());
+        viajeServicio.crear(placa, fechaInicio, "cliente@cliente.com", "origen", "taxista1@taxista.com");
 
-            Assert.assertEquals(insertado.getFechaFin(), "2019-05-30 15:30:00");
-        }
-    }*/
+        mockMvc.perform(
+                put("/viajes/finalizar")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(
+                                "{" +
+                                        "\"placa\": \"" + placa + "\"," +
+                                        "\"fechaInicio\": \"" + fechaInicio + "\"," +
+                                        "\"fechaFin\": \"2019-05-30 15:30:00\"" +
+                                        "}"
+                        )
+        )
+                .andExpect(status().isOk());
+
+        ViajeEntidad insertado = viajesRepositorio.encontrarViaje(placa, fechaInicio);
+
+        Assert.assertEquals(insertado.getFechaFin(), "2019-05-30 15:30:00");
+
+    }
+
+    /**
+     * Prueba para el endpoint asignar estrellas a un viaje
+     *
+     * @author Marco Venegas (B67697)
+     * @since 22-06-2019
+     */
+    @Test
+    @Transactional
+    public void asignarEstrellasViaje() throws Exception{
+        String placa = "AAA111";
+        String fechaInicio = "2019-05-30 14:28:00";
+        String fechaFin = "2019-05-30 15:30:00";
+
+        viajesRepositorio.eliminarViaje(placa, fechaInicio);
+
+        viajeServicio.crear(placa, fechaInicio, "cliente@cliente.com", "origen", "taxista1@taxista.com");
+        viajeServicio.finalizar(placa, fechaInicio, fechaFin);
+
+        mockMvc.perform(
+                put("/viajes/asignarEstrellas")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(
+                                "{" +
+                                        "\"placa\": \"" + placa + "\"," +
+                                        "\"fechaInicio\": \"" + fechaInicio + "\"," +
+                                        "\"estrellas\": 5" +
+                                        "}"
+                        )
+        )
+                .andExpect(status().isOk());
+
+        ViajeEntidad insertado = viajesRepositorio.encontrarViaje(placa, fechaInicio);
+
+        Assert.assertEquals(insertado.getEstrellas(), new Integer(5));
+
+    }
+
+
     //-------------------------------------------------------------------------
     /**
      * Prueba para el endpoint guardar monto
@@ -378,13 +415,6 @@ public class ViajeControladorIntegrationTest {
      */
     @Test
     public void guardarMonto() {
-        //---------------------------------------------------------------------
-        /*when(
-                viajeServicio.guardarMonto(
-                        any(ViajeEntidadPK.class),
-                        any(String.class)
-                )
-        ).thenReturn(0);*/
         //---------------------------------------------------------------------
         try{
             mockMvc.perform(

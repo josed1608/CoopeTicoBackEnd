@@ -276,8 +276,10 @@ public class ViajeControlador {
      *
      * @param   datosDelViaje Placa, fecha de inicio y fecha de finalizacion del viaje.
      * @return  Ok si no hubo problema,
-     *          Not found si el usuario que crea el viaje no existe en la DB
-     *          Server error, si el error no ha sido identificado.
+     *          Not found si el viaje no existe en la BD
+     *          Conflict, si se intenta finalizar un viaje que ya finalizó.
+     *          Forbidden si la fecha de finalización tiene un formato inválido.
+     *          Server error, si el error no ha sido identificado o si no se pudo almacenar en la BD.
      */
     @PutMapping("/finalizar")
     public ResponseEntity finalizarViaje(@RequestBody ViajeTmpEntidad datosDelViaje) {
@@ -315,6 +317,56 @@ public class ViajeControlador {
 
             case -6: {
                 resultado = new ResponseEntity("No se pudo actualizar el estado del viaje", HttpStatus.INTERNAL_SERVER_ERROR);
+            }break;
+        }
+        return resultado;
+    }
+
+    /**
+     * Actualiza el campo de fechaFin de la tupla del viaje proporcionado.
+     *
+     * @author Marco Venegas (B67697)
+     * @since 27-05-2019
+     *
+     * @param   datosDelViaje Placa, fecha de inicio y estrellas para el viaje.
+     * @return  Ok si no hubo problema,
+     *          Not found si el viaje no existe en la BD
+     *          Conflict, si se intenta asignar estrellas a un viaje que no ha finalizado.
+     *          Forbidden si la cantidad de estrellas es inválida.
+     *          Server error, si el error no ha sido identificado o si no se pudo almacenar en la BD.
+     */
+    @PutMapping("/asignarEstrellas")
+    public ResponseEntity asignarEstrellasViaje(@RequestBody ViajeTmpEntidad datosDelViaje) {
+        ResponseEntity resultado = null;
+        int respuestaServicio = viajesServicio.asignarEstrellas(
+                datosDelViaje.getPlaca(),
+                datosDelViaje.getFechaInicio(),
+                datosDelViaje.getEstrellas()
+        );
+
+        switch (respuestaServicio){
+            case 0: {
+                resultado = new ResponseEntity("Se asignaron las estrellas para el viaje exitosamente.", HttpStatus.OK); //
+            }break;
+
+            case -1: {
+                resultado = new ResponseEntity("Hubo un error no identificado.", HttpStatus.INTERNAL_SERVER_ERROR);
+            }break;
+
+            case -2: {
+                resultado = new ResponseEntity("No existe este viaje en la base de datos.", HttpStatus.NOT_FOUND);//
+            }break;
+
+            case -3: {
+                resultado = new ResponseEntity("No se pudo asignar estrellas a este viaje puesto que no ha finalizado.", HttpStatus.CONFLICT);//
+            }break;
+
+            case -4: {
+                resultado = new ResponseEntity("No se pueden asignar menos de 1 ni más de 5 estrellas.", HttpStatus.FORBIDDEN);
+            }break;
+
+            case -5: {
+                resultado = new ResponseEntity("No se pudo asignar estrellas al viaje por un problema con la base de datos.", HttpStatus.INTERNAL_SERVER_ERROR);
             }break;
         }
         return resultado;

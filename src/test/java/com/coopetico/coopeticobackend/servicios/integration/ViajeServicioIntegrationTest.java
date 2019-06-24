@@ -39,7 +39,7 @@ public class ViajeServicioIntegrationTest {
      * @author Marco Venegas (B67697)
      * @since 30-05-2019
      */
-    /*@Test
+    @Test
     @Transactional
     public void finalizarViaje(){
         ViajeEntidadPK pk = new ViajeEntidadPK("AAA111", "2019-05-30 14:28:00");
@@ -54,7 +54,7 @@ public class ViajeServicioIntegrationTest {
 
             Assert.assertEquals(insertado.getFechaFin(), "2019-05-30 15:28:00");
         }
-    }*/
+    }
     //-------------------------------------------------------------------------
     /**
      * Prueba para el método guardar el monto del viaje
@@ -115,4 +115,28 @@ public class ViajeServicioIntegrationTest {
         );
     }
     //-------------------------------------------------------------------------
+
+    /**
+     * Prueba para el método finalizar viaje
+     *
+     * @author Marco Venegas (B67697)
+     * @since 22-06-2019
+     */
+    @Test
+    @Transactional
+    public void asignarEstrellas(){
+        ViajeEntidadPK pk = new ViajeEntidadPK("AAA111", "2019-05-30 14:28:00");
+        try{
+            viajesRepositorio.deleteById(pk);
+        }catch(Exception e){}
+        finally{
+            viajeServicio.crear(pk.getPkPlacaTaxi(), pk.getPkFechaInicio(), "cliente@cliente.com", "origen", "taxista1@taxista.com");
+            viajeServicio.finalizar(pk.getPkPlacaTaxi(), pk.getPkFechaInicio(), "2019-05-30 15:28:00");
+            viajeServicio.asignarEstrellas(pk.getPkPlacaTaxi(), pk.getPkFechaInicio(), 5);
+
+            ViajeEntidad insertado = viajesRepositorio.encontrarViaje(pk.getPkPlacaTaxi(), pk.getPkFechaInicio());
+
+            Assert.assertEquals(insertado.getEstrellas(), new Integer(5));
+        }
+    }
 }
