@@ -110,7 +110,7 @@ public class ViajeServicioUnitTest {
 
         //Si es exitoso, devuelve 0
         when(viajesRepositorio.encontrarViaje(any(String.class), any(String.class))).thenReturn(viajeTest);
-        Assert.assertEquals(viajeServicio.finalizar(placa, fechaInicio, fechaFin), -0);
+        Assert.assertEquals(viajeServicio.finalizar(placa, fechaInicio, fechaFin), 0);
 
         //Si no se puede guardar en la base, devuelve -6
         //viajeTest.setFechaFin(null);
@@ -123,4 +123,102 @@ public class ViajeServicioUnitTest {
         Assert.assertEquals(viajeServicio.finalizar(placa, fechaInicio, fechaFin), -1);
 
     }
+
+
+    /**
+     * Prueba para el método de asignar estrellas a un viaje
+     *
+     * @author Marco Venegas (B67697)
+     * @since 22-06-2019
+     */
+    @Test
+    public void asignarEstrellas(){
+        String placa = "AAA111";
+        String fechaInicio = "2019-04-20 04:20:00";
+        String fechaFin = "2019-04-20 04:21:00";
+        int estrellas = 5;
+
+        ViajeEntidadPK pk = new ViajeEntidadPK(placa, fechaInicio);
+        ViajeEntidad viajeMock = new ViajeEntidad();
+        viajeMock.setViajeEntidadPK(pk);
+
+        //Si no hay viaje, devuelve -2
+        ViajeEntidad viajeTest = null;
+        when(viajesRepositorio.encontrarViaje(any(String.class), any(String.class))).thenReturn(viajeTest);
+        Assert.assertEquals(viajeServicio.asignarEstrellas(placa, fechaInicio, estrellas), -2);
+
+        //Si no ha finalizado, devuelve -3
+        viajeTest = viajeMock;
+        when(viajesRepositorio.encontrarViaje(any(String.class), any(String.class))).thenReturn(viajeTest);
+        Assert.assertEquals(viajeServicio.asignarEstrellas(placa, fechaInicio, estrellas), -3);
+
+        //Si se intenta asignar menos de 1 estrella, devuelve -4
+        viajeTest.setFechaFin(fechaFin);
+        when(viajesRepositorio.encontrarViaje(any(String.class), any(String.class))).thenReturn(viajeTest);
+        Assert.assertEquals(viajeServicio.asignarEstrellas(placa, fechaInicio, 0), -4);
+
+        //Si se intenta asignar más de 5 estrellas, devuelve -4
+        viajeTest.setFechaFin(fechaFin);
+        when(viajesRepositorio.encontrarViaje(any(String.class), any(String.class))).thenReturn(viajeTest);
+        Assert.assertEquals(viajeServicio.asignarEstrellas(placa, fechaInicio, 6), -4);
+
+        //Si es exitoso, devuelve 0
+        when(viajesRepositorio.encontrarViaje(any(String.class), any(String.class))).thenReturn(viajeTest);
+        Assert.assertEquals(viajeServicio.asignarEstrellas(placa, fechaInicio, estrellas), 0);
+
+        //Si algo pasa en el try, devuelve -1
+        when(viajesRepositorio.encontrarViaje(any(String.class), any(String.class))).thenThrow();
+        Assert.assertEquals(viajeServicio.asignarEstrellas(placa, fechaInicio, estrellas), -1);
+    }
+
+    //-------------------------------------------------------------------------
+    /**
+     * Prueba para el método guardar el monto del viaje
+     *
+     * @author Joseph Rementería (b55824)
+     * @since 21-06-2019
+     */
+    @Test
+    public void testGuardarMonto(){
+        //---------------------------------------------------------------------
+        // Datos del viaje "mockeado"
+        String placa = "AAA111";
+        String fechaInicio = "2019-04-20 04:20:00";
+        String costoValido = "3000";
+        String costoInvalido = "123456789";
+        //---------------------------------------------------------------------
+        // Creación de la entidad
+        ViajeEntidadPK pk = new ViajeEntidadPK(placa, fechaInicio);
+        ViajeEntidad viajeMock = new ViajeEntidad();
+        viajeMock.setViajeEntidadPK(pk);
+        //---------------------------------------------------------------------
+        // Se prueba que devuelva el código correspondiente para el caso en
+        // el que no se encuentre el viaje
+        ViajeEntidad noEncontrado = null;
+        final int CODIGO_VIAJE_NO_ENCONTRADO = -2;
+        when (
+            viajesRepositorio.encontrarViaje(
+                any(String.class), any(String.class)
+            )
+        ).thenReturn(noEncontrado);
+        //---------------------------------------------------------------------
+        // Mockeo del método
+        Assert.assertEquals(
+            viajeServicio.guardarMonto( pk,costoValido),
+            CODIGO_VIAJE_NO_ENCONTRADO
+        );
+        //---------------------------------------------------------------------
+        // Se prueba que no se den fallos en el método
+        final int CODIGO_VIAJE_EXITO = 0;
+        when (
+                viajesRepositorio.encontrarViaje(
+                        any(String.class), any(String.class)
+                )
+        ).thenReturn(viajeMock);
+        Assert.assertEquals(
+            viajeServicio.guardarMonto( pk,costoValido),
+            CODIGO_VIAJE_EXITO
+        );
+    }
+    //-------------------------------------------------------------------------
 }

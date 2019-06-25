@@ -218,5 +218,69 @@ public class ViajeControladorUnitTest {
             fail();
         }
     }
+
+    /**
+     * Prueba para el endpoint asignar estrellas
+     *
+     * @author Marco Venegas (B67697)
+     * @since 22-06-2019
+     */
+    @Test
+    public void asignarEstrellasViaje() {
+        when(viajeServicio.asignarEstrellas(any(String.class), any(String.class), any(Integer.class))).thenReturn(0);
+
+        try{
+            mockMvc.perform(
+                    put("/viajes/asignarEstrellas")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(
+                                    "{" +
+                                            "\"placa\": \"AAA111\"," +
+                                            "\"fechaInicio\": \"2019-05-30 14:30:00\"," +
+                                            "\"estrellas\": 5" +
+                                            "}"
+                            )
+            )
+                    .andExpect(status().isOk());
+        }catch(Exception e){
+            fail();
+        }
+    }
+
+    //-------------------------------------------------------------------------
+    /**
+     * Prueba para el endpoint guardar monto
+     *
+     * @author Joseph Rementería (b55824)
+     * @since 23.-06-2019
+     */
+    @Test
+    public void guardarMonto() {
+        //---------------------------------------------------------------------
+        when(
+            viajeServicio.guardarMonto(
+                any(ViajeEntidadPK.class),
+                any(String.class)
+            )
+        ).thenReturn(0);
+        //---------------------------------------------------------------------
+        try{
+            mockMvc.perform(
+                put("/viajes/costoViaje/5000")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(
+                    "{" +
+                        "\"pkPlacaTaxi\": \"AAA111\"," +
+                        "\"pkFechaInicio\": \"2019-05-29 15:48:00\"" +
+                    "}"
+                )
+            )
+            .andExpect(status().isOk());
+        } catch (Exception e) {
+            fail();
+        }
+        //---------------------------------------------------------------------
+    }
+    //-------------------------------------------------------------------------
 }
 //-----------------------------------------------------------------------------

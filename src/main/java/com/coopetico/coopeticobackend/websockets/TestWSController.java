@@ -30,6 +30,11 @@ public class TestWSController {
         return principal.getName();
     }
 
+    @SubscribeMapping("/recibir-viaje")
+    public String testSubscription(Principal principal) {
+        return principal.getName();
+    }
+
     /**
      * Endpoint para probar mensajes con destino de usuario
      * @param mensaje mensaje enviado por el usuario que se le reenviará
