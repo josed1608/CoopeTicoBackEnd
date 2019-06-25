@@ -50,7 +50,9 @@ public class DatosTaxistaAsigadoEntidad {
         float estrellasTaxista,
         String telefono,
         String foto,
-        String placa
+        String placa,
+        String modeloAuto,
+        String fotoAuto
     ) {
         this.viaje = viaje;
         this.correoTaxista = correoTaxista;
@@ -60,6 +62,8 @@ public class DatosTaxistaAsigadoEntidad {
         this.telefono = telefono;
         this.foto = foto;
         this.placa = placa;
+        this.modeloAuto = modeloAuto;
+        this.fotoAuto = fotoAuto;
     }
 
     public DatosTaxistaAsigadoEntidad() {

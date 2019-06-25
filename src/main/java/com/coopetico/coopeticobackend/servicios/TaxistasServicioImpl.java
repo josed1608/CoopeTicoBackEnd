@@ -323,7 +323,9 @@ public class TaxistasServicioImpl implements  TaxistasServicio {
             taxistaUsuarioDatos.getFoto(),
             //-----------------------------------------------------------------
             //TODO: get the placa, this will be solve in the third sprint
-            "AAA111"
+            "AAA111",
+            "Modelo eventual",
+            "Foto Eventual"
             //-----------------------------------------------------------------
         );
         //---------------------------------------------------------------------
