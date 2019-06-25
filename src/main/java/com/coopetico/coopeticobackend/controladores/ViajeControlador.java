@@ -283,7 +283,9 @@ public class ViajeControlador {
      */
     @PutMapping("/finalizar")
     public ResponseEntity finalizarViaje(@RequestBody ViajeTmpEntidad datosDelViaje) {
+
         ResponseEntity resultado = null;
+
         int respuestaServicio = viajesServicio.finalizar(
                 datosDelViaje.getPlaca(),
                 datosDelViaje.getFechaInicio(),
@@ -323,10 +325,10 @@ public class ViajeControlador {
     }
 
     /**
-     * Actualiza el campo de fechaFin de la tupla del viaje proporcionado.
+     * Actualiza el campo de estrellas de la tupla del viaje proporcionado.
      *
      * @author Marco Venegas (B67697)
-     * @since 27-05-2019
+     * @since 22-06-2019
      *
      * @param   datosDelViaje Placa, fecha de inicio y estrellas para el viaje.
      * @return  Ok si no hubo problema,

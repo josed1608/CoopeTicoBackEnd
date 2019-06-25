@@ -10,6 +10,7 @@ import com.coopetico.coopeticobackend.entidades.bd.ViajeEntidadPK;
 import com.coopetico.coopeticobackend.repositorios.ViajesRepositorio;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -35,6 +36,8 @@ public class ViajesServicioImpl implements ViajesServicio {
     private TaxisServicio taxisServicio;
     private TaxistasServicioImpl taxistasServicio;
     private OperadoresServicio operadorServicio;
+    private final SimpMessagingTemplate template;
+
     //-------------------------------------------------------------------------
     // Métodos.
     /**
@@ -47,17 +50,19 @@ public class ViajesServicioImpl implements ViajesServicio {
      * @param txsSer Servicio de taxis.
      * @param txstSer Servicio de taxistas.
      */
-//    @Autowired
+    @Autowired
     public ViajesServicioImpl(
         ViajesRepositorio vjsRep,
         ClienteServicio cntSer,
         TaxisServicio txsSer,
-        TaxistasServicioImpl txstSer
+        TaxistasServicioImpl txstSer,
+        SimpMessagingTemplate template
     ){
         this.viajesRepositorio = vjsRep;
         this.taxisServicio = txsSer;
         this.taxistasServicio = txstSer;
         this.clientesServicio = cntSer;
+        this.template = template;
     }
 
     /**
@@ -250,12 +255,15 @@ public class ViajesServicioImpl implements ViajesServicio {
             viajeAFinalizar.setFechaFin(fechaFin);//Timestamp.valueOf(fechaFin));
             try{
                 viajesRepositorio.save(viajeAFinalizar);
+                String correo = viajeAFinalizar.getClienteByPkCorreoCliente().getPkCorreoUsuario();
+                template.convertAndSend("/user/" + correo + "/queue/esperar-finalizacion", true);
             }catch(Exception e){
                 return -6;
             }
         }catch (Exception e) {
             return -1;
         }
+
         return 0;
     }
 
