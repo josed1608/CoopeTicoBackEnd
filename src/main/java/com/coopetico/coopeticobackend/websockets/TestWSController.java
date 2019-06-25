@@ -30,7 +30,7 @@ public class TestWSController {
         return principal.getName();
     }
 
-    @SubscribeMapping("/user/queue/recibir-viaje")
+    @SubscribeMapping("/recibir-viaje")
     public String testSubscription(Principal principal) {
         return principal.getName();
     }
