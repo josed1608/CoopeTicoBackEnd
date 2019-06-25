@@ -283,7 +283,15 @@ public class ViajeControlador {
      */
     @PutMapping("/finalizar")
     public ResponseEntity finalizarViaje(@RequestBody ViajeTmpEntidad datosDelViaje) {
+
         ResponseEntity resultado = null;
+
+        if(datosDelViaje.getCorreoCliente() != null){
+            template.convertAndSend("/user/" + datosDelViaje.getCorreoCliente() + "/queue/esperar-finalizacion", true);
+        }else{
+            resultado = new ResponseEntity("No se incluyó el correo del cliente.", HttpStatus.BAD_REQUEST);
+        }
+
         int respuestaServicio = viajesServicio.finalizar(
                 datosDelViaje.getPlaca(),
                 datosDelViaje.getFechaInicio(),
