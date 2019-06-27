@@ -234,9 +234,10 @@ public class ViajeControlador {
         switch (respuestaRepo){
             case 0:
                 result = new ResponseEntity(
-                        "Se insetó el viaje",
+                        "Se insertó el viaje",
                         HttpStatus.OK
                 );
+                template.convertAndSend("/user/" + datosDelViaje.getCorreoCliente() + "/queue/esperar-comienzo", true);
                 break;
             case -1:
                 result = new ResponseEntity(
