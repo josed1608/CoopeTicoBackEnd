@@ -59,6 +59,7 @@ public interface ViajesServicio {
         String fechaInicio,
         String correoUsuario,
         String origen,
+        String destino,
         String correoTaxista
     );
 

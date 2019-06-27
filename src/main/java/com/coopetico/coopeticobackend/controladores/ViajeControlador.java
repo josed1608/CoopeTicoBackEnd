@@ -227,6 +227,7 @@ public class ViajeControlador {
             datosDelViaje.getFechaInicio(),
             datosDelViaje.getCorreoCliente(),
             datosDelViaje.getOrigen(),
+            datosDelViaje.getDestino(),
             datosDelViaje.getCorreoTaxista()
         );
         //---------------------------------------------------------------------
@@ -237,7 +238,7 @@ public class ViajeControlador {
                         "Se insertó el viaje",
                         HttpStatus.OK
                 );
-                template.convertAndSend("/user/" + datosDelViaje.getCorreoCliente() + "/queue/esperar-comienzo", true);
+                template.convertAndSend("/user/" + datosDelViaje.getCorreoCliente() + "/queue/esperar-comienzo", datosDelViaje);
                 break;
             case -1:
                 result = new ResponseEntity(
