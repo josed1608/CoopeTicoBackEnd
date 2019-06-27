@@ -27,6 +27,7 @@ public class TaxiEntidad {
     private Timestamp fechaVenSeguro;
     private boolean estado;
     private String justificacion;
+    private TaxistaEntidad taxistaActual;
     @JsonIgnore
     private Collection<ViajeEntidad> viajesByPkPlaca;
     private Collection<ConduceEntidad> taxistasQueMeConducen;
@@ -34,7 +35,7 @@ public class TaxiEntidad {
     public TaxiEntidad(String pkPlaca, Boolean datafono, String telefono, String clase, String tipo,
                        Timestamp fechaVenRtv, Timestamp fechaVenMarchamo, Timestamp fechaVenSeguro,
                        Collection<ViajeEntidad> viajesByPkPlaca, String foto, Boolean valido, String correoTaxista,
-                       boolean estado, String justificacion, Collection<ConduceEntidad> taxistasQueMeConducen) {
+                       boolean estado, String justificacion, TaxistaEntidad taxistaActual, Collection<ConduceEntidad> taxistasQueMeConducen) {
         this.pkPlaca = pkPlaca;
         this.datafono = datafono;
         this.telefono = telefono;
@@ -48,6 +49,7 @@ public class TaxiEntidad {
         this.fechaVenSeguro = fechaVenSeguro;
         this.estado = estado;
         this.justificacion = justificacion;
+        this.taxistaActual = taxistaActual;
         this.viajesByPkPlaca = viajesByPkPlaca;
         this.taxistasQueMeConducen = taxistasQueMeConducen;
     }
@@ -235,5 +237,14 @@ public class TaxiEntidad {
 
     public void setTaxistasQueMeConducen(Collection<ConduceEntidad> taxistasQueMeConducen) {
         this.taxistasQueMeConducen = taxistasQueMeConducen;
+    }
+
+    @OneToOne(mappedBy = "taxiActual")
+    public TaxistaEntidad getTaxistaActual() {
+        return taxistaActual;
+    }
+
+    public void setTaxistaActual(TaxistaEntidad taxistaActual) {
+        this.taxistaActual = taxistaActual;
     }
 }
