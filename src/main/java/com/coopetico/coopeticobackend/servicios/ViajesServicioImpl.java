@@ -155,6 +155,7 @@ public class ViajesServicioImpl implements ViajesServicio {
         String fechaInicio,
         String correoUsuario,
         String origen,
+        String destino,
         String correoTaxista
     ) {
         int result = 0;
@@ -177,6 +178,7 @@ public class ViajesServicioImpl implements ViajesServicio {
                     consultarTaxistaPorId(correoTaxista)
             );
             viajeEnCreacion.setOrigen(origen);
+            viajeEnCreacion.setDestino(destino);
             //-----------------------------------------------------------------
             // Acá se referencia sea el cliente o el operador con el viaje.
             ClienteEntidad clienteCreador = this.clientesServicio
@@ -349,6 +351,11 @@ public class ViajesServicioImpl implements ViajesServicio {
         //---------------------------------------------------------------------
         return resultado;
         //---------------------------------------------------------------------
+    }
+
+    @Override
+    public ViajeEntidad viajePorId(ViajeEntidadPK id) {
+        return viajesRepositorio.findById(id).orElse(null);
     }
     //-------------------------------------------------------------------------
 }

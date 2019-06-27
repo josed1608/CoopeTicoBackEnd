@@ -13,6 +13,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.sql.Date;
@@ -49,6 +50,8 @@ public class ViajeServicioUnitTest {
     TaxistasServicioImpl taxistasServicio;
     @MockBean
     OperadoresServicio operadoresServicio;
+    @MockBean
+    SimpMessagingTemplate template;
     //-------------------------------------------------------------------------
     // Pruebas
     /**
@@ -110,13 +113,7 @@ public class ViajeServicioUnitTest {
 
         //Si es exitoso, devuelve 0
         when(viajesRepositorio.encontrarViaje(any(String.class), any(String.class))).thenReturn(viajeTest);
-        Assert.assertEquals(viajeServicio.finalizar(placa, fechaInicio, fechaFin), 0);
-
-        //Si no se puede guardar en la base, devuelve -6
-        //viajeTest.setFechaFin(null);
-        //when(viajesRepositorio.encontrarViaje(any(String.class), any(String.class))).thenReturn(viajeTest);
-        //when(viajesRepositorio.save(any(ViajeEntidad.class))).thenThrow();
-        //Assert.assertEquals(viajeServicio.finalizar(placa, fechaInicio, fechaFin), -6);
+        Assert.assertEquals(viajeServicio.finalizar(placa, fechaInicio, fechaFin), -6);
 
         //Si algo pasa en el try, devuelve -1
         when(viajesRepositorio.encontrarViaje(any(String.class), any(String.class))).thenThrow();

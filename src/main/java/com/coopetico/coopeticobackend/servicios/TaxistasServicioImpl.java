@@ -2,6 +2,7 @@ package com.coopetico.coopeticobackend.servicios;
 
 import com.coopetico.coopeticobackend.entidades.bd.*;
 import com.coopetico.coopeticobackend.entidades.*;
+import com.coopetico.coopeticobackend.excepciones.TaxiTomadoExcepcion;
 import com.coopetico.coopeticobackend.excepciones.UsuarioNoEncontradoExcepcion;
 import com.coopetico.coopeticobackend.repositorios.GruposRepositorio;
 import com.coopetico.coopeticobackend.repositorios.TaxisRepositorio;
@@ -125,8 +126,8 @@ public class TaxistasServicioImpl implements  TaxistasServicio {
     }
 
     @Override
-    @Transactional
     public Optional<TaxistaEntidad> taxistaPorCorreo(String correo) {
+        this.taxistaRepositorio.findAll();
         return taxistaRepositorio.findById(correo);
     }
 
@@ -347,6 +348,22 @@ public class TaxistasServicioImpl implements  TaxistasServicio {
         }catch (Exception e){
             System.out.println(e);
             return false;
+        }
+    }
+
+    @Override
+    public void actualizarTaxiActual(TaxistaEntidad taxista, TaxiEntidad taxi) throws TaxiTomadoExcepcion{
+        if(taxi == null) {
+            taxista.setTaxiActual(null);
+            taxistaRepositorio.save(taxista);
+        }
+        else {
+            if (taxi.getTaxistaActual() != null && !taxi.getTaxistaActual().getPkCorreoUsuario().equals(taxista.getPkCorreoUsuario())) {
+                throw new TaxiTomadoExcepcion("El taxi ya está siendo manejado por el taxista " + taxi.getTaxistaActual().getPkCorreoUsuario(), HttpStatus.CONFLICT, System.currentTimeMillis());
+            }
+
+            taxista.setTaxiActual(taxi);
+            taxistaRepositorio.save(taxista);
         }
     }
 }

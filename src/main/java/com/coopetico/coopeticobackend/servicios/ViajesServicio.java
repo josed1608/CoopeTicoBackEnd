@@ -59,6 +59,7 @@ public interface ViajesServicio {
         String fechaInicio,
         String correoUsuario,
         String origen,
+        String destino,
         String correoTaxista
     );
 
@@ -110,4 +111,6 @@ public interface ViajesServicio {
      */
     public int guardarMonto(ViajeEntidadPK llave, String costo);
     //-------------------------------------------------------------------------
+
+    ViajeEntidad viajePorId(ViajeEntidadPK id);
 }

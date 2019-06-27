@@ -347,7 +347,7 @@ public class ViajeControladorIntegrationTest {
 
         viajesRepositorio.eliminarViaje(placa, fechaInicio);
 
-        viajeServicio.crear(placa, fechaInicio, "cliente@cliente.com", "origen", "taxista1@taxista.com");
+        viajeServicio.crear(placa, fechaInicio, "cliente@cliente.com", "origen","destino","taxista1@taxista.com");
 
         mockMvc.perform(
                 put("/viajes/finalizar")
@@ -383,7 +383,7 @@ public class ViajeControladorIntegrationTest {
 
         viajesRepositorio.eliminarViaje(placa, fechaInicio);
 
-        viajeServicio.crear(placa, fechaInicio, "cliente@cliente.com", "origen", "taxista1@taxista.com");
+        viajeServicio.crear(placa, fechaInicio, "cliente@cliente.com", "origen", "destino","taxista1@taxista.com");
         viajeServicio.finalizar(placa, fechaInicio, fechaFin);
 
         mockMvc.perform(
@@ -421,7 +421,7 @@ public class ViajeControladorIntegrationTest {
 
         viajesRepositorio.eliminarViaje(placa, fechaInicio);
 
-        viajeServicio.crear(placa, fechaInicio, "cliente@cliente.com", "origen", "taxista1@taxista.com");
+        viajeServicio.crear(placa, fechaInicio, "cliente@cliente.com", "origen", "destino","taxista1@taxista.com");
         viajeServicio.finalizar(placa, fechaInicio, fechaFin);
         viajeServicio.asignarEstrellas(placa, fechaInicio, 5);
 

@@ -227,6 +227,7 @@ public class ViajeControlador {
             datosDelViaje.getFechaInicio(),
             datosDelViaje.getCorreoCliente(),
             datosDelViaje.getOrigen(),
+            datosDelViaje.getDestino(),
             datosDelViaje.getCorreoTaxista()
         );
         //---------------------------------------------------------------------
@@ -234,9 +235,10 @@ public class ViajeControlador {
         switch (respuestaRepo){
             case 0:
                 result = new ResponseEntity(
-                        "Se insetó el viaje",
+                        "Se insertó el viaje",
                         HttpStatus.OK
                 );
+                template.convertAndSend("/user/" + datosDelViaje.getCorreoCliente() + "/queue/esperar-comienzo", datosDelViaje);
                 break;
             case -1:
                 result = new ResponseEntity(
