@@ -1,8 +1,10 @@
 package com.coopetico.coopeticobackend.servicios;
 
 import com.coopetico.coopeticobackend.entidades.DatosTaxistaAsigadoEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.TaxiEntidad;
 import com.coopetico.coopeticobackend.entidades.bd.TaxistaEntidad;
 import com.coopetico.coopeticobackend.entidades.TaxistaEntidadTemporal;
+import com.coopetico.coopeticobackend.excepciones.TaxiTomadoExcepcion;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.List;
@@ -90,4 +92,12 @@ public interface TaxistasServicio {
      * @param taxistas Lista Entidad taxistas que se quiere guardar
      */
     boolean guardarLista(List<TaxistaEntidadTemporal> taxistas);
+
+    /**
+     * Recibe un taxista y un taxi para asignarle al taxista. Si recibe null como taxi, le asigna null al taxista por lo cual se desocupa el taxi que tenía
+     * @param taxista taxista al que se le asigna el taxi
+     * @param taxi taxi a asignar
+     * @throws TaxiTomadoExcepcion si el taxi que se desea asignar ya lo tiene algún otro taxista
+     */
+    void actualizarTaxiActual(TaxistaEntidad taxista, TaxiEntidad taxi) throws TaxiTomadoExcepcion;
 }

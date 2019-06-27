@@ -350,6 +350,11 @@ public class ViajesServicioImpl implements ViajesServicio {
         return resultado;
         //---------------------------------------------------------------------
     }
+
+    @Override
+    public ViajeEntidad viajePorId(ViajeEntidadPK id) {
+        return viajesRepositorio.findById(id).orElse(null);
+    }
     //-------------------------------------------------------------------------
 }
 //-----------------------------------------------------------------------------

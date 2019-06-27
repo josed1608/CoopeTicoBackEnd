@@ -110,4 +110,6 @@ public interface ViajesServicio {
      */
     public int guardarMonto(ViajeEntidadPK llave, String costo);
     //-------------------------------------------------------------------------
+
+    ViajeEntidad viajePorId(ViajeEntidadPK id);
 }
