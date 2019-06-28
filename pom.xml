@@ -13,7 +13,6 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>coopetico-backend</name>
 	<description>Backend for Coopetico taxis app</description>
-
 	<properties>
 		<java.version>1.8</java.version>
 	</properties>

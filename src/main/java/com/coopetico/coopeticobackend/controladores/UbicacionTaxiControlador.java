@@ -64,14 +64,14 @@ public class UbicacionTaxiControlador {
 
         if(simular) {
             if (primero) {
-                taxis.add(new TaxiTemporal("AAA111", 22.33159, 105.63233, "A", true, true));
-                taxis.add(new TaxiTemporal("AAA111", 7.92658, -12.05228, "B", true, true));
-                taxis.add(new TaxiTemporal("AAA111", 48.75606, -118.85900, "C", false, true));
+                taxis.add(new TaxiTemporal("AAA111", 9.9325427, -84.0795782, "A", true, true));
+                taxis.add(new TaxiTemporal("AAA112", 9.931972026029896, -84.07971767486568, "B", true, true));
+                taxis.add(new TaxiTemporal("AAA113", 9.932183, -84.08035067618793, "C", false, true));
 
             } else {
-                taxis.add(new TaxiTemporal("AAA111", 5.19334, -67.03352, "A", true, true));
-                taxis.add(new TaxiTemporal("AAA111", 12.09407, 26.31618, "B", false, true));
-                taxis.add(new TaxiTemporal("AAA111", 47.92393, 78.58339, "C", true, true));
+                taxis.add(new TaxiTemporal("AAA111", 9.932522, -84.0834727674925, "A", true, true));
+                taxis.add(new TaxiTemporal("AAA112", 9.933049964915796, -84.0834727674925, "B", false, true));
+                taxis.add(new TaxiTemporal("AAA113", 9.931105, -84.08615497650531, "C", true, true));
 
             }
         }
