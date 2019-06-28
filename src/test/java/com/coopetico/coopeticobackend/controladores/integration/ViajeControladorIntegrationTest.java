@@ -76,6 +76,7 @@ public class ViajeControladorIntegrationTest {
     private CompletableFuture<String> completableFutureStrings;
 
     // Beans de las inyecciones de dependencias
+
     @Autowired
     ViajeControlador viajesControlador;
 
@@ -111,9 +112,6 @@ public class ViajeControladorIntegrationTest {
 
         // Cargar datos para test de la estructura
         mockMvc.perform(post("/ubicaciones/cargar-datos-test")).andReturn();
-
-        // ViajesControlador
-        this.mockMvc = standaloneSetup(viajesControlador).build();
     }
 
     /**
@@ -149,6 +147,7 @@ public class ViajeControladorIntegrationTest {
 
         return stompClient.connect(URL, new WebSocketHttpHeaders(headerAutorizacion), new StompSessionHandlerAdapter() {
         }).get(1, SECONDS);
+
     }
 
     /**
@@ -162,7 +161,7 @@ public class ViajeControladorIntegrationTest {
         stompSession.subscribe("/user/queue/recibir-viaje", new ViajeControladorIntegrationTest.CreateStringStompFrameHandlerViajeSolicitado());
 
         // Act: que el cliente solicite un viaje
-        mockMvc.perform(get("/viajes/solicitar")
+        mockMvc.perform(post("/viajes/solicitar")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\n" +
                                     "\t\"correoCliente\": \"cliente@cliente.com\",\n" +
@@ -179,34 +178,6 @@ public class ViajeControladorIntegrationTest {
         assertEquals("cliente@cliente.com", notificacionTaxista.getCorreoCliente());
     }
 
-    /**
-     * Testea que el taxista acepte el viaje y se le avise al cliente
-     */
-    @Test
-    @Transactional
-    public void aceptarViaje() throws Exception {
-        // Arrange: que el cliente se suscriba a esperar taxista
-        StompSession stompSessionCliente = obtenerSesionWS(authHeaderCliente);
-        stompSessionCliente.subscribe("/user/queue/esperar-taxista", new ViajeControladorIntegrationTest.CreateStringStompFrameHandlerTaxistaAsignado());
-
-        // Act: Que el taxista responda afirmativo al viaje
-        mockMvc.perform(post("/viajes/aceptar-rechazar?respuesta=true")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{\n" +
-                            "\t\"correoCliente\": \"cliente@cliente.com\",\n" +
-                            "\t\"origen\": \"9.963111,-84.054929\",\n" +
-                            "\t\"destino\": \"9.963111,-84.054929\",\n" +
-                            "\t\"tipo\": \"sedan\",\n" +
-                            "\t\"datafono\": true,\n" +
-                            "\t\"taxistasQueRechazaron\": []" +
-                        "}")
-                .headers(authHeaderTaxista))
-            .andExpect(content().string("Viaje comienza"));
-
-        // Assert: Que al cliente le haya llegado la info del taxista1
-        DatosTaxistaAsigadoEntidad notificacionTaxista = completableFutureTaxistaAsignado.get(10, SECONDS);
-        assertEquals("taxista1@taxista.com", notificacionTaxista.getCorreoTaxista());
-    }
 
     /**
      * Prueba que si un taxista rechaza un mensaje, que se le avise al siguiente taxista
@@ -235,6 +206,35 @@ public class ViajeControladorIntegrationTest {
         // Assert: asegurarse que al segundo taxista le llegara el viaje
         ViajeComenzandoEntidad viajeTaxista2 = completableFutureViajeComenzado.get(10, SECONDS);
         assertEquals("cliente@cliente.com", viajeTaxista2.getCorreoCliente());
+    }
+    /**
+     * Testea que el taxista acepte el viaje y se le avise al cliente
+     */
+    @Test
+    @Transactional
+    public void aceptarViaje() throws Exception {
+        // Arrange: que el cliente se suscriba a esperar taxista
+        StompSession stompSessionCliente = obtenerSesionWS(authHeaderCliente);
+        stompSessionCliente.subscribe("/user/queue/esperar-taxista", new ViajeControladorIntegrationTest.CreateStringStompFrameHandlerTaxistaAsignado());
+        Thread.sleep(1000);
+
+        // Act: Que el taxista responda afirmativo al viaje
+        mockMvc.perform(post("/viajes/aceptar-rechazar?respuesta=true")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\n" +
+                            "\t\"correoCliente\": \"cliente@cliente.com\",\n" +
+                            "\t\"origen\": \"9.963111,-84.054929\",\n" +
+                            "\t\"destino\": \"9.963111,-84.054929\",\n" +
+                            "\t\"tipo\": \"sedan\",\n" +
+                            "\t\"datafono\": true,\n" +
+                            "\t\"taxistasQueRechazaron\": []" +
+                        "}")
+                .headers(authHeaderTaxista))
+            .andExpect(content().string("Viaje comienza"));
+
+        // Assert: Que al cliente le haya llegado la info del taxista1
+        DatosTaxistaAsigadoEntidad notificacionTaxista = completableFutureTaxistaAsignado.get(10, SECONDS);
+        assertEquals("taxista1@taxista.com", notificacionTaxista.getCorreoTaxista());
     }
 
     /**
@@ -301,12 +301,12 @@ public class ViajeControladorIntegrationTest {
     /**
      * Test de obtener viajes
      */
-    @Test
+    /*@Test
     public void testobtenerViajes() throws Exception {
         List<ViajeEntidadTemporal> viajesRetorno = viajesControlador.obtenerViajes();
         assertNotNull(viajesRetorno);
         Assert.assertEquals(viajesRetorno.size(), 2);
-    }
+    }*/
 
     /**
      * Metodo para obtener un usuario para las pruebas
@@ -340,35 +340,108 @@ public class ViajeControladorIntegrationTest {
      * @since 30-05-2019
      */
     @Test
-    public void finalizarViaje(){
-        ViajeEntidadPK pk = new ViajeEntidadPK("AAA111", "2019-05-30 14:28:00");
-        try{
-            viajesRepositorio.deleteById(pk);
-        }catch(Exception e){}
-        finally{
-            viajeServicio.crear(pk.getPkPlacaTaxi(), pk.getPkFechaInicio(), "cliente@cliente.com", "origen", "taxista1@taxista.com");
+    @Transactional
+    public void finalizarViaje() throws Exception{
+        String placa = "AAA111";
+        String fechaInicio = "2019-05-30 14:28:00";
 
-            try{
-                mockMvc.perform(
-                        put("/viajes/finalizar")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(
-                                        "{" +
-                                                "\"placa\": \"AAA111\"," +
-                                                "\"fechaInicio\": \"2019-05-30 14:28:00\"," +
-                                                "\"fechaFin\": \"2019-05-30 15:30:00\"" +
-                                                "}"
-                                )
-                )
-                        .andExpect(status().isOk());
-            }catch(Exception e){
-                fail();
-            }
+        viajesRepositorio.eliminarViaje(placa, fechaInicio);
 
-            ViajeEntidad insertado = viajesRepositorio.encontrarViaje(pk.getPkPlacaTaxi(), pk.getPkFechaInicio());
+        viajeServicio.crear(placa, fechaInicio, "cliente@cliente.com", "origen","destino","taxista1@taxista.com");
 
-            Assert.assertEquals(insertado.getFechaFin(), "2019-05-30 15:30:00");
-        }
+        mockMvc.perform(
+                put("/viajes/finalizar")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(
+                                "{" +
+                                        "\"placa\": \"" + placa + "\"," +
+                                        "\"fechaInicio\": \"" + fechaInicio + "\"," +
+                                        "\"fechaFin\": \"2019-05-30 15:30:00\"" +
+                                        "}"
+                        )
+        )
+                .andExpect(status().isOk());
+
+        ViajeEntidad insertado = viajesRepositorio.encontrarViaje(placa, fechaInicio);
+
+        Assert.assertEquals(insertado.getFechaFin(), "2019-05-30 15:30:00");
+
     }
 
+    /**
+     * Prueba para el endpoint asignar estrellas a un viaje
+     *
+     * @author Marco Venegas (B67697)
+     * @since 22-06-2019
+     */
+    @Test
+    @Transactional
+    public void asignarEstrellasViaje() throws Exception{
+        String placa = "AAA111";
+        String fechaInicio = "2019-05-30 14:28:00";
+        String fechaFin = "2019-05-30 15:30:00";
+
+        viajesRepositorio.eliminarViaje(placa, fechaInicio);
+
+        viajeServicio.crear(placa, fechaInicio, "cliente@cliente.com", "origen", "destino","taxista1@taxista.com");
+        viajeServicio.finalizar(placa, fechaInicio, fechaFin);
+
+        mockMvc.perform(
+                put("/viajes/asignarEstrellas")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(
+                                "{" +
+                                        "\"placa\": \"" + placa + "\"," +
+                                        "\"fechaInicio\": \"" + fechaInicio + "\"," +
+                                        "\"estrellas\": 5" +
+                                        "}"
+                        )
+        )
+                .andExpect(status().isOk());
+
+        ViajeEntidad insertado = viajesRepositorio.encontrarViaje(placa, fechaInicio);
+
+        Assert.assertEquals(insertado.getEstrellas(), new Integer(5));
+
+    }
+
+
+    //-------------------------------------------------------------------------
+    /**
+     * Prueba para el endpoint guardar monto
+     *
+     * @author Joseph Rementería (b55824)
+     * @since 23.-06-2019
+     */
+    @Test
+    public void guardarMonto() {
+        String placa = "AAA111";
+        String fechaInicio = "2019-05-30 14:28:00";
+        String fechaFin = "2019-05-30 15:30:00";
+
+        viajesRepositorio.eliminarViaje(placa, fechaInicio);
+
+        viajeServicio.crear(placa, fechaInicio, "cliente@cliente.com", "origen", "destino","taxista1@taxista.com");
+        viajeServicio.finalizar(placa, fechaInicio, fechaFin);
+        viajeServicio.asignarEstrellas(placa, fechaInicio, 5);
+
+        //---------------------------------------------------------------------
+        try{
+            mockMvc.perform(
+                put("/viajes/costoViaje/5000")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(
+                    "{" +
+                            "\"pkPlacaTaxi\": \"" + placa + "\"," +
+                            "\"pkFechaInicio\": \"" + fechaInicio + "\"" +
+                    "}"
+                )
+            )
+            .andExpect(status().isOk());
+        } catch (Exception e) {
+            fail();
+        }
+        //---------------------------------------------------------------------
+    }
+    //-------------------------------------------------------------------------
 }

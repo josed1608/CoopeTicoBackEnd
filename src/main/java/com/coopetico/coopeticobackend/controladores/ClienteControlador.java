@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.http.ResponseEntity.ok;
+import java.security.Principal;
+
 
 /**
  * Controlador para la entidad Cliente
@@ -59,5 +61,19 @@ public class ClienteControlador {
         } catch (Exception e) {
             return "Not found";
         }
+    }
+
+    /**
+     * Modifica un cliente existente
+     *
+     * @param usuarioNuevo Entidad del usuario con la información actualizada
+     * @return ok si se actualiza el usuario correctamente
+     * @author Valeria Zamora
+     */
+    @PostMapping("/modificarUsuario}")
+    public ResponseEntity modificarCliente(@RequestBody UsuarioEntidad usuarioNuevo, Principal principal) {
+        this.usuarioServicio.modificarUsuario(usuarioNuevo, principal.getName());
+        this.clienteServicio.modificarCliente(usuarioNuevo, principal.getName());
+        return ok("Cliente modificado");
     }
 }

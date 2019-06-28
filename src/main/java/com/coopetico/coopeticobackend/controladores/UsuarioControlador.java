@@ -189,7 +189,14 @@ public class UsuarioControlador {
     @GetMapping()
     public List<UsuarioTemporal> obtenerUsuarios(){
         List<UsuarioEntidad> usuarios = usuarioServicio.obtenerUsuarios();
-        return usuarioTemporal.getListaUsuarioTemporal(usuarios);
+        List<UsuarioTemporal> usuariosTemporales = usuarioTemporal.getListaUsuarioTemporal(usuarios);
+        List<UsuarioTemporal> usuariosRetorno = new ArrayList<>();
+        for(UsuarioTemporal usuario: usuariosTemporales) {
+            if(usuario.getValid() == true && !usuario.getIdGrupo().equals("Taxista")) {
+                usuariosRetorno.add(usuario);
+            }
+        }
+        return usuariosRetorno;
     }
 
     /**
@@ -309,6 +316,7 @@ public class UsuarioControlador {
             usuarioEntidad.setNombre(usuario.getNombre());
             usuarioEntidad.setTelefono(usuario.getTelefono());
             usuarioEntidad.setFoto(usuario.getFoto());
+            usuarioEntidad.setValid(usuario.getValid());
 
             temporal = usuarioServicio.crearUsuario(usuarioEntidad);
         }catch (DataAccessException e){

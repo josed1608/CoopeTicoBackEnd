@@ -143,10 +143,10 @@ public class UbicacionTaxiControladorUnitTest {
     public static List<TaxiEntidad> getListaTaxisEntidad(){
         List<TaxiEntidad> taxis = new ArrayList<>();
         Date date = new Date();
-        taxis.add(new TaxiEntidad("AAA111", true, "11112222", "A", "Auto", new Timestamp(date.getTime()), new Timestamp(date.getTime()), new Timestamp(date.getTime()),null,"foto.jpg", true,"correo@correo.com",null));
-        taxis.add(new TaxiEntidad("AAA112", false, "33334444", "B", "Auto", new Timestamp(date.getTime()), new Timestamp(date.getTime()), new Timestamp(date.getTime()),null,"foto1.jpg", true,"correo@correo.com",null));
-        taxis.add(new TaxiEntidad("AAA113", true, "55556666", "C", "Camion", new Timestamp(date.getTime()), new Timestamp(date.getTime()), new Timestamp(date.getTime()),null,"foto2.jpg", true,"correo@correo.com",null));
-        taxis.add(new TaxiEntidad("AAA114", true, "55556666", "C", "Camion", new Timestamp(date.getTime()), new Timestamp(date.getTime()), new Timestamp(date.getTime()),null,"foto2.jpg", true,"correo@correo.com",null));
+        taxis.add(new TaxiEntidad("AAA111", true, "11112222", "A", "Auto", new Timestamp(date.getTime()), new Timestamp(date.getTime()), new Timestamp(date.getTime()),null,"foto.jpg", true,"correo@correo.com", true, "",null, null));
+        taxis.add(new TaxiEntidad("AAA112", false, "33334444", "B", "Auto", new Timestamp(date.getTime()), new Timestamp(date.getTime()), new Timestamp(date.getTime()),null,"foto1.jpg", true,"correo@correo.com", true, "",null, null));
+        taxis.add(new TaxiEntidad("AAA113", true, "55556666", "C", "Camion", new Timestamp(date.getTime()), new Timestamp(date.getTime()), new Timestamp(date.getTime()),null,"foto2.jpg", true,"correo@correo.com", true, "",null, null));
+        taxis.add(new TaxiEntidad("AAA114", true, "55556666", "C", "Camion", new Timestamp(date.getTime()), new Timestamp(date.getTime()), new Timestamp(date.getTime()),null,"foto2.jpg", true,"correo@correo.com", true, "",null, null));
         return taxis;
     }
 

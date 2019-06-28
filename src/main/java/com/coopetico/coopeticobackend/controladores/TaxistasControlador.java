@@ -1,12 +1,11 @@
 package com.coopetico.coopeticobackend.controladores;
 
 import com.coopetico.coopeticobackend.entidades.DatosTaxistaAsigadoEntidad;
-import com.coopetico.coopeticobackend.entidades.bd.TaxistaEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.*;
 import com.coopetico.coopeticobackend.entidades.TaxistaEntidadTemporal;
 import com.coopetico.coopeticobackend.excepciones.UsuarioNoEncontradoExcepcion;
 import com.coopetico.coopeticobackend.mail.EmailServiceImpl;
-import com.coopetico.coopeticobackend.servicios.TaxistasServicio;
-import com.coopetico.coopeticobackend.servicios.TokensRecuperacionContrasenaServicioImpl;
+import com.coopetico.coopeticobackend.servicios.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +13,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
+import static org.springframework.http.ResponseEntity.notFound;
 import static org.springframework.http.ResponseEntity.ok;
 
 /**
@@ -33,12 +35,14 @@ import static org.springframework.http.ResponseEntity.ok;
 @RestController
 @RequestMapping("/taxistas")
 public class TaxistasControlador {
-
     /**
      * Servicio de taxistas para consultar datos.
      */
     @Autowired
     private TaxistasServicio taxistaServicio;
+
+    @Autowired
+    private TaxisServicio taxisServicio;
 
     /**
      * Servicio generador de token para establecer la contrasenna.
@@ -227,5 +231,46 @@ public class TaxistasControlador {
     public ResponseEntity guardarTaxisArchivo(@RequestBody List<TaxistaEntidadTemporal> taxistas) {
         this.taxistaServicio.guardarLista(taxistas);
         return ok("");
+    }
+
+    /**
+     * Endpoint para asignarle un taxi actual a un taxista
+     * @param correoTaxista correo del taxista a asignarle un taxi
+     * @param placa placa del taxi
+     * @return retorna ok si se logró asignar, not found si el taxi o el taxista no existe y conflict si el taxi ya está siendo manejado
+     */
+    @PostMapping("{correoTaxista}/taxi-actual/{placa}")
+    public ResponseEntity guardarTaxiActual(@PathVariable String correoTaxista, @PathVariable String placa){
+        TaxistaEntidad taxista  = taxistaServicio.taxistaPorCorreo(correoTaxista).orElse(null);
+        TaxiEntidad taxi = taxisServicio.consultarPorId(placa);
+
+        if (taxista == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El taxista no existe");
+        }
+        else if (taxi == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El taxi no existe");
+        }
+        else {
+            taxistaServicio.actualizarTaxiActual(taxista, taxi);
+            return ok("Taxi actual actualizado para el taxista " + correoTaxista);
+        }
+    }
+
+    /**
+     * Desocupa el taxi que estaba manejando el taxista
+     * @param correoTaxista correo del taxista
+     * @return retorn ok si se desocupa o not found si el taxista no existe
+     */
+    @PostMapping("{correoTaxista}/desocupar-taxi")
+    public ResponseEntity desocuparTaxi(@PathVariable String correoTaxista){
+        TaxistaEntidad taxista  = taxistaServicio.taxistaPorCorreo(correoTaxista).orElse(null);
+        if (taxista == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El taxista no existe");
+        }
+        else{
+            String taxiAnterior = taxista.getTaxiActual() != null ? taxista.getTaxiActual().getPkPlaca() : "";
+            taxistaServicio.actualizarTaxiActual(taxista, null);
+            return ok("El taxista " + correoTaxista + " desocupo el taxi " + taxiAnterior);
+        }
     }
 }

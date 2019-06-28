@@ -94,7 +94,4 @@ public class UsuarioServicioIntegrationTest {
         usuarioEntidad.setTelefono("88887777");
         return usuarioEntidad;
     }
-
 }
-
-

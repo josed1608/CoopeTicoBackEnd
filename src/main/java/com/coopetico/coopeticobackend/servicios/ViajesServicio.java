@@ -9,6 +9,7 @@
 package com.coopetico.coopeticobackend.servicios;
 
 import com.coopetico.coopeticobackend.entidades.bd.ViajeEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.ViajeEntidadPK;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -58,6 +59,7 @@ public interface ViajesServicio {
         String fechaInicio,
         String correoUsuario,
         String origen,
+        String destino,
         String correoTaxista
     );
 
@@ -74,4 +76,41 @@ public interface ViajesServicio {
      * @return Int con el estado
      */
     int finalizar(String placa, String fechaInicio, String fechaFin);
+
+    /**
+     * Este es el método a usar para actualizar la estrellas de un viaje.
+     *
+     * @author Marco Venegas (B67697)
+     * @since 22-06-2019
+     *
+     * @param placa la placa del taxi asignado
+     * @param fechaInicio la fecha de inicio de un viaje en el formato "yyyy-mm-dd hh:mm:ss"
+     * @param estrellas la cantidad de estrellas con las que se calificó el viaje.
+     *
+     * @return Int con el estado  0 si se actualizó correctamente
+     *                           -1 si hubo un problema no manejado.
+     *                           -2 si no existe ese viaje en la bd.
+     *                           -3 No se pueden asignar estrellas a un viaje que no ha finalizado.
+     *                           -4 No se pueden asignar menos de 1 ni más de 5 estrellas.
+     *                           -5 si no se pudo guardar el cambio en la bd.
+     */
+     int asignarEstrellas(String placa, String fechaInicio, int estrellas);
+
+    //-------------------------------------------------------------------------
+    /**
+     * Actualliza el monto final del viaje
+     *
+     * @author Joseph Rementería (b55824)
+     * @since 11-06-2019
+     *
+     * @param llave llave primaria del viaje
+     * @param costo monto final
+     * @return   0 no hubo errores
+     *          -1 hubo un error no manejado
+     *          -2 no se lograron salvar los cambios
+     */
+    public int guardarMonto(ViajeEntidadPK llave, String costo);
+    //-------------------------------------------------------------------------
+
+    ViajeEntidad viajePorId(ViajeEntidadPK id);
 }

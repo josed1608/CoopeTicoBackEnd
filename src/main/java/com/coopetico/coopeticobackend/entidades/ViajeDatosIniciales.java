@@ -22,6 +22,7 @@ public class ViajeDatosIniciales {
     private String correoCliente;
     private String fechaInicio;
     private String origen;
+    private String destino;
     private String correoTaxista;
     //-------------------------------------------------------------------------
     // Constructor
@@ -40,12 +41,14 @@ public class ViajeDatosIniciales {
         String correoCliente,
         String fechaInicio,
         String origen,
+        String destino,
         String correoTaxista
     ) {
         this.placa = placa;
         this.correoCliente = correoCliente;
         this.fechaInicio = fechaInicio;
         this.origen = origen;
+        this.destino = destino;
         this.correoTaxista = correoTaxista;
     }
 
@@ -107,6 +110,20 @@ public class ViajeDatosIniciales {
      */
     public void setOrigen(String origenDestino) {
         this.origen = origenDestino;
+    }
+
+    /**
+     * @return the destino
+     */
+    public String getDestino() {
+        return destino;
+    }
+
+    /**
+     * @param destino the destino to set
+     */
+    public void setDestino(String destino) {
+        this.destino = destino;
     }
 
     /**

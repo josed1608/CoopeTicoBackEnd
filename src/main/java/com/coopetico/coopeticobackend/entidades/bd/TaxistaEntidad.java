@@ -19,11 +19,12 @@ public class TaxistaEntidad {
     private float estrellas;
     private String justificacion;
     private Timestamp vence_licencia;
+    private TaxiEntidad taxiActual;
     private UsuarioEntidad usuarioByPkCorreoUsuario;
     private Collection<ViajeEntidad> viajesByPkCorreoUsuario;
     private Collection<ConduceEntidad> taxisConducidos;
 
-    public TaxistaEntidad(String pkCorreoUsuario, String faltas, boolean estado, boolean hojaDelincuencia, float estrellas, String justificacion, Timestamp vence_licencia, UsuarioEntidad usuarioByPkCorreoUsuario, Collection<ViajeEntidad> viajesByPkCorreoUsuario, Collection<ConduceEntidad> taxisConducidos) {
+    public TaxistaEntidad(String pkCorreoUsuario, String faltas, boolean estado, boolean hojaDelincuencia, float estrellas, String justificacion, Timestamp vence_licencia, TaxiEntidad taxiActual, UsuarioEntidad usuarioByPkCorreoUsuario, Collection<ViajeEntidad> viajesByPkCorreoUsuario, Collection<ConduceEntidad> taxisConducidos) {
         this.pkCorreoUsuario = pkCorreoUsuario;
         this.faltas = faltas;
         this.estado = estado;
@@ -31,6 +32,7 @@ public class TaxistaEntidad {
         this.estrellas = estrellas;
         this.justificacion = justificacion;
         this.vence_licencia = vence_licencia;
+        this.taxiActual = taxiActual;
         this.usuarioByPkCorreoUsuario = usuarioByPkCorreoUsuario;
         this.viajesByPkCorreoUsuario = viajesByPkCorreoUsuario;
         this.taxisConducidos = taxisConducidos;
@@ -134,6 +136,16 @@ public class TaxistaEntidad {
 
     public void setUsuarioByPkCorreoUsuario(UsuarioEntidad usuarioByPkCorreoUsuario) {
         this.usuarioByPkCorreoUsuario = usuarioByPkCorreoUsuario;
+    }
+
+    @OneToOne
+    @JoinColumn(name = "taxi_actual", referencedColumnName = "pk_placa", nullable = false)
+    public TaxiEntidad getTaxiActual() {
+        return taxiActual;
+    }
+
+    public void setTaxiActual(TaxiEntidad taxiActual) {
+        this.taxiActual = taxiActual;
     }
 
     @OneToMany(mappedBy = "taxistaByCorreoTaxi")

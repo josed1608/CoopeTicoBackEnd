@@ -10,6 +10,7 @@ import com.coopetico.coopeticobackend.entidades.bd.ViajeEntidadPK;
 import com.coopetico.coopeticobackend.repositorios.ViajesRepositorio;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -20,22 +21,23 @@ import java.util.Optional;
 
 //-----------------------------------------------------------------------------
 // Definición de la clase.
-@Service
 /**
  * Esta es la implentación de la intefaz ./ViajesServicio.java
  *
  * @author Joseph Rementería (b55824)
  * @since 06-04-2019
  */
+@Service
 public class ViajesServicioImpl implements ViajesServicio {
     //-------------------------------------------------------------------------
     // Variables globales
-    @Autowired
     private ViajesRepositorio viajesRepositorio;
     private ClienteServicio clientesServicio;
     private TaxisServicio taxisServicio;
     private TaxistasServicioImpl taxistasServicio;
     private OperadoresServicio operadorServicio;
+    private final SimpMessagingTemplate template;
+
     //-------------------------------------------------------------------------
     // Métodos.
     /**
@@ -48,16 +50,19 @@ public class ViajesServicioImpl implements ViajesServicio {
      * @param txsSer Servicio de taxis.
      * @param txstSer Servicio de taxistas.
      */
+    @Autowired
     public ViajesServicioImpl(
         ViajesRepositorio vjsRep,
         ClienteServicio cntSer,
         TaxisServicio txsSer,
-        TaxistasServicioImpl txstSer
+        TaxistasServicioImpl txstSer,
+        SimpMessagingTemplate template
     ){
         this.viajesRepositorio = vjsRep;
-        this.clientesServicio = cntSer;
         this.taxisServicio = txsSer;
         this.taxistasServicio = txstSer;
+        this.clientesServicio = cntSer;
+        this.template = template;
     }
 
     /**
@@ -150,6 +155,7 @@ public class ViajesServicioImpl implements ViajesServicio {
         String fechaInicio,
         String correoUsuario,
         String origen,
+        String destino,
         String correoTaxista
     ) {
         int result = 0;
@@ -172,6 +178,7 @@ public class ViajesServicioImpl implements ViajesServicio {
                     consultarTaxistaPorId(correoTaxista)
             );
             viajeEnCreacion.setOrigen(origen);
+            viajeEnCreacion.setDestino(destino);
             //-----------------------------------------------------------------
             // Acá se referencia sea el cliente o el operador con el viaje.
             ClienteEntidad clienteCreador = this.clientesServicio
@@ -250,13 +257,106 @@ public class ViajesServicioImpl implements ViajesServicio {
             viajeAFinalizar.setFechaFin(fechaFin);//Timestamp.valueOf(fechaFin));
             try{
                 viajesRepositorio.save(viajeAFinalizar);
+                String correo = viajeAFinalizar.getClienteByPkCorreoCliente().getPkCorreoUsuario();
+                template.convertAndSend("/user/" + correo + "/queue/esperar-finalizacion", true);
             }catch(Exception e){
                 return -6;
             }
         }catch (Exception e) {
             return -1;
         }
+
         return 0;
     }
+
+    /**
+     * Este es el método a usar para actualizar la estrellas de un viaje.
+     *
+     * @author Marco Venegas (B67697)
+     * @since 22-06-2019
+     *
+     * @param placa la placa del taxi asignado
+     * @param fechaInicio la fecha de inicio de un viaje en el formato "yyyy-mm-dd hh:mm:ss"
+     * @param estrellas la cantidad de estrellas con las que se calificó el viaje.
+     *
+     * @return Int con el estado  0 si se actualizó correctamente
+     *                           -1 si hubo un problema no manejado.
+     *                           -2 si no existe ese viaje en la bd.
+     *                           -3 No se pueden asignar estrellas a un viaje que no ha finalizado.
+     *                           -4 No se pueden asignar menos de 1 ni más de 5 estrellas.
+     *                           -5 si no se pudo guardar el cambio en la bd.
+     */
+    public int asignarEstrellas(String placa, String fechaInicio, int estrellas){
+        try{
+            ViajeEntidad viajeACalificar = viajesRepositorio.encontrarViaje(placa, fechaInicio);
+            if(viajeACalificar == null){
+                return -2;
+            }
+            if(viajeACalificar.getFechaFin() == null){
+                return -3;
+            }
+            if (estrellas < 1 || estrellas > 5) {
+                return -4;
+            }
+
+            viajeACalificar.setEstrellas(estrellas);
+            try{
+                viajesRepositorio.save(viajeACalificar);
+            }catch(Exception e){
+                return -5;
+            }
+        }catch (Exception e) {
+            return -1;
+        }
+        return 0;
+    }
+
+    //-------------------------------------------------------------------------
+    /**
+     * Actualliza el monto final del viaje
+     *
+     * @author Joseph Rementería (b55824)
+     * @since 11-06-2019
+     *
+     * @param llave llave primaria del viaje
+     * @param costo monto final
+     * @return   0 no hubo errores
+     *          -1 hubo un error no manejado
+     *          -2 no se lograron salvar los cambios
+     */
+    public int guardarMonto(ViajeEntidadPK llave, String costo) {
+        //---------------------------------------------------------------------
+        // Variables auxiliares
+        int resultado = -1;
+        //-------  ------------------------------------------------------------
+        ViajeEntidad viaje = this.viajesRepositorio.encontrarViaje(
+            llave.getPkPlacaTaxi(),
+            llave.getPkFechaInicio()
+        );
+        //---------------------------------------------------------------------
+        if (viaje != null) {
+            //-----------------------------------------------------------------
+            viaje.setCosto(costo);
+            //-----------------------------------------------------------------
+            try{
+                this.viajesRepositorio.save(viaje);
+                resultado = 0;
+            } catch (Exception e) {
+                resultado = -2;
+            }
+            //-----------------------------------------------------------------
+        } else {
+            resultado = -2;
+        }
+        //---------------------------------------------------------------------
+        return resultado;
+        //---------------------------------------------------------------------
+    }
+
+    @Override
+    public ViajeEntidad viajePorId(ViajeEntidadPK id) {
+        return viajesRepositorio.findById(id).orElse(null);
+    }
+    //-------------------------------------------------------------------------
 }
 //-----------------------------------------------------------------------------

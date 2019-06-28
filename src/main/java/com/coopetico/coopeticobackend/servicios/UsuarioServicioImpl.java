@@ -4,6 +4,7 @@
 
 package com.coopetico.coopeticobackend.servicios;
 
+import com.coopetico.coopeticobackend.entidades.UsuarioTemporal;
 import com.coopetico.coopeticobackend.entidades.bd.GrupoEntidad;
 import com.coopetico.coopeticobackend.entidades.bd.PermisosGrupoEntidad;
 import com.coopetico.coopeticobackend.entidades.bd.UsuarioEntidad;
@@ -156,5 +157,21 @@ public class UsuarioServicioImpl implements UsuarioServicio{
         }
     }
 
-
+    @Override
+    public UsuarioEntidad modificarUsuario(UsuarioEntidad usuarioNuevo, String correo) throws UsuarioNoEncontradoExcepcion {
+        if (usuariosRepositorio.findById(correo).isPresent()) {
+            if (!usuarioNuevo.equals(usuarioPorCorreo(correo))) {
+                usuarioNuevo.setContrasena(encoder.encode(usuarioNuevo.getContrasena()));
+                if (correo == usuarioNuevo.getPkCorreo()) {
+                    return usuariosRepositorio.save(usuarioNuevo);
+                }
+                usuariosRepositorio.deleteById(correo);
+                return usuariosRepositorio.save(usuarioNuevo);
+            } else {
+                return usuarioNuevo;
+            }
+        } else {
+            throw new UsuarioNoEncontradoExcepcion("El usuario no existe.", HttpStatus.NOT_FOUND, System.currentTimeMillis());
+        }
+    }
 }

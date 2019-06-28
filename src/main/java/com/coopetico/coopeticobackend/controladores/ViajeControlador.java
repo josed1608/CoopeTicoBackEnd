@@ -5,6 +5,7 @@ import com.coopetico.coopeticobackend.entidades.DatosTaxistaAsigadoEntidad;
 import com.coopetico.coopeticobackend.entidades.ViajeComenzandoEntidad;
 import com.coopetico.coopeticobackend.entidades.ViajeEntidadTemporal;
 import com.coopetico.coopeticobackend.entidades.bd.UsuarioEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.ViajeEntidadPK;
 import com.coopetico.coopeticobackend.excepciones.UsuarioNoEncontradoExcepcion;
 import com.coopetico.coopeticobackend.servicios.*;
 import com.coopetico.coopeticobackend.entidades.bd.ViajeEntidad;
@@ -142,7 +143,7 @@ public class ViajeControlador {
      * @param datosViaje Datos del viaje que desea hacer el cliente
      * @return retorna ok si se pudo escoger al primer taxista y una excepción si no
      */
-    @GetMapping("/solicitar")
+    @PostMapping("/solicitar")
     public ResponseEntity solicitarViaje(@RequestBody ViajeComenzandoEntidad datosViaje) {
         List<Pair<String, LatLng>> taxistasDisponibles = ubicacionTaxistasServicio.obtenerTaxistasDisponibles(new LinkedList<>());
 
@@ -226,6 +227,7 @@ public class ViajeControlador {
             datosDelViaje.getFechaInicio(),
             datosDelViaje.getCorreoCliente(),
             datosDelViaje.getOrigen(),
+            datosDelViaje.getDestino(),
             datosDelViaje.getCorreoTaxista()
         );
         //---------------------------------------------------------------------
@@ -233,9 +235,10 @@ public class ViajeControlador {
         switch (respuestaRepo){
             case 0:
                 result = new ResponseEntity(
-                        "Se insetó el viaje",
+                        "Se insertó el viaje",
                         HttpStatus.OK
                 );
+                template.convertAndSend("/user/" + datosDelViaje.getCorreoCliente() + "/queue/esperar-comienzo", datosDelViaje);
                 break;
             case -1:
                 result = new ResponseEntity(
@@ -275,12 +278,16 @@ public class ViajeControlador {
      *
      * @param   datosDelViaje Placa, fecha de inicio y fecha de finalizacion del viaje.
      * @return  Ok si no hubo problema,
-     *          Not found si el usuario que crea el viaje no existe en la DB
-     *          Server error, si el error no ha sido identificado.
+     *          Not found si el viaje no existe en la BD
+     *          Conflict, si se intenta finalizar un viaje que ya finalizó.
+     *          Forbidden si la fecha de finalización tiene un formato inválido.
+     *          Server error, si el error no ha sido identificado o si no se pudo almacenar en la BD.
      */
     @PutMapping("/finalizar")
     public ResponseEntity finalizarViaje(@RequestBody ViajeTmpEntidad datosDelViaje) {
+
         ResponseEntity resultado = null;
+
         int respuestaServicio = viajesServicio.finalizar(
                 datosDelViaje.getPlaca(),
                 datosDelViaje.getFechaInicio(),
@@ -318,5 +325,108 @@ public class ViajeControlador {
         }
         return resultado;
     }
+
+    /**
+     * Actualiza el campo de estrellas de la tupla del viaje proporcionado.
+     *
+     * @author Marco Venegas (B67697)
+     * @since 22-06-2019
+     *
+     * @param   datosDelViaje Placa, fecha de inicio y estrellas para el viaje.
+     * @return  Ok si no hubo problema,
+     *          Not found si el viaje no existe en la BD
+     *          Conflict, si se intenta asignar estrellas a un viaje que no ha finalizado.
+     *          Forbidden si la cantidad de estrellas es inválida.
+     *          Server error, si el error no ha sido identificado o si no se pudo almacenar en la BD.
+     */
+    @PutMapping("/asignarEstrellas")
+    public ResponseEntity asignarEstrellasViaje(@RequestBody ViajeTmpEntidad datosDelViaje) {
+        ResponseEntity resultado = null;
+        int respuestaServicio = viajesServicio.asignarEstrellas(
+                datosDelViaje.getPlaca(),
+                datosDelViaje.getFechaInicio(),
+                datosDelViaje.getEstrellas()
+        );
+
+        switch (respuestaServicio){
+            case 0: {
+                resultado = new ResponseEntity("Se asignaron las estrellas para el viaje exitosamente.", HttpStatus.OK); //
+            }break;
+
+            case -1: {
+                resultado = new ResponseEntity("Hubo un error no identificado.", HttpStatus.INTERNAL_SERVER_ERROR);
+            }break;
+
+            case -2: {
+                resultado = new ResponseEntity("No existe este viaje en la base de datos.", HttpStatus.NOT_FOUND);//
+            }break;
+
+            case -3: {
+                resultado = new ResponseEntity("No se pudo asignar estrellas a este viaje puesto que no ha finalizado.", HttpStatus.CONFLICT);//
+            }break;
+
+            case -4: {
+                resultado = new ResponseEntity("No se pueden asignar menos de 1 ni más de 5 estrellas.", HttpStatus.FORBIDDEN);
+            }break;
+
+            case -5: {
+                resultado = new ResponseEntity("No se pudo asignar estrellas al viaje por un problema con la base de datos.", HttpStatus.INTERNAL_SERVER_ERROR);
+            }break;
+        }
+        return resultado;
+    }
+
+    //-------------------------------------------------------------------------
+    /**
+     * Guarda el monto final en la tupla del viaje
+     *
+     * @author Joseph Rementería (b55824)
+     * @since 11-06-2019
+     *
+     * @param   llave llave primaria del viaje
+     * @param   costo final
+     * @return  TODO:
+     */
+    @PutMapping("/costoViaje/{costo}")
+    public ResponseEntity guardarCosto(@PathVariable String costo,@RequestBody ViajeEntidadPK llave) {
+        //---------------------------------------------------------------------
+        ResponseEntity resultado = null;
+        //---------------------------------------------------------------------
+        int respuestaServicio = viajesServicio.guardarMonto(
+            llave,
+            costo
+        );
+        //---------------------------------------------------------------------
+        switch (respuestaServicio){
+            case 0:
+                //-------------------------------------------------------------
+                resultado = new ResponseEntity(
+                    "Se actualizó el campo monto para el viaje",
+                    HttpStatus.OK
+                );
+                //-------------------------------------------------------------
+                break;
+            case -1:
+                //-------------------------------------------------------------
+                resultado = new ResponseEntity(
+                    "Hubo un error no manejado",
+                    HttpStatus.INTERNAL_SERVER_ERROR
+                );
+                //-------------------------------------------------------------
+                break;
+            case -2:
+                //-------------------------------------------------------------
+                resultado = new ResponseEntity(
+                    "No se encontró el viaje",
+                    HttpStatus.NOT_FOUND
+                );
+                //-------------------------------------------------------------
+                break;
+        }
+        //---------------------------------------------------------------------
+        return resultado;
+        //---------------------------------------------------------------------
+    }
+    //-------------------------------------------------------------------------
 }
 //-----------------------------------------------------------------------------

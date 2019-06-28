@@ -1,5 +1,6 @@
 package com.coopetico.coopeticobackend.servicios;
 
+import com.coopetico.coopeticobackend.entidades.UsuarioTemporal;
 import com.coopetico.coopeticobackend.entidades.bd.GrupoEntidad;
 import com.coopetico.coopeticobackend.entidades.bd.UsuarioEntidad;
 import org.springframework.data.domain.Page;
@@ -86,4 +87,12 @@ public interface UsuarioServicio {
      * @author Kevin Jimenez
      */
     void cambiarEstado(String correo, Boolean estadoNuevo);
+
+    /**
+     * Metodo para modificar un usuario en la BD
+     * @param usuarioEntidad Usuario a modificar
+     * @return Usuario modificado
+     * @author Valeria Zamora
+     */
+    UsuarioEntidad modificarUsuario(UsuarioEntidad usuarioEntidad, String correo);
 }
