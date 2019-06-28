@@ -22,6 +22,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 @SpringBootTest
@@ -37,7 +38,7 @@ public class UsuarioServicioIntegrationTest {
     @Test
     public void testListarUsuarios(){
         List<UsuarioEntidad> listaUsuarios = servicio.obtenerUsuarios();
-        Assert.assertEquals(7, listaUsuarios.size());
+        Assert.assertEquals(8, listaUsuarios.size());
     }
 
     /**
@@ -48,6 +49,7 @@ public class UsuarioServicioIntegrationTest {
         UsuarioEntidad usuarioNuevo = getUsuarioDefecto();
         UsuarioEntidad usuarioAgregado = servicio.crearUsuario(usuarioNuevo);
         assertNotNull(usuarioAgregado);
+        assertEquals(usuarioAgregado.getPkCorreo(), getUsuarioDefecto().getPkCorreo());
         servicio.eliminar(getUsuarioDefecto().getPkCorreo());
     }
 
@@ -56,11 +58,10 @@ public class UsuarioServicioIntegrationTest {
      */
     @Test
     public void testUsuarioPorCorreo(){
-        servicio.crearUsuario(getUsuarioDefecto());
-        Optional<UsuarioEntidad> usuario = servicio.usuarioPorCorreo(getUsuarioDefecto().getPkCorreo());
+        String correo = "gerente@gerente.com";
+        Optional<UsuarioEntidad> usuario = servicio.usuarioPorCorreo(correo);
         assertNotNull(usuario.get());
-        servicio.eliminar(getUsuarioDefecto().getPkCorreo());
-        testListarUsuarios();
+        assertEquals(usuario.get().getPkCorreo(), correo);
     }
 
     /**
@@ -84,7 +85,7 @@ public class UsuarioServicioIntegrationTest {
         UsuarioEntidad usuarioEntidad = new UsuarioEntidad();
         usuarioEntidad.setFoto("");
         usuarioEntidad.setContrasena("aguacatico");
-        usuarioEntidad.setPkCorreo("test@test.com");
+        usuarioEntidad.setPkCorreo("gerente@gerente1.com");
         usuarioEntidad.setNombre("testNombre");
         usuarioEntidad.setApellido1("test1");
         usuarioEntidad.setApellido2("test2");
@@ -93,4 +94,7 @@ public class UsuarioServicioIntegrationTest {
         usuarioEntidad.setTelefono("88887777");
         return usuarioEntidad;
     }
+
 }
+
+
