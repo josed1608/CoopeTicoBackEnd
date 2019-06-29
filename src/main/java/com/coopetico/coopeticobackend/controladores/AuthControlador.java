@@ -26,6 +26,7 @@ import static org.springframework.http.ResponseEntity.ok;
  * Controlador para los request relacionados con autenticación
  * @author      Jose David Vargas Artavia
  */
+@CrossOrigin
 @RestController
 @RequestMapping("/auth")
 public class AuthControlador {
@@ -59,7 +60,6 @@ public class AuthControlador {
      * @param data Modelo del request de autenticación. Espera los atributos username y password
      * @return el JWT en caso de un sign in exitoso
      */
-    @CrossOrigin
     @PostMapping("/signin")
     public ResponseEntity signin(@RequestBody AuthenticationRequest data) {
         try {
@@ -89,7 +89,6 @@ public class AuthControlador {
      * @param token string del token que se pasa en el body
      * @return devuelve true si el token es válido o una excepción si el token es inválido
      */
-    @CrossOrigin
     @PostMapping("/validar-token")
     public boolean validarToken(@RequestBody String token) {
         try {

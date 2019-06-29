@@ -22,6 +22,7 @@ import java.util.List;
 
 import static org.springframework.http.ResponseEntity.ok;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/permisosGrupo")
 public class PermisosGrupoControlador {
@@ -45,7 +46,6 @@ public class PermisosGrupoControlador {
      * @return Lista con los permisos en objetos de PermisosGrupoEntidad
      */
     @GetMapping("/{id}")
-    @CrossOrigin(origins = "http://localhost:4200")
     public List<PermisoEntidad> getPermisosGrupo(@PathVariable String id){
         GrupoEntidad grupoEntidad = grupoServicio.getGrupoPorPK(id);
         List<PermisoEntidad> listaPermisosGrupo = permisosGrupoServicio.getPermisosGrupo(grupoEntidad);
@@ -58,7 +58,6 @@ public class PermisosGrupoControlador {
      * @return Lista con los permisos en objetos de PermisosGrupoEntidad
      */
     @GetMapping("/-{id}")
-    @CrossOrigin(origins = "http://localhost:4200")
     public List<PermisoEntidad> getNoPermisosGrupo(@PathVariable String id){
         GrupoEntidad grupoEntidad = grupoServicio.getGrupoPorPK(id);
         List<PermisoEntidad> listaPermisos = permisosServicio.getPermisos();
@@ -76,7 +75,6 @@ public class PermisosGrupoControlador {
      * @return ok Si las llaves son guardadas correctamente
      */
     @PostMapping()
-    @CrossOrigin(origins = "http://localhost:4200")
     public ResponseEntity guardarPermisoGrupo(@RequestBody List<PermisosGrupoEntidadPK> pG) {
 
         for(PermisosGrupoEntidadPK pgEntrante: pG) {
@@ -109,7 +107,6 @@ public class PermisosGrupoControlador {
      * @return ok Si la llave es eliminada correctamente
      */
     @DeleteMapping("/{idPermiso}/{idGrupo}")
-    @CrossOrigin(origins = "http://localhost:4200")
     public ResponseEntity eliminarPermisoGrupo(@PathVariable("idPermiso")int idPermiso, @PathVariable("idGrupo") String idGrupo) {
 
         PermisosGrupoEntidadPK entidad = new PermisosGrupoEntidadPK(idPermiso, idGrupo);

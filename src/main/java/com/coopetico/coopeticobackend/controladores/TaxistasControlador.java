@@ -31,7 +31,7 @@ import static org.springframework.http.ResponseEntity.ok;
  @version    1.0.
  */
 
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin
 @RestController
 @RequestMapping("/taxistas")
 public class TaxistasControlador {
