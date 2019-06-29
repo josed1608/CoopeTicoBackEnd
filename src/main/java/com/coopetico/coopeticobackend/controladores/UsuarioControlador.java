@@ -45,7 +45,7 @@ import com.coopetico.coopeticobackend.excepciones.UsuarioNoEncontradoExcepcion;
  @version:   3.0
  */
 
-@CrossOrigin( origins = {"http://localhost:4200"})
+@CrossOrigin
 @RestController
 @RequestMapping(path="/usuarios")
 @Validated

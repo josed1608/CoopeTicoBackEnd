@@ -25,7 +25,7 @@ import static org.springframework.http.ResponseEntity.ok;
  * @autor   Jorge Araya González
  */
 
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin
 @RestController
 @RequestMapping("/taxis")
 public class TaxisControlador {

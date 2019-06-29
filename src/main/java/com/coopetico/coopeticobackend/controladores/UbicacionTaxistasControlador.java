@@ -19,6 +19,7 @@ import static org.springframework.http.ResponseEntity.ok;
  @since       13-05-2019
  @version     1.0
  */
+@CrossOrigin
 @RestController
 @RequestMapping(path = "/ubicaciones")
 public class UbicacionTaxistasControlador {

@@ -15,7 +15,7 @@ import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-@CrossOrigin( origins = {"http://localhost:4200"})
+@CrossOrigin
 @RestController
 @RequestMapping(path="/upload")
 @Validated

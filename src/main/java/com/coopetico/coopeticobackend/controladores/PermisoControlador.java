@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+@CrossOrigin
 @RestController
 @RequestMapping(path = "/permisos")
 public class PermisoControlador {
@@ -33,7 +34,6 @@ public class PermisoControlador {
      * @return Lista de permisos con el ID y la Descripcion
      */
     @GetMapping()
-    @CrossOrigin(origins = "http://localhost:4200")
     public List<PermisoEntidad> getPermisos(){
         List<PermisoEntidad> lista = permisos.getPermisos();
         return lista;

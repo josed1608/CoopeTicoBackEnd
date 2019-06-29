@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
 
 import static org.springframework.http.ResponseEntity.ok;
 //-----------------------------------------------------------------------------
-@CrossOrigin( origins = {"http://localhost:4200"})
+@CrossOrigin
 @RestController
 @Validated
 @Controller

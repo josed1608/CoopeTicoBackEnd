@@ -27,7 +27,7 @@ import java.util.logging.Logger;
  @version:   1.0
  */
 
-@CrossOrigin( origins = {"http://localhost:4200"})
+@CrossOrigin
 @RestController
 @RequestMapping(path="/utilidades")
 @Validated
