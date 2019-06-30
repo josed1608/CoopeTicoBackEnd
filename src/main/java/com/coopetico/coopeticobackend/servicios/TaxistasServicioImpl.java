@@ -319,7 +319,15 @@ public class TaxistasServicioImpl implements  TaxistasServicio {
                 + " "
                 + taxistaUsuarioDatos.getApellido2(),
             taxistaUsuarioDatos.getFoto(),
-            taxistaPorCorreo.getEstrellas()
+            taxistaPorCorreo.getEstrellas(),
+            taxistaUsuarioDatos.getTelefono(),
+            taxistaUsuarioDatos.getFoto(),
+            //-----------------------------------------------------------------
+            //TODO: get the placa, this will be solve in the third sprint
+            "AAA111",
+            "Modelo eventual",
+            "Foto Eventual"
+            //-----------------------------------------------------------------
         );
         //---------------------------------------------------------------------
     }
