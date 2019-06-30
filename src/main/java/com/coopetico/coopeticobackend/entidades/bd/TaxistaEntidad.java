@@ -20,11 +20,12 @@ public class TaxistaEntidad {
     private String justificacion;
     private Timestamp vence_licencia;
     private TaxiEntidad taxiActual;
+    private TaxiEntidad taxiPropiedad;
     private UsuarioEntidad usuarioByPkCorreoUsuario;
     private Collection<ViajeEntidad> viajesByPkCorreoUsuario;
     private Collection<ConduceEntidad> taxisConducidos;
 
-    public TaxistaEntidad(String pkCorreoUsuario, String faltas, boolean estado, boolean hojaDelincuencia, float estrellas, String justificacion, Timestamp vence_licencia, TaxiEntidad taxiActual, UsuarioEntidad usuarioByPkCorreoUsuario, Collection<ViajeEntidad> viajesByPkCorreoUsuario, Collection<ConduceEntidad> taxisConducidos) {
+    public TaxistaEntidad(String pkCorreoUsuario, String faltas, boolean estado, boolean hojaDelincuencia, float estrellas, String justificacion, Timestamp vence_licencia, TaxiEntidad taxiActual, TaxiEntidad taxiPropiedad, UsuarioEntidad usuarioByPkCorreoUsuario, Collection<ViajeEntidad> viajesByPkCorreoUsuario, Collection<ConduceEntidad> taxisConducidos) {
         this.pkCorreoUsuario = pkCorreoUsuario;
         this.faltas = faltas;
         this.estado = estado;
@@ -33,6 +34,7 @@ public class TaxistaEntidad {
         this.justificacion = justificacion;
         this.vence_licencia = vence_licencia;
         this.taxiActual = taxiActual;
+        this.taxiPropiedad = taxiPropiedad;
         this.usuarioByPkCorreoUsuario = usuarioByPkCorreoUsuario;
         this.viajesByPkCorreoUsuario = viajesByPkCorreoUsuario;
         this.taxisConducidos = taxisConducidos;
@@ -116,16 +118,12 @@ public class TaxistaEntidad {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TaxistaEntidad that = (TaxistaEntidad) o;
-        return estado == that.estado &&
-                hojaDelincuencia == that.hojaDelincuencia &&
-                estrellas == that.estrellas &&
-                Objects.equals(pkCorreoUsuario, that.pkCorreoUsuario) &&
-                Objects.equals(faltas, that.faltas);
+        return Objects.equals(pkCorreoUsuario, that.pkCorreoUsuario);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(pkCorreoUsuario, faltas, estado, hojaDelincuencia, estrellas);
+        return Objects.hash(pkCorreoUsuario);
     }
 
     @OneToOne
@@ -138,14 +136,23 @@ public class TaxistaEntidad {
         this.usuarioByPkCorreoUsuario = usuarioByPkCorreoUsuario;
     }
 
-    @OneToOne
-    @JoinColumn(name = "taxi_actual", referencedColumnName = "pk_placa", nullable = false)
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "taxi_actual")
     public TaxiEntidad getTaxiActual() {
         return taxiActual;
     }
 
     public void setTaxiActual(TaxiEntidad taxiActual) {
         this.taxiActual = taxiActual;
+    }
+
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "duennoTaxi")
+    public TaxiEntidad getTaxiPropiedad() {
+        return taxiPropiedad;
+    }
+
+    public void setTaxiPropiedad(TaxiEntidad taxiPropiedad) {
+        this.taxiPropiedad = taxiPropiedad;
     }
 
     @OneToMany(mappedBy = "taxistaByCorreoTaxi")

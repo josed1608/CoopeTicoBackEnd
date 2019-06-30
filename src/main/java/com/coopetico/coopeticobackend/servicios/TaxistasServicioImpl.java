@@ -127,7 +127,6 @@ public class TaxistasServicioImpl implements  TaxistasServicio {
 
     @Override
     public Optional<TaxistaEntidad> taxistaPorCorreo(String correo) {
-        this.taxistaRepositorio.findAll();
         return taxistaRepositorio.findById(correo);
     }
 

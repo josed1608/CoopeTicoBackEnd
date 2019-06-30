@@ -21,29 +21,29 @@ public class TaxiEntidad {
     private String tipo;
     private String foto;
     private Boolean valido;
-    private String correoTaxista;
     private Timestamp fechaVenRtv;
     private Timestamp fechaVenMarchamo;
     private Timestamp fechaVenSeguro;
     private boolean estado;
     private String justificacion;
     private TaxistaEntidad taxistaActual;
+    private TaxistaEntidad duennoTaxi;
     @JsonIgnore
     private Collection<ViajeEntidad> viajesByPkPlaca;
     private Collection<ConduceEntidad> taxistasQueMeConducen;
 
     public TaxiEntidad(String pkPlaca, Boolean datafono, String telefono, String clase, String tipo,
                        Timestamp fechaVenRtv, Timestamp fechaVenMarchamo, Timestamp fechaVenSeguro,
-                       Collection<ViajeEntidad> viajesByPkPlaca, String foto, Boolean valido, String correoTaxista,
+                       TaxistaEntidad duennoTaxi, Collection<ViajeEntidad> viajesByPkPlaca, String foto, Boolean valido,
                        boolean estado, String justificacion, TaxistaEntidad taxistaActual, Collection<ConduceEntidad> taxistasQueMeConducen) {
         this.pkPlaca = pkPlaca;
         this.datafono = datafono;
         this.telefono = telefono;
         this.clase = clase;
         this.tipo = tipo;
+        this.duennoTaxi = duennoTaxi;
         this.foto = foto;
         this.valido = valido;
-        this.correoTaxista = correoTaxista;
         this.fechaVenRtv = fechaVenRtv;
         this.fechaVenMarchamo = fechaVenMarchamo;
         this.fechaVenSeguro = fechaVenSeguro;
@@ -54,19 +54,17 @@ public class TaxiEntidad {
         this.taxistasQueMeConducen = taxistasQueMeConducen;
     }
 
-    public TaxiEntidad(String pkPlaca, Boolean datafono, String telefono, String clase, String tipo, Date fechaVenRtv,
-                       Date fechaVenMarchamo, Date fechaVenSeguro, boolean estado, String justificacion, Boolean valido, String foto, String correoTaxista) {
+    public TaxiEntidad(String pkPlaca, Boolean datafono, String telefono, String clase, String tipo, Date fechaVenRtv, Date fechaVenMarchamo, Date fechaVenSeguro, boolean estado, String justificacion, Boolean valido, String foto) {
         this.pkPlaca = pkPlaca;
         this.datafono = datafono;
         this.telefono = telefono;
         this.clase = clase;
         this.tipo = tipo;
-        this.fechaVenRtv =  new Timestamp(fechaVenRtv.getTime());
+        this.foto = foto;
+        this.valido = valido;
+        this.fechaVenRtv = new Timestamp(fechaVenRtv.getTime());
         this.fechaVenMarchamo = new Timestamp(fechaVenMarchamo.getTime());
         this.fechaVenSeguro = new Timestamp(fechaVenSeguro.getTime());
-        this.valido = valido;
-        this.foto = foto;
-        this.correoTaxista = correoTaxista;
         this.estado = estado;
         this.justificacion = justificacion;
     }
@@ -159,14 +157,14 @@ public class TaxiEntidad {
         this.justificacion = justificacion;
     }
 
-    @Basic
-    @Column(name = "correo_taxista", nullable = false)
-    public String getCorreoTaxista() {
-        return correoTaxista;
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "correo_taxista")
+    public TaxistaEntidad getDuennoTaxi() {
+        return duennoTaxi;
     }
 
-    public void setCorreoTaxista(String correoTaxista) {
-        this.correoTaxista = correoTaxista;
+    public void setDuennoTaxi(TaxistaEntidad duennoTaxi) {
+        this.duennoTaxi = duennoTaxi;
     }
 
     @Basic
@@ -239,7 +237,7 @@ public class TaxiEntidad {
         this.taxistasQueMeConducen = taxistasQueMeConducen;
     }
 
-    @OneToOne(mappedBy = "taxiActual")
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "taxiActual")
     public TaxistaEntidad getTaxistaActual() {
         return taxistaActual;
     }

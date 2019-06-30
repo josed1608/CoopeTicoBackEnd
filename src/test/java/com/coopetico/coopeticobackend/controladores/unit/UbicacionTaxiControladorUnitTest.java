@@ -1,7 +1,6 @@
 package com.coopetico.coopeticobackend.controladores.unit;
 
 import com.coopetico.coopeticobackend.controladores.UbicacionTaxiControlador;
-import com.coopetico.coopeticobackend.controladores.UbicacionTaxistasControlador;
 import com.coopetico.coopeticobackend.entidades.TaxiTemporal;
 import com.coopetico.coopeticobackend.entidades.bd.TaxiEntidad;
 import com.coopetico.coopeticobackend.servicios.TaxisServicio;
@@ -14,7 +13,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -143,10 +141,10 @@ public class UbicacionTaxiControladorUnitTest {
     public static List<TaxiEntidad> getListaTaxisEntidad(){
         List<TaxiEntidad> taxis = new ArrayList<>();
         Date date = new Date();
-        taxis.add(new TaxiEntidad("AAA111", true, "11112222", "A", "Auto", new Timestamp(date.getTime()), new Timestamp(date.getTime()), new Timestamp(date.getTime()),null,"foto.jpg", true,"correo@correo.com", true, "",null, null));
-        taxis.add(new TaxiEntidad("AAA112", false, "33334444", "B", "Auto", new Timestamp(date.getTime()), new Timestamp(date.getTime()), new Timestamp(date.getTime()),null,"foto1.jpg", true,"correo@correo.com", true, "",null, null));
-        taxis.add(new TaxiEntidad("AAA113", true, "55556666", "C", "Camion", new Timestamp(date.getTime()), new Timestamp(date.getTime()), new Timestamp(date.getTime()),null,"foto2.jpg", true,"correo@correo.com", true, "",null, null));
-        taxis.add(new TaxiEntidad("AAA114", true, "55556666", "C", "Camion", new Timestamp(date.getTime()), new Timestamp(date.getTime()), new Timestamp(date.getTime()),null,"foto2.jpg", true,"correo@correo.com", true, "",null, null));
+        taxis.add(new TaxiEntidad("AAA111", true, "11112222", "A", "Auto", new Timestamp(date.getTime()), new Timestamp(date.getTime()), new Timestamp(date.getTime()), null, null,"foto.jpg", true, true, "",null, null));
+        taxis.add(new TaxiEntidad("AAA112", false, "33334444", "B", "Auto", new Timestamp(date.getTime()), new Timestamp(date.getTime()), new Timestamp(date.getTime()), null, null,"foto1.jpg", true, true, "",null, null));
+        taxis.add(new TaxiEntidad("AAA113", true, "55556666", "C", "Camion", new Timestamp(date.getTime()), new Timestamp(date.getTime()), new Timestamp(date.getTime()), null, null,"foto2.jpg", true, true, "",null, null));
+        taxis.add(new TaxiEntidad("AAA114", true, "55556666", "C", "Camion", new Timestamp(date.getTime()), new Timestamp(date.getTime()), new Timestamp(date.getTime()), null, null,"foto2.jpg", true, true, "",null, null));
         return taxis;
     }
 

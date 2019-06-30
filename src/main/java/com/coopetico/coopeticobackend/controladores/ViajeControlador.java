@@ -4,11 +4,9 @@ package com.coopetico.coopeticobackend.controladores;
 import com.coopetico.coopeticobackend.entidades.DatosTaxistaAsigadoEntidad;
 import com.coopetico.coopeticobackend.entidades.ViajeComenzandoEntidad;
 import com.coopetico.coopeticobackend.entidades.ViajeEntidadTemporal;
-import com.coopetico.coopeticobackend.entidades.bd.UsuarioEntidad;
-import com.coopetico.coopeticobackend.entidades.bd.ViajeEntidadPK;
+import com.coopetico.coopeticobackend.entidades.bd.*;
 import com.coopetico.coopeticobackend.excepciones.UsuarioNoEncontradoExcepcion;
 import com.coopetico.coopeticobackend.servicios.*;
-import com.coopetico.coopeticobackend.entidades.bd.ViajeEntidad;
 import com.coopetico.coopeticobackend.servicios.UsuarioServicio;
 import com.coopetico.coopeticobackend.entidades.ViajeDatosIniciales;
 import com.coopetico.coopeticobackend.servicios.ViajesServicio;
@@ -18,10 +16,8 @@ import com.google.maps.errors.ApiException;
 import com.google.maps.model.LatLng;
 import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,7 +28,6 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static org.springframework.http.ResponseEntity.ok;
 //-----------------------------------------------------------------------------
@@ -64,15 +59,15 @@ public class ViajeControlador {
      *
      * @author Joseph Rementería (b55824)
      * @since 06-04-2019
-     *
-     * @param vjsRep repositorio de viajes ya creado
+     *@param vjsRep repositorio de viajes ya creado
      * @param taxistasServicio
+     * @param taxisServicio
      * @param ubicacionTaxistasServicio
      * @param distanciaServicio
      *
      */
     @Autowired
-    public ViajeControlador(ViajesServicio vjsRep, UsuarioServicio usuarioServicio, TaxistasServicio taxistasServicio, UbicacionTaxistasServicio ubicacionTaxistasServicio, DistanciaServicio distanciaServicio, SimpMessagingTemplate template) {
+    public ViajeControlador(ViajesServicio vjsRep, UsuarioServicio usuarioServicio, TaxistasServicio taxistasServicio, TaxisServicio taxisServicio, UbicacionTaxistasServicio ubicacionTaxistasServicio, DistanciaServicio distanciaServicio, SimpMessagingTemplate template) {
         this.viajesServicio = vjsRep;
         this.usuarioServicio = usuarioServicio;
         this.taxistasServicio = taxistasServicio;
