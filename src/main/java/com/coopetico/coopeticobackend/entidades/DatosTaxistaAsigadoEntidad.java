@@ -22,6 +22,11 @@ public class DatosTaxistaAsigadoEntidad {
     private String nombreTaxista;
     private String fotoTaxista;
     private float estrellasTaxista;
+    private String telefono;
+    private String foto;
+    private String placa;
+    private String modeloAuto;      //TODO:
+    private String fotoAuto;        //TODO:
     //-------------------------------------------------------------------------
 
     /**
@@ -33,19 +38,32 @@ public class DatosTaxistaAsigadoEntidad {
      * @param nombreTaxista nombre y apellidos del taxista concatenados
      * @param fotoTaxista la foto del taxista
      * @param estrellasTaxista el promedio de estrellas de un taxista
-     */
+     * @param telefono el telefono del usuario
+     * @param foto el url a la foto del usuario
+     * @param placa la placa del taxi que el taxista asignado está conduciendo
+     */ 
     public DatosTaxistaAsigadoEntidad(
-            ViajeComenzandoEntidad viaje,
-            String correoTaxista,
-            String nombreTaxista,
-            String fotoTaxista,
-            float estrellasTaxista
+        ViajeComenzandoEntidad viaje,
+        String correoTaxista,
+        String nombreTaxista,
+        String fotoTaxista,
+        float estrellasTaxista,
+        String telefono,
+        String foto,
+        String placa,
+        String modeloAuto,
+        String fotoAuto
     ) {
         this.viaje = viaje;
         this.correoTaxista = correoTaxista;
         this.nombreTaxista = nombreTaxista;
         this.fotoTaxista = fotoTaxista;
         this.estrellasTaxista = estrellasTaxista;
+        this.telefono = telefono;
+        this.foto = foto;
+        this.placa = placa;
+        this.modeloAuto = modeloAuto;
+        this.fotoAuto = fotoAuto;
     }
 
     public DatosTaxistaAsigadoEntidad() {
@@ -92,6 +110,31 @@ public class DatosTaxistaAsigadoEntidad {
 
     public void setEstrellasTaxista(float estrellasTaxista) {
         this.estrellasTaxista = estrellasTaxista;
+    }
+
+    public String getTelefo() {
+        return this.telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+
+    public String getFoto() {
+        return this.foto;
+    }
+
+    public void setFoto(String foto) {
+        this.foto = foto;
+    }
+
+    public String getPlaca() {
+        return this.placa;
+    }
+
+    public void setPlaca(String placa) {
+        this.placa = placa;
     }
     //-------------------------------------------------------------------------
 }
