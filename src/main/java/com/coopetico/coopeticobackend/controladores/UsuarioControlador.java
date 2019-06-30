@@ -1,5 +1,6 @@
 package com.coopetico.coopeticobackend.controladores;
 
+import com.coopetico.coopeticobackend.Util.Utileria;
 import com.coopetico.coopeticobackend.entidades.*;
 import com.coopetico.coopeticobackend.entidades.bd.GrupoEntidad;
 import com.coopetico.coopeticobackend.entidades.bd.TokenRecuperacionContrasenaEntidad;
@@ -9,6 +10,7 @@ import com.coopetico.coopeticobackend.servicios.TokensRecuperacionContrasenaServ
 import com.coopetico.coopeticobackend.servicios.UsuarioServicio;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -43,7 +45,7 @@ import com.coopetico.coopeticobackend.excepciones.UsuarioNoEncontradoExcepcion;
  @version:   3.0
  */
 
-@CrossOrigin( origins = {"http://localhost:4200"})
+@CrossOrigin
 @RestController
 @RequestMapping(path="/usuarios")
 @Validated
@@ -53,20 +55,21 @@ public class UsuarioControlador {
     private final EmailServiceImpl mail;
     private UsuariosRepositorio usuariosRepositorio;
     private PasswordEncoder encoder;
-    private UsuarioServicio usuarioServicio;
+    private final UsuarioServicio usuarioServicio;
     private UsuarioTemporal usuarioTemporal;
     private final Logger log = LoggerFactory.getLogger(UsuarioControlador.class);
     private UtilidadesControlador utilidadesControlador;
 
 
-    public UsuarioControlador(UsuariosRepositorio usuariosRepositorio, PasswordEncoder encoder,UsuarioServicio servicio, TokensRecuperacionContrasenaServicioImpl tokensServicio, EmailServiceImpl mail) {
-        this.usuarioServicio = servicio;
+    @Autowired
+    public UsuarioControlador(UsuariosRepositorio usuariosRepositorio, PasswordEncoder encoder, TokensRecuperacionContrasenaServicioImpl tokensServicio, EmailServiceImpl mail, UsuarioServicio usuarioServicio) {
         this.usuariosRepositorio = usuariosRepositorio;
         this.encoder = encoder;
         this.usuarioTemporal = new UsuarioTemporal();
         this.utilidadesControlador = new UtilidadesControlador();
         this.tokensServicio = tokensServicio;
         this.mail = mail;
+        this.usuarioServicio = usuarioServicio;
     }
 
     /**
@@ -144,6 +147,10 @@ public class UsuarioControlador {
         Map<String, Object> response = new HashMap<>();
         UsuarioEntidad usuarioEntidad;
 
+        // Se agrega contrasenna por defecto
+        if (usuario.getContrasena() == null)
+            usuario.setContrasena(Utileria.generarContrasena(usuario.getNombre(), usuario.getApellido1()));
+
         if (resultado.hasErrors()) {
             List<String> errores = resultado.getFieldErrors()
                     .stream()
@@ -156,6 +163,12 @@ public class UsuarioControlador {
 
         try {
             usuarioEntidad =  usuarioServicio.crearUsuario(usuario.convertirAUsuarioEntidad());
+            if (usuarioEntidad != null) {
+                String token = tokensServicio.insertarToken(usuarioEntidad.getPkCorreo());
+                if (token != null) {
+                    this.mail.enviarCorreoRegistro(usuarioEntidad.getPkCorreo(), token);
+                }
+            }
         }catch (DataAccessException e){
             response.put("mensaje", "Error al insertar en la base de datos");
             response.put("error", Objects.requireNonNull(e.getMessage()).concat(":").concat(e.getMostSpecificCause().getMessage()));

@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+@CrossOrigin
 @RestController
-@CrossOrigin( origins = {"http://localhost:4200"})
 @RequestMapping(path = "/grupos")
 public class GrupoControlador {
 

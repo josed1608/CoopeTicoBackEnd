@@ -16,6 +16,7 @@ import java.security.Principal;
 /**
  * Controlador para la entidad Cliente
  */
+@CrossOrigin
 @RestController
 @RequestMapping(path="/clientes")
 public class ClienteControlador {
