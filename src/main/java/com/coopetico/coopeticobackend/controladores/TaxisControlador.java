@@ -98,14 +98,15 @@ public class TaxisControlador {
 
     /**
      * Método para modificar un taxi existente en la base de datos
-     * @param taxi Entidad taxi modificada
+     * @param taxiTemporal Entidad taxi modificada
      * @param id Placa del taxi a modificar
      * @return Entidad del taxi modificado
      */
     @PutMapping("/taxis/{id}")
     @ResponseStatus(HttpStatus.CREATED)
-    public TaxiEntidad modificar(@RequestBody TaxiEntidad taxi, @PathVariable String id){
+    public TaxiEntidad modificar(@RequestBody TaxiEntidadTemporal taxiTemporal, @PathVariable String id){
         TaxiEntidad taxiActual = taxisServicio.consultarPorId(id);
+        TaxiEntidad taxi = taxiTemporal.toTaxiEntidad();
         taxiActual.setPkPlaca(taxi.getPkPlaca());
         taxiActual.setClase(taxi.getClase());
         taxiActual.setDatafono(taxi.getDatafono());
@@ -117,6 +118,10 @@ public class TaxisControlador {
         taxiActual.setValido(taxi.getValido());
         taxiActual.setEstado(taxi.isEstado());
         taxiActual.setJustificacion(taxi.getJustificacion());
+        if(taxiTemporal.getCorreoTaxista() != null) {
+            TaxistaEntidad taxistaEntidad = this.taxistasServicio.consultarTaxistaPorId(taxiTemporal.getCorreoTaxista());
+            taxiActual.setDuennoTaxi(taxistaEntidad);
+        }
         return taxisServicio.guardar(taxiActual);
     }
 
@@ -162,7 +167,7 @@ public class TaxisControlador {
             this.utilidadesControlador.eliminarFoto(taxiEntidad.getFoto());
 
             taxiEntidad.setFoto(nombreArchivo);
-            this.modificar(taxiEntidad, taxiEntidad.getPkPlaca());
+            this.modificar(new TaxiEntidadTemporal(taxiEntidad), taxiEntidad.getPkPlaca());
             response.put("taxi",taxiEntidad);
             response.put("mensaje", "Has subido correctamente la imagen "+nombreArchivo);
         }
