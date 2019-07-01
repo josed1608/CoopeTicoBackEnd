@@ -157,7 +157,7 @@ public class TaxiEntidad {
         this.justificacion = justificacion;
     }
 
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "correo_taxista")
     public TaxistaEntidad getDuennoTaxi() {
         return duennoTaxi;

@@ -20,12 +20,12 @@ public class TaxistaEntidad {
     private String justificacion;
     private Timestamp vence_licencia;
     private TaxiEntidad taxiActual;
-    private TaxiEntidad taxiPropiedad;
+    private Collection<TaxiEntidad> taxiPropiedad;
     private UsuarioEntidad usuarioByPkCorreoUsuario;
     private Collection<ViajeEntidad> viajesByPkCorreoUsuario;
     private Collection<ConduceEntidad> taxisConducidos;
 
-    public TaxistaEntidad(String pkCorreoUsuario, String faltas, boolean estado, boolean hojaDelincuencia, float estrellas, String justificacion, Timestamp vence_licencia, TaxiEntidad taxiActual, TaxiEntidad taxiPropiedad, UsuarioEntidad usuarioByPkCorreoUsuario, Collection<ViajeEntidad> viajesByPkCorreoUsuario, Collection<ConduceEntidad> taxisConducidos) {
+    public TaxistaEntidad(String pkCorreoUsuario, String faltas, boolean estado, boolean hojaDelincuencia, float estrellas, String justificacion, Timestamp vence_licencia, TaxiEntidad taxiActual, Collection<TaxiEntidad> taxiPropiedad, UsuarioEntidad usuarioByPkCorreoUsuario, Collection<ViajeEntidad> viajesByPkCorreoUsuario, Collection<ConduceEntidad> taxisConducidos) {
         this.pkCorreoUsuario = pkCorreoUsuario;
         this.faltas = faltas;
         this.estado = estado;
@@ -146,12 +146,12 @@ public class TaxistaEntidad {
         this.taxiActual = taxiActual;
     }
 
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "duennoTaxi")
-    public TaxiEntidad getTaxiPropiedad() {
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "duennoTaxi")
+    public Collection<TaxiEntidad> getTaxiPropiedad() {
         return taxiPropiedad;
     }
 
-    public void setTaxiPropiedad(TaxiEntidad taxiPropiedad) {
+    public void setTaxiPropiedad(Collection<TaxiEntidad> taxiPropiedad) {
         this.taxiPropiedad = taxiPropiedad;
     }
 
