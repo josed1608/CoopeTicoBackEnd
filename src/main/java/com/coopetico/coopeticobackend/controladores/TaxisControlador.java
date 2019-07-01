@@ -1,7 +1,10 @@
 package com.coopetico.coopeticobackend.controladores;
 
+import com.coopetico.coopeticobackend.entidades.TaxiEntidadTemporal;
 import com.coopetico.coopeticobackend.entidades.bd.TaxiEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.TaxistaEntidad;
 import com.coopetico.coopeticobackend.servicios.TaxisServicio;
+import com.coopetico.coopeticobackend.servicios.TaxistasServicio;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +39,9 @@ public class TaxisControlador {
     @Autowired
     private TaxisServicio taxisServicio;
 
+    @Autowired
+    private TaxistasServicio taxistasServicio;
+
     /**
      * Logger para subir la imagen
      */
@@ -59,20 +65,11 @@ public class TaxisControlador {
      * @return lista de entidades de taxi
      */
     @GetMapping("/taxis")
-    public List<TaxiEntidad> consultar(){
-        /*
-        List<TaxiEntidad> taxisValidos = new ArrayList<>();
-        List<TaxiEntidad> taxis = taxisServicio.consultar();
-
-        for (TaxiEntidad taxi : taxis){
-            if(taxi.getValido() == true){
-                taxisValidos.add(taxi);
-            }
-        }
-
-         */
-
-        return taxisServicio.consultar();
+    public List<TaxiEntidadTemporal> consultar(){
+        TaxiEntidadTemporal taxiEntidadTemporal = new TaxiEntidadTemporal();
+        List<TaxiEntidad> taxiEntidades = taxisServicio.consultar();
+        List<TaxiEntidadTemporal> taxiEntidadTemporales = taxiEntidadTemporal.toListTaxiTemporal(taxiEntidades);
+        return taxiEntidadTemporales;
     }
 
     /**
@@ -92,8 +89,11 @@ public class TaxisControlador {
      */
     @PostMapping("/taxis")
     @ResponseStatus(HttpStatus.CREATED)
-    public TaxiEntidad agregar(@RequestBody TaxiEntidad taxi){
-        return taxisServicio.guardar(taxi);
+    public TaxiEntidadTemporal agregar(@RequestBody TaxiEntidadTemporal taxi){
+        TaxistaEntidad duennoTaxi = this.taxistasServicio.consultarTaxistaPorId(taxi.getCorreoTaxista());
+        TaxiEntidad taxiEntidad = taxi.toTaxiEntidad();
+        taxiEntidad.setDuennoTaxi(duennoTaxi);
+        return new TaxiEntidadTemporal(taxisServicio.guardar(taxiEntidad));
     }
 
     /**
