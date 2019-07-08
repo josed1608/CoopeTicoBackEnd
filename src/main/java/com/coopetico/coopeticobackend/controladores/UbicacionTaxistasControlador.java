@@ -1,7 +1,10 @@
 package com.coopetico.coopeticobackend.controladores;
 
 import com.coopetico.coopeticobackend.entidades.UbicacionTaxistaEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.TaxiEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.TaxistaEntidad;
 import com.coopetico.coopeticobackend.excepciones.UsuarioNoEncontradoExcepcion;
+import com.coopetico.coopeticobackend.servicios.TaxisServicio;
 import com.coopetico.coopeticobackend.servicios.TaxistasServicio;
 import com.coopetico.coopeticobackend.servicios.UbicacionTaxistasServicio;
 import com.google.maps.model.LatLng;
@@ -30,10 +33,13 @@ public class UbicacionTaxistasControlador {
     private final
     TaxistasServicio taxistasServicio;
 
+    private final TaxisServicio taxisServicio;
+
     @Autowired
-    public UbicacionTaxistasControlador(UbicacionTaxistasServicio ubicacionTaxistasServicio, TaxistasServicio taxistasServicio){
+    public UbicacionTaxistasControlador(UbicacionTaxistasServicio ubicacionTaxistasServicio, TaxistasServicio taxistasServicio, TaxisServicio taxisServicio){
         this.ubicacionTaxistasServicio = ubicacionTaxistasServicio;
         this.taxistasServicio = taxistasServicio;
+        this.taxisServicio = taxisServicio;
     }
 
 
@@ -149,12 +155,19 @@ public class UbicacionTaxistasControlador {
      */
     @PostMapping("/cargar-datos-test")
     public ResponseEntity cargarTaxistasDePrueba(){
-        String[] taxistas = {"taxista1@taxista.com", "taxista2@taxista.com", "taxista3@taxista.com", "taxista4@taxista.com", "taxista5@taxista.com", "taxista6@taxista.com"};
+        String[] taxistas = {"taxista1@taxista.com", "taxista2@taxista.com"};
         // Lincoln Plaza, Centro Comercial Guadalupe, Facultad de Derecho, Parque Morazán, Gorilla Logic, Parque de la Paz
-        LatLng[] ubicaciones = {new LatLng(9.963111, -84.054929), new LatLng(9.942293, -84.064481), new LatLng(9.936656, -84.054296), new LatLng(9.935459, -84.074635), new LatLng(9.938768, -84.109315), new LatLng(9.914237, -84.071847)};
-        boolean[] disponibles = {true, true, true, true, true, false};
+        LatLng[] ubicaciones = {new LatLng(9.963111, -84.054929), new LatLng(9.942293, -84.064481)};
+        boolean[] disponibles = {true, true};
 
-        for(int i = 0; i < 6; i++) {
+        TaxistaEntidad taxista  = taxistasServicio.taxistaPorCorreo("taxista1@taxista.com").orElse(null);
+        TaxiEntidad taxi = taxisServicio.consultarPorId("AAA111");
+        taxistasServicio.actualizarTaxiActual(taxista, taxi);
+        taxista  = taxistasServicio.taxistaPorCorreo("taxista2@taxista.com").orElse(null);
+        taxi = taxisServicio.consultarPorId("BBB111");
+        taxistasServicio.actualizarTaxiActual(taxista, taxi);
+
+        for(int i = 0; i < 2; i++) {
             this.ubicacionTaxistasServicio.upsertUbicacionDisponibleTaxista(taxistas[i], ubicaciones[i], disponibles[i]);
         }
         return ok("Taxis de test agregados");
