@@ -25,7 +25,7 @@ public class UbicacionTaxiControlador {
     boolean primero = true;
 
     // Booleano para simular
-    boolean simular = true;
+    boolean simular = false;
 
     @Autowired
     TaxisServicio taxisServicio;
