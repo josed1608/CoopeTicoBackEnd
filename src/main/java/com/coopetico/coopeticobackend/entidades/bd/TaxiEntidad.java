@@ -54,7 +54,7 @@ public class TaxiEntidad {
         this.taxistasQueMeConducen = taxistasQueMeConducen;
     }
 
-    public TaxiEntidad(String pkPlaca, Boolean datafono, String telefono, String clase, String tipo, Date fechaVenRtv, Date fechaVenMarchamo, Date fechaVenSeguro, boolean estado, String justificacion, Boolean valido, String foto) {
+    public TaxiEntidad(String pkPlaca, Boolean datafono, String telefono, String clase, String tipo, Date fechaVenRtv, Date fechaVenMarchamo, Date fechaVenSeguro, boolean estado, String justificacion, Boolean valido, String foto, TaxistaEntidad duenno) {
         this.pkPlaca = pkPlaca;
         this.datafono = datafono;
         this.telefono = telefono;
@@ -67,6 +67,7 @@ public class TaxiEntidad {
         this.fechaVenSeguro = new Timestamp(fechaVenSeguro.getTime());
         this.estado = estado;
         this.justificacion = justificacion;
+        this.duennoTaxi = duenno;
     }
 
     public TaxiEntidad(){}
@@ -157,7 +158,7 @@ public class TaxiEntidad {
         this.justificacion = justificacion;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "correo_taxista")
     public TaxistaEntidad getDuennoTaxi() {
         return duennoTaxi;

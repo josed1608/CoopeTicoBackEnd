@@ -1,7 +1,10 @@
 package com.coopetico.coopeticobackend.controladores;
 
+import com.coopetico.coopeticobackend.entidades.TaxiEntidadTemporal;
 import com.coopetico.coopeticobackend.entidades.bd.TaxiEntidad;
+import com.coopetico.coopeticobackend.entidades.bd.TaxistaEntidad;
 import com.coopetico.coopeticobackend.servicios.TaxisServicio;
+import com.coopetico.coopeticobackend.servicios.TaxistasServicio;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +39,9 @@ public class TaxisControlador {
     @Autowired
     private TaxisServicio taxisServicio;
 
+    @Autowired
+    private TaxistasServicio taxistasServicio;
+
     /**
      * Logger para subir la imagen
      */
@@ -59,20 +65,11 @@ public class TaxisControlador {
      * @return lista de entidades de taxi
      */
     @GetMapping("/taxis")
-    public List<TaxiEntidad> consultar(){
-        /*
-        List<TaxiEntidad> taxisValidos = new ArrayList<>();
-        List<TaxiEntidad> taxis = taxisServicio.consultar();
-
-        for (TaxiEntidad taxi : taxis){
-            if(taxi.getValido() == true){
-                taxisValidos.add(taxi);
-            }
-        }
-
-         */
-
-        return taxisServicio.consultar();
+    public List<TaxiEntidadTemporal> consultar(){
+        TaxiEntidadTemporal taxiEntidadTemporal = new TaxiEntidadTemporal();
+        List<TaxiEntidad> taxiEntidades = taxisServicio.consultar();
+        List<TaxiEntidadTemporal> taxiEntidadTemporales = taxiEntidadTemporal.toListTaxiTemporal(taxiEntidades);
+        return taxiEntidadTemporales;
     }
 
     /**
@@ -92,20 +89,24 @@ public class TaxisControlador {
      */
     @PostMapping("/taxis")
     @ResponseStatus(HttpStatus.CREATED)
-    public TaxiEntidad agregar(@RequestBody TaxiEntidad taxi){
-        return taxisServicio.guardar(taxi);
+    public TaxiEntidadTemporal agregar(@RequestBody TaxiEntidadTemporal taxi){
+        TaxistaEntidad duennoTaxi = this.taxistasServicio.consultarTaxistaPorId(taxi.getCorreoTaxista());
+        TaxiEntidad taxiEntidad = taxi.toTaxiEntidad();
+        taxiEntidad.setDuennoTaxi(duennoTaxi);
+        return new TaxiEntidadTemporal(taxisServicio.guardar(taxiEntidad));
     }
 
     /**
      * Método para modificar un taxi existente en la base de datos
-     * @param taxi Entidad taxi modificada
+     * @param taxiTemporal Entidad taxi modificada
      * @param id Placa del taxi a modificar
      * @return Entidad del taxi modificado
      */
     @PutMapping("/taxis/{id}")
     @ResponseStatus(HttpStatus.CREATED)
-    public TaxiEntidad modificar(@RequestBody TaxiEntidad taxi, @PathVariable String id){
+    public TaxiEntidad modificar(@RequestBody TaxiEntidadTemporal taxiTemporal, @PathVariable String id){
         TaxiEntidad taxiActual = taxisServicio.consultarPorId(id);
+        TaxiEntidad taxi = taxiTemporal.toTaxiEntidad();
         taxiActual.setPkPlaca(taxi.getPkPlaca());
         taxiActual.setClase(taxi.getClase());
         taxiActual.setDatafono(taxi.getDatafono());
@@ -117,6 +118,10 @@ public class TaxisControlador {
         taxiActual.setValido(taxi.getValido());
         taxiActual.setEstado(taxi.isEstado());
         taxiActual.setJustificacion(taxi.getJustificacion());
+        if(taxiTemporal.getCorreoTaxista() != null) {
+            TaxistaEntidad taxistaEntidad = this.taxistasServicio.consultarTaxistaPorId(taxiTemporal.getCorreoTaxista());
+            taxiActual.setDuennoTaxi(taxistaEntidad);
+        }
         return taxisServicio.guardar(taxiActual);
     }
 
@@ -162,7 +167,7 @@ public class TaxisControlador {
             this.utilidadesControlador.eliminarFoto(taxiEntidad.getFoto());
 
             taxiEntidad.setFoto(nombreArchivo);
-            this.modificar(taxiEntidad, taxiEntidad.getPkPlaca());
+            this.modificar(new TaxiEntidadTemporal(taxiEntidad), taxiEntidad.getPkPlaca());
             response.put("taxi",taxiEntidad);
             response.put("mensaje", "Has subido correctamente la imagen "+nombreArchivo);
         }
